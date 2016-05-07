@@ -1,0 +1,24 @@
+$gauge-width: 100% !default;
+$gauge-height: 1em !default;
+$gauge-background: linear-gradient(90deg, red, #ee0 25%, green 50%, darkGreen) !default;
+$gauge-background-on: transparent !default;
+$gauge-background-off: $background-color !default;
+
+gauge {
+    display: flex;
+    width: $gauge-width;
+    height: $gauge-height;
+    background: $gauge-background;
+    vertical-align: -0.2em;
+}
+
+gauge > span:first-child {
+    background: $gauge-background-on;
+    height: 100%;
+}
+
+gauge > span:last-child {
+    background: $gauge-background-off;
+    height: 100%;
+    flex-grow: 1;
+}

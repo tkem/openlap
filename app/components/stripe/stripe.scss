@@ -1,0 +1,31 @@
+$stripe-size: 0.75rem !default;
+$stripe-background: gray !default;
+
+stripe {
+    display: inline-block;
+    position:absolute;
+    transform: skew(-30deg);
+    transform-origin: top right;
+    background: $stripe-background;
+    border-style: solid;
+    border-width: 0 $stripe-size 0 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.stripe-container {
+    /*background: linear-gradient(-60deg, rgba(0,0,0,0) 1em, gray 1ex);*/
+    position: relative;
+    overflow: hidden;
+}
+
+/*
+width: 0;
+height: 0;
+border-style: solid;
+border-width: 162px 75px 0 0;
+border-color: #007bff transparent transparent transparent;
+*/

@@ -2,15 +2,13 @@
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Race</ion-title>
-  <ion-buttons end *ngIf="laps">Lap {{lap}}/{{laps}}</ion-buttons>
+  <ion-title>Practice</ion-title>
 </ion-navbar>
 
 <ion-content>
   <table class="leaderboard">
     <colgroup>
       <col style="width: 2.25em">
-      <col>
       <col>
       <col>
       <col>
@@ -22,7 +20,6 @@
       <tr>
         <th text-left>POS</th>
         <th text-left>NAME</th>
-        <th text-right>TIME</th>
         <th text-right>LAP TIME</th>
         <th text-right>BEST LAP</th>
         <th text-right>LAPS</th>
@@ -31,10 +28,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of (items | async); let i = index; let leader = first">
+      <tr *ngFor="let item of (items | async); let i = index;">
         <td text-left class="stripe-container">{{i + 1}}<stripe [color]="drivers.itemAt(item.id).color"></stripe></td>
         <td text-left>{{drivers.itemAt(item.id).name}}</td>
-        <td text-right>{{leader ? time(item) : gap(item)}}</td>
         <td text-right>{{(item.laptime / 1000).toFixed(3)}}</td>
         <td text-right>{{(item.bestlap / 1000).toFixed(3)}}</td>
         <td text-right>{{item.laps}}</td>

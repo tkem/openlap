@@ -1,43 +1,106 @@
-import {EventEmitter, Injectable} from 'angular2/core';
+import {EventEmitter, Injectable, NgZone} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/distinctUntilChanged';
 
-function parseUint32(array, offset = 0) {
-  var n = (array[offset + 0] & 0x0f) << 24;
-  n |= (array[offset + 1] & 0x0f) << 28;
-  n |= (array[offset + 2] & 0x0f) << 16;
-  n |= (array[offset + 3] & 0x0f) << 20;
-  n |= (array[offset + 4] & 0x0f) << 8;
-  n |= (array[offset + 5] & 0x0f) << 12;
-  n |= (array[offset + 6] & 0x0f) << 0;
-  n |= (array[offset + 7] & 0x0f) << 4;
-  return n;
-}
+class DataView {
+  private array: Uint8Array;
 
-export class Status {
-  constructor(array) {
-    this.fuel = array.subarray(2, 10).map(n => { return n & 0xf; });
-    this.start = array[10] & 0x0f;
-    this.mode = array[11] & 0x0f;
-    this.pit = array[12] & 0x0f | ((array[13] & 0x0f) << 4);
-    this.display = array[14] & 0x0f;
+  get buffer() {
+    return this.array.buffer;
   }
 
-  public fuel;
+  get byteLength() {
+    return this.array.byteLength;
+  }
 
-  public start;
+  get byteOffset() {
+    return this.array.byteOffset;
+  }
 
-  public mode;
+  constructor(buffer: ArrayBuffer, byteOffset?: number, byteLength?: number) {
+    if (byteLength !== undefined) {
+      this.array = new Uint8Array(buffer, byteOffset, byteLength);
+    } else if (byteOffset) {
+      this.array = new Uint8Array(buffer, byteOffset);
+    } else {
+      this.array = new Uint8Array(buffer);
+    }
+  }
 
-  public pit;
+  getUint4(byteOffset: number) {
+    return this.array[byteOffset] & 0xf;
+  }
 
-  public display;
+  getUint8(byteOffset: number) {
+    return (this.array[byteOffset] & 0xf) | ((this.array[byteOffset + 1] & 0xf) << 4);
+  }
+
+  getUint32(byteOffset: number) {
+    let value = 0;
+    value |= (this.array[byteOffset + 0] & 0xf) << 24;
+    value |= (this.array[byteOffset + 1] & 0xf) << 28;
+    value |= (this.array[byteOffset + 2] & 0xf) << 16;
+    value |= (this.array[byteOffset + 3] & 0xf) << 20;
+    value |= (this.array[byteOffset + 4] & 0xf) << 8;
+    value |= (this.array[byteOffset + 5] & 0xf) << 12;
+    value |= (this.array[byteOffset + 6] & 0xf) << 0;
+    value |= (this.array[byteOffset + 7] & 0xf) << 4;
+    return value;
+  }
+
+  getArray(byteOffset: number, byteLength: number): ArrayLike<number> {
+    return this.array.subarray(byteOffset, byteOffset + byteLength).map(n => n & 0xf);
+  }
+
+  setUint4(byteOffset: number, value: number): void {
+    this.array[byteOffset] = value | 0x30;
+  }
+
+  setUint8(byteOffset: number, value: number): void {
+    this.array[byteOffset] = (value & 0xf) | 0x30;
+    this.array[byteOffset + 1] = (value >> 4) | 0x30;
+  }
+
+  toString(byteOffset?: number, byteLength?: number) {
+    return String.fromCharCode.apply(null, this.subarray(byteOffset, byteLength));
+  }
+
+  static fromString(s: string) {
+    return new DataView(Uint8Array.from(s.split('').map(c => c.charCodeAt(0))).buffer);
+  }
+
+  private subarray(byteOffset?: number, byteLength?: number) {
+    if (byteLength !== undefined) {
+      return this.array.subarray(byteOffset, byteOffset + byteLength);
+    } else if (byteOffset) {
+      return this.array.subarray(byteOffset);
+    } else {
+      return this.array;
+    }
+  }
+}
+
+function getUint32(array: ArrayLike<number>, offset = 0) {
+  let n = 0;
+  n |= (array[offset + 0] & 0xf) << 24;
+  n |= (array[offset + 1] & 0xf) << 28;
+  n |= (array[offset + 2] & 0xf) << 16;
+  n |= (array[offset + 3] & 0xf) << 20;
+  n |= (array[offset + 4] & 0xf) << 8;
+  n |= (array[offset + 5] & 0xf) << 12;
+  n |= (array[offset + 6] & 0xf) << 0;
+  n |= (array[offset + 7] & 0xf) << 4;
+  return n;
 }
 
 export class Lap {
   constructor(array) {
     this.id = array[1] - 0x30;
-    this.time = parseUint32(array, 2);
+    this.time = getUint32(array, 2);
     this.sector = array[10] - 0x30;
   }
 
@@ -61,34 +124,56 @@ export class ControlUnit {
 
   private requests: any = [];
 
-  private lastResult = '';
-
   private observer = null;
 
-  status: EventEmitter<Status> = new EventEmitter();
+  private fuelSubject = new BehaviorSubject<ArrayLike<number>>(undefined);
+  private startSequenceSubject = new BehaviorSubject<number>(undefined);
+  private modeSubject = new BehaviorSubject<number>(undefined);
+  private pitSubject = new BehaviorSubject<number>(undefined);
+  private lapSubject = new Subject<Lap>(undefined);
 
-  lap: EventEmitter<Lap> = new EventEmitter();
+  fuel: Observable<ArrayLike<number>>;
+  startSequence: Observable<number>;  // TODO: name!
+  mode: Observable<number>;
+  pit: Observable<number>;
+  lap: Observable<Lap>;
 
-  constructor() {}
+  constructor(private zone: NgZone) {
+    // TODO: custom Subject implementation(s)?
+    this.startSequence = this.startSequenceSubject.filter(value => value !== undefined).distinctUntilChanged();
+    this.fuel = this.fuelSubject.filter(value => value !== undefined).distinctUntilChanged(
+      null, array => getUint32(array)  // TODO: better equality
+      //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
+    );
+    this.mode = this.modeSubject.filter(value => value !== undefined).distinctUntilChanged();
+    this.pit = this.pitSubject.filter(value => value !== undefined).distinctUntilChanged();
+    this.lap = this.lapSubject.distinctUntilChanged(
+      (a, b) => a.id == b.id && a.time == b.time && a.sector == b.sector
+    );
+  }
 
   connect(connection) {
+
     this.connection = connection;
+
     connection.subscribe(buffer => {
-      let array = new Uint8Array(buffer)
-      let string = String.fromCharCode.apply(null, array);
-      if (string !== this.lastResult) {
-        console.log('CU received', String.fromCharCode.apply(null, array));
-        switch (array[0]) {
-        case '?'.charCodeAt(0):
-          if (array[1] == ':'.charCodeAt(0)) {
-            this.status.emit(new Status(array));
+      let view = new DataView(buffer);
+      // console.log('CU received', view.toString());
+      this.zone.run(() => {
+        switch (view.toString(0, 1)) {
+        case '?':
+          if (view.toString(1, 1) == ':') {
+            this.fuelSubject.next(view.getArray(2, 8));
+            this.startSequenceSubject.next(view.getUint4(10));
+            this.modeSubject.next(view.getUint4(11));
+            this.pitSubject.next(view.getUint8(12));
           } else {
-            this.lap.emit(new Lap(array));
+            this.lapSubject.next(new Lap(new Uint8Array(view.buffer)));
           }
           break;
-        case '0'.charCodeAt(0):
+        case '0':
           if (this.observer) {
-            this.observer.next(string.substring(1, 5));
+            this.observer.next(view.toString(1, 4));
             this.observer.complete();
             this.observer = null;
           }
@@ -97,8 +182,7 @@ export class ControlUnit {
           // TODO: command promises?
           break;
         }
-        this.lastResult = string;
-      }
+      });
       this.poll();
     });
     this.poll();
@@ -106,35 +190,70 @@ export class ControlUnit {
 
   version() {
     return Observable.create(observer => {
-      this.requests.push(new Uint8Array(['0'.charCodeAt(0)]).buffer);
+      this.requests.push(DataView.fromString('0').buffer);
       this.observer = observer;
     });
   }
 
   start() {
-    this.requests.push(new Uint8Array(['T'.charCodeAt(0), '2'.charCodeAt(0)]).buffer);
+    this.requests.push(DataView.fromString('T2').buffer);
   }
-  
+
   setLap(value: number) {
-    this.setWord(17, 7, value >> 4);
-    this.setWord(18, 7, value & 0xf);
+    this.set(17, 7, value >> 4);
+    this.set(18, 7, value & 0xf);
   }
-  
-  private setWord(word: number, address: number, value: number, repeat=1) {
-    let cmd = new Uint8Array(['J'.charCodeAt(0), 0x30 + (word & 0x0f),0x30 + (word >> 4 | address << 1), 0x30 + value, 0x30 + repeat, 0x30]);
-    for (var i = 0; i != cmd.length - 1; ++i) {
-      cmd[cmd.length - 1] += (cmd[i] & 0xf);
-      cmd[cmd.length - 1] &= 0x3f;
+
+  setPosition(addr: number, pos: number) {
+    this.set(6, addr, pos);
+  }
+
+  clearPosition() {
+    this.set(6, 0, 9);
+  }
+
+  setMask(value) {
+    this.command(':', value & 0xf, value >> 4);
+  }
+
+  reset() {
+    this.requests.push(DataView.fromString('=10').buffer);
+  }
+
+  setSpeed(addr: number, value: number) {
+    this.set(0, addr, value, 2);
+  }
+
+  setBrake(addr: number, value: number) {
+    this.set(1, addr, value, 2);
+  }
+
+  setFuel(addr: number, value: number) {
+    this.set(2, addr, value, 2);
+  }
+
+  private set(word: number, addr: number, value: number, repeat=1) {
+    this.command('J', word & 0x0f, (word >> 4) | (addr << 1), value, repeat);
+  }
+
+  private command(cmd: string, ...values: number[]) {
+    let a = new Uint8Array(values.length + 2);
+    let c = a[0] = cmd.charCodeAt(0);
+    for (let i = 0; i != values.length; ++i) {
+      let v = values[i];
+      a[i + 1] = 0x30 | v;
+      c += v;
     }
-    this.requests.push(cmd.buffer);
+    a[a.length - 1] = 0x30 | (c & 0xf);
+    this.requests.push(a.buffer);
   }
-  
+
   private poll() {
     if (this.requests.length !== 0) {
-      console.log('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
+      //console.log('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
       this.connection.send(this.requests.shift());
     } else {
-      this.connection.send(new Uint8Array(['?'.charCodeAt(0)]).buffer);
+      this.connection.send(DataView.fromString('?').buffer);
     }
   }
 }

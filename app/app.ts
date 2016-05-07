@@ -1,27 +1,45 @@
-import {App, IonicApp, Platform} from 'ionic-angular';
+import {App, IonicApp, Nav, Platform} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
+import { provide } from '@angular/core';
+
+import {PracticePage} from './pages/practice/practice';
+import {QualifyingPage} from './pages/qualifying/qualifying';
 import {RacePage} from './pages/race/race';
+import {ConnectionPage} from './pages/connection/connection';
+import {SettingsPage} from './pages/settings/settings';
+import {AboutPage} from './pages/about/about';
+
 import {BLEProvider} from './connections/ble';
 import {DemoProvider} from './connections/demo';
 import {Provider} from './connections/connection';
 import {ControlUnit} from './providers/cu';
-import {Inject, provide} from 'angular2/core';
+import { Drivers, DefaultDrivers } from './providers/drivers';
+import {Inject, ViewChild} from '@angular/core';
 
 @App({
   templateUrl: 'build/app.html',
-  providers: [provide(Provider, { useClass: BLEProvider}), ControlUnit],
+  providers: [ControlUnit, provide(Drivers, {useClass: DefaultDrivers})],
   config: {} // http://ionicframework.com/docs/v2/api/config/Config/
 })
 class MyApp {
-  rootPage: any = RacePage;
+  rootPage: any = PracticePage;
   pages: Array<{title: string, component: any}>
 
-  constructor(private app: IonicApp, private platform: Platform, private cu: ControlUnit) {
+  @ViewChild(Nav) nav: Nav;
+
+  constructor(private app: IonicApp, private platform: Platform, private cu: ControlUnit, private drivers:Drivers) {
+          console.log('Drivers: ', this.drivers);
+
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Race', component: RacePage }
+      { title: 'Practice', component: PracticePage },
+      { title: 'Qualifying', component: QualifyingPage },
+      { title: 'Race', component: RacePage },
+      { title: 'Connection', component: ConnectionPage },
+      { title: 'Settings', component: SettingsPage },
+      { title: 'About', component: AboutPage }
     ];
 
     let provider = platform.is('cordova') ? new BLEProvider() : new DemoProvider();
@@ -31,9 +49,6 @@ class MyApp {
       cu.lap.subscribe(event => {
         console.log('New lap', event);
       });
-      cu.status.subscribe(event => {
-        console.log('New status', event);
-      })
       provider.connect(device).subscribe(connection => {
         cu.connect(connection);
         cu.version().subscribe(version => {
@@ -50,7 +65,7 @@ class MyApp {
       StatusBar.styleDefault();
       if (window['plugins'] && window['plugins'].insomnia) {
         window['plugins'].insomnia.keepAwake(() => {
-          console.log('Keeping app awake...');          
+          console.log('Keeping app awake...');
         });
       }
     });
@@ -59,7 +74,6 @@ class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    let nav = this.app.getComponent('nav');
-    nav.setRoot(page.component);
+    this.nav.setRoot(page.component);
   }
 }

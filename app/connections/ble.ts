@@ -1,5 +1,5 @@
 import {Connection, Device, Provider} from './connection';
-import {EventEmitter, Injectable} from 'angular2/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {BLE} from 'ionic-native';
 import 'rxjs/add/operator/map';
 
