@@ -1,0 +1,39 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Race</ion-title>
+</ion-navbar>
+
+<ion-content>
+  <table class="position">
+    <tr>
+      <th>POS</th>
+      <th>DRIVER</th>
+      <th>TIME</th>
+      <th>LAP TIME</th>
+      <th>BEST LAP</th>
+      <th>LAPS</th>
+      <th>PITS</th>
+      <th>FUEL</th>
+      <th>&nbsp;</th>
+    </tr>
+    <tr *ngFor="#item of items; #i = index">
+      <td class="team-number">
+        {{i + 1}}
+        <span class="color" [style.background]="item.color"></span>
+      </td>
+      <td>{{item.name}}</td>
+      <td>{{item.time}}</td>
+      <td>{{item.laptime / 1000 | number:'1.3'}}</td>
+      <td>{{item.bestlap / 1000 | number:'1.3'}}</td>
+      <td>{{item.laps}}</td>
+      <td>{{item.pitstops}}</td>
+      <td>{{item.fuel}}</td>
+      <td style="padding: 0">
+        <span *ngIf="item.pit">PIT</span>
+      </td>
+    </tr>
+  </table>
+  <button (click)="start()">Start</button>
+</ion-content>

@@ -1,0 +1,57 @@
+.position {
+    font-family: "Open Sans",Helvetica,sans-serif;
+    font-weight: 700;
+    line-height: 14px;
+    font-size: 1.4rem;
+    width: 100%;
+}
+
+.position tr {
+    padding-bottom: 6px;
+}
+
+.position th {
+    text-align: left;
+    padding: 2px;
+}
+
+.position td {
+    padding: 4px;
+}
+
+.position ion-icon {
+    font-size: inherit;
+}
+
+.team-number {
+    text-align: center;
+    background: #B0B0B0 none repeat scroll 0% 0%;
+    color: #FFF;
+    display: inline-block;
+    padding: 6px 0px 6px 0px;
+    margin-right: 16px;
+    width: 24px;
+    text-align: center;
+    /*transform: skew(-30deg);*/
+    position: relative;
+}
+.team-number:after {
+    content: "";
+    background: #B0B0B0;
+    position: absolute;
+    transform: skew(-30deg);
+    width: 15px;
+    height:100%;
+    right:-5px;
+    top:0;
+    z-index:-11;
+}
+
+.color {
+    width: 10px;
+    position: absolute;
+    right: -10px;
+    top: 0px;
+    height: 100%;
+    transform: skew(-30deg);
+}
