@@ -1,32 +1,15 @@
 import {Modal, NavController, Page, ViewController} from 'ionic-angular';
 import {EventEmitter} from '@angular/core';
 import {ControlUnit, Drivers} from '../../providers';
-import {Gauge, Startlight, Stripe} from '../../components.ts';
+import {ColWidth, Gauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components.ts';
 import {Car} from '../../models/car';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/toPromise';
 
 @Page({
-  template: `
-    <ion-content padding>
-    <h1>Race Settings</h1>
-    <ion-list>
-    <ion-item>
-    <ion-label>Laps</ion-label>
-    <ion-input [(ngModel)]="laps" type="number" min="0"></ion-input>
-    </ion-item>
-    <ion-item>
-    <ion-label>Time (min)</ion-label>
-    <ion-input [(ngModel)]="time" type="number" min="0"></ion-input>
-    </ion-item>
-    <ion-item>
-    <ion-label>Autonomous car</ion-label>
-    <ion-toggle [(ngModel)]="auto"></ion-toggle>
-    </ion-item>
-    </ion-list>
-    <button (click)="close()">OK</button>
-    </ion-content>
-  `
+  templateUrl: 'build/pages/race/race-settings.html'
 })
-class Settings {
+class RaceSettings {
 
   laps = 5;
   time = 0;
@@ -41,7 +24,8 @@ class Settings {
 }
 
 @Page({
-  directives: [Gauge, Startlight, Stripe],
+  directives: [ColWidth, Gauge, Startlight, Stripe],
+  pipes: [TimePipe, IsSetPipe],
   templateUrl: 'build/pages/race/race.html',
 })
 export class RacePage {
@@ -51,6 +35,7 @@ export class RacePage {
 
   private lap = 0;
   private laps = 0;
+  private mask = 0;
 
   private startTime: number;
   private currentTime: number;
@@ -61,15 +46,20 @@ export class RacePage {
 
   onPageLoaded() {
     // FIXME: overlay on race screen on first open
-    let modal = Modal.create(Settings);
+    let modal = Modal.create(RaceSettings);
     modal.onDismiss(settings => {
       this.laps = settings.laps;
+      this.cu.start.take(1).toPromise().then(value => {
+        if (value !== 1) {
+          this.cu.toggleStart();
+        }
+      });
+      this.subscription = this.cu.time.subscribe(event => this.update(event));
+      this.cu.clearPosition();
+      this.cu.setMask(0);
+      this.cu.reset();
     });
-    setTimeout(() => this.nav.present(modal), 100);
-
-    this.subscription = this.cu.lap.subscribe(event => this.onTime(event));
-    this.cu.clearPosition();
-    this.cu.reset();
+    setTimeout(() => this.nav.present(modal));
   }
 
   onPageDidUnload() {
@@ -83,11 +73,7 @@ export class RacePage {
     return this.cars[id];
   }
 
-  private start() {
-    this.cu.start();
-  }
-
-  private onTime(event: any) {
+  private update(event: any) {
     if (this.startTime === undefined) {
       this.startTime = event.time;
       this.currentTime = event.time;
@@ -100,6 +86,10 @@ export class RacePage {
         this.cu.setLap(this.lap);
         this.currentTime = event.time;
       }
+      if (car.laps == this.laps) {
+        this.mask |= 1 << event.id;
+        this.cu.setMask(this.mask);
+      }
     }
     if (!car.bestlap || car.laptime < car.bestlap) {
       car.bestlap = car.laptime;
@@ -109,23 +99,6 @@ export class RacePage {
     let items = Object.keys(this.cars).map(id => this.cars[id]);
     items.sort((lhs, rhs) => (rhs.laps - lhs.laps) || (lhs.time - rhs.time));
     this.items.emit(items);
-  }
-
-  private inPit(id: string, mask: number) {
-    let n = id.charCodeAt(0) - 0x31;
-    let v = mask & (1 << n);
-    return v != 0;
-  }
-
-  private time(item: Car) {
-    let ms = item.time - this.startTime;
-    let m = Math.floor(ms / 60000);
-    let s = ((ms % 60000) / 1000);
-    if (m) {
-      return m.toString() + ':' + (s >= 10 ? '' : '0') + s.toFixed(3);
-    } else {
-      return s.toFixed(3);
-    }
   }
 
   private gap(item: Car) {

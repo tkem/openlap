@@ -1,41 +1,14 @@
-import {Modal, NavController, Page, ViewController} from 'ionic-angular';
+import {Page} from 'ionic-angular';
 import {EventEmitter} from '@angular/core';
 import {ControlUnit, Drivers} from '../../providers';
-import {Gauge, Startlight, Stripe} from '../../components.ts';
+import {ColWidth, Gauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components.ts';
 import {Car} from '../../models/car';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/toPromise';
 
 @Page({
-  template: `
-    <ion-content padding>
-    <h1>Qualifying Settings</h1>
-    <ion-list>
-    <ion-item>
-    <ion-label>Laps</ion-label>
-    <ion-input [(ngModel)]="laps" type="number" min="0"></ion-input>
-    </ion-item>
-    <ion-item>
-    <ion-label>Time (min)</ion-label>
-    <ion-input [(ngModel)]="time" type="number" min="0"></ion-input>
-    </ion-item>
-    </ion-list>
-    <button (click)="close()">OK</button>
-    </ion-content>
-    `
-})
-class Settings {
-
-  laps = 5;
-  time = 0;
-
-  constructor(private view: ViewController) {}
-
-  close() {
-    this.view.dismiss(this);
-  }
-}
-
-@Page({
-  directives: [Gauge, Startlight, Stripe],
+  directives: [ColWidth, Gauge, Startlight, Stripe],
+  pipes: [TimePipe, IsSetPipe],
   templateUrl: 'build/pages/qualifying/qualifying.html',
 })
 export class QualifyingPage {
@@ -47,18 +20,18 @@ export class QualifyingPage {
 
   private subscription: any;
 
-  constructor(private cu: ControlUnit, private drivers: Drivers, private nav: NavController) {}
+  constructor(private cu: ControlUnit, private drivers: Drivers) {}
 
   onPageLoaded() {
     // TODO: use settings
-    setTimeout(() => {
-      let modal = Modal.create(Settings);
-      modal.onDismiss(data => console.log(data));
-      this.nav.present(modal);
-    }, 100);
-    //this.nav.present(Modal.create(Settings));  // wont work w/o timeout
-    this.subscription = this.cu.lap.subscribe(event => this.onTime(event));
+    this.cu.start.take(1).toPromise().then(value => {
+      if (value !== 1) {
+        this.cu.toggleStart();
+      }
+    });
+    this.subscription = this.cu.time.subscribe(event => this.update(event));
     this.cu.clearPosition();
+    this.cu.setMask(0);
     this.cu.reset();
   }
 
@@ -73,11 +46,7 @@ export class QualifyingPage {
     return this.cars[id];
   }
 
-  private start() {
-    this.cu.start();
-  }
-
-  private onTime(event: any) {
+  private update(event: any) {
     let car = this.getCar(event.id);
     if (car.time) {
       car.laptime = event.time - car.time;
@@ -93,12 +62,8 @@ export class QualifyingPage {
 
     let items = Object.keys(this.cars).map(id => this.cars[id]);
     items.sort((lhs, rhs) => (lhs.bestlap || Infinity) - (rhs.bestlap || Infinity));
+    // TODO: only if changed? how to prevent pos. tower default behavior?
+    items.forEach((item, index) => this.cu.setPosition(item.id, index + 1));
     this.items.emit(items);
-  }
-
-  private inPit(id: string, mask: number) {
-    let n = id.charCodeAt(0) - 0x31;
-    let v = mask & (1 << n);
-    return v != 0;
   }
 }

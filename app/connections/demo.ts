@@ -153,7 +153,7 @@ export class DemoConnection implements Connection {
       view[i + 2] = 0x30 + ((this.cars[i].fuel) >> 4 & 0xf);
     }
     view[10] = 0x30 + this.startValue; // start
-    view[11] = 0x30 + 0x2; // mode
+    view[11] = 0x30 + 0x02; // mode
     view[12] = 0x30 + this.getPitMask(0, 4);
     view[13] = 0x30 + this.getPitMask(4, 8);
     view[14] = 0x36;  // display
@@ -168,7 +168,7 @@ export class DemoConnection implements Connection {
     }
     return mask;
   }
-  
+
   private onStart() {
     if (this.startValue == 0) {
       this.stopAll();
@@ -181,13 +181,13 @@ export class DemoConnection implements Connection {
       setTimeout(() => this.onStart(), 1000);
     }
   }
-  
+
   private startAll() {
     for (let i = 0; i != this.config.numCars; ++i) {
       this.cars[i].start(this.config.minLapTime, this.config.maxLapTime, random(0, this.config.maxStartTime));
     }
   }
-  
+
   private stopAll() {
     for (let i = 0; i != this.config.numCars; ++i) {
       this.cars[i].stop();

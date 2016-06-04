@@ -3,20 +3,20 @@
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title>Race</ion-title>
-  <ion-buttons end *ngIf="laps">Lap {{lap}}/{{laps}}</ion-buttons>
+  <ion-buttons end *ngIf="laps"><span light>Lap {{lap}}/{{laps}}</span></ion-buttons>
 </ion-navbar>
 
 <ion-content>
   <table class="leaderboard">
     <colgroup>
-      <col style="width: 2.25em">
+      <col width="2.25em">
       <col>
       <col>
       <col>
       <col>
-      <col style="width: 4em">
-      <col style="width: 6em">
-      <col style="width: 4em">
+      <col width="4em">
+      <col width="6em" *ngIf="(cu.mode | async) != 0">
+      <col width="4em">
     </colgroup>
     <thead>
       <tr>
@@ -26,23 +26,27 @@
         <th text-right>LAP TIME</th>
         <th text-right>BEST LAP</th>
         <th text-right>LAPS</th>
-        <th text-left>FUEL</th>
+        <th text-left *ngIf="(cu.mode | async) != 0">FUEL</th>
         <th text-left></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of (items | async); let i = index; let leader = first">
-        <td text-left class="stripe-container">{{i + 1}}<stripe [color]="drivers.itemAt(item.id).color"></stripe></td>
+        <td text-left class="stripe-container">
+          {{i + 1}}
+          <stripe [color]="drivers.itemAt(item.id).color"></stripe>
+        </td>
         <td text-left>{{drivers.itemAt(item.id).name}}</td>
-        <td text-right>{{leader ? time(item) : gap(item)}}</td>
-        <td text-right>{{(item.laptime / 1000).toFixed(3)}}</td>
-        <td text-right>{{(item.bestlap / 1000).toFixed(3)}}</td>
+        <td text-right>{{leader ? (item.time | time:startTime) : gap(item)}}</td>
+        <td text-right>{{item.laptime | time}}</td>
+        <td text-right>{{item.bestlap | time}}</td>
         <td text-right>{{item.laps}}</td>
         <td text-left>
-          <gauge max="15" [value]="(cu.fuel | async)[item.id.charCodeAt(0) - 49]"></gauge>
+          <gauge max="15" [value]="(cu.fuel | async)[item.id]"></gauge>
         </td>
         <td text-left>
-          <span *ngIf="inPit(item.id, cu.pit | async)" class="pit">PIT</span>
+          <span *ngIf="cu.pit | async | isSet:item.id" class="pit">PIT</span>
+          <ion-icon *ngIf="item.laps >= laps" name="flag"></ion-icon>
         </td>
       </tr>
     </tbody>
@@ -50,5 +54,5 @@
 </ion-content>
 
 <ion-toolbar position="bottom" text-center transparent>
-  <startlight (click)="start()" [value]="cu.startSequence | async"></startlight>
+  <startlight (click)="cu.toggleStart()" [value]="cu.start | async"></startlight>
 </ion-toolbar>

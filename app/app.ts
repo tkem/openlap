@@ -37,21 +37,18 @@ class MyApp {
       { title: 'Practice', component: PracticePage },
       { title: 'Qualifying', component: QualifyingPage },
       { title: 'Race', component: RacePage },
-      { title: 'Connection', component: ConnectionPage },
-      { title: 'Settings', component: SettingsPage },
-      { title: 'About', component: AboutPage }
+      //{ title: 'Connection', component: ConnectionPage },
+      //{ title: 'Settings', component: SettingsPage },
+      //{ title: 'About', component: AboutPage }
     ];
 
     let provider = platform.is('cordova') ? new BLEProvider() : new DemoProvider();
 
     provider.scan().subscribe(device => {
       console.log(device);
-      cu.lap.subscribe(event => {
-        console.log('New lap', event);
-      });
       provider.connect(device).subscribe(connection => {
         cu.connect(connection);
-        cu.version().subscribe(version => {
+        cu.getVersion().subscribe(version => {
           console.log('CU version', version);
         });
       });

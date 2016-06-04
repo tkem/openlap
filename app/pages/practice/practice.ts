@@ -1,11 +1,12 @@
 import {Page} from 'ionic-angular';
 import {EventEmitter} from '@angular/core';
 import {ControlUnit, Drivers} from '../../providers';
-import {Gauge, Startlight, Stripe} from '../../components.ts';
+import {ColWidth, Gauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components.ts';
 import {Car} from '../../models/car';
 
 @Page({
-  directives: [Gauge, Startlight, Stripe],
+  directives: [ColWidth, Gauge, Startlight, Stripe],
+  pipes: [TimePipe, IsSetPipe],
   templateUrl: 'build/pages/practice/practice.html',
 })
 export class PracticePage {
@@ -20,9 +21,11 @@ export class PracticePage {
   constructor(private cu: ControlUnit, private drivers: Drivers) {}
 
   onPageLoaded() {
-    this.subscription = this.cu.lap.subscribe(event => this.onTime(event));
+    this.subscription = this.cu.time.subscribe(event => this.update(event));
     this.cu.clearPosition();
+    this.cu.setMask(0);
     this.cu.reset();
+    this.cu.mode.subscribe(mode => console.log('CU mode: ' + mode));
   }
 
   onPageDidUnload() {
@@ -36,11 +39,7 @@ export class PracticePage {
     return this.cars[id];
   }
 
-  private start() {
-    this.cu.start();
-  }
-
-  private onTime(event: any) {
+  private update(event: any) {
     let car = this.getCar(event.id);
     if (car.time) {
       car.laptime = event.time - car.time;
@@ -57,11 +56,5 @@ export class PracticePage {
     let items = Object.keys(this.cars).map(id => this.cars[id]);
     items.sort((lhs, rhs) => (rhs.laps - lhs.laps) || (lhs.time - rhs.time));
     this.items.emit(items);
-  }
-
-  private inPit(id: string, mask: number) {
-    let n = id.charCodeAt(0) - 0x31;
-    let v = mask & (1 << n);
-    return v != 0;
   }
 }

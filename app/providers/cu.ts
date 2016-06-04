@@ -97,26 +97,11 @@ function getUint32(array: ArrayLike<number>, offset = 0) {
   return n;
 }
 
-export class Lap {
-  constructor(array) {
-    this.id = array[1] - 0x30;
-    this.time = getUint32(array, 2);
-    this.sector = array[10] - 0x30;
-  }
-
-  public id;
-
-  public time: number;
-
-  public sector;
+// TODO: tuple?
+class TimeEvent {
+  constructor(public id: number, public time: number, public sector: number) {}
 }
 
-/*
-  Generated class for the Connection provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class ControlUnit {
 
@@ -126,34 +111,33 @@ export class ControlUnit {
 
   private observer = null;
 
-  private fuelSubject = new BehaviorSubject<ArrayLike<number>>(undefined);
-  private startSequenceSubject = new BehaviorSubject<number>(undefined);
-  private modeSubject = new BehaviorSubject<number>(undefined);
-  private pitSubject = new BehaviorSubject<number>(undefined);
-  private lapSubject = new Subject<Lap>(undefined);
+  private _fuel = new BehaviorSubject<ArrayLike<number>>(undefined);
+  private _start = new BehaviorSubject<number>(undefined);
+  private _mode = new BehaviorSubject<number>(undefined);
+  private _pit = new BehaviorSubject<number>(undefined);
+  private _time = new Subject<TimeEvent>(undefined);
 
   fuel: Observable<ArrayLike<number>>;
-  startSequence: Observable<number>;  // TODO: name!
+  start: Observable<number>;
   mode: Observable<number>;
   pit: Observable<number>;
-  lap: Observable<Lap>;
+  time: Observable<TimeEvent>;
 
   constructor(private zone: NgZone) {
     // TODO: custom Subject implementation(s)?
-    this.startSequence = this.startSequenceSubject.filter(value => value !== undefined).distinctUntilChanged();
-    this.fuel = this.fuelSubject.filter(value => value !== undefined).distinctUntilChanged(
+    this.fuel = this._fuel.filter(value => value !== undefined).distinctUntilChanged(
       null, array => getUint32(array)  // TODO: better equality
       //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
     );
-    this.mode = this.modeSubject.filter(value => value !== undefined).distinctUntilChanged();
-    this.pit = this.pitSubject.filter(value => value !== undefined).distinctUntilChanged();
-    this.lap = this.lapSubject.distinctUntilChanged(
+    this.start = this._start.filter(value => value !== undefined).distinctUntilChanged();
+    this.mode = this._mode.filter(value => value !== undefined).distinctUntilChanged();
+    this.pit = this._pit.filter(value => value !== undefined).distinctUntilChanged();
+    this.time = this._time.distinctUntilChanged(
       (a, b) => a.id == b.id && a.time == b.time && a.sector == b.sector
     );
   }
 
   connect(connection) {
-
     this.connection = connection;
 
     connection.subscribe(buffer => {
@@ -163,12 +147,15 @@ export class ControlUnit {
         switch (view.toString(0, 1)) {
         case '?':
           if (view.toString(1, 1) == ':') {
-            this.fuelSubject.next(view.getArray(2, 8));
-            this.startSequenceSubject.next(view.getUint4(10));
-            this.modeSubject.next(view.getUint4(11));
-            this.pitSubject.next(view.getUint8(12));
+            this._fuel.next(view.getArray(2, 8));
+            this._start.next(view.getUint4(10));
+            this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
+            this._pit.next(view.getUint8(12));
           } else {
-            this.lapSubject.next(new Lap(new Uint8Array(view.buffer)));
+            let id = view.getUint4(1) - 1;
+            let time = view.getUint32(2);
+            let sector = view.getUint4(10);
+            this._time.next(new TimeEvent(id, time, sector));
           }
           break;
         case '0':
@@ -188,14 +175,14 @@ export class ControlUnit {
     this.poll();
   }
 
-  version() {
+  getVersion() {
     return Observable.create(observer => {
       this.requests.push(DataView.fromString('0').buffer);
       this.observer = observer;
     });
   }
 
-  start() {
+  toggleStart() {
     this.requests.push(DataView.fromString('T2').buffer);
   }
 
@@ -204,8 +191,8 @@ export class ControlUnit {
     this.set(18, 7, value & 0xf);
   }
 
-  setPosition(addr: number, pos: number) {
-    this.set(6, addr, pos);
+  setPosition(id: number, pos: number) {
+    this.set(6, id, pos);
   }
 
   clearPosition() {
@@ -220,20 +207,20 @@ export class ControlUnit {
     this.requests.push(DataView.fromString('=10').buffer);
   }
 
-  setSpeed(addr: number, value: number) {
-    this.set(0, addr, value, 2);
+  setSpeed(id: number, value: number) {
+    this.set(0, id, value, 2);
   }
 
-  setBrake(addr: number, value: number) {
-    this.set(1, addr, value, 2);
+  setBrake(id: number, value: number) {
+    this.set(1, id, value, 2);
   }
 
-  setFuel(addr: number, value: number) {
-    this.set(2, addr, value, 2);
+  setFuel(id: number, value: number) {
+    this.set(2, id, value, 2);
   }
 
-  private set(word: number, addr: number, value: number, repeat=1) {
-    this.command('J', word & 0x0f, (word >> 4) | (addr << 1), value, repeat);
+  private set(address: number, id: number, value: number, repeat=1) {
+    this.command('J', address & 0x0f, (address >> 4) | (id << 1), value, repeat);
   }
 
   private command(cmd: string, ...values: number[]) {

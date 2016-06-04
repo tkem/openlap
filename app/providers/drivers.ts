@@ -1,31 +1,23 @@
 import {Injectable} from '@angular/core';
 
 export interface Driver {
-    id: string;
     name: string;
     color: string;
 }
 
 export abstract class Drivers {
-    abstract itemAt(key: string | number): Driver;
+    abstract itemAt(id: number): Driver;
 }
 
 class DefaultDriver implements Driver {
-
-    private _id: string;
 
     private _name: string;
 
     private _color: string;
 
-    constructor(id: string, name: string, color: string) {
-        this._id = id;
+    constructor(name: string, color: string) {
         this._name = name;
         this._color = color;
-    }
-
-    get id() {
-        return this._id;
     }
 
     get name() {
@@ -50,21 +42,17 @@ class DefaultDriver implements Driver {
 @Injectable()
 export class DefaultDrivers extends Drivers {
     private drivers = [
-        new DefaultDriver('1', 'Driver #1', 'blue'),
-        new DefaultDriver('2', 'Driver #2', 'red'),
-        new DefaultDriver('3', 'Driver #3', 'yellow'),
-        new DefaultDriver('4', 'Driver #4', 'green'),
-        new DefaultDriver('5', 'Driver #5', 'white'),
-        new DefaultDriver('6', 'Driver #6', 'gray'),
-        new DefaultDriver('7', 'Autonomous Car', 'silver'),
-        new DefaultDriver('8', 'Pace Car', 'gold'),
+        new DefaultDriver('Driver #1', 'blue'),
+        new DefaultDriver('Driver #2', 'red'),
+        new DefaultDriver('Driver #3', 'yellow'),
+        new DefaultDriver('Driver #4', 'green'),
+        new DefaultDriver('Driver #5', 'white'),
+        new DefaultDriver('Driver #6', 'gray'),
+        new DefaultDriver('Autonomous Car', 'silver'),
+        new DefaultDriver('Pace Car', 'gold'),
     ];
 
-    itemAt(key: number | string) {
-        if (typeof key === 'string') {
-            return this.drivers[parseInt(key) - 1];
-        } else {
-            return this.drivers[key];
-        }
+    itemAt(id: number) {
+      return this.drivers[id];
     }
 }

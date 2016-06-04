@@ -1,0 +1,10 @@
+<ion-content padding>
+  <h1>Race Settings</h1>
+  <ion-list>
+    <ion-item>
+      <ion-label>Laps</ion-label>
+      <ion-input [(ngModel)]="laps" type="number" min="0"></ion-input>
+    </ion-item>
+  </ion-list>
+  <button (click)="close()">OK</button>
+</ion-content>
