@@ -38,7 +38,7 @@
         <td text-right>{{item.bestlap | time}}</td>
         <td text-right>{{item.laps}}</td>
         <td text-left *ngIf="(cu.mode | async) != 0">
-          <gauge max="15" [value]="(cu.fuel | async)[item.id]"></gauge>
+          <fuel-gauge max="15" [value]="((cu.fuel | async) || [])[item.id]"></fuel-gauge>
         </td>
         <td text-left>
           <span *ngIf="cu.pit | async | isSet:item.id" class="pit">PIT</span>

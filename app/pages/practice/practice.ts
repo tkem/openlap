@@ -1,11 +1,10 @@
-import {Page} from 'ionic-angular';
-import {EventEmitter} from '@angular/core';
-import {ControlUnit, Drivers} from '../../providers';
-import {ColWidth, Gauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components.ts';
+import {Component, EventEmitter} from '@angular/core';
+import {ControlUnit, Drivers, Logger} from '../../providers';
+import {ColWidth, FuelGauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components';
 import {Car} from '../../models/car';
 
-@Page({
-  directives: [ColWidth, Gauge, Startlight, Stripe],
+@Component({
+  directives: [ColWidth, FuelGauge, Startlight, Stripe],
   pipes: [TimePipe, IsSetPipe],
   templateUrl: 'build/pages/practice/practice.html',
 })
@@ -18,17 +17,17 @@ export class PracticePage {
 
   private subscription: any;
 
-  constructor(private cu: ControlUnit, private drivers: Drivers) {}
+  constructor(private cu: ControlUnit, private drivers: Drivers, private logger: Logger) {}
 
-  onPageLoaded() {
+  ionViewLoaded() {
     this.subscription = this.cu.time.subscribe(event => this.update(event));
     this.cu.clearPosition();
     this.cu.setMask(0);
     this.cu.reset();
-    this.cu.mode.subscribe(mode => console.log('CU mode: ' + mode));
+    this.cu.mode.subscribe(mode => this.logger.debug('CU mode: ' + mode));
   }
 
-  onPageDidUnload() {
+  ionViewDidUnload() {
     this.subscription.unsubscribe();
   }
 

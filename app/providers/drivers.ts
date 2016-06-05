@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 export interface Driver {
     name: string;
@@ -25,7 +25,7 @@ class DefaultDriver implements Driver {
     }
 
     set name(value: string) {
-        console.log('Driver name set to "' + value + '"');
+        //console.log('Driver name set to "' + value + '"');
         this._name = value;
     }
 
@@ -34,7 +34,7 @@ class DefaultDriver implements Driver {
     }
 
     set color(value: string) {
-        console.log('Driver color set to "' + value + '"');
+        //console.log('Driver color set to "' + value + '"');
         this._color = value;
     }
 }

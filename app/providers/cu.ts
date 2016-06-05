@@ -1,10 +1,14 @@
-import {EventEmitter, Injectable, NgZone} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Subject} from 'rxjs/Subject';
+import { Injectable, NgZone } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/distinctUntilChanged';
+
+import { Connection, ConnectionProvider, Device } from '../connections/connection';
+import { Logger } from './logger';
 
 class DataView {
   private array: Uint8Array;
@@ -84,6 +88,7 @@ class DataView {
   }
 }
 
+// TODO: remove
 function getUint32(array: ArrayLike<number>, offset = 0) {
   let n = 0;
   n |= (array[offset + 0] & 0xf) << 24;
@@ -105,17 +110,18 @@ class TimeEvent {
 @Injectable()
 export class ControlUnit {
 
-  private connection: any = null;
-
-  private requests: any = [];
-
-  private observer = null;
+  private device: Device;
+  private connection: Connection;
+  private provider: ConnectionProvider;
+  
+  private requests = Array<ArrayBuffer>();
+  private version = null;
 
   private _fuel = new BehaviorSubject<ArrayLike<number>>(undefined);
   private _start = new BehaviorSubject<number>(undefined);
   private _mode = new BehaviorSubject<number>(undefined);
   private _pit = new BehaviorSubject<number>(undefined);
-  private _time = new Subject<TimeEvent>(undefined);
+  private _time = new Subject<TimeEvent>();
 
   fuel: Observable<ArrayLike<number>>;
   start: Observable<number>;
@@ -123,7 +129,7 @@ export class ControlUnit {
   pit: Observable<number>;
   time: Observable<TimeEvent>;
 
-  constructor(private zone: NgZone) {
+  constructor(private logger: Logger, private zone: NgZone) {
     // TODO: custom Subject implementation(s)?
     this.fuel = this._fuel.filter(value => value !== undefined).distinctUntilChanged(
       null, array => getUint32(array)  // TODO: better equality
@@ -137,48 +143,74 @@ export class ControlUnit {
     );
   }
 
-  connect(connection) {
-    this.connection = connection;
+  /* TODO: injectable provider */
+  connect(provider: ConnectionProvider, device: Device) {
+    this.logger.info('CU: Connecting to ' + device.id);
+    this.provider = provider;
+    this.device = device;
+    return this.provider.connect(device).then(connection => this.onConnect(connection));
+  }
 
-    connection.subscribe(buffer => {
-      let view = new DataView(buffer);
-      // console.log('CU received', view.toString());
-      this.zone.run(() => {
-        switch (view.toString(0, 1)) {
-        case '?':
-          if (view.toString(1, 1) == ':') {
-            this._fuel.next(view.getArray(2, 8));
-            this._start.next(view.getUint4(10));
-            this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
-            this._pit.next(view.getUint8(12));
-          } else {
-            let id = view.getUint4(1) - 1;
-            let time = view.getUint32(2);
-            let sector = view.getUint4(10);
-            this._time.next(new TimeEvent(id, time, sector));
-          }
-          break;
-        case '0':
-          if (this.observer) {
-            this.observer.next(view.toString(1, 4));
-            this.observer.complete();
-            this.observer = null;
-          }
-          break;
-        default:
-          // TODO: command promises?
-          break;
-        }
-      });
-      this.poll();
+  private onConnect(connection: Connection) {
+    this.logger.info('CU: Connected to ' + this.device.id);
+    this.connection = connection;
+    connection.subscribe(
+      data => this.onData(data), 
+      error => this.onError(error), 
+      () => this.onClose()
+    );
+    this.getVersion().then(version => {
+      this.logger.info('CU version', version);
     });
     this.poll();
   }
-
+  
+  private onData(data: ArrayBuffer) {
+    let view = new DataView(data);
+    // TODO: remove zone?
+    this.zone.run(() => {
+      switch (view.toString(0, 1)) {
+      case '?':
+        if (view.toString(1, 1) == ':') {
+          this._fuel.next(view.getArray(2, 8));
+          this._start.next(view.getUint4(10));
+          this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
+          this._pit.next(view.getUint8(12));
+        } else {
+          let id = view.getUint4(1) - 1;
+          let time = view.getUint32(2);
+          let sector = view.getUint4(10);
+          this._time.next(new TimeEvent(id, time, sector));
+        }
+        break;
+      case '0':
+        if (this.version) {
+          this.version(view.toString(1, 4));
+        }
+        break;
+      default:
+        // TODO: command promises?
+        this.logger.debug('CU received', view.toString());
+        break;
+      }
+    });
+    this.poll();
+  }
+  
+  private onError(error: any) {
+    this.logger.error('CU: Connection error: ', error);
+    this.connection = null;
+    this.provider.connect(this.device).then(connection => this.onConnect(connection));
+  }
+  
+  private onClose() {
+    this.logger.info('CU: Connection closed');
+  }
+  
   getVersion() {
-    return Observable.create(observer => {
+    return new Promise((resolve, reject) => {
       this.requests.push(DataView.fromString('0').buffer);
-      this.observer = observer;
+      this.version = resolve;
     });
   }
 
@@ -226,6 +258,7 @@ export class ControlUnit {
   private command(cmd: string, ...values: number[]) {
     let a = new Uint8Array(values.length + 2);
     let c = a[0] = cmd.charCodeAt(0);
+    // TODO: CRC necessary?
     for (let i = 0; i != values.length; ++i) {
       let v = values[i];
       a[i + 1] = 0x30 | v;
@@ -237,7 +270,7 @@ export class ControlUnit {
 
   private poll() {
     if (this.requests.length !== 0) {
-      //console.log('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
+      this.logger.debug('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
       this.connection.send(this.requests.shift());
     } else {
       this.connection.send(DataView.fromString('?').buffer);

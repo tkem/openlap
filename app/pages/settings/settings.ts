@@ -1,8 +1,16 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import { Component } from '@angular/core';
+
+import { NavController, NavParams } from 'ionic-angular';
+
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 import {ControlUnit} from '../../providers/cu';
 import {Drivers} from '../../providers/drivers';
 
-@Page({
+@Component({
   template: `
     <ion-content>
       <ion-list>
@@ -18,7 +26,7 @@ class NamePage {
   constructor(private drivers: Drivers) {}
 }
 
-@Page({
+@Component({
   template: `
     <ion-content>
       <ion-list>
@@ -43,54 +51,56 @@ class ColorPage {
   constructor(private drivers: Drivers) {}
 }
 
-@Page({
+@Component({
   template: `
     <ion-content>
       <ion-list>
-        <ion-item *ngFor="let id of '123456'.split('')">
-          <ion-label>#{{id}}</ion-label>
-          <ion-select [(ngModel)]="model[id]" (change)="change(id)">
-            <ion-option value="0">0</ion-option>
-            <ion-option value="1">1</ion-option>
-            <ion-option value="2">2</ion-option>
-            <ion-option value="3">3</ion-option>
-            <ion-option value="4">4</ion-option>
-            <ion-option value="5">5</ion-option>
-            <ion-option value="6">6</ion-option>
-            <ion-option value="7">7</ion-option>
-            <ion-option value="8">8</ion-option>
-            <ion-option value="9">9</ion-option>
-            <ion-option value="10">10</ion-option>
-            <ion-option value="11">11</ion-option>
-            <ion-option value="12">12</ion-option>
-            <ion-option value="13">13</ion-option>
-            <ion-option value="14">14</ion-option>
-            <ion-option value="15">15</ion-option>
-          </ion-select>
+        <ion-item *ngFor="let model of models">
+          <ion-range min="0" max="15" snaps="true" [(ngModel)]="model.value" (ionChange)="onChange(model.id)">
+              <ion-label range-left>#{{model.id + 1}}</ion-label>
+          </ion-range>
         </ion-item>
       </ion-list>
     </ion-content>
   `
 })
 class RangePage {
-  model = {'1': 8, '2': 8, '3': 8, '4': 8, '5': 8, '6': 8};
+  // TODO: initial values, improve mapping (simple array not sufficient?)
+  models = [
+    { id: 0, value: 8},
+    { id: 1, value: 8},
+    { id: 2, value: 8},
+    { id: 3, value: 8},
+    { id: 4, value: 8},
+    { id: 5, value: 8}
+  ];
 
-  constructor(navParams: NavParams) {
-    console.log("---> Passed params", navParams.data);
+  private subject = new Subject<number>();
+  
+  constructor(private cu: ControlUnit, private navParams: NavParams) {
+    // TODO: distinctUntilChanged, etc.
+    this.subject.debounceTime(400).subscribe(id => {
+      console.log('Update ' + this.navParams.data + ':' + id + ': ' + this.models[id]);
+      switch (this.navParams.data) {
+      case 'speed':
+        this.cu.setSpeed(id, this.models[id].value);
+        break;
+      case 'brake':
+        this.cu.setBrake(id, this.models[id].value);
+        break;
+      case 'fuel':
+        this.cu.setFuel(id, this.models[id].value);
+        break;    
+      }
+    });
   }
 
-  change(id) {
-    console.log('---> Change #' + id + ': ' + this.model[id]);
+  onChange(id) {
+    this.subject.next(id);
   }
 }
 
-/*
-  Generated class for the SettingsPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
-@Page({
+@Component({
   templateUrl: 'build/pages/settings/settings.html',
 })
 export class SettingsPage {

@@ -1,10 +1,9 @@
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 
-export interface Connection {
-  subscribe(generatorOrNext?: any, error?: any, complete?: any) : any;
+import { Observable, Subscribable } from 'rxjs/Observable';
 
+export interface Connection extends Subscribable<ArrayBuffer> {
   send(data: ArrayBuffer);
-
   close();
 }
 
@@ -13,7 +12,6 @@ export interface Device {
   id: any;
 }
 
-export abstract class Provider {
-  abstract connect(device: Device): Observable<Connection>;
-  abstract scan(): Observable<Device>;  
+export abstract class ConnectionProvider {
+  abstract connect(device?: Device): Promise<Connection>;
 }

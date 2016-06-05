@@ -1,10 +1,18 @@
-<ion-navbar *navbar>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Connection</ion-title>
-</ion-navbar>
-
-<ion-content padding class="connection">
-
+<ion-content padding>
+  <h1>Connection</h1>
+  <ion-list>
+    <ion-item *ngFor="let device of devices" (click)="connect(device)">
+      <h1>{{device.name}}</h1>
+      <h3>{{device.id}}</h3>
+    </ion-item>
+    <ion-item (click)="connect({id: 'serial', name: 'Serial'})">
+      <h1>Serial USB</h1>
+    </ion-item>
+    <ion-item (click)="connect({id: 'demo', name: 'Demo'})">
+      <h1>Demo</h1>
+    </ion-item>
+  </ion-list>
+  <div *ngIf="error">{{error}}</div>
+  <div>{{version | async}}</div>
+  <button (click)="close()">OK</button>
 </ion-content>

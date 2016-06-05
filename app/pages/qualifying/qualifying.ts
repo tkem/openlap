@@ -1,13 +1,12 @@
-import {Page} from 'ionic-angular';
-import {EventEmitter} from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import {ControlUnit, Drivers} from '../../providers';
-import {ColWidth, Gauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components.ts';
+import {ColWidth, FuelGauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components';
 import {Car} from '../../models/car';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
 
-@Page({
-  directives: [ColWidth, Gauge, Startlight, Stripe],
+@Component({
+  directives: [ColWidth, FuelGauge, Startlight, Stripe],
   pipes: [TimePipe, IsSetPipe],
   templateUrl: 'build/pages/qualifying/qualifying.html',
 })
@@ -22,7 +21,7 @@ export class QualifyingPage {
 
   constructor(private cu: ControlUnit, private drivers: Drivers) {}
 
-  onPageLoaded() {
+  ionViewLoaded() {
     // TODO: use settings
     this.cu.start.take(1).toPromise().then(value => {
       if (value !== 1) {
@@ -35,7 +34,7 @@ export class QualifyingPage {
     this.cu.reset();
   }
 
-  onPageDidUnload() {
+  ionViewDidUnload() {
     this.subscription.unsubscribe();
   }
 

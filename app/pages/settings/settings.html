@@ -8,7 +8,7 @@
 <ion-tabs tabbarPlacement="top">
   <ion-tab [root]="nameRoot" tabTitle="Name"></ion-tab>
   <ion-tab [root]="colorRoot" tabTitle="Color"></ion-tab>
-  <ion-tab [root]="speedRoot" [rootParams]="0" tabTitle="Speed"></ion-tab>
-  <ion-tab [root]="brakeRoot" [rootParams]="1" tabTitle="Brake"></ion-tab>
-  <ion-tab [root]="fuelRoot" [rootParams]="2" tabTitle="Fuel"></ion-tab>
+  <ion-tab [root]="speedRoot" rootParams="speed" tabTitle="Speed"></ion-tab>
+  <ion-tab [root]="brakeRoot" rootParams="brake" tabTitle="Brake"></ion-tab>
+  <ion-tab [root]="fuelRoot" rootParams="fuel" tabTitle="Fuel"></ion-tab>
 </ion-tabs>

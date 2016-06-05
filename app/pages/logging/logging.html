@@ -1,0 +1,19 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Logging</ion-title>
+  <ion-buttons end>
+    <button (click)="logger.records = []">Clear</button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let record of logger.records">
+      <span>{{record.level}}</span>
+      <span>{{record.time | date:'HH:mm:ss.sss'}}.{{(record.time % 1000) | number:'3.0-0'}}</span>
+      <span>{{record.args.join(', ')}}</span>
+    </ion-item>
+  </ion-list>
+</ion-content>

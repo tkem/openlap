@@ -1,10 +1,9 @@
-import {Connection, Device, Provider} from './connection';
-import {EventEmitter, Injectable} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import {IntervalObservable} from 'rxjs/observable/IntervalObservable'
+import { EventEmitter, Injectable } from '@angular/core';
 
-import 'rxjs/add/operator/map';
-//import 'rxjs/add/operator/interval';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
+import {Connection, Device, ConnectionProvider} from './connection';
 
 const DOLLAR = '$'.charCodeAt(0);
 
@@ -77,12 +76,10 @@ class Car {
   }
 }
 
-export class DemoConnection implements Connection {
-  private emitter = new EventEmitter<ArrayBuffer>();
+export class DemoConnection extends Subject<ArrayBuffer> implements Connection {
+  private static start = Date.now();
 
-  private start = Date.now();
-
-  private startValue = 0;
+  private startSequence = 0;
 
   private cars = [
     new Car('1'),
@@ -104,15 +101,15 @@ export class DemoConnection implements Connection {
     maxLapTime: 5000
   };
 
-  constructor(private device) {
+  private version: string;
+
+  constructor() {
+    super();
+    this.version = (Math.random() * 10000).toFixed(0);
     for (let i = 0; i != this.config.numCars; ++i) {
       this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
     }
     this.startAll();
-  }
-
-  subscribe(generatorOrNext?: any, error?: any, complete?: any) {
-    this.emitter.subscribe(generatorOrNext, error, complete);
   }
 
   send(data: ArrayBuffer) {
@@ -120,8 +117,12 @@ export class DemoConnection implements Connection {
       this.onStart();
     }
     setTimeout(() => {
-      let event = this.laps.length ? this.laps.shift() : this.createStatus();
-      this.emitter.emit(event);
+      if (toString(data) == '0') {
+        let version = new Uint8Array(('0' + this.version).split('').map(c => c.charCodeAt(0)));
+        this.next(version.buffer);
+      } else {
+        this.next(this.laps.length ? this.laps.shift() : this.createStatus());
+      }
     }, 50);
   }
 
@@ -129,7 +130,7 @@ export class DemoConnection implements Connection {
   }
 
   private createLap(id: string) {
-    let time = Date.now() - this.start;
+    let time = Date.now() - DemoConnection.start;
     let view = new Uint8Array(11);
     view[0] = '?'.charCodeAt(0);
     view[1] = id.charCodeAt(0);;
@@ -152,7 +153,7 @@ export class DemoConnection implements Connection {
     for (let i = 0; i != 8; ++i) {
       view[i + 2] = 0x30 + ((this.cars[i].fuel) >> 4 & 0xf);
     }
-    view[10] = 0x30 + this.startValue; // start
+    view[10] = 0x30 + this.startSequence; // start
     view[11] = 0x30 + 0x02; // mode
     view[12] = 0x30 + this.getPitMask(0, 4);
     view[13] = 0x30 + this.getPitMask(4, 8);
@@ -170,14 +171,15 @@ export class DemoConnection implements Connection {
   }
 
   private onStart() {
-    if (this.startValue == 0) {
+    if (this.startSequence == 0) {
       this.stopAll();
-      this.startValue = 1;
-    } else if (this.startValue == 7) {
+      this.startSequence = 1;
+      //this.error('Forced error');
+    } else if (this.startSequence == 7) {
       this.startAll();
-      this.startValue = 0;
+      this.startSequence = 0;
     } else {
-      this.startValue++;
+      this.startSequence++;
       setTimeout(() => this.onStart(), 1000);
     }
   }
@@ -196,20 +198,12 @@ export class DemoConnection implements Connection {
 }
 
 @Injectable()
-export class DemoProvider extends Provider {
+export class DemoProvider extends ConnectionProvider {
   constructor() {
     super();
   }
 
-  connect(device: Device) {
-    return new Observable<Connection>(observer => {
-      observer.next(new DemoConnection(device));
-    });
-  }
-
-  scan() {
-    return new Observable<Device>(observer => {
-      observer.next({name: 'Demo', id: 'demo'});
-    });
+  connect() {
+    return Promise.resolve(new DemoConnection());
   }
 }

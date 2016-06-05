@@ -1,12 +1,14 @@
-import {Modal, NavController, Page, ViewController} from 'ionic-angular';
-import {EventEmitter} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
+
+import {Modal, NavController, ViewController} from 'ionic-angular';
+
 import {ControlUnit, Drivers} from '../../providers';
-import {ColWidth, Gauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components.ts';
+import {ColWidth, FuelGauge, Startlight, Stripe, TimePipe, IsSetPipe} from '../../components';
 import {Car} from '../../models/car';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/race/race-settings.html'
 })
 class RaceSettings {
@@ -23,8 +25,8 @@ class RaceSettings {
   }
 }
 
-@Page({
-  directives: [ColWidth, Gauge, Startlight, Stripe],
+@Component({
+  directives: [ColWidth, FuelGauge, Startlight, Stripe],
   pipes: [TimePipe, IsSetPipe],
   templateUrl: 'build/pages/race/race.html',
 })
@@ -44,7 +46,7 @@ export class RacePage {
 
   constructor(private cu: ControlUnit, private drivers: Drivers, private nav: NavController) {}
 
-  onPageLoaded() {
+  ionViewLoaded() {
     // FIXME: overlay on race screen on first open
     let modal = Modal.create(RaceSettings);
     modal.onDismiss(settings => {
@@ -62,7 +64,7 @@ export class RacePage {
     setTimeout(() => this.nav.present(modal));
   }
 
-  onPageDidUnload() {
+  ionViewDidUnload() {
     this.subscription.unsubscribe();
   }
 
