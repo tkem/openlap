@@ -1,4 +1,5 @@
 import { Component, NgZone } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 import { ViewController } from 'ionic-angular';
 
@@ -10,7 +11,7 @@ import { DemoProvider } from '../../connections/demo';
 import { SerialProvider } from '../../connections/serial';
 
 @Component({
-  providers: [BLEProvider, DemoProvider, SerialProvider],
+  providers: [BLEProvider, DemoProvider, SerialProvider, NgClass],
   templateUrl: 'build/pages/connection/connection.html',
 })
 export class ConnectionPage {
@@ -61,7 +62,7 @@ export class ConnectionPage {
     );
   }
   
-  close() {
+  onClose() {
     this.view.dismiss();
   }
 }

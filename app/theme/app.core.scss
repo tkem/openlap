@@ -5,7 +5,9 @@
 @import "../components/startlight/startlight";
 @import "../components/stripe/stripe";
 
-@import "../pages/practice/practice";
-@import "../pages/qualifying/qualifying";
-@import "../pages/race/race";
+@import "../pages/root/root";
 @import "../pages/settings/settings";
+
+.item.selected {
+    background: color($colors, primary);
+}

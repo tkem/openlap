@@ -1,12 +1,16 @@
-<ion-navbar *navbar>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Logging</ion-title>
+<ion-toolbar>
+  <ion-title>
+    Logging
+  </ion-title>
   <ion-buttons end>
-    <button (click)="logger.records = []">Clear</button>
+    <button (click)="logger.records = []">
+      Clear
+    </button>
+    <button (click)="close()">
+      <ion-icon name="close"></ion-icon>
+    </button>
   </ion-buttons>
-</ion-navbar>
+</ion-toolbar>
 
 <ion-content>
   <ion-list>

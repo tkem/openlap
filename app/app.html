@@ -1,9 +1,39 @@
 <ion-menu [content]="content">
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
+      <ion-item-group>
+        <button ion-item menuClose (click)="startPractice()">
+          Practice
+        </button>
+        <button ion-item menuClose (click)="startQualifying()">
+          Qualifying
+        </button>
+        <button ion-item menuClose (click)="startRace()">
+          Race
+        </button>
+      </ion-item-group>
+      <ion-item-group>
+        <button ion-item menuClose (click)="openConnection()">
+          Connection
+        </button>
+        <button ion-item menuClose (click)="openSettings()">
+          Settings
+        </button>
+        <button ion-item menuClose (click)="openDrivers()">
+          Drivers
+        </button>
+        <button ion-item menuClose (click)="openColors()">
+          Colors
+        </button>
+      </ion-item-group>
+      <ion-item-group>
+        <button ion-item menuClose (click)="openLogging()">
+          Logging
+        </button>
+        <button ion-item (click)="exit()">
+          Exit
+        </button>
+      </ion-item-group>
     </ion-list>
   </ion-content>
 </ion-menu>

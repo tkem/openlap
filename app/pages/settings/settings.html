@@ -1,14 +1,34 @@
-<ion-navbar *navbar>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Settings</ion-title>
-</ion-navbar>
+<ion-toolbar>
+  <ion-title>
+    Settings
+  </ion-title>
+  <ion-buttons start>
+    <button (click)="onClose()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
 
-<ion-tabs tabbarPlacement="top">
-  <ion-tab [root]="nameRoot" tabTitle="Name"></ion-tab>
-  <ion-tab [root]="colorRoot" tabTitle="Color"></ion-tab>
-  <ion-tab [root]="speedRoot" rootParams="speed" tabTitle="Speed"></ion-tab>
-  <ion-tab [root]="brakeRoot" rootParams="brake" tabTitle="Brake"></ion-tab>
-  <ion-tab [root]="fuelRoot" rootParams="fuel" tabTitle="Fuel"></ion-tab>
-</ion-tabs>
+<ion-content>
+  <ion-segment [(ngModel)]="type">
+    <ion-segment-button value="speed">
+      Speed
+    </ion-segment-button>
+    <ion-segment-button value="brake">
+      Brake
+    </ion-segment-button>
+    <ion-segment-button value="fuel">
+      Fuel
+    </ion-segment-button>
+  </ion-segment>
+  <ion-list no-lines>
+    <ion-item *ngFor="let model of models">
+      <ion-range min="0" max="15" snaps="true" [(ngModel)]="model[type]" (ionChange)="update(model.id, type)">
+        <ion-label range-left>#{{model.id + 1}}</ion-label>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+  <ion-buttons>
+    <button (click)="onClose()">OK</button>
+  </ion-buttons>
+</ion-content>

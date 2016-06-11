@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, Pipe, PipeTransform} from '@angular/core';
+import {Directive, ElementRef, Input} from '@angular/core';
 
 @Directive({
   selector: 'col[width]',
@@ -20,25 +20,4 @@ export class ColCollapse {
   }
 
   constructor(private el: ElementRef) {}
-}
-
-@Pipe({name: 'time'})
-export class TimePipe implements PipeTransform {
-  transform(value: number, start = 0): string {
-    let ms = value - start;
-    let m = Math.floor(ms / 60000);
-    let s = ((ms % 60000) / 1000);
-    if (m) {
-      return m.toString() + ':' + (s >= 10 ? '' : '0') + s.toFixed(3);
-    } else {
-      return s.toFixed(3);
-    }
-  }
-}
-
-@Pipe({name: 'isSet'})
-export class IsSetPipe implements PipeTransform {
-  transform(value: number, n: number): boolean {
-    return (value & (1 << n)) != 0;
-  }
 }

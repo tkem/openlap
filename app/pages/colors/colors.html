@@ -1,0 +1,24 @@
+<ion-toolbar>
+  <ion-title>
+    Colors
+  </ion-title>
+  <ion-buttons start>
+    <button (click)="onClose()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content>
+  <form #formData="ngForm" (ngSubmit)="onSubmit(models)">
+    <ion-list>
+      <ion-item *ngFor="let model of models; let id = index">
+        <ion-label>#{{id + 1}}</ion-label>
+        <ion-input [(ngModel)]="model.color" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-buttons>
+      <button [disabled]="!formData.form.valid" type="submit">OK</button>
+    </ion-buttons>
+  </form>
+</ion-content>

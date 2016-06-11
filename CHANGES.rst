@@ -1,3 +1,15 @@
+0.3.0 2016-06-15
+----------------
+
+- Move to modal user interface.
+
+- Setup race, qualifying, drivers and controller colors.
+
+- Add ``RaceControl`` provider.
+
+- Add global exception handler.
+
+
 0.2.0 2016-06-10
 ----------------
 

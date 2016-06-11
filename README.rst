@@ -4,7 +4,10 @@ Open Lap
 Open Lap is a hybrid slotcar race app for Carrera(R) DIGITAL 124/132
 systems.
 
-This project is under development, and there's not much to see yet.
+This project is under development, and there's not much to see yet.  
+You may want to join the `Beta testing program 
+<https://play.google.com/apps/testing/at.co.kemmer.openlap>` to preview
+unreleased versions.
 
 
 Building from Source

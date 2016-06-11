@@ -3,18 +3,18 @@ import {Component} from '@angular/core';
 import {NavParams, ViewController} from 'ionic-angular';
 
 @Component({
-  templateUrl: 'build/pages/qualifying/qualifying.html'
+  templateUrl: 'build/pages/drivers/drivers.html'
 })
-export class QualifyingPage {
+export class DriversPage {
 
-  private options: any;
+  private models: any;
 
   constructor(private view: ViewController, params: NavParams) {
-    this.options = params.data;
+    this.models = params.data;
   }
 
-  onSubmit(options) {
-    this.view.dismiss(options);
+  onSubmit(models) {
+    this.view.dismiss(models);
   }
 
   onClose() {

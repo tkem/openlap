@@ -22,7 +22,9 @@ export class Logger {
 
     records = new Array<LogRecord>();
 
-    constructor() {}
+    constructor() { }
+
+    // TODO: logError, logGroup, ... for ExceptionHandler!
 
     debug(...args: any[]) {
         this.log(LogLevel.DEBUG, args);
@@ -41,7 +43,7 @@ export class Logger {
     }
 
     private log(level: LogLevel, args: any[]) {
-        this.records.push({level: level, time: Date.now(), args: args});
+        this.records.push({ level: level, time: Date.now(), args: args });
         console.log.apply(console, args);
     }
 }

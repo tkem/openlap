@@ -1,58 +1,31 @@
-<ion-navbar *navbar>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
+<ion-toolbar>
   <ion-title>Race</ion-title>
-  <ion-buttons end *ngIf="laps"><span light>Lap {{lap}}/{{laps}}</span></ion-buttons>
-</ion-navbar>
+  <ion-buttons end>
+    <button (click)="onClose()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
 
 <ion-content>
-  <table class="leaderboard">
-    <colgroup>
-      <col width="2.25em">
-      <col>
-      <col>
-      <col>
-      <col>
-      <col width="4em">
-      <col width="6em" *ngIf="(cu.mode | async) != 0">
-      <col width="4em">
-    </colgroup>
-    <thead>
-      <tr>
-        <th text-left>POS</th>
-        <th text-left>NAME</th>
-        <th text-right>TIME</th>
-        <th text-right>LAP TIME</th>
-        <th text-right>BEST LAP</th>
-        <th text-right>LAPS</th>
-        <th text-left *ngIf="(cu.mode | async) != 0">FUEL</th>
-        <th text-left></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of (items | async); let i = index; let leader = first">
-        <td text-left class="stripe-container">
-          {{i + 1}}
-          <stripe [color]="drivers.itemAt(item.id).color"></stripe>
-        </td>
-        <td text-left>{{drivers.itemAt(item.id).name}}</td>
-        <td text-right>{{leader ? (item.time | time:startTime) : gap(item)}}</td>
-        <td text-right>{{item.laptime | time}}</td>
-        <td text-right>{{item.bestlap | time}}</td>
-        <td text-right>{{item.laps}}</td>
-        <td text-left>
-          <fuel-gauge max="15" [value]="((cu.fuel | async) || [])[item.id]"></fuel-gauge>
-        </td>
-        <td text-left>
-          <span *ngIf="cu.pit | async | isSet:item.id" class="pit">PIT</span>
-          <ion-icon *ngIf="item.laps >= laps" name="flag"></ion-icon>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <form #formData="ngForm" (ngSubmit)="onSubmit(formData.value)">
+    <ion-list>
+      <ion-item>
+        <ion-label>Laps</ion-label>
+        <ion-input [(ngModel)]="options.laps" ngControl="laps" type="number" min="0"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time (min)</ion-label>
+        <ion-input [(ngModel)]="options.time" ngControl="time" type="number" min="0"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Autonomous Car</ion-label>
+        <ion-toggle [(ngModel)]="options.auto" ngControl="auto"></ion-toggle>
+      </ion-item>
+    </ion-list>
+    <ion-buttons>
+      <button [disabled]="!formData.form.valid" type="submit">OK</button>
+      <button (click)="onClose()">Cancel</button>
+    </ion-buttons>
+  </form>
 </ion-content>
-
-<ion-toolbar position="bottom" text-center transparent>
-  <startlight (click)="cu.toggleStart()" [value]="cu.start | async"></startlight>
-</ion-toolbar>

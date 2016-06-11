@@ -1,18 +1,32 @@
-<ion-content padding>
-  <h1>Connection</h1>
+<ion-toolbar>
+  <ion-title>
+    Connection
+  </ion-title>
+  <ion-buttons start>
+    <button [disabled]="!cu.device?.id" (click)="onClose()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content>
   <ion-list>
-    <ion-item *ngFor="let device of devices" (click)="connect(device)">
+    <button ion-item [ngClass]="{selected: cu.device?.id == device.id}" *ngFor="let device of devices" (click)="connect(device)">
       <h1>{{device.name}}</h1>
-      <h3>{{device.id}}</h3>
-    </ion-item>
-    <ion-item (click)="connect({id: 'serial', name: 'Serial'})">
+      <h2>{{device.id}}</h2>
+      <h2 *ngIf="cu.device?.id == device.id">Version {{version | async}}</h2>
+    </button>
+    <button ion-item [ngClass]="{selected: cu.device?.id == 'serial'}" (click)="connect({id: 'serial', name: 'Serial'})">
       <h1>Serial USB</h1>
-    </ion-item>
-    <ion-item (click)="connect({id: 'demo', name: 'Demo'})">
+      <h2 *ngIf="cu.device?.id == 'serial'">Version {{version | async}}</h2>
+    </button>
+    <button ion-item [ngClass]="{selected: cu.device?.id == 'demo'}" (click)="connect({id: 'demo', name: 'Demo'})">
       <h1>Demo</h1>
-    </ion-item>
+      <h2 *ngIf="cu.device?.id == 'demo'">Version {{version | async}}</h2>
+    </button>
   </ion-list>
   <div *ngIf="error">{{error}}</div>
-  <div>{{version | async}}</div>
-  <button (click)="close()">OK</button>
+  <ion-buttons>
+    <button [disabled]="!cu.device?.id" (click)="onClose()">OK</button>
+  </ion-buttons>
 </ion-content>
