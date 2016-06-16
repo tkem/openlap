@@ -19,16 +19,16 @@
 </ion-navbar>
 
 <ion-content>
-  <table class="leaderboard">
+  <table class="leaderboard" [ngClass]="rc.mode" [class.pitstop]="cu.mode | async">
     <colgroup>
-      <col width="2.25em">
+      <col class="position" width="2.25em">
+      <col>
       <col *ngIf="rc.mode == 'race'">
-      <col>
-      <col>
-      <col>
-      <col width="4em">
-      <col width="6em" *ngIf="(cu.mode | async) != 0">
-      <col width="4em">
+      <col class="time">
+      <col class="time">
+      <col class="count">
+      <col class="fuel" *ngIf="(cu.mode | async) != 0">
+      <col class="status">
     </colgroup>
     <thead>
       <tr>
@@ -38,7 +38,7 @@
         <th text-right>LAP TIME</th>
         <th text-right>BEST LAP</th>
         <th text-right>LAPS</th>
-        <th text-left *ngIf="(cu.mode | async) != 0">FUEL</th>
+        <th *ngIf="(cu.mode | async) != 0" text-left>FUEL</th>
         <th text-left></th>
       </tr>
     </thead>
@@ -48,7 +48,8 @@
           {{i + 1}}<stripe [color]="item.color"></stripe>
         </td>
         <td text-left>
-          {{item.driver.name}}
+          <span class="full-name">{{item.driver.name}}</span>
+          <span class="short-name">{{item.driver.name.split(' ').slice(-1)[0].substr(0, 3).toUpperCase()}}</span>
         </td>
         <td *ngIf="rc.mode == 'race'" [ngSwitch]="i == 0 ? null : rc.lap - item.laps" text-right>
           <span *ngSwitchWhen="">
@@ -64,7 +65,7 @@
             +{{rc.lap - item.laps}} Laps
           </span>
         </td>
-        <td text-right [ngClass]="{bestlap: item.laptime == item.bestlap}">
+        <td text-right [ngClass]="{bestlap: item.laptime == item.bestlap, allbest: item.laptime == rc.bestlap}">
           {{item.laptime | time:'s.sss'}}
         </td>
         <td text-right>

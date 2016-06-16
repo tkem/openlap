@@ -1,3 +1,13 @@
+0.3.1 2016-06-16
+----------------
+
+- More responsive layout.
+
+- Mark overall best lap.
+
+- Remove cancel buttons from dialogs.
+
+
 0.3.0 2016-06-15
 ----------------
 
