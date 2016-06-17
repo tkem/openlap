@@ -5,6 +5,7 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import {ControlUnit} from '../../providers/cu';

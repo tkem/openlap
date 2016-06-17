@@ -3,15 +3,15 @@
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title [ngSwitch]="rc.mode">
-    <span *ngSwitchWhen="'practice'">Free Practice</span>
-    <span *ngSwitchWhen="'qualifying'">Qualifying</span>
-    <span *ngSwitchWhen="'race'">Race</span>
+    <span *ngSwitchCase="'practice'">Free Practice</span>
+    <span *ngSwitchCase="'qualifying'">Qualifying</span>
+    <span *ngSwitchCase="'race'">Race</span>
   </ion-title>
   <ion-buttons end [ngSwitch]="rc.mode">
-    <span *ngSwitchWhen="'qualifying'" light>
+    <span *ngSwitchCase="'qualifying'" light>
       {{rc.time - (rc.clock | async) | time:'m:ss'}}
     </span>
-    <span *ngSwitchWhen="'race'" light>
+    <span *ngSwitchCase="'race'" light>
       Lap {{rc.lap}}/{{rc.laps}}
       <span *ngIf="rc.time">{{rc.time - (rc.clock | async) | time:'m:ss'}}</span>
     </span>
@@ -52,13 +52,13 @@
           <span class="short-name">{{item.driver.name.split(' ').slice(-1)[0].substr(0, 3).toUpperCase()}}</span>
         </td>
         <td *ngIf="rc.mode == 'race'" [ngSwitch]="i == 0 ? null : rc.lap - item.laps" text-right>
-          <span *ngSwitchWhen="">
+          <span *ngSwitchCase="">
             {{(item.time - rc.startTime) | time:'m:ss.sss'}}
           </span>
-          <span *ngSwitchWhen="0">
+          <span *ngSwitchCase="0">
             +{{(item.time - rc.currentTime) | time:'s.sss'}}
           </span>
-          <span *ngSwitchWhen="1">
+          <span *ngSwitchCase="1">
             +1 Lap
           </span>
           <span *ngSwitchDefault>

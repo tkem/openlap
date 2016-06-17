@@ -1,3 +1,11 @@
+0.4.0 2016-06-17
+----------------
+
+- Improve connection handling.
+
+- Upgrade to Ionic 2 Beta 9.
+
+
 0.3.1 2016-06-16
 ----------------
 

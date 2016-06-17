@@ -4,8 +4,10 @@ import { ControlUnit } from './cu';
 import { Logger } from './logger';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/map';
-import 'rxjs/observable/interval';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/toPromise';
 
 class Car {
   constructor(public id, public driver, public color) { }

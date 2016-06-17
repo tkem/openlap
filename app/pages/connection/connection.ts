@@ -17,6 +17,7 @@ import { SerialProvider } from '../../connections/serial';
 export class ConnectionPage {
   devices: any[];
   error: any;
+
   version: Promise<string>;
   
   constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins, private view: ViewController, private zone: NgZone,
@@ -28,6 +29,9 @@ export class ConnectionPage {
     }).catch(error => {
       this.logger.info('BLE not enabled');
     });
+    if (cu.device) {
+      this.version = cu.getVersion();
+    }
   }
 
   connect(device: Device) {
@@ -55,6 +59,7 @@ export class ConnectionPage {
     let devices = {};
     ble.startScan([],
       device => {
+        this.logger.debug('Found BLE device', device);
         devices[device.id] = device;
         this.zone.run(() => { this.devices = Object.keys(devices).map(id => devices[id]); });
       },

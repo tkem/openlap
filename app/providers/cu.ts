@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -117,20 +117,25 @@ export class ControlUnit {
   private requests = Array<ArrayBuffer>();
   private version = null;
 
+  private timeout: any;
+
+  private _state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
   private _fuel = new BehaviorSubject<ArrayLike<number>>(undefined);
   private _start = new BehaviorSubject<number>(undefined);
   private _mode = new BehaviorSubject<number>(undefined);
   private _pit = new BehaviorSubject<number>(undefined);
   private _time = new Subject<TimeEvent>();
 
+  state: Observable<'disconnected' | 'connecting' | 'connected'>;
   fuel: Observable<ArrayLike<number>>;
   start: Observable<number>;
   mode: Observable<number>;
   pit: Observable<boolean[]>;
   time: Observable<TimeEvent>;
 
-  constructor(private logger: Logger, private zone: NgZone) {
+  constructor(private logger: Logger) {
     // TODO: custom Subject implementation(s)?
+    this.state = this._state;
     this.fuel = this._fuel.filter(value => value !== undefined).distinctUntilChanged(
       null, array => getUint32(array)  // TODO: better equality
       //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
@@ -149,72 +154,80 @@ export class ControlUnit {
     );
   }
 
-  /* TODO: injectable provider */
   connect(provider: ConnectionProvider, device: Device) {
     if (this.connection) {
       this.connection.close();
       this.connection = null;
     }
-    this.logger.info('CU: Connecting to ' + device.id);
     this.provider = provider;
     this.device = device;
+    this.logger.info('CU: Connecting to ' + device.id);
+    this._state.next('connecting');
     return this.provider.connect(device).then(connection => this.onConnect(connection));
+  }
+
+  disconnect() {
+    if (this.connection) {
+      this.connection.close();
+      this.connection = null;
+      this.device = null;
+    }
   }
 
   private onConnect(connection: Connection) {
     this.logger.info('CU: Connected to ' + this.device.id);
+    this._state.next('connected');
     this.connection = connection;
     connection.subscribe(
       data => this.onData(data),
       error => this.onError(error),
       () => this.onClose()
     );
-    this.getVersion().then(version => {
-      this.logger.info('CU version', version);
-    });
     this.poll();
   }
 
   private onData(data: ArrayBuffer) {
+    clearTimeout(this.timeout);
     let view = new DataView(data);
-    // TODO: remove zone?
-    this.zone.run(() => {
-      switch (view.toString(0, 1)) {
-        case '?':
-          if (view.toString(1, 1) == ':') {
-            this._fuel.next(view.getArray(2, 8));
-            this._start.next(view.getUint4(10));
-            this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
-            this._pit.next(view.getUint8(12));
-          } else {
-            let id = view.getUint4(1) - 1;
-            let time = view.getUint32(2);
-            let sector = view.getUint4(10);
-            this._time.next(new TimeEvent(id, time, sector));
-          }
-          break;
-        case '0':
-          if (this.version) {
-            this.version(view.toString(1, 4));
-          }
-          break;
-        default:
-          // TODO: command promises?
-          this.logger.debug('CU received', view.toString());
-          break;
-      }
-    });
+    switch (view.toString(0, 1)) {
+      case '?':
+        if (view.toString(1, 1) == ':') {
+          this._fuel.next(view.getArray(2, 8));
+          this._start.next(view.getUint4(10));
+          this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
+          this._pit.next(view.getUint8(12));
+        } else {
+          let id = view.getUint4(1) - 1;
+          let time = view.getUint32(2);
+          let sector = view.getUint4(10);
+          this._time.next(new TimeEvent(id, time, sector));
+        }
+        break;
+      case '0':
+        if (this.version) {
+          this.version(view.toString(1, 4));
+        }
+        break;
+      default:
+        // TODO: command promises?
+        this.logger.debug('CU received', view.toString());
+        break;
+    }
     this.poll();
   }
 
   private onError(error: any) {
     this.logger.error('CU: Connection error: ', error);
+    clearTimeout(this.timeout);
     this.connection = null;
+    this._state.next('connecting');
     this.provider.connect(this.device).then(connection => this.onConnect(connection));
   }
 
   private onClose() {
     this.logger.info('CU: Connection closed');
+    clearTimeout(this.timeout);
+    this._state.next('disconnected');
   }
 
   getVersion() {
@@ -285,5 +298,6 @@ export class ControlUnit {
     } else {
       this.connection.send(DataView.fromString('?').buffer);
     }
+    this.timeout = setTimeout(() => this.onError(new Error('Poll timeout')), 1000);  // TODO: config
   }
 }

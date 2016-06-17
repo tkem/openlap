@@ -53,11 +53,6 @@ class OpenLapApp {
       this.settings.push({ id: i, speed: 8, brake: 8, fuel: 8 });
     }
 
-    platform.ready().then(() => {
-      // FIXME: overlay on race screen on first open/cu disconnected
-      setTimeout(() => this.openConnection());
-    });
-
     this.plugins.get('insomnia').then(insomnia => {
       return new Promise((resolve, reject) => {
         insomnia.keepAwake(resolve, reject);
@@ -145,7 +140,7 @@ class OpenLapApp {
   }
 
   exit() {
-    // TODO: close connection, *really* exit
+    this.cu.disconnect();
     this.platform.exitApp();
   }
 
