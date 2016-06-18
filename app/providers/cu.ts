@@ -155,22 +155,25 @@ export class ControlUnit {
   }
 
   connect(provider: ConnectionProvider, device: Device) {
-    if (this.connection) {
-      this.connection.close();
-      this.connection = null;
-    }
-    this.provider = provider;
-    this.device = device;
-    this.logger.info('CU: Connecting to ' + device.id);
-    this._state.next('connecting');
-    return this.provider.connect(device).then(connection => this.onConnect(connection));
+    return this.disconnect().catch(error => {
+      this.logger.error('Error disconnecting CU', error);
+    }).then(() => {
+      this.provider = provider;
+      this.device = device;
+      this.logger.info('CU: Connecting to ' + device.id);
+      this._state.next('connecting');
+      return this.provider.connect(device).then(connection => this.onConnect(connection));
+    });
   }
 
   disconnect() {
     if (this.connection) {
-      this.connection.close();
-      this.connection = null;
-      this.device = null;
+      return this.connection.close().then(() => {
+        this.connection = null;
+        this.device = null;
+      });
+    } else {
+      return Promise.resolve();
     }
   }
 
@@ -292,12 +295,17 @@ export class ControlUnit {
   }
 
   private poll() {
-    if (this.requests.length !== 0) {
-      this.logger.debug('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
-      this.connection.send(this.requests.shift());
-    } else {
-      this.connection.send(DataView.fromString('?').buffer);
+    if (this.connection) {
+      let promise: Promise<void>;
+      if (this.requests.length !== 0) {
+        //this.logger.debug('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
+        promise = this.connection.write(this.requests.shift());
+      } else {
+        promise = this.connection.write(DataView.fromString('?').buffer);
+      }
+      promise.catch(error => this.logger.error('Write error', error)).then(() => {
+        this.timeout = setTimeout(() => this.onError(new Error('Poll timeout')), 1000);  // TODO: config
+      });
     }
-    this.timeout = setTimeout(() => this.onError(new Error('Poll timeout')), 1000);  // TODO: config
   }
 }

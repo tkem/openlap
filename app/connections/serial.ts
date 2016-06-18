@@ -44,30 +44,32 @@ export class SerialConnection extends Subject<ArrayBuffer> implements Connection
           this.zone.run(() => this.next(a.buffer));
         }
       },
-      error => this.error(error)
+      error => {
+        this.logger.error("Serial receive error", error);
+        this.zone.run(() => this.error(error));
+      }   
     );
   }
 
-  send(data: ArrayBuffer) {
+  write(data: ArrayBuffer) {
     this.log('Sending serial data', data);
-    // TODO: serial.write array buffer?
-    this.serial.write(
-      '"' + String.fromCharCode.apply(null, new Uint8Array(data)) + '$',
-      undefined,
-      error => this.error(error)
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.serial.write(
+        '"' + String.fromCharCode.apply(null, new Uint8Array(data)) + '$',
+        () => this.zone.run(resolve),
+        error => this.zone.run(() => reject(error))
+      );
+    });
   }
 
   close() {
     this.log('Closing serial connection');
-    this.serial.close();
-    this.zone.run(() => this.complete());
-  }
-
-  error(e: any) {
-    this.logger.error("Serial connection error", e);
-    this.serial.close();
-    this.zone.run(() => super.error(e));
+    return new Promise<void>((resolve, reject) => {
+      this.serial.close(
+        () => this.zone.run(() => { this.complete(); resolve() }),
+        error => this.zone.run(() => reject(error))
+      );
+    });
   }
 
   private log(message: string, data?: ArrayBuffer) {

@@ -20,6 +20,8 @@ export class LogRecord {
 @Injectable()
 export class Logger {
 
+    limit = 50;  // TODO: config
+
     records = new Array<LogRecord>();
 
     constructor() { }
@@ -42,8 +44,15 @@ export class Logger {
         this.log(LogLevel.ERROR, args);
     }
 
+    clear() {
+        this.records.length = 0;
+    }
+
     private log(level: LogLevel, args: any[]) {
-        this.records.push({ level: level, time: Date.now(), args: args });
         console.log.apply(console, args);
+        while (this.records.length >= this.limit) {
+            this.records.shift();
+        }
+        this.records.push({ level: level, time: Date.now(), args: args });
     }
 }

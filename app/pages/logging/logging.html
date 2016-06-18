@@ -3,7 +3,7 @@
     Logging
   </ion-title>
   <ion-buttons end>
-    <button (click)="logger.records = []">
+    <button (click)="logger.clear()">
       Clear
     </button>
     <button (click)="close()">
@@ -14,9 +14,9 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let record of logger.records">
-      <span>{{record.level}}</span>
-      <span>{{record.time | date:'HH:mm:ss.sss'}}.{{(record.time % 1000) | number:'3.0-0'}}</span>
+    <ion-item *ngFor="let record of logger.records" text-wrap>
+      <ion-icon item-left [name]="icons[record.level].name" [ngStyle]="icons[record.level].style"></ion-icon>
+      <span>{{record.time | date:'HH:mm:ss'}}.{{(record.time % 1000) | number:'3.0-0'}}</span>
       <span>{{record.args.join(', ')}}</span>
     </ion-item>
   </ion-list>

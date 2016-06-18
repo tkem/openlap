@@ -30,30 +30,35 @@ export class BLEConnection extends Subject<ArrayBuffer> implements Connection {
         }
         this.zone.run(() => this.next(view.buffer)); 
       },
-      error => this.error(error)
+      error => {
+        this.logger.error("BLE receive error", error);
+        this.zone.run(() => this.error(error));
+      }
     );
   }
 
-  send(data: ArrayBuffer) {
+  write(data: ArrayBuffer) {
     this.log('Sending BLE data', data);
-    this.ble.writeWithoutResponse(this.peripheral.id, SERVICE_UUID, OUTPUT_UUID, data,
-      undefined,
-      error => this.error(error)
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.ble.writeWithoutResponse(
+        this.peripheral.id, SERVICE_UUID, OUTPUT_UUID, data,
+        () => this.zone.run(resolve),
+        error => this.zone.run(() => reject(error))
+      );
+    });
   }
 
   close() {
     this.log('Closing BLE connection');
-    this.ble.disconnect(this.peripheral.id);
-    this.zone.run(() => this.complete());
+    return new Promise<void>((resolve, reject) => {
+      this.ble.disconnect(
+        this.peripheral.id,
+        () => this.zone.run(() => { this.complete(); resolve() }),
+        error => this.zone.run(() => reject(error))
+      );
+    });
   }
   
-  error(e: any) {
-    this.logger.error("BLE connection error", e);
-    this.ble.disconnect(this.peripheral.id);
-    this.zone.run(() => super.error(e));
-  }
-
   private log(message: string, data?: ArrayBuffer) {
     if (this.logEnabled) {
       let now = Date.now();

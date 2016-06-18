@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 import { ViewController } from 'ionic-angular';
@@ -14,24 +14,32 @@ import { SerialProvider } from '../../connections/serial';
   providers: [BLEProvider, DemoProvider, SerialProvider, NgClass],
   templateUrl: 'build/pages/connection/connection.html',
 })
-export class ConnectionPage {
+export class ConnectionPage implements OnInit, OnDestroy {
+  _devices = {};
   devices: any[];
-  error: any;
 
-  version: Promise<string>;
+  status = '';
   
+  private scanning = false;
+
   constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins, private view: ViewController, private zone: NgZone,
           private ble: BLEProvider, private serial: SerialProvider, private demo: DemoProvider
   ) {
-    let devices = {};
-    plugins.get('ble').then(ble => {
-      ble.enable(() => this.startScan(ble), error => this.logger.info('Not scanning for BLE devices', error));
-    }).catch(error => {
-      this.logger.info('BLE not enabled');
-    });
     if (cu.device) {
-      this.version = cu.getVersion();
+      cu.getVersion().then(version => {
+        this.status = 'Version ' + version;
+      }).catch(error => {
+        this.status = 'Error: ' + error;
+        this.logger.error(error);
+      });
+      this.add(cu.device);
     }
+    this.add({name: 'Demo Connection', id: 'demo'});
+    plugins.get('serial').then(() => {
+      this.add({name: 'Serial USB', id: 'serial'});
+    }).catch(error => {
+      this.logger.info('Serial plugin not enabled');
+    });
   }
 
   connect(device: Device) {
@@ -47,26 +55,58 @@ export class ConnectionPage {
         provider = this.ble;
         break;
     }
-    this.cu.connect(provider, device).then(
-      () => this.version = this.cu.getVersion()
-    ).catch(error => {
+    this.status = '';
+    this.cu.connect(provider, device).then(() => {
+      return this.cu.getVersion();
+    }).then(version => {
+      this.status = 'Version ' + version;
+    }).catch(error => {
+      this.status = 'Error: ' + error;
       this.logger.error(error);
-      this.error = error;
     });    
   }
 
-  startScan(ble: any) {
-    let devices = {};
-    ble.startScan([],
-      device => {
-        this.logger.debug('Found BLE device', device);
-        devices[device.id] = device;
-        this.zone.run(() => { this.devices = Object.keys(devices).map(id => devices[id]); });
-      },
-      error => this.logger.error('Error scanning for BLE devices', error)
+  ngOnInit() {
+    this.plugins.get('ble').then(ble => {
+      ble.enable(() => this.startScan(ble), error => this.logger.info('Not scanning for BLE devices', error));
+    }).catch(error => {
+      this.logger.info('BLE not enabled');
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.scanning) {
+      this.plugins.get('ble').then(ble => this.stopScan(ble));
+    }
+  }
+
+  private add(device: Device) {
+    this.logger.debug('Found new device', device);
+    this._devices[device.id] = device;
+    let devices: Device[] = Object.keys(this._devices).map(id => this._devices[id]);
+    devices.sort((a, b) => a.name.localeCompare(b.name));
+    this.devices = devices;
+  }
+
+  private startScan(ble: any) {
+    this.logger.info('Start scanning for BLE devices');
+    ble.startScan(
+      [], 
+      device => this.zone.run(() => this.add(device)),
+      error => this.logger.error('Error scanning BLE devices', error)
     );
+    this.scanning = true;
   }
   
+  private stopScan(ble: any) {
+    this.logger.info('Stop scanning for BLE devices');
+    ble.stopScan(
+      () => this.logger.info('Stopped scanning for BLE devices'),
+      error => this.logger.error('Error stopping scanning BLE devices', error)
+    );
+    this.scanning = false;
+  }
+
   onClose() {
     this.view.dismiss();
   }

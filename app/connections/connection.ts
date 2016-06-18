@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, Subscribable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
-export interface Connection extends Subscribable<ArrayBuffer> {
-  send(data: ArrayBuffer);
-  close();
+export interface Connection extends Observable<ArrayBuffer> {
+
+  write(data: ArrayBuffer): Promise<void>;
+  
+  close(): Promise<void>;
 }
 
 export interface Device {

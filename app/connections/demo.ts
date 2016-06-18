@@ -112,7 +112,7 @@ export class DemoConnection extends Subject<ArrayBuffer> implements Connection {
     this.startAll();
   }
 
-  send(data: ArrayBuffer) {
+  write(data: ArrayBuffer) {
     if (toString(data) == 'T2') {
       this.onStart();
     }
@@ -124,9 +124,11 @@ export class DemoConnection extends Subject<ArrayBuffer> implements Connection {
         this.next(this.laps.length ? this.laps.shift() : this.createStatus());
       }
     }, 50);
+    return Promise.resolve();
   }
 
   close() {
+    return Promise.resolve();
   }
 
   private createLap(id: string) {

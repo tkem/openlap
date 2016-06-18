@@ -65,11 +65,11 @@ class OpenLapApp {
   }
 
   startPractice() {
-    this.raceControl.start('practice', {auto: true, pace: true});
+    this.raceControl.start('practice', { auto: true, pace: true });
   }
-  
+
   startQualifying() {
-    this.storage.get('qualifying', {time: 3, auto: false}).then(settings => {
+    this.storage.get('qualifying', { time: 3, auto: false }).then(settings => {
       this.logger.debug('Qualifying settings:', settings);
       let modal = Modal.create(QualifyingPage, settings);
       modal.onDismiss(newSettings => {
@@ -83,7 +83,7 @@ class OpenLapApp {
   }
 
   startRace() {
-    this.storage.get('race', {laps: 10, auto: true}).then(settings => {
+    this.storage.get('race', { laps: 10, auto: true }).then(settings => {
       this.logger.debug('Race settings:', settings);
       let modal = Modal.create(RacePage, settings);
       modal.onDismiss(newSettings => {
@@ -102,31 +102,31 @@ class OpenLapApp {
   }
 
   openDrivers() {
-      this.storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {
-          this.logger.debug('Drivers:', drivers);
-          let modal = Modal.create(DriversPage, drivers);
-          modal.onDismiss(newDrivers => {
-              if (newDrivers) {
-                  this.raceControl.drivers = newDrivers;
-                  this.storage.set('drivers', newDrivers);
-              }
-          });
-          this.nav.present(modal);
+    this.storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {
+      this.logger.debug('Drivers:', drivers);
+      let modal = Modal.create(DriversPage, drivers);
+      modal.onDismiss(newDrivers => {
+        if (newDrivers) {
+          this.raceControl.drivers = newDrivers;
+          this.storage.set('drivers', newDrivers);
+        }
       });
+      this.nav.present(modal);
+    });
   }
 
   openColors() {
-      this.storage.get('colors', DEFAULT_COLORS).then(colors => {
-          this.logger.debug('Colors:', colors);
-          let modal = Modal.create(ColorsPage, colors);
-          modal.onDismiss(newColors => {
-              if (newColors) {
-                  this.raceControl.colors = newColors;
-                  this.storage.set('colors', newColors);
-              }
-          });
-          this.nav.present(modal);
+    this.storage.get('colors', DEFAULT_COLORS).then(colors => {
+      this.logger.debug('Colors:', colors);
+      let modal = Modal.create(ColorsPage, colors);
+      modal.onDismiss(newColors => {
+        if (newColors) {
+          this.raceControl.colors = newColors;
+          this.storage.set('colors', newColors);
+        }
       });
+      this.nav.present(modal);
+    });
   }
 
   openSettings() {
@@ -140,8 +140,12 @@ class OpenLapApp {
   }
 
   exit() {
-    this.cu.disconnect();
-    this.platform.exitApp();
+    this.cu.disconnect().catch(error => {
+      this.logger.error('Error disconnecting', error);
+    }).then(() => {
+      this.logger.info('Exiting');
+      this.platform.exitApp();
+    });
   }
 
   ionViewLoaded() {

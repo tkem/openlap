@@ -1,3 +1,10 @@
+0.4.1 2016-06-18
+----------------
+
+- Fix logging issues.
+
+- Connection improvements.
+
 0.4.0 2016-06-17
 ----------------
 
