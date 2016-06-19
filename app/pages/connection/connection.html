@@ -1,13 +1,8 @@
-<ion-toolbar>
+<ion-navbar *navbar>
   <ion-title>
     Connection
   </ion-title>
-  <ion-buttons start>
-    <button [disabled]="!cu.device?.id" (click)="onClose()">
-      <ion-icon name="close"></ion-icon>
-    </button>
-  </ion-buttons>
-</ion-toolbar>
+</ion-navbar>
 
 <ion-content>
   <ion-list>
@@ -17,7 +12,4 @@
       <h2 *ngIf="cu.device?.id == device.id">{{status}}</h2>
     </button>
   </ion-list>
-  <ion-buttons>
-    <button [disabled]="!cu.device?.id" (click)="onClose()">OK</button>
-  </ion-buttons>
 </ion-content>

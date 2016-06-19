@@ -1,13 +1,8 @@
-<ion-toolbar>
+<ion-navbar *navbar>
   <ion-title>
     Settings
   </ion-title>
-  <ion-buttons start>
-    <button (click)="onClose()">
-      <ion-icon name="close"></ion-icon>
-    </button>
-  </ion-buttons>
-</ion-toolbar>
+</ion-navbar>
 
 <ion-content>
   <ion-segment [(ngModel)]="type">
@@ -28,7 +23,4 @@
       </ion-range>
     </ion-item>
   </ion-list>
-  <ion-buttons>
-    <button (click)="onClose()">OK</button>
-  </ion-buttons>
 </ion-content>

@@ -1,8 +1,13 @@
 <ion-toolbar>
   <ion-title>Qualifying</ion-title>
-  <ion-buttons end>
+  <ion-buttons left>
     <button (click)="onClose()">
       <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-buttons right>
+    <button (click)="onSubmit(formData.value)" [disabled]="!formData.form.valid" type="submit">
+      Start
     </button>
   </ion-buttons>
 </ion-toolbar>
@@ -23,8 +28,5 @@
         <ion-toggle [(ngModel)]="options.auto" ngControl="auto"></ion-toggle>
       </ion-item>
     </ion-list>
-    <ion-buttons>
-      <button [disabled]="!formData.form.valid" type="submit">OK</button>
-    </ion-buttons>
   </form>
 </ion-content>

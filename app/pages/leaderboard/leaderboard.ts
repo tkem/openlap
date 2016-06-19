@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {Modal,  NavController, Toast } from 'ionic-angular';
+import { NavController, Toast } from 'ionic-angular';
 
 import { ConnectionPage } from '../connection/connection';
 
@@ -12,13 +12,13 @@ import { TimePipe } from '../../pipes';
 @Component({
   directives: [FuelGauge, Startlight, Stripe],
   pipes: [TimePipe],
-  templateUrl: 'build/pages/root/root.html',
+  templateUrl: 'build/pages/leaderboard/leaderboard.html',
 })
-export class RootPage {
+export class LeaderboardPage implements OnInit {
 
   constructor(public cu: ControlUnit, public rc: RaceControl, private nav: NavController) {}
 
-  ionViewLoaded() {
+  ngOnInit() {
     this.cu.state.subscribe(state => {
       switch (state) {
         case 'connected':
@@ -28,7 +28,7 @@ export class RootPage {
           this.nav.present(Toast.create({message: 'Connecting to ' + this.cu.device.name, duration: 1000}));
           break;
         case 'disconnected':
-          this.nav.present(Modal.create(ConnectionPage));
+          this.nav.push(ConnectionPage);
           break;
       }
     });

@@ -1,4 +1,4 @@
-<ion-toolbar>
+<ion-navbar *navbar>
   <ion-title>
     Logging
   </ion-title>
@@ -6,11 +6,8 @@
     <button (click)="logger.clear()">
       Clear
     </button>
-    <button (click)="close()">
-      <ion-icon name="close"></ion-icon>
-    </button>
   </ion-buttons>
-</ion-toolbar>
+</ion-navbar>
 
 <ion-content>
   <ion-list>

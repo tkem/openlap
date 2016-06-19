@@ -1,7 +1,8 @@
 import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
+
 import { NgClass } from '@angular/common';
 
-import { ViewController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 
 import { ControlUnit, Logger, Plugins } from '../../providers';
 
@@ -9,6 +10,8 @@ import { ConnectionProvider, Device } from '../../connections/connection';
 import { BLEProvider } from '../../connections/ble';
 import { DemoProvider } from '../../connections/demo';
 import { SerialProvider } from '../../connections/serial';
+
+import { LeaderboardPage } from '../../pages';
 
 @Component({
   providers: [BLEProvider, DemoProvider, SerialProvider, NgClass],
@@ -19,11 +22,12 @@ export class ConnectionPage implements OnInit, OnDestroy {
   devices: any[];
 
   status = '';
-  
+
   private scanning = false;
 
-  constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins, private view: ViewController, private zone: NgZone,
-          private ble: BLEProvider, private serial: SerialProvider, private demo: DemoProvider
+  constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins,
+    private nav: NavController, private zone: NgZone,
+    private ble: BLEProvider, private serial: SerialProvider, private demo: DemoProvider
   ) {
     if (cu.device) {
       cu.getVersion().then(version => {
@@ -34,9 +38,9 @@ export class ConnectionPage implements OnInit, OnDestroy {
       });
       this.add(cu.device);
     }
-    this.add({name: 'Demo Connection', id: 'demo'});
+    this.add({ name: 'Demo Connection', id: 'demo' });
     plugins.get('serial').then(() => {
-      this.add({name: 'Serial USB', id: 'serial'});
+      this.add({ name: 'Serial USB', id: 'serial' });
     }).catch(error => {
       this.logger.info('Serial plugin not enabled');
     });
@@ -60,10 +64,13 @@ export class ConnectionPage implements OnInit, OnDestroy {
       return this.cu.getVersion();
     }).then(version => {
       this.status = 'Version ' + version;
+      if (!this.nav.canGoBack()) {
+        return this.nav.setRoot(LeaderboardPage);
+      }
     }).catch(error => {
       this.status = 'Error: ' + error;
       this.logger.error(error);
-    });    
+    });
   }
 
   ngOnInit() {
@@ -91,13 +98,13 @@ export class ConnectionPage implements OnInit, OnDestroy {
   private startScan(ble: any) {
     this.logger.info('Start scanning for BLE devices');
     ble.startScan(
-      [], 
+      [],
       device => this.zone.run(() => this.add(device)),
       error => this.logger.error('Error scanning BLE devices', error)
     );
     this.scanning = true;
   }
-  
+
   private stopScan(ble: any) {
     this.logger.info('Stop scanning for BLE devices');
     ble.stopScan(
@@ -105,10 +112,6 @@ export class ConnectionPage implements OnInit, OnDestroy {
       error => this.logger.error('Error stopping scanning BLE devices', error)
     );
     this.scanning = false;
-  }
-
-  onClose() {
-    this.view.dismiss();
   }
 }
 

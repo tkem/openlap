@@ -1,54 +1,45 @@
-import { provide, Component, ExceptionHandler, Injectable, ViewChild } from '@angular/core';
+import { provide, Component, ExceptionHandler, Injectable, OnInit, ViewChild } from '@angular/core';
 
-import { ionicBootstrap, App, Modal, Nav, NavController, NavParams, Platform, ViewController } from 'ionic-angular';
+import { ionicBootstrap, Modal, Nav, Platform } from 'ionic-angular';
 
-import { RootPage, QualifyingPage, RacePage, SettingsPage, ConnectionPage, ColorsPage, DriversPage, LoggingPage } from './pages';
 import { ControlUnit, Logger, RaceControl, Plugins, Storage } from './providers';
 
-const DEFAULT_DRIVERS = [
-  { name: 'Driver #1', shortName: '#1' },
-  { name: 'Driver #2', shortName: '#2' },
-  { name: 'Driver #3', shortName: '#3' },
-  { name: 'Driver #4', shortName: '#4' },
-  { name: 'Driver #5', shortName: '#5' },
-  { name: 'Driver #6', shortName: '#6' },
-  { name: 'Autonomous Car', shortName: 'AUT' },
-  { name: 'Pace Car', shortName: 'PAC' }
-];
+import * as pages from './pages';
 
-const DEFAULT_COLORS = [
-  'blue',
-  'red',
-  'yellow',
-  'green',
-  'gray',
-  'black',
-  'silver',
-  'gold'
+const DEFAULT_DRIVERS = [
+  { name: 'Driver #1', code: '#1', color: '#ff0000' },
+  { name: 'Driver #2', code: '#2', color: '#0000ff' },
+  { name: 'Driver #3', code: '#3', color: '#ffff00' },
+  { name: 'Driver #4', code: '#4', color: '#00ff00' },
+  { name: 'Driver #5', code: '#5', color: '#808080' },
+  { name: 'Driver #6', code: '#6', color: '#000000' },
+  { name: 'Autonomous Car', code: 'AUT', color: '#ffffff' },
+  { name: 'Pace Car', code: 'PAC', color: '#808000' }
 ];
 
 @Component({
   providers: [ControlUnit, RaceControl, Plugins],
   templateUrl: 'build/app.html'
 })
-class OpenLapApp {
-  rootPage: any = RootPage;
+class OpenLapApp implements OnInit {
+  driversPage = pages.DriversPage;
+  settingsPage = pages.SettingsPage;
+  connectionPage = pages.ConnectionPage;
+  loggingPage = pages.LoggingPage;
 
-  private settings = [];
+  private settings = [];  // TODO: store with CU?
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(private platform: Platform, private cu: ControlUnit,
-    private logger: Logger, private raceControl: RaceControl, private plugins: Plugins,
-    private storage: Storage) {
+  constructor(private cu: ControlUnit, private rc: RaceControl, 
+    private logger: Logger, private plugins: Plugins, private storage: Storage, 
+    private platform: Platform)
+  {
     storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {
-      raceControl.drivers = drivers;
-    })
-    storage.get('colors', DEFAULT_COLORS).then(colors => {
-      raceControl.colors = colors;
+      rc.drivers = drivers;
     })
 
-    // TODO: initial values, mark as touched
+    // TODO: initial values, mark as touched, etc.
     for (let i = 0; i != 6; ++i) {
       this.settings.push({ id: i, speed: 8, brake: 8, fuel: 8 });
     }
@@ -65,94 +56,35 @@ class OpenLapApp {
   }
 
   startPractice() {
-    this.raceControl.start('practice', { auto: true, pace: true });
+    this.rc.start('practice', { auto: true, pace: true });
   }
 
   startQualifying() {
-    this.storage.get('qualifying', { time: 3, auto: false }).then(settings => {
-      this.logger.debug('Qualifying settings:', settings);
-      let modal = Modal.create(QualifyingPage, settings);
-      modal.onDismiss(newSettings => {
-        if (newSettings) {
-          this.raceControl.start('qualifying', newSettings);
-          this.storage.set('qualifying', newSettings);
-        }
-      });
-      this.nav.present(modal);
-    });
+    let modal = Modal.create(pages.QualifyingPage);
+    this.nav.present(modal);
   }
 
   startRace() {
-    this.storage.get('race', { laps: 10, auto: true }).then(settings => {
-      this.logger.debug('Race settings:', settings);
-      let modal = Modal.create(RacePage, settings);
-      modal.onDismiss(newSettings => {
-        if (newSettings) {
-          this.raceControl.start('race', newSettings);
-          this.storage.set('race', newSettings);
-        }
-      });
-      this.nav.present(modal);
-    });
-  }
-
-  openConnection() {
-    let modal = Modal.create(ConnectionPage);
+    let modal = Modal.create(pages.RacePage);
     this.nav.present(modal);
   }
 
-  openDrivers() {
-    this.storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {
-      this.logger.debug('Drivers:', drivers);
-      let modal = Modal.create(DriversPage, drivers);
-      modal.onDismiss(newDrivers => {
-        if (newDrivers) {
-          this.raceControl.drivers = newDrivers;
-          this.storage.set('drivers', newDrivers);
-        }
+  exitApp() {
+      this.cu.disconnect().catch(error => {
+          this.logger.error('Error disconnecting CU', error);
+      }).then(() => {
+          this.logger.info('Exiting application');
+          this.platform.exitApp();
+          this.logger.info('Exited application');
       });
-      this.nav.present(modal);
-    });
   }
 
-  openColors() {
-    this.storage.get('colors', DEFAULT_COLORS).then(colors => {
-      this.logger.debug('Colors:', colors);
-      let modal = Modal.create(ColorsPage, colors);
-      modal.onDismiss(newColors => {
-        if (newColors) {
-          this.raceControl.colors = newColors;
-          this.storage.set('colors', newColors);
-        }
-      });
-      this.nav.present(modal);
-    });
+  ngOnInit() {
+    this.logger.info('Initializing application');
   }
 
-  openSettings() {
-    let modal = Modal.create(SettingsPage, this.settings);
-    this.nav.present(modal);
-  }
-
-  openLogging() {
-    let modal = Modal.create(LoggingPage);
-    this.nav.present(modal);
-  }
-
-  exit() {
-    this.cu.disconnect().catch(error => {
-      this.logger.error('Error disconnecting', error);
-    }).then(() => {
-      this.logger.info('Exiting');
-      this.platform.exitApp();
-    });
-  }
-
-  ionViewLoaded() {
-    // FIXME: overlay on race screen on first open
-    //let modal = Modal.create(ConnectionPage);
-    //modal.onDismiss(settings => {});
-    //setTimeout(() => this.nav.present(modal));
+  ngOnDestroy() {
+    this.logger.info('Destroying application');
   }
 }
 

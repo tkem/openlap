@@ -13,24 +13,21 @@
         </button>
       </ion-item-group>
       <ion-item-group>
-        <button ion-item menuClose (click)="openConnection()">
-          Connection
-        </button>
-        <button ion-item menuClose (click)="openSettings()">
-          Settings
-        </button>
-        <button ion-item menuClose (click)="openDrivers()">
+        <button ion-item menuClose (click)="nav.push(driversPage)">
           Drivers
         </button>
-        <button ion-item menuClose (click)="openColors()">
-          Colors
+        <button ion-item menuClose (click)="nav.push(settingsPage, settings)">
+          Settings
+        </button>
+        <button ion-item menuClose (click)="nav.push(connectionPage)">
+          Connection
         </button>
       </ion-item-group>
       <ion-item-group>
-        <button ion-item menuClose (click)="openLogging()">
+        <button ion-item menuClose (click)="nav.push(loggingPage)">
           Logging
         </button>
-        <button ion-item (click)="exit()">
+        <button ion-item menuClose (click)="exitApp()">
           Exit
         </button>
       </ion-item-group>
@@ -38,4 +35,4 @@
   </ion-content>
 </ion-menu>
 
-<ion-nav #content id="nav" [root]="rootPage" swipeBackEnabled="false"></ion-nav>
+<ion-nav #content id="nav" [root]="connectionPage" swipeBackEnabled="false"></ion-nav>

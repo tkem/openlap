@@ -1,3 +1,8 @@
+.checkered {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAFUlEQVQYlWP4jwYY0AEdFAyAlegKAMLXf4H+fz3eAAAAAElFTkSuQmCC) repeat;
+    padding-left: 1em;
+}
+
 table.leaderboard {
     table-layout: fixed;
     border-collapse: collapse;
@@ -55,19 +60,6 @@ table.leaderboard span.pit {
     color: black;
     font-size: smaller;
     vertical-align: middle;
-}
-
-@media (orientation: portrait) {
-    table.leaderboard .full-name {
-        width: 4em;
-        display: none;
-    }
-}
-
-@media (orientation: landscape) {
-    table.leaderboard .short-name {
-        display: none;
-    }
 }
 
 @media (min-width: 320px) {

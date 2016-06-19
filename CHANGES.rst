@@ -1,3 +1,11 @@
+0.4.2 2016-06-22
+----------------
+
+- More "material" design.
+
+- Update application icon.
+
+
 0.4.1 2016-06-18
 ----------------
 

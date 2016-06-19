@@ -10,7 +10,7 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
 
 class Car {
-  constructor(public id, public driver, public color) { }
+  constructor(public id, public driver) { }
 
   time: number = null;
   laps: number = 0;
@@ -36,19 +36,6 @@ export class RaceControl {
   });
 
   mode = 'practice';
-
-  private _colors = [];
-
-  get colors() {
-    return this._colors;
-  }
-
-  set colors(colors) {
-    for (let id of Object.keys(this.cars)) {
-      this.cars[id].color = colors[id];
-    }
-    this._colors = colors;
-  }
 
   private _drivers = [];
 
@@ -109,7 +96,7 @@ export class RaceControl {
 
   private getCar(id: number) {
     if (!(id in this.cars)) {
-      this.cars[id] = new Car(id, this.drivers[id], this.colors[id]);
+      this.cars[id] = new Car(id, this.drivers[id]);
     }
     return this.cars[id];
   }

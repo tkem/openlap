@@ -1,23 +1,23 @@
-import {Component} from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
-import {NavParams, ViewController} from 'ionic-angular';
+import { RaceControl, Storage } from '../../providers';
 
 @Component({
   templateUrl: 'build/pages/drivers/drivers.html'
 })
-export class DriversPage {
+export class DriversPage implements OnDestroy {
 
-  private models: any;
+  private drivers: any;
 
-  constructor(private view: ViewController, params: NavParams) {
-    this.models = params.data;
+  constructor(rc: RaceControl, private storage: Storage) {
+    this.drivers = rc.drivers;
   }
+  
+  getCode(name: string) {
+    return name.split(' ').slice(-1)[0].substr(0, 3).toUpperCase();
+  } 
 
-  onSubmit(models) {
-    this.view.dismiss(models);
-  }
-
-  onClose() {
-    this.view.dismiss();
+  ngOnDestroy() {
+    this.storage.set('drivers', this.drivers);
   }
 }

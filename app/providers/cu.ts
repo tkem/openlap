@@ -298,7 +298,7 @@ export class ControlUnit {
     if (this.connection) {
       let promise: Promise<void>;
       if (this.requests.length !== 0) {
-        //this.logger.debug('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
+        this.logger.debug('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
         promise = this.connection.write(this.requests.shift());
       } else {
         promise = this.connection.write(DataView.fromString('?').buffer);

@@ -45,11 +45,11 @@
     <tbody>
       <tr *ngFor="let item of (rc.ranking | async); let i = index;">
         <td text-left class="stripe-container">
-          {{i + 1}}<stripe [color]="item.color"></stripe>
+          {{i + 1}}<stripe [color]="item.driver.color"></stripe>
         </td>
         <td text-left>
-          <span class="full-name">{{item.driver.name}}</span>
-          <span class="short-name">{{item.driver.name.split(' ').slice(-1)[0].substr(0, 3).toUpperCase()}}</span>
+          <span showWhen="landscape">{{item.driver.name}}</span>
+          <span showWhen="portrait">{{item.driver.code}}</span>
         </td>
         <td *ngIf="rc.mode == 'race'" [ngSwitch]="i == 0 ? null : rc.lap - item.laps" text-right>
           <span *ngSwitchCase="">
@@ -78,7 +78,7 @@
           <fuel-gauge max="15" [value]="((cu.fuel | async) || [])[item.id]"></fuel-gauge>
         </td>
         <td text-left>
-          <span *ngIf="item.finished"><ion-icon name="flag"></ion-icon></span>
+          <span *ngIf="item.finished" class="checkered">&nbsp;&nbsp;</span>
           <span *ngIf="((cu.pit | async) || [])[item.id]" class="pit">PIT</span>
         </td>
       </tr>

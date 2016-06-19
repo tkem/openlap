@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 
-import {DatePipe } from '@angular/common';
-
-import { NavParams, ViewController } from 'ionic-angular';
-
 import { Logger } from '../../providers';
 
 @Component({
@@ -17,9 +13,5 @@ export class LoggingPage {
     {name: 'alert', style: {color: 'red'}}
   ];
 
-  constructor(public logger: Logger, private view: ViewController) {}
-    
-  close() {
-    this.view.dismiss();
-  }
+  constructor(public logger: Logger) {}
 }

@@ -1,24 +1,22 @@
-<ion-toolbar>
+<ion-navbar *navbar>
   <ion-title>
     Drivers
   </ion-title>
-  <ion-buttons start>
-    <button (click)="onClose()">
-      <ion-icon name="close"></ion-icon>
-    </button>
-  </ion-buttons>
-</ion-toolbar>
+</ion-navbar>
 
 <ion-content>
   <form #formData="ngForm" (ngSubmit)="onSubmit(models)">
     <ion-list>
-      <ion-item *ngFor="let model of models; let id = index">
+      <ion-item *ngFor="let driver of drivers; let id = index">
         <ion-label>#{{id + 1}}</ion-label>
-        <ion-input [(ngModel)]="model.name" required></ion-input>
+        <ion-input [(ngModel)]="driver.name" (change)="driver.code = getCode(driver.name)"></ion-input>
+        <ion-buttons item-right>
+          <ion-note>
+            {{driver.code}}
+          </ion-note>
+          <input [(ngModel)]="driver.color" type="color">
+        </ion-buttons>
       </ion-item>
     </ion-list>
-    <ion-buttons>
-      <button [disabled]="!formData.form.valid" type="submit">OK</button>
-    </ion-buttons>
   </form>
 </ion-content>
