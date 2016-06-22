@@ -3,13 +3,10 @@ import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 
-import { Connection, Device, ConnectionProvider } from './connection';
-import { Logger } from '../providers/logger';
-import { Plugins } from '../providers/plugins';
+import { Connection } from '../cu';
+import { Logger } from '../logger';
 
 const DOLLAR = '$'.charCodeAt(0);
-
-const SERIAL_OPTS = {baudRate: 19200};
 
 function concat(lhs: Uint8Array, rhs: Uint8Array) {
   if (lhs.length == 0) {
@@ -26,10 +23,9 @@ function concat(lhs: Uint8Array, rhs: Uint8Array) {
 
 export class SerialConnection extends Subject<ArrayBuffer> implements Connection {
 
-  private logEnabled = false;
   private readBuffer = new Uint8Array(0);
 
-  constructor(private serial: any, private logger: Logger, private zone: NgZone) {
+  constructor(private serial: any, private zone: NgZone, private logger?: Logger) {
     super();
     this.log('Creating serial connection');
     this.serial.registerReadCallback(
@@ -45,7 +41,6 @@ export class SerialConnection extends Subject<ArrayBuffer> implements Connection
         }
       },
       error => {
-        this.logger.error("Serial receive error", error);
         this.zone.run(() => this.error(error));
       }   
     );
@@ -73,7 +68,7 @@ export class SerialConnection extends Subject<ArrayBuffer> implements Connection
   }
 
   private log(message: string, data?: ArrayBuffer) {
-    if (this.logEnabled) {
+    if (this.logger) {
       let now = Date.now();
       if (data) {
         this.logger.debug(now.toString() + ": " + message + " " + String.fromCharCode.apply(null, new Uint8Array(data)));
@@ -82,30 +77,17 @@ export class SerialConnection extends Subject<ArrayBuffer> implements Connection
       }
     }
   }
-}
 
-@Injectable()
-export class SerialProvider extends ConnectionProvider {
-  constructor(private logger: Logger, private plugins: Plugins, private zone: NgZone) {
-    super();
-  }
-
-  connect() {
-    return this.enable().then(serial => {
-      return new Promise<Connection>((resolve, reject) => {
-        serial.open(SERIAL_OPTS, () => resolve(new SerialConnection(serial, this.logger, this.zone)), reject);
-      });
-    });
-  }
-
-  private enable(): Promise<any> {
-    return this.plugins.get('serial').then(serial => {
-      return new Promise((resolve, reject) => {
-        serial.requestPermission(
-          () => resolve(serial), 
-          () => reject(new Error('Permission denied'))
-        );
-      });
+  static connect(serial: any, zone: NgZone, logger?: Logger) {
+    return new Promise<Connection>((resolve, reject) => {
+      serial.requestPermission(
+        () => serial.open(
+          { baudRate: 19200 }, 
+          () => resolve(new SerialConnection(serial, zone, logger)), 
+          reject
+        ),
+        () => reject(new Error('Permission denied'))
+      );
     });
   }
 }

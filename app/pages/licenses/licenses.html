@@ -1,0 +1,15 @@
+<ion-navbar *navbar>
+  <ion-title>
+    Licenses
+  </ion-title>
+</ion-navbar>
+
+<ion-content>
+  <ion-list>
+    <a ion-item [href]="item.url" target="_system" *ngFor="let item of items">
+      <h1>{{item.name}}</h1>
+      <h2>{{item.copyright}}</h2>
+      <p>License: {{item.license}}</p>
+    </a>
+  </ion-list>
+</ion-content>

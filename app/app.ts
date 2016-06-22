@@ -2,7 +2,7 @@ import { provide, Component, ExceptionHandler, Injectable, OnInit, ViewChild } f
 
 import { ionicBootstrap, Modal, Nav, Platform } from 'ionic-angular';
 
-import { ControlUnit, Logger, RaceControl, Plugins, Storage } from './providers';
+import { ControlUnit, Devices, Logger, RaceControl, Plugins, Storage } from './providers';
 
 import * as pages from './pages';
 
@@ -13,26 +13,26 @@ const DEFAULT_DRIVERS = [
   { name: 'Driver #4', code: '#4', color: '#00ff00' },
   { name: 'Driver #5', code: '#5', color: '#808080' },
   { name: 'Driver #6', code: '#6', color: '#000000' },
-  { name: 'Autonomous Car', code: 'AUT', color: '#ffffff' },
-  { name: 'Pace Car', code: 'PAC', color: '#808000' }
+  { name: 'Autonomous Car', code: 'AUT', color: '#870275' },
+  { name: 'Pace Car', code: 'PAC', color: '#00fbff' }
 ];
 
 @Component({
-  providers: [ControlUnit, RaceControl, Plugins],
+  providers: [ControlUnit, Devices, RaceControl, Plugins],
   templateUrl: 'build/app.html'
 })
 class OpenLapApp implements OnInit {
   driversPage = pages.DriversPage;
-  settingsPage = pages.SettingsPage;
+  carSetupPage = pages.CarSetupPage;
   connectionPage = pages.ConnectionPage;
-  loggingPage = pages.LoggingPage;
-
+  settingsPage = pages.SettingsPage;
+  
   private settings = [];  // TODO: store with CU?
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(private cu: ControlUnit, private rc: RaceControl, 
-    private logger: Logger, private plugins: Plugins, private storage: Storage, 
+  constructor(private cu: ControlUnit, private rc: RaceControl,
+    private logger: Logger, private plugins: Plugins, private storage: Storage,
     private platform: Platform)
   {
     storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {

@@ -1,44 +1,29 @@
 import { Component } from '@angular/core';
 
-import { NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 
-import { ControlUnit } from '../../providers/cu';
+import { TargetDirective } from '../../directives';
 
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { Plugins } from '../../providers';
+
+import { LicensesPage } from '../licenses/licenses';
+import { LoggingPage } from '../logging/logging';
 
 @Component({
+  directives: [TargetDirective],
   templateUrl: 'build/pages/settings/settings.html',
 })
 export class SettingsPage {
+  licensesPage = LicensesPage;
+  loggingPage = LoggingPage;
+    
+  version: Promise<string>;
 
-  models = [];
-
-  type = 'speed';
-
-  private subject = new Subject<{id: number, type: string}>();
-  
-  constructor(cu: ControlUnit, params: NavParams) {
-    this.models = params.data;
-
-    // TODO: distinctUntilChanged, etc.
-    this.subject.debounceTime(400).subscribe(event => {
-      switch (event.type) {
-      case 'speed':
-        cu.setSpeed(event.id, this.models[event.id].speed);
-        break;
-      case 'brake':
-        cu.setBrake(event.id, this.models[event.id].brake);
-        break;
-      case 'fuel':
-        cu.setFuel(event.id, this.models[event.id].fuel);
-        break;    
-      }
+  constructor(plugins: Plugins, private nav: NavController) {
+    this.version = plugins.get('AppVersion').then(obj => {
+      return obj.version;
+    }).catch(error => {
+      return 'develop';
     });
-  }
-  
-  update(id: number, type: string) {
-    this.subject.next({id: id, type: type});  
   }
 }

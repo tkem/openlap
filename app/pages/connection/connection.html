@@ -6,10 +6,10 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item [ngClass]="{selected: cu.device?.id == device.id}" *ngFor="let device of devices" (click)="connect(device)">
-      <h1>{{device.name}}</h1>
-      <h2>{{device.id}}</h2>
-      <h2 *ngIf="cu.device?.id == device.id">{{status}}</h2>
+    <button ion-item detail-none [ngClass]="{selected: cu.device?.id == item.id}" *ngFor="let item of items" (click)="connect(item)">
+      <h1>{{item.name}}</h1>
+      <h2>{{item.id}}</h2>
+      <h2 *ngIf="cu.device?.id == item.id">{{status}}</h2>
     </button>
   </ion-list>
 </ion-content>

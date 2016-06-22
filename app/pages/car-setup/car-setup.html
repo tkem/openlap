@@ -1,0 +1,26 @@
+<ion-navbar *navbar>
+  <ion-title>
+    Car Setup
+  </ion-title>
+</ion-navbar>
+
+<ion-content>
+  <ion-segment [(ngModel)]="type">
+    <ion-segment-button value="speed">
+      Speed
+    </ion-segment-button>
+    <ion-segment-button value="brake">
+      Brake
+    </ion-segment-button>
+    <ion-segment-button value="fuel">
+      Fuel
+    </ion-segment-button>
+  </ion-segment>
+  <ion-list no-lines>
+    <ion-item *ngFor="let model of models">
+      <ion-range min="0" max="15" snaps="true" [(ngModel)]="model[type]" (ionChange)="update(model.id, type)">
+        <ion-label range-left>#{{model.id + 1}}</ion-label>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+</ion-content>

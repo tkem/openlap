@@ -1,34 +1,23 @@
 import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 
-import { NgClass } from '@angular/common';
-
 import { NavController } from 'ionic-angular';
 
-import { ControlUnit, Logger, Plugins } from '../../providers';
+import { ControlUnit, Device, Devices, Logger, Plugins } from '../../providers';
 
-import { ConnectionProvider, Device } from '../../connections/connection';
-import { BLEProvider } from '../../connections/ble';
-import { DemoProvider } from '../../connections/demo';
-import { SerialProvider } from '../../connections/serial';
-
-import { LeaderboardPage } from '../../pages';
+import { MainPage } from '../../pages';
 
 @Component({
-  providers: [BLEProvider, DemoProvider, SerialProvider, NgClass],
-  templateUrl: 'build/pages/connection/connection.html',
+  templateUrl: 'build/pages/connection/connection.html'
 })
 export class ConnectionPage implements OnInit, OnDestroy {
-  _devices = {};
-  devices: any[];
+  _items = {};
+  items = [];
 
   status = '';
 
-  private scanning = false;
-
-  constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins,
-    private nav: NavController, private zone: NgZone,
-    private ble: BLEProvider, private serial: SerialProvider, private demo: DemoProvider
-  ) {
+  constructor(private cu: ControlUnit, private devices: Devices, private logger: Logger,
+              private plugins: Plugins, private nav: NavController) 
+  {
     if (cu.device) {
       cu.getVersion().then(version => {
         this.status = 'Version ' + version;
@@ -36,36 +25,16 @@ export class ConnectionPage implements OnInit, OnDestroy {
         this.status = 'Error: ' + error;
         this.logger.error(error);
       });
-      this.add(cu.device);
     }
-    this.add({ name: 'Demo Connection', id: 'demo' });
-    plugins.get('serial').then(() => {
-      this.add({ name: 'Serial USB', id: 'serial' });
-    }).catch(error => {
-      this.logger.info('Serial plugin not enabled');
-    });
   }
 
   connect(device: Device) {
-    let provider: ConnectionProvider;
-    switch (device.id) {
-      case 'demo':
-        provider = this.demo;
-        break;
-      case 'serial':
-        provider = this.serial;
-        break;
-      default:
-        provider = this.ble;
-        break;
-    }
-    this.status = '';
-    this.cu.connect(provider, device).then(() => {
+    this.cu.connect(device).then(() => {
       return this.cu.getVersion();
     }).then(version => {
       this.status = 'Version ' + version;
       if (!this.nav.canGoBack()) {
-        return this.nav.setRoot(LeaderboardPage);
+        return this.nav.setRoot(MainPage);
       }
     }).catch(error => {
       this.status = 'Error: ' + error;
@@ -74,44 +43,17 @@ export class ConnectionPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.plugins.get('ble').then(ble => {
-      ble.enable(() => this.startScan(ble), error => this.logger.info('Not scanning for BLE devices', error));
-    }).catch(error => {
-      this.logger.info('BLE not enabled');
-    });
+      this.devices.scan().subscribe(device => {
+          this.logger.debug('Found new device', device);
+          this._items[device.id] = device;
+          let items: Device[] = Object.keys(this._items).map(id => this._items[id]);
+          items.sort((a, b) => a.name.localeCompare(b.name));
+          this.items = items;
+      });
   }
 
   ngOnDestroy() {
-    if (this.scanning) {
-      this.plugins.get('ble').then(ble => this.stopScan(ble));
-    }
-  }
-
-  private add(device: Device) {
-    this.logger.debug('Found new device', device);
-    this._devices[device.id] = device;
-    let devices: Device[] = Object.keys(this._devices).map(id => this._devices[id]);
-    devices.sort((a, b) => a.name.localeCompare(b.name));
-    this.devices = devices;
-  }
-
-  private startScan(ble: any) {
-    this.logger.info('Start scanning for BLE devices');
-    ble.startScan(
-      [],
-      device => this.zone.run(() => this.add(device)),
-      error => this.logger.error('Error scanning BLE devices', error)
-    );
-    this.scanning = true;
-  }
-
-  private stopScan(ble: any) {
-    this.logger.info('Stop scanning for BLE devices');
-    ble.stopScan(
-      () => this.logger.info('Stopped scanning for BLE devices'),
-      error => this.logger.error('Error stopping scanning BLE devices', error)
-    );
-    this.scanning = false;
+      // TODO: unsubscribe?
+      this.devices.stop();
   }
 }
-

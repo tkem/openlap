@@ -28,11 +28,12 @@
   "name": "openlap",
   "description": "openlap: An Ionic project",
   "cordovaPlugins": [
+    "cordova-plugin-appversion",
     "cordova-plugin-ble-central",
     "cordova-plugin-console",
     "cordova-plugin-device",
+    "cordova-plugin-inappbrowser",
     "cordova-plugin-insomnia",
-    "cordova-plugin-serial",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "cordova-plugin-whitelist",

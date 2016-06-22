@@ -1,0 +1,81 @@
+leaderboard table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    width: 100%;
+}
+
+leaderboard tr {
+    padding-bottom: 6px;
+}
+
+leaderboard th, td {
+    padding: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+leaderboard th {
+    font-size: smaller;
+}
+
+leaderboard .position {
+    width: 2.5em;
+}
+
+leaderboard .time {
+    width: 6em;
+}
+
+leaderboard .count {
+    width: 3em;
+}
+
+leaderboard .gauge {
+    width: 6em;
+}
+
+leaderboard .status {
+    width: 4em;
+}
+
+leaderboard .bestlap {
+    color: #0f0;
+}
+
+leaderboard .allbest {
+    color: magenta !important;
+}
+
+leaderboard .checkered {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAFUlEQVQYlWP4jwYY0AEdFAyAlegKAMLXf4H+fz3eAAAAAElFTkSuQmCC) repeat;
+    padding-left: 1em;
+}
+
+
+leaderboard span.pit {
+    background: yellow;
+    padding: 0 2px 0 2px 0;
+    color: black;
+    font-size: smaller;
+    vertical-align: middle;
+}
+/*
+leaderboard span.pit {
+    color: magenta;
+    font-size: smaller;
+    vertical-align: middle;
+}
+
+leaderboard span.pit:before {
+    content: "[";
+    color: white;
+}
+
+leaderboard span.pit:after {
+    content: "]";
+    color: white;
+}
+*/

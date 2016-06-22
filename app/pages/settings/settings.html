@@ -5,22 +5,25 @@
 </ion-navbar>
 
 <ion-content>
-  <ion-segment [(ngModel)]="type">
-    <ion-segment-button value="speed">
-      Speed
-    </ion-segment-button>
-    <ion-segment-button value="brake">
-      Brake
-    </ion-segment-button>
-    <ion-segment-button value="fuel">
-      Fuel
-    </ion-segment-button>
-  </ion-segment>
-  <ion-list no-lines>
-    <ion-item *ngFor="let model of models">
-      <ion-range min="0" max="15" snaps="true" [(ngModel)]="model[type]" (ionChange)="update(model.id, type)">
-        <ion-label range-left>#{{model.id + 1}}</ion-label>
-      </ion-range>
-    </ion-item>
+  <ion-list>
+    <ion-list-header>
+      General
+    </ion-list-header>
+    <button ion-item (click)="nav.push(loggingPage)">
+      Logging
+    </button>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      About
+    </ion-list-header>
+    <a ion-item href="https://github.com/tkem/openlap/" target="_system">
+      <h2>Open Lap {{version | async}}</h2>
+      <p>Copyright &copy; 2016 Thomas Kemmer</p>
+    </a>
+    <button ion-item (click)="nav.push(licensesPage)">
+      Open source licenses
+    </button>
   </ion-list>
 </ion-content>

@@ -1,3 +1,14 @@
+0.4.3 2016-06-27
+----------------
+
+- Add settings page.
+
+- Click log record for JSON view.
+
+- Use ``cordovarduino`` plugin for serial connection.
+
+- Various refactorings and improvements.
+
 0.4.2 2016-06-22
 ----------------
 

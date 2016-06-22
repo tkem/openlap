@@ -6,15 +6,15 @@ import { ConnectionPage } from '../connection/connection';
 
 import { ControlUnit, RaceControl } from '../../providers';
 
-import { FuelGauge, Startlight, Stripe } from '../../components';
+import { FuelGauge, Leaderboard, Startlight, Stripe } from '../../components';
 import { TimePipe } from '../../pipes';
 
 @Component({
-  directives: [FuelGauge, Startlight, Stripe],
+  directives: [FuelGauge, Leaderboard, Startlight, Stripe],
   pipes: [TimePipe],
-  templateUrl: 'build/pages/leaderboard/leaderboard.html',
+  templateUrl: 'build/pages/main/main.html',
 })
-export class LeaderboardPage implements OnInit {
+export class MainPage implements OnInit {
 
   constructor(public cu: ControlUnit, public rc: RaceControl, private nav: NavController) {}
 

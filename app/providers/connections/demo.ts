@@ -3,7 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-import {Connection, Device, ConnectionProvider} from './connection';
+import { Connection } from '../cu';
 
 const DOLLAR = '$'.charCodeAt(0);
 
@@ -20,7 +20,7 @@ function toString(buffer: ArrayBuffer) {
 class Car {
   id: string;
 
-  fuel = 0xff;
+  fuel: number;
 
   lap = new EventEmitter<Car>();
 
@@ -32,6 +32,7 @@ class Car {
 
   constructor(id: string) {
     this.id = id;
+    this.fuel = this.id == '7' || this .id == '8' ? 0 : 0x3f;
   }
 
   start(minLapTime, maxLapTime, delay=0) {
@@ -54,14 +55,19 @@ class Car {
   }
 
   private onNext() {
-    if (this.fuel >= 0x10) {
+    if (this.id == '7' || this .id == '8') {
       this.lap.emit(this);
-    }
-    if (this.fuel < random(0x10, 0x30)) {
-      this.pit = true;
-      this.timeout = setTimeout(() => this.onRefuel(), 500);
+      this.timeout = setTimeout(() => this.onNext(), random(this.minLapTime, this.maxLapTime));
     } else {
-      this.timeout = setTimeout(() => this.onFuel(), this.sectionTime());
+      if (this.fuel >= 0x10) {
+        this.lap.emit(this);
+      }
+      if (this.fuel < random(0x10, 0x30)) {
+        this.pit = true;
+        this.timeout = setTimeout(() => this.onRefuel(), 500);
+      } else {
+        this.timeout = setTimeout(() => this.onFuel(), this.sectionTime());
+      }
     }
   }
 
@@ -95,7 +101,7 @@ export class DemoConnection extends Subject<ArrayBuffer> implements Connection {
   private laps = [];
 
   private config = {
-    numCars: 3,
+    numCars: 8,
     maxStartTime: 500,
     minLapTime: 3000,
     maxLapTime: 5000
@@ -167,7 +173,8 @@ export class DemoConnection extends Subject<ArrayBuffer> implements Connection {
   private getPitMask(begin, end) {
     let mask = 0;
     for (let i = begin; i != end; ++i) {
-      mask |= (this.cars[i].pit ? 1 : 0) << i;
+      mask >>= 1
+      mask |= (this.cars[i].pit ? 8 : 0);
     }
     return mask;
   }
@@ -196,16 +203,5 @@ export class DemoConnection extends Subject<ArrayBuffer> implements Connection {
     for (let i = 0; i != this.config.numCars; ++i) {
       this.cars[i].stop();
     }
-  }
-}
-
-@Injectable()
-export class DemoProvider extends ConnectionProvider {
-  constructor() {
-    super();
-  }
-
-  connect() {
-    return Promise.resolve(new DemoConnection());
   }
 }

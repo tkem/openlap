@@ -11,10 +11,12 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let record of logger.records" text-wrap>
+    <button ion-item *ngFor="let record of logger.records" (click)="record.json = !record.json" text-wrap>
       <ion-icon item-left [name]="icons[record.level].name" [ngStyle]="icons[record.level].style"></ion-icon>
       <span>{{record.time | date:'HH:mm:ss'}}.{{(record.time % 1000) | number:'3.0-0'}}</span>
-      <span>{{record.args.join(', ')}}</span>
-    </ion-item>
+      <span *ngFor="let arg of record.args">
+        {{record.json ? (arg | json) : arg}}
+      </span>
+    </button>
   </ion-list>
 </ion-content>

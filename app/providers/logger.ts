@@ -7,8 +7,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { Connection, ConnectionProvider, Device } from '../connections/connection';
-
 export enum LogLevel { DEBUG, INFO, WARNING, ERROR };
 
 export class LogRecord {

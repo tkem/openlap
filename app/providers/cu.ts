@@ -7,7 +7,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { Connection, ConnectionProvider, Device } from '../connections/connection';
 import { Logger } from './logger';
 
 class DataView {
@@ -56,7 +55,7 @@ class DataView {
     return value;
   }
 
-  getArray(byteOffset: number, byteLength: number): ArrayLike<number> {
+  getUint8Array(byteOffset: number, byteLength: number): ArrayLike<number> {
     return this.array.subarray(byteOffset, byteOffset + byteLength).map(n => n & 0xf);
   }
 
@@ -88,6 +87,8 @@ class DataView {
   }
 }
 
+const POLL_REQUEST = DataView.fromString('?').buffer;
+
 // TODO: remove
 function getUint32(array: ArrayLike<number>, offset = 0) {
   let n = 0;
@@ -107,12 +108,26 @@ class TimeEvent {
   constructor(public id: number, public time: number, public sector: number) { }
 }
 
+export interface Connection extends Observable<ArrayBuffer> {
+  write(data: ArrayBuffer): Promise<void>;
+  
+  close(): Promise<void>;
+}
+
+export interface Device {
+  id?: any;
+
+  name: string;
+
+  connect(): Promise<Connection>;
+}
+
 @Injectable()
 export class ControlUnit {
 
-  private connection: Connection;
   device: Device;
-  private provider: ConnectionProvider;
+
+  private connection: Connection;
 
   private requests = Array<ArrayBuffer>();
   private version = null;
@@ -154,15 +169,14 @@ export class ControlUnit {
     );
   }
 
-  connect(provider: ConnectionProvider, device: Device) {
+  connect(device: Device) {
     return this.disconnect().catch(error => {
       this.logger.error('Error disconnecting CU', error);
     }).then(() => {
-      this.provider = provider;
       this.device = device;
       this.logger.info('CU: Connecting to ' + device.id);
       this._state.next('connecting');
-      return this.provider.connect(device).then(connection => this.onConnect(connection));
+      return this.device.connect().then(connection => this.onConnect(connection));
     });
   }
 
@@ -195,7 +209,7 @@ export class ControlUnit {
     switch (view.toString(0, 1)) {
       case '?':
         if (view.toString(1, 1) == ':') {
-          this._fuel.next(view.getArray(2, 8));
+          this._fuel.next(view.getUint8Array(2, 8));
           this._start.next(view.getUint4(10));
           this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
           this._pit.next(view.getUint8(12));
@@ -224,7 +238,7 @@ export class ControlUnit {
     clearTimeout(this.timeout);
     this.connection = null;
     this._state.next('connecting');
-    this.provider.connect(this.device).then(connection => this.onConnect(connection));
+    this.device.connect().then(connection => this.onConnect(connection));
   }
 
   private onClose() {
@@ -296,15 +310,11 @@ export class ControlUnit {
 
   private poll() {
     if (this.connection) {
-      let promise: Promise<void>;
-      if (this.requests.length !== 0) {
-        this.logger.debug('CU sends', String.fromCharCode.apply(null, new Uint8Array(this.requests[0])));
-        promise = this.connection.write(this.requests.shift());
-      } else {
-        promise = this.connection.write(DataView.fromString('?').buffer);
-      }
-      promise.catch(error => this.logger.error('Write error', error)).then(() => {
-        this.timeout = setTimeout(() => this.onError(new Error('Poll timeout')), 1000);  // TODO: config
+      let request = this.requests.shift() || POLL_REQUEST;
+      this.connection.write(request).catch(error => {
+        this.logger.error('Connection write error', error)
+      }).then(() => {
+        this.timeout = setTimeout(() => this.onError(new Error('Poll timeout')), 1000);
       });
     }
   }
