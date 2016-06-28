@@ -225,8 +225,11 @@ export class ControlUnit {
           this.version(view.toString(1, 4));
         }
         break;
-      default:
+      case 'J':
         // TODO: command promises?
+        // this.logger.debug('CU received', view.toString());
+        break;
+      default:
         this.logger.debug('CU received', view.toString());
         break;
     }

@@ -8,8 +8,7 @@ import { BLEConnection, DemoConnection, SerialConnection } from './connections';
 import { Connection, Device } from './cu';
 import { Logger } from './logger';
 import { Plugins } from './plugins';
-
-const CONNECTION_LOGGING = false;
+import { Storage } from './storage';
 
 @Injectable()
 export class Devices {
@@ -20,7 +19,9 @@ export class Devices {
 
   private ble: Promise<any>;
 
-  constructor(private logger: Logger, plugins: Plugins, private zone: NgZone) {
+  private logging: any = {};
+
+  constructor(private logger: Logger, plugins: Plugins, storage: Storage, private zone: NgZone) {
     this.logger.debug('Setup devices');
     this.subject.next({ 
       id: 'demo',
@@ -31,7 +32,7 @@ export class Devices {
       this.subject.next({ 
         id: 'serial',
         name: 'Serial USB',
-        connect: () => SerialConnection.connect(serial, zone, CONNECTION_LOGGING ? logger : null)
+        connect: () => SerialConnection.connect(serial, zone, this.logging.connection ? logger : null)
       });
     }).catch(error => {
       this.logger.info('Serial plugin not enabled');
@@ -41,6 +42,7 @@ export class Devices {
         ble.enable(() => resolve(ble), error => reject(ble));
       });
     });
+    storage.get('logging', {}).then(logging => this.logging = logging);
   }
 
   scan() {
@@ -75,7 +77,7 @@ export class Devices {
         let dev = {
           id: device.id,
           name: device.name,
-          connect: () => BLEConnection.connect(ble, device.id, this.zone, CONNECTION_LOGGING ? this.logger : null)
+          connect: () => BLEConnection.connect(ble, device.id, this.zone, this.logging.connection ? this.logger : null)
         };
         this.zone.run(() => this.subject.next(dev));
       },

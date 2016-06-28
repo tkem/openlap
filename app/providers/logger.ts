@@ -10,47 +10,69 @@ import 'rxjs/add/operator/distinctUntilChanged';
 export enum LogLevel { DEBUG, INFO, WARNING, ERROR };
 
 export class LogRecord {
-    level: LogLevel;
-    time: number;
-    args: any[];
+  level: LogLevel;
+  time: number;
+  args: any[];
 };
 
 @Injectable()
 export class Logger {
 
-    limit = 50;  // TODO: config
+  level = LogLevel.INFO;
 
-    records = new Array<LogRecord>();
+  limit = 50;  // TODO: config
 
-    constructor() { }
+  records = new Array<LogRecord>();
 
-    // TODO: logError, logGroup, ... for ExceptionHandler!
+  // TODO: logError, logGroup, ... for ExceptionHandler!
 
-    debug(...args: any[]) {
-        this.log(LogLevel.DEBUG, args);
+  setLevel(level: string) {
+    switch (level) {
+    case 'debug':
+      this.level = LogLevel.DEBUG;
+      break;
+    case 'info':
+      this.level = LogLevel.INFO;
+      break;
+    case 'warning':
+      this.level = LogLevel.WARNING;
+      break;
+    case 'error':
+      this.level = LogLevel.ERROR;
+      break;
+    default:
+      // TODO
     }
+  }
 
-    info(...args: any[]) {
-        this.log(LogLevel.INFO, args);
-    }
+  // TODO: rename to "log"?
+  debug(...args: any[]) {
+    this.log(LogLevel.DEBUG, args);
+  }
 
-    warn(...args: any[]) {
-        this.log(LogLevel.WARNING, args);
-    }
+  info(...args: any[]) {
+    this.log(LogLevel.INFO, args);
+  }
 
-    error(...args: any[]) {
-        this.log(LogLevel.ERROR, args);
-    }
+  warn(...args: any[]) {
+    this.log(LogLevel.WARNING, args);
+  }
 
-    clear() {
-        this.records.length = 0;
-    }
+  error(...args: any[]) {
+    this.log(LogLevel.ERROR, args);
+  }
 
-    private log(level: LogLevel, args: any[]) {
-        console.log.apply(console, args);
-        while (this.records.length >= this.limit) {
-            this.records.shift();
-        }
-        this.records.push({ level: level, time: Date.now(), args: args });
+  clear() {
+    this.records.length = 0;
+  }
+
+  private log(level: LogLevel, args: any[]) {
+    if (level >= this.level) {
+      console.log.apply(console, args);
+      while (this.records.length >= this.limit) {
+        this.records.shift();
+      }
+      this.records.push({ level: level, time: Date.now(), args: args });
     }
+  }
 }

@@ -7,10 +7,23 @@
 <ion-content>
   <ion-list>
     <ion-list-header>
-      General
-    </ion-list-header>
-    <button ion-item (click)="nav.push(loggingPage)">
       Logging
+    </ion-list-header>
+    <ion-item>
+      <ion-label light>Log level</ion-label>
+      <ion-select [(ngModel)]="logging.level" (ionChange)="logger.setLevel(logging.level)">
+        <ion-option value="debug">Debug</ion-option>
+        <ion-option value="info">Info</ion-option>
+        <ion-option value="warning">Warning</ion-option>
+        <ion-option value="error">Error</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Connection logging</ion-label>
+      <ion-toggle [(ngModel)]="logging.connection"></ion-toggle>
+    </ion-item>
+    <button ion-item (click)="nav.push(loggingPage)">
+      View log
     </button>
   </ion-list>
 

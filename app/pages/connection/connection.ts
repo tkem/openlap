@@ -43,17 +43,22 @@ export class ConnectionPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.devices.scan().subscribe(device => {
-          this.logger.debug('Found new device', device);
-          this._items[device.id] = device;
-          let items: Device[] = Object.keys(this._items).map(id => this._items[id]);
-          items.sort((a, b) => a.name.localeCompare(b.name));
-          this.items = items;
-      });
+    this.plugins.get('splashscreen').then(splashscreen => {
+      splashscreen.hide();
+    }).catch(() => {
+      this.logger.info('Splash screen not enabled');
+    });
+    this.devices.scan().subscribe(device => {
+      this.logger.debug('Found new device', device);
+      this._items[device.id] = device;
+      let items: Device[] = Object.keys(this._items).map(id => this._items[id]);
+      items.sort((a, b) => a.name.localeCompare(b.name));
+      this.items = items;
+    });
   }
 
   ngOnDestroy() {
-      // TODO: unsubscribe?
-      this.devices.stop();
+    // TODO: unsubscribe?
+    this.devices.stop();
   }
 }

@@ -35,6 +35,9 @@ class OpenLapApp implements OnInit {
     private logger: Logger, private plugins: Plugins, private storage: Storage,
     private platform: Platform)
   {
+    storage.get('logging', {level: 'info'}).then(logging => {
+      logger.setLevel(logging.level || 'info');
+    });
     storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {
       rc.drivers = drivers;
     })

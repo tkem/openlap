@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { TargetDirective } from '../../directives';
 
-import { Plugins } from '../../providers';
+import { Logger, Plugins, Storage } from '../../providers';
 
 import { LicensesPage } from '../licenses/licenses';
 import { LoggingPage } from '../logging/logging';
@@ -19,11 +19,20 @@ export class SettingsPage {
     
   version: Promise<string>;
 
-  constructor(plugins: Plugins, private nav: NavController) {
+  logging = {};
+
+  constructor(private logger: Logger, plugins: Plugins, private storage: Storage, private nav: NavController) {
     this.version = plugins.get('AppVersion').then(obj => {
       return obj.version;
     }).catch(error => {
       return 'develop';
     });
+    storage.get('logging', {level: 'info'}).then(logging => {
+      this.logging = logging;
+    });
+  }
+
+  ngOnDestroy() {
+    this.storage.set('logging', this.logging);
   }
 }

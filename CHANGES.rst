@@ -1,3 +1,10 @@
+0.4.4 2016-06-28
+----------------
+
+- Add splash screen.
+
+- Improve logging configuration.
+
 0.4.3 2016-06-27
 ----------------
 
