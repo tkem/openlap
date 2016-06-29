@@ -1,22 +1,24 @@
-<ion-navbar *navbar>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title [ngSwitch]="rc.mode">
-    <span *ngSwitchCase="'practice'">Free Practice</span>
-    <span *ngSwitchCase="'qualifying'">Qualifying</span>
-    <span *ngSwitchCase="'race'">Race</span>
-  </ion-title>
-  <ion-buttons end [ngSwitch]="rc.mode">
-    <span *ngSwitchCase="'qualifying'" light>
-      {{rc.time - (rc.clock | async) | time:'m:ss'}}
-    </span>
-    <span *ngSwitchCase="'race'" light>
-      Lap {{rc.lap}}/{{rc.laps}}
-      <span *ngIf="rc.time">{{rc.time - (rc.clock | async) | time:'m:ss'}}</span>
-    </span>
-  </ion-buttons>
-</ion-navbar>
+<ion-header>
+  <ion-navbar>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title [ngSwitch]="rc.mode">
+      <span *ngSwitchCase="'practice'">Free Practice</span>
+      <span *ngSwitchCase="'qualifying'">Qualifying</span>
+      <span *ngSwitchCase="'race'">Race</span>
+    </ion-title>
+    <ion-buttons end [ngSwitch]="rc.mode">
+      <span *ngSwitchCase="'qualifying'" light>
+        {{rc.time - (rc.clock | async) | time:'m:ss'}}
+      </span>
+      <span *ngSwitchCase="'race'" light>
+        Lap {{rc.lap}}/{{rc.laps}}
+        <span *ngIf="rc.time">{{rc.time - (rc.clock | async) | time:'m:ss'}}</span>
+      </span>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
   <leaderboard>
@@ -82,6 +84,8 @@
   </leaderboard>
 </ion-content>
 
-<ion-toolbar position="bottom" text-center transparent>
-  <startlight (click)="cu.toggleStart()" [value]="cu.start | async"></startlight>
-</ion-toolbar>
+<ion-footer>
+  <ion-toolbar text-center transparent>
+    <startlight (click)="cu.toggleStart()" [value]="cu.start | async"></startlight>
+  </ion-toolbar>
+</ion-footer>

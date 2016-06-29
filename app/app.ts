@@ -105,5 +105,7 @@ class LoggingExceptionHandler extends ExceptionHandler {
 ionicBootstrap(OpenLapApp, [
   Logger,
   provide(ExceptionHandler, { useClass: LoggingExceptionHandler }),
-  provide(Storage, { useFactory: () => new Storage('at.co.kemmer.openlap') })
-]);
+  provide(Storage, { useFactory: () => new Storage('at.co.kemmer.openlap') }),
+], { 
+  prodMode: !!window['cordova'] 
+});

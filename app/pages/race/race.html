@@ -1,16 +1,18 @@
-<ion-toolbar>
-  <ion-title>Race</ion-title>
-  <ion-buttons left>
-    <button (click)="onClose()">
-      <ion-icon name="close"></ion-icon>
-    </button>
-  </ion-buttons>
-  <ion-buttons right>
-    <button (click)="onSubmit(formData.value)" [disabled]="!formData.form.valid" type="submit">
-      Start
-    </button>
-  </ion-buttons>
-</ion-toolbar>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Race</ion-title>
+    <ion-buttons left>
+      <button (click)="onClose()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons right>
+      <button (click)="onSubmit(formData.value)" [disabled]="!formData.form.valid" type="submit">
+        Start
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
   <form #formData="ngForm" (ngSubmit)="onSubmit(formData.value)">

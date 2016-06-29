@@ -15,7 +15,7 @@ class Car {
   times: number[] = [];
   stops: number = 0;
 
-  get laps() { return this.times.length; }
+  get laps() { return this.times.length ? this.times.length - 1 : undefined; }
 
   get time() { return this.times[this.times.length - 1]; }
 

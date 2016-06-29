@@ -1,3 +1,13 @@
+0.4.5 2016-06-29
+----------------
+
+- Upgrade to Ionic 2 Beta 10.
+
+- Enable production mode when running on device.
+
+- Fix lap counts starting at 1.
+
+
 0.4.4 2016-06-28
 ----------------
 

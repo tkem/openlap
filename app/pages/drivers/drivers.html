@@ -1,22 +1,22 @@
-<ion-navbar *navbar>
-  <ion-title>
-    Drivers
-  </ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Drivers
+    </ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
-  <form #formData="ngForm" (ngSubmit)="onSubmit(models)">
-    <ion-list>
-      <ion-item *ngFor="let driver of drivers; let id = index">
-        <ion-label>#{{id + 1}}</ion-label>
-        <ion-input [(ngModel)]="driver.name" (change)="driver.code = getCode(driver.name)"></ion-input>
-        <ion-buttons item-right>
-          <ion-note>
-            {{driver.code}}
-          </ion-note>
-          <input [(ngModel)]="driver.color" type="color">
-        </ion-buttons>
-      </ion-item>
-    </ion-list>
-  </form>
+  <ion-list>
+    <ion-item *ngFor="let driver of drivers; let id = index">
+      <ion-label>#{{id + 1}}</ion-label>
+      <ion-input [(ngModel)]="driver.name" (keyup)="driver.code = getCode(driver.name)"></ion-input>
+      <ion-buttons item-right>
+        <ion-note>
+          {{driver.code}}
+        </ion-note>
+        <input [(ngModel)]="driver.color" type="color">
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
 </ion-content>
