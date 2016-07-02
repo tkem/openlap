@@ -1,4 +1,6 @@
-import {Component} from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+import { ControlUnit, RaceControl } from '../../providers';
 
 import { FuelGauge } from '../fuel-gauge/fuel-gauge';
 import { Stripe } from '../stripe/stripe';
@@ -8,8 +10,10 @@ import { TimePipe } from '../../pipes';
   selector: 'leaderboard',
   directives: [FuelGauge, Stripe],
   pipes: [TimePipe],
-  template: '<ng-content></ng-content>'
+  templateUrl: 'build/components/leaderboard/leaderboard.html'
 })
 export class Leaderboard {
-  // TODO
+  @Input() fuel: number[];
+  @Input() pitlane: boolean;
+  @Input() rc: RaceControl;
 }

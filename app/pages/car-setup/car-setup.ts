@@ -19,7 +19,7 @@ export class CarSetupPage {
 
   private subject = new Subject<{id: number, type: string}>();
   
-  constructor(cu: ControlUnit, params: NavParams) {
+  constructor(public cu: ControlUnit, params: NavParams) {
     this.models = params.data;
 
     // TODO: distinctUntilChanged, etc.

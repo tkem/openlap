@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/retryWhen';
+import 'rxjs/add/operator/timeout';
 
 import { Logger } from './logger';
+import { Backend } from '../backends';
 
 class DataView {
   private array: Uint8Array;
@@ -103,16 +109,7 @@ function getUint32(array: ArrayLike<number>, offset = 0) {
   return n;
 }
 
-// TODO: tuple?
-class TimeEvent {
-  constructor(public id: number, public time: number, public sector: number) { }
-}
-
-export interface Connection extends Observable<ArrayBuffer> {
-  write(data: ArrayBuffer): Promise<void>;
-  
-  close(): Promise<void>;
-}
+export type Connection = Subject<ArrayBuffer>;
 
 export interface Device {
   id?: any;
@@ -125,99 +122,101 @@ export interface Device {
 @Injectable()
 export class ControlUnit {
 
-  device: Device;
+  deviceId: string;
 
   private connection: Connection;
-
+  private subscription: any;
+  
   private requests = Array<ArrayBuffer>();
   private version = null;
 
-  private timeout: any;
+  private stateSubject = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
+  private fuelSubject = new BehaviorSubject<ArrayLike<number>>([]);
+  private startSubject = new BehaviorSubject<number>(undefined);
+  private modeSubject = new BehaviorSubject<number>(undefined);
+  private pitSubject = new BehaviorSubject<number>(0);
+  private timeSubject = new Subject<[number, number, number]>();
 
-  private _state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
-  private _fuel = new BehaviorSubject<ArrayLike<number>>(undefined);
-  private _start = new BehaviorSubject<number>(undefined);
-  private _mode = new BehaviorSubject<number>(undefined);
-  private _pit = new BehaviorSubject<number>(undefined);
-  private _time = new Subject<TimeEvent>();
+  state = this.stateSubject.distinctUntilChanged();
 
-  state: Observable<'disconnected' | 'connecting' | 'connected'>;
-  fuel: Observable<ArrayLike<number>>;
-  start: Observable<number>;
-  mode: Observable<number>;
-  pit: Observable<boolean[]>;
-  time: Observable<TimeEvent>;
+  // TODO: better equality check
+  fuel = this.fuelSubject.distinctUntilChanged(
+    null, array => array.length ? getUint32(array) : -1
+    //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
+  );
 
-  constructor(private logger: Logger) {
-    // TODO: custom Subject implementation(s)?
-    this.state = this._state;
-    this.fuel = this._fuel.filter(value => value !== undefined).distinctUntilChanged(
-      null, array => getUint32(array)  // TODO: better equality
-      //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
-    );
-    this.start = this._start.filter(value => value !== undefined).distinctUntilChanged();
-    this.mode = this._mode.filter(value => value !== undefined).distinctUntilChanged();
-    this.pit = this._pit.filter(value => value !== undefined).distinctUntilChanged().map(value => {
-      let result = new Array<boolean>(8);
-      for (let i = 0; i != 8; ++i) {
-        result[i] = (value & (1 << i)) != 0;
-      }
-      return result;
-    });
-    this.time = this._time.distinctUntilChanged(
-      (a, b) => a.id == b.id && a.time == b.time && a.sector == b.sector
-    );
-  }
+  // TODO: initial value?
+  start = this.startSubject.filter(value => value !== undefined).distinctUntilChanged();
 
-  connect(device: Device) {
-    return this.disconnect().catch(error => {
-      this.logger.error('Error disconnecting CU', error);
-    }).then(() => {
-      this.device = device;
-      this.logger.info('CU: Connecting to ' + device.id);
-      this._state.next('connecting');
-      return this.device.connect().then(connection => this.onConnect(connection));
+  // TODO: initial value?
+  mode = this.modeSubject.filter(value => value !== undefined).distinctUntilChanged();
+
+  pit = this.pitSubject.distinctUntilChanged();
+
+  // TODO: array equality?
+  time = this.timeSubject.distinctUntilChanged(
+    (a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2]
+  );
+
+  constructor(private logger: Logger) {}
+
+  connect(backend: Backend, deviceId: string) {
+    this.disconnect();
+    this.deviceId = deviceId;
+    this.logger.info('CU: Connecting to ' + deviceId);
+    this.stateSubject.next('connecting');
+
+    return new Promise<void>((resolve, reject) => {
+      this.connection = backend.connect(deviceId, {
+        next: () => {
+          console.log('CU connected');
+          this.stateSubject.next('connected');
+          resolve();
+          this.poll();
+        }
+      });
+      this.subscription = this.connection.timeout(3000).retryWhen(errors => {
+        return errors.do(error => {
+          this.logger.error('CU: Connection error:', error)
+          this.stateSubject.next('disconnected');
+        }).delay(2000).do(() => {
+          this.logger.error('CU: Reconnecting');
+          this.stateSubject.next('connecting');
+        });
+      }).subscribe(
+        data => this.onData(data),
+        error => this.onError(error),
+        () => this.onClose()
+      );
     });
   }
 
   disconnect() {
     if (this.connection) {
-      return this.connection.close().then(() => {
-        this.connection = null;
-        this.device = null;
-      });
-    } else {
-      return Promise.resolve();
+      this.connection.complete();
+      this.subscription.unsubscribe();
+      this.connection = null;
     }
   }
 
-  private onConnect(connection: Connection) {
-    this.logger.info('CU: Connected to ' + this.device.id);
-    this._state.next('connected');
-    this.connection = connection;
-    connection.subscribe(
-      data => this.onData(data),
-      error => this.onError(error),
-      () => this.onClose()
-    );
-    this.poll();
-  }
-
   private onData(data: ArrayBuffer) {
-    clearTimeout(this.timeout);
+    let requestsPending = this.requests.length !== 0;
+    if (requestsPending) {
+      this.poll();
+    }
     let view = new DataView(data);
     switch (view.toString(0, 1)) {
       case '?':
         if (view.toString(1, 1) == ':') {
-          this._fuel.next(view.getUint8Array(2, 8));
-          this._start.next(view.getUint4(10));
-          this._mode.next(view.getUint4(11) & 0x03);  // TODO: 4 added for pitlane
-          this._pit.next(view.getUint8(12));
+          this.fuelSubject.next(view.getUint8Array(2, 8));
+          this.startSubject.next(view.getUint4(10));
+          this.modeSubject.next(view.getUint4(11));
+          this.pitSubject.next(view.getUint8(12));
         } else {
           let id = view.getUint4(1) - 1;
           let time = view.getUint32(2);
-          let sector = view.getUint4(10);
-          this._time.next(new TimeEvent(id, time, sector));
+          let sector = view.getUint4(10);  // TODO: check with new checklane
+          this.timeSubject.next([id, time, sector]);
         }
         break;
       case '0':
@@ -233,21 +232,19 @@ export class ControlUnit {
         this.logger.debug('CU received', view.toString());
         break;
     }
-    this.poll();
+    if (!requestsPending) {
+      this.poll();
+    }
   }
 
   private onError(error: any) {
-    this.logger.error('CU: Connection error: ', error);
-    clearTimeout(this.timeout);
-    this.connection = null;
-    this._state.next('connecting');
-    this.device.connect().then(connection => this.onConnect(connection));
+    this.logger.error('CU: Fatal error ', error);
+    this.stateSubject.next('disconnected');
   }
 
   private onClose() {
     this.logger.info('CU: Connection closed');
-    clearTimeout(this.timeout);
-    this._state.next('disconnected');
+    this.stateSubject.next('disconnected');
   }
 
   getVersion() {
@@ -262,8 +259,16 @@ export class ControlUnit {
   }
 
   setLap(value: number) {
-    this.set(17, 7, value >> 4);
-    this.set(18, 7, value & 0xf);
+    this.setLapHi(value >> 4);
+    this.setLapLo(value & 0xf);
+  }
+
+  setLapHi(value: number) {
+    this.set(17, 7, value);
+  }
+
+  setLapLo(value: number) {
+    this.set(18, 7, value);
   }
 
   setPosition(id: number, pos: number) {
@@ -311,14 +316,10 @@ export class ControlUnit {
     this.requests.push(a.buffer);
   }
 
-  private poll() {
+  poll() {
     if (this.connection) {
       let request = this.requests.shift() || POLL_REQUEST;
-      this.connection.write(request).catch(error => {
-        this.logger.error('Connection write error', error)
-      }).then(() => {
-        this.timeout = setTimeout(() => this.onError(new Error('Poll timeout')), 1000);
-      });
+      this.connection.next(request);
     }
   }
 }

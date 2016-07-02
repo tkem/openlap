@@ -1,0 +1,67 @@
+<table [ngClass]="rc.mode" [class.pitstop]="pitlane">
+  <thead>
+    <tr>
+      <th class="position" text-left>POS</th>
+      <th text-left>NAME</th>
+      <th *ngIf="rc.mode == 'race'" text-right>TIME</th>
+      <th class="time" text-right>BEST LAP</th>
+      <th *ngIf="rc.mode !='race'" class="time" text-right>GAP</th>
+      <th *ngIf="rc.mode !='race'" class="time" text-right>INT</th>
+      <th class="time" text-right>LAP TIME</th>
+      <th class="count" text-right>LAPS</th>
+      <th *ngIf="rc.mode == 'race' && pitlane" class="count" text-right>PITS</th>
+      <th *ngIf="pitlane" class="gauge" text-left>FUEL</th>
+      <th class="status" text-left></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of (rc.ranking | async); let i = index;">
+      <td text-left class="stripe-container">
+        {{i + 1}}<stripe [color]="item.driver.color"></stripe>
+      </td>
+      <td text-left>
+        <span showWhen="landscape">{{item.driver.name}}</span>
+        <span showWhen="portrait">{{item.driver.code}}</span>
+      </td>
+      <td *ngIf="rc.mode == 'race'" [ngSwitch]="i == 0 ? null : rc.lap - item.laps" text-right>
+        <span *ngSwitchCase="">
+          {{(item.time - rc.startTime) | time:'m:ss.sss'}}
+        </span>
+        <span *ngSwitchCase="0">
+          +{{(item.time - rc.currentTime) | time:'s.sss'}}
+        </span>
+        <span *ngSwitchCase="1">
+          +1 Lap
+        </span>
+        <span *ngSwitchDefault>
+          +{{rc.lap - item.laps}} Laps
+        </span>
+      </td>
+      <td text-right>
+        {{item.bestlap | time:'s.sss'}}
+      </td>
+      <td *ngIf="rc.mode != 'race'" text-right>
+        {{item.gap || null | time:'+s.sss'}}
+      </td>
+      <td *ngIf="rc.mode != 'race'"text-right>
+        {{item.int || null | time:'+s.sss'}}
+      </td>
+      <td text-right [ngClass]="{bestlap: item.laptime == item.bestlap, allbest: item.laptime == rc.bestlap}">
+        {{item.laptime | time:'s.sss'}}
+      </td>
+      <td text-right>
+        {{item.laps}}
+      </td>
+      <td text-right *ngIf="rc.mode == 'race' && pitlane">
+        {{item.stops}}
+      </td>
+      <td text-left *ngIf="pitlane">
+        <fuel-gauge max="15" [value]="fuel[item.id]"></fuel-gauge>
+      </td>
+      <td text-left>
+        <span *ngIf="item.finished" class="checkered">&nbsp;&nbsp;</span>
+        <span *ngIf="item.pit" class="pit">PIT</span>
+      </td>
+    </tr>
+  </tbody>
+</table>

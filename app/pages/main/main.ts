@@ -1,36 +1,63 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavController, Toast } from 'ionic-angular';
 
-import { ConnectionPage } from '../connection/connection';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/map';
 
 import { ControlUnit, RaceControl } from '../../providers';
-
-import { FuelGauge, Leaderboard, Startlight, Stripe } from '../../components';
+import { Leaderboard, Startlight } from '../../components';
 import { TimePipe } from '../../pipes';
 
 @Component({
-  directives: [FuelGauge, Leaderboard, Startlight, Stripe],
+  directives: [Leaderboard, Startlight],
   pipes: [TimePipe],
   templateUrl: 'build/pages/main/main.html',
 })
-export class MainPage implements OnInit {
+export class MainPage implements OnDestroy, OnInit {
 
-  constructor(public cu: ControlUnit, public rc: RaceControl, private nav: NavController) {}
+  startCount: Observable<number>;
+  startBlink: Observable<boolean>;
+  usePitlane: Observable<boolean>;
+
+  private stateSubscription: any;
+
+  constructor(public cu: ControlUnit, public rc: RaceControl, private nav: NavController) {
+    this.startCount = cu.start.map(value => {
+      return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
+    });
+    this.startBlink = cu.state.combineLatest(cu.start, (state, value) => {
+      return state !== 'connected' || value >= 8;
+    });
+    this.usePitlane = cu.mode.map(value => {
+      return (value & 0x03) != 0;  // TODO: 4 added for pitlane - ignore or insist?
+    });
+  }
 
   ngOnInit() {
-    this.cu.state.subscribe(state => {
+    this.stateSubscription = this.cu.state.debounceTime(1000).distinctUntilChanged().subscribe(state => {
       switch (state) {
-        case 'connected':
-          this.nav.present(Toast.create({message: 'Connected to ' + this.cu.device.name, duration: 2000}));
-          break;
-        case 'connecting':
-          this.nav.present(Toast.create({message: 'Connecting to ' + this.cu.device.name, duration: 1000}));
-          break;
-        case 'disconnected':
-          this.nav.push(ConnectionPage);
-          break;
+      case 'connected':
+        this.toast('Connected to ' + this.cu.deviceId, 1000);
+        break;
+      case 'connecting':
+        this.toast('Connecting to ' + this.cu.deviceId, 1000);
+        break;
+      case 'disconnected':
+        this.toast('CU disconnected', 1000);
+        break;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.stateSubscription.unsubscribe();
+  }
+
+  toast(message: string, duration: number) {
+    this.nav.present(Toast.create({message: message, duration: duration}));
   }
 }

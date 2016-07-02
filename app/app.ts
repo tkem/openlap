@@ -2,7 +2,9 @@ import { provide, Component, ExceptionHandler, Injectable, OnInit, ViewChild } f
 
 import { ionicBootstrap, Modal, Nav, Platform } from 'ionic-angular';
 
-import { ControlUnit, Devices, Logger, RaceControl, Plugins, Storage } from './providers';
+import { ControlUnit, Logger, RaceControl, Plugins, Storage } from './providers';
+
+import { BACKENDS } from './backends';
 
 import * as pages from './pages';
 
@@ -18,7 +20,7 @@ const DEFAULT_DRIVERS = [
 ];
 
 @Component({
-  providers: [ControlUnit, Devices, RaceControl, Plugins],
+  providers: [ControlUnit, Plugins, RaceControl, BACKENDS],
   templateUrl: 'build/app.html'
 })
 class OpenLapApp implements OnInit {
@@ -73,13 +75,10 @@ class OpenLapApp implements OnInit {
   }
 
   exitApp() {
-      this.cu.disconnect().catch(error => {
-          this.logger.error('Error disconnecting CU', error);
-      }).then(() => {
-          this.logger.info('Exiting application');
-          this.platform.exitApp();
-          this.logger.info('Exited application');
-      });
+    this.cu.disconnect();
+    this.logger.info('Exiting application');
+    this.platform.exitApp();
+    this.logger.info('Exited application');
   }
 
   ngOnInit() {

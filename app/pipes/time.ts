@@ -27,7 +27,14 @@ const TIME_FORMATS = {
   's': t => Math.floor(t / 1000).toString(),
   'h:mm:ss.sss': t => formatHMS(t, true),
   'm:ss.sss': t => formatMS(t, true),
-  's.sss': t => (t / 1000).toFixed(3)
+  's.sss': t => (t / 1000).toFixed(3),
+  '+h:mm:ss': t => '+' + formatHMS(t),
+  '+m:ss': t => '+' + formatMS(t),
+  '+s': t => '+' + Math.floor(t / 1000).toString(),
+  '+h:mm:ss.sss': t => '+' + formatHMS(t, true),
+  '+m:ss.sss': t => '+' + formatMS(t, true),
+  '+s.sss': t => '+' + (t / 1000).toFixed(3)
+
 };
 
 @Pipe({name: 'time', pure: true})

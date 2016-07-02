@@ -9,13 +9,21 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
 
+function raceCompare(lhs, rhs) {
+  return (rhs.laps - lhs.laps) || (lhs.time - rhs.time)
+}
+
+function qualifyingCompare(lhs, rhs) {
+  return (lhs.bestlap || Infinity) - (rhs.bestlap || Infinity);
+}
+
 class Car {
   constructor(public id, public driver, public pit) { }
 
   times: number[] = [];
   stops: number = 0;
 
-  get laps() { return this.times.length ? this.times.length - 1 : undefined; }
+  get laps() { return this.times.length ? this.times.length - 1 : 0; }
 
   get time() { return this.times[this.times.length - 1]; }
 
@@ -31,8 +39,10 @@ class Car {
 
   bestlap: number;
   finished = false;
+  gap: number;
+  int: number;
 
-  add(time: number) {
+  update(time: number) {
     this.times.push(time);
     let laptime = this.laptime;
     if (!this.bestlap || laptime < this.bestlap ) {
@@ -46,6 +56,16 @@ export class RaceControl {
   private cars = {};
 
   ranking = new EventEmitter<Car[]>();
+
+  timer = Observable.interval(1000).map(() => {
+    if (!this.time) {
+      return undefined;
+    } else if (this.realStartTime) {
+      return Math.max(0, this.realStartTime + this.time - Date.now());
+    } else {
+      return this.time;
+    }
+  });
 
   clock = Observable.interval(1000).map(() => {
     if (this.realStartTime) {
@@ -78,19 +98,25 @@ export class RaceControl {
   laps = 0;
   time = 0;
   bestlap: number;
+  pit: number;
   private mask = 0;
-  private pit: boolean[] = [];
   private startTime: number;
   private currentTime: number;
   private realStartTime: number;
+  private compare = qualifyingCompare;
 
   constructor(private cu: ControlUnit, private logger: Logger) {
-    cu.time.subscribe(event => this.update(event.id, event.time, event.sector));
+    cu.time.subscribe(args => this.update.apply(this, args));
     cu.pit.subscribe(value => this.onPitChange(value));
   }
 
   start(mode: 'practice' | 'qualifying' | 'race', options: any = {}) {
     this.logger.info('Start ' + mode, options);
+    if (mode === 'race') {
+      this.compare = raceCompare;
+    } else {
+      this.compare = qualifyingCompare;
+    }
     this.mode = mode;
     this.time = parseInt(options.time || 0) * 60 * 1000;
     this.laps = parseInt(options.laps || 0);
@@ -118,13 +144,6 @@ export class RaceControl {
     });
   }
 
-  private getCar(id: number) {
-    if (!(id in this.cars)) {
-      this.cars[id] = new Car(id, this.drivers[id], this.pit[id]);
-    }
-    return this.cars[id];
-  }
-
   private update(id: number, time: number, sector: number) {
     this.logger.debug('Race event', id, time, sector);
     if (this.mask & (1 << id)) {
@@ -134,14 +153,19 @@ export class RaceControl {
       this.startTime = this.currentTime = time;
       this.realStartTime = Date.now();
     }
-    let car = this.getCar(id);
-    car.add(time);
+    let car = this.cars[id] || (
+      this.cars[id] = new Car(id, this.drivers[id], (this.pit & (1 << id)) != 0)
+    );
+    car.update(time);
     if (!this.bestlap || car.laptime < this.bestlap) {
       this.bestlap = car.laptime;
     }
     if (car.laps > this.lap) {
       this.lap = car.laps;
-      this.cu.setLap(this.lap);
+      if ((this.lap & 0xf) == 0) {
+        this.cu.setLapHi(this.lap >> 4);
+      }
+      this.cu.setLapLo(this.lap & 0xf);
       this.currentTime = time;
     }
     if ((this.laps && car.laps >= this.laps) || (this.time && time >= this.startTime + this.time)) {
@@ -150,22 +174,22 @@ export class RaceControl {
       this.mask |= 1 << id;
       this.cu.setMask(this.mask);
     }
+
     let items = Object.keys(this.cars).map(id => this.cars[id]);
-    switch (this.mode) {
-      case 'practice':
-        // TODO: ranking for practice mode?
-        items.sort((lhs, rhs) => (rhs.laps - lhs.laps) || (lhs.time - rhs.time));
-        break;
-      case 'qualifying':
-        items.sort((lhs, rhs) => (lhs.bestlap || Infinity) - (rhs.bestlap || Infinity));
-        break;
-      case 'race':
-        items.sort((lhs, rhs) => (rhs.laps - lhs.laps) || (lhs.time - rhs.time));
-        break;
-    }
-    // TODO: more efficient update?
-    items.forEach((item, index) => this.cu.setPosition(item.id, index + 1));
-    //this.logger.debug(items);
+    items.sort(this.compare);
+    items.forEach((item, index) => {
+      if (index === 0) {
+        item.gap = item.int = undefined;
+      } else if (this.mode === 'race') {
+        item.gap = [items[0].laps - item.laps, item.time - items[0].time];
+        item.int = [items[index - 1].laps - item.laps, item.time - items[index - 1].time];
+      } else {
+        item.gap = item.bestlap - items[0].bestlap;
+        item.int = item.bestlap - items[index - 1].bestlap;
+      }
+      // TODO: more efficient update?
+      // this.cu.setPosition(item.id, index + 1);
+    });
     this.ranking.emit(items);
   }
 
@@ -173,10 +197,11 @@ export class RaceControl {
     //this.logger.info('Pit mask', value);
     for (let id of Object.keys(this.cars)) {
       let car = this.cars[id];
-      if (!(this.mask & (1 << parseInt(id))) && !car.pit && value[id]) {
+      let pit = (value & (1 << parseInt(id))) !== 0;
+      if (!(this.mask & (1 << parseInt(id))) && !car.pit && pit) {
         car.stops++;
       }
-      car.pit = value[id];
+      car.pit = pit;
     }
     this.pit = value;
   }

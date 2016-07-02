@@ -1,44 +1,62 @@
-import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { ControlUnit, Device, Devices, Logger, Plugins } from '../../providers';
+import { ControlUnit, Logger, Plugins } from '../../providers';
+
+import { Backend, BLEBackend, DemoBackend, SerialBackend } from '../../backends';
 
 import { MainPage } from '../../pages';
 
 @Component({
   templateUrl: 'build/pages/connection/connection.html'
 })
-export class ConnectionPage implements OnInit, OnDestroy {
+export class ConnectionPage implements OnInit {
   _items = {};
   items = [];
 
   status = '';
 
-  constructor(private cu: ControlUnit, private devices: Devices, private logger: Logger,
-              private plugins: Plugins, private nav: NavController) 
+  constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins, 
+              private ble: BLEBackend, private demo: DemoBackend, private serial: SerialBackend,
+              private nav: NavController)
   {
-    if (cu.device) {
+    if (cu.deviceId) {
       cu.getVersion().then(version => {
+        this.logger.info('CU version ' + version);
         this.status = 'Version ' + version;
       }).catch(error => {
-        this.status = 'Error: ' + error;
         this.logger.error(error);
+        this.status = 'Error: ' + error;
       });
     }
   }
 
-  connect(device: Device) {
-    this.cu.connect(device).then(() => {
+  connect(deviceId: string) {
+    let backend: Backend;
+    switch (deviceId) {
+      case 'demo':
+        backend = this.demo;
+        break;
+      case 'serial':
+        backend = this.serial;
+        break;
+      default:
+        backend = this.ble;
+        break;
+    }
+    this.cu.connect(backend, deviceId).then(() => {
+      this.logger.info('Connected to ' + deviceId);
       return this.cu.getVersion();
     }).then(version => {
+      this.logger.info('CU version ' + version);
       this.status = 'Version ' + version;
       if (!this.nav.canGoBack()) {
         return this.nav.setRoot(MainPage);
       }
     }).catch(error => {
-      this.status = 'Error: ' + error;
       this.logger.error(error);
+      this.status = 'Error: ' + error;
     });
   }
 
@@ -48,17 +66,12 @@ export class ConnectionPage implements OnInit, OnDestroy {
     }).catch(() => {
       this.logger.info('Splash screen not enabled');
     });
-    this.devices.scan().subscribe(device => {
+    this.ble.scan().subscribe(device => {
       this.logger.debug('Found new device', device);
       this._items[device.id] = device;
-      let items: Device[] = Object.keys(this._items).map(id => this._items[id]);
+      let items = Object.keys(this._items).map(id => this._items[id]);
       items.sort((a, b) => a.name.localeCompare(b.name));
       this.items = items;
     });
-  }
-
-  ngOnDestroy() {
-    // TODO: unsubscribe?
-    this.devices.stop();
   }
 }

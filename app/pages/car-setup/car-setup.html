@@ -20,7 +20,7 @@
   </ion-segment>
   <ion-list no-lines>
     <ion-item *ngFor="let model of models">
-      <ion-range min="0" max="15" snaps="true" [(ngModel)]="model[type]" (ionChange)="update(model.id, type)">
+      <ion-range min="0" max="15" snaps="true" [disabled]="(cu.state | async) != 'connected'" [(ngModel)]="model[type]" (ionChange)="update(model.id, type)">
         <ion-label range-left>#{{model.id + 1}}</ion-label>
       </ion-range>
     </ion-item>
