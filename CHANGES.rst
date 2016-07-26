@@ -1,3 +1,9 @@
+0.4.6 2016-07-26
+----------------
+
+- Improve connection handling.
+
+
 0.4.5 2016-06-29
 ----------------
 
@@ -15,6 +21,7 @@
 
 - Improve logging configuration.
 
+
 0.4.3 2016-06-27
 ----------------
 
@@ -25,6 +32,7 @@
 - Use ``cordovarduino`` plugin for serial connection.
 
 - Various refactorings and improvements.
+
 
 0.4.2 2016-06-22
 ----------------
@@ -40,6 +48,7 @@
 - Fix logging issues.
 
 - Connection improvements.
+
 
 0.4.0 2016-06-17
 ----------------
