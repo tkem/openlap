@@ -1,11 +1,15 @@
 import { Injectable, NgZone } from '@angular/core';
 
+import { Platform } from 'ionic-angular';
+
+import { BLE } from 'ionic-native';
+
 import { Observable } from 'rxjs/Observable';
 import { Observer, NextObserver } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 
 import { Backend } from './backend';
-import { Logger, Plugins } from '../providers';
+import { Logger } from '../providers';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
 const OUTPUT_UUID = '39df8888-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -16,15 +20,13 @@ const DOLLAR = '$'.charCodeAt(0);
 @Injectable()
 export class BLEBackend implements Backend {
 
-  private ble: Promise<any>;
+  private enabled: Promise<void>;
 
   private devices = {};
 
-  constructor(private logger: Logger, private zone: NgZone, plugins: Plugins) {
-    this.ble = plugins.get('ble').then(ble => {
-      return new Promise<any>((resolve, reject) => {
-        ble.enable(() => resolve(ble), error => reject(error));
-      });
+  constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
+    this.enabled = this.platform.ready().then(() => {
+      return BLE.enable();
     });
   }
 
@@ -39,58 +41,61 @@ export class BLEBackend implements Backend {
           subscriber.next(this.devices[id]);
         }
       });
-      this.ble.then(ble => {
+      let scan = undefined;
+      this.enabled.then(() => {
         this.logger.debug('Start scanning for BLE devices');
-        ble.startScan([], 
-          device => {
+        scan = BLE.startScan([]).subscribe({
+          next: device => {
             if (!(device.id in this.devices)) {
               this.zone.run(() => subscriber.next(device));
               this.devices[device.id] = device;
             }
           }, 
-          error => this.zone.run(() => subscriber.error(error))
-        );
+          error: err => {
+            this.zone.run(() => subscriber.error(err))
+          }
+        });
       }).catch(error => {
-        this.logger.warn('Not scanning for BLE devices:', error);
-      });      
+        this.logger.info('BLE not enabled: ', error);
+        subscriber.complete();
+      });
       return () => {
         this.logger.debug('Stop scanning for BLE devices');
-        this.ble.then(ble => ble.stopScan()).catch();
+        if (scan) {
+          scan.unsubscribe();
+        }
       }
     });
   }
 
   private createObservable(id: string, connected?: NextObserver<void>) {
-    return new Observable(subscriber => {
+    return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to BLE device ' + id);
-      this.ble.then(ble => {
-        let isConnected = false;
-        ble.connect(
-          id, 
-          peripheral => {
-            this.logger.info('Connected to BLE device:', peripheral);
-            isConnected = true;
-            ble.startNotification(
-              id, SERVICE_UUID, NOTIFY_UUID,
-              data => this.onNotify(data, subscriber),
-              error => this.onError(error, subscriber)
-            );
-            if (connected) {
-              connected.next(undefined);
-            }
-          },
-          obj => {
-            if (obj instanceof Error) {
-              this.logger.error('BLE connection error:', obj);
-              subscriber.error(obj);
-            } else if (!isConnected) {
-              this.logger.error('BLE connection error:', obj);
-              subscriber.error(new Error('Connection error'));
-            } else {}
-              this.logger.info('BLE device disconnected:', obj);
-              subscriber.complete();
+      let isConnected = false;
+      BLE.connect(id).subscribe({
+        next: peripheral => {
+          this.logger.info('Connected to BLE device:', peripheral);
+          isConnected = true;
+          BLE.startNotification(id, SERVICE_UUID, NOTIFY_UUID).subscribe({
+            next: data => this.onNotify(data, subscriber),
+            error: err => this.onError(err, subscriber)
+          });
+          if (connected) {
+            connected.next(undefined);
           }
-        );
+        },
+        error: obj => {
+          if (obj instanceof Error) {
+            this.logger.error('BLE connection error:', obj);
+            subscriber.error(obj);
+          } else if (!isConnected) {
+            this.logger.error('BLE connection error:', obj);
+            subscriber.error(new Error('Connection error'));
+          } else {
+            this.logger.info('BLE device disconnected:', obj);
+            subscriber.complete();
+          }
+        }
       });
       return () => {
         this.disconnect(id);
@@ -101,12 +106,8 @@ export class BLEBackend implements Backend {
   private createObserver(id: string) {
     return {
       next: (value: ArrayBuffer) => {
-        this.ble.then(ble => {
-          ble.writeWithoutResponse(
-            id, SERVICE_UUID, OUTPUT_UUID, value,
-            null /* () => this.logger.debug('BLE write success') */, 
-            error => this.logger.error('BLE write error', error)
-          );
+        BLE.writeWithoutResponse(id, SERVICE_UUID, OUTPUT_UUID, value).catch(error => {
+          this.logger.error('BLE write error', error);
         });
       },
       error: (err: any) => {
@@ -138,12 +139,10 @@ export class BLEBackend implements Backend {
   }
     
   private disconnect(id: string) {
-    this.ble.then(ble => {
-      ble.disconnect(
-        id,
-        () => this.logger.debug('BLE disconnected from ' + id),
-        error => this.logger.error('BLE disconnect error:', error)
-      );
+    BLE.disconnect(id).then(() => {
+      this.logger.debug('BLE disconnected from ' + id);
+    }).catch(error => {
+      this.logger.error('BLE disconnect error:', error);
     });
   }
 }

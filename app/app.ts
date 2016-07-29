@@ -1,8 +1,10 @@
 import { provide, Component, ExceptionHandler, Injectable, OnInit, ViewChild } from '@angular/core';
 
-import { ionicBootstrap, Modal, Nav, Platform } from 'ionic-angular';
+import { ionicBootstrap, Modal, Nav, NavController, Platform } from 'ionic-angular';
 
-import { ControlUnit, Logger, RaceControl, Plugins, Storage } from './providers';
+import { Insomnia, Splashscreen } from 'ionic-native';
+
+import { ControlUnit, Logger, RaceControl, Storage } from './providers';
 
 import { BACKENDS } from './backends';
 
@@ -20,7 +22,7 @@ const DEFAULT_DRIVERS = [
 ];
 
 @Component({
-  providers: [ControlUnit, Plugins, RaceControl, BACKENDS],
+  providers: [ControlUnit, RaceControl, BACKENDS],
   templateUrl: 'build/app.html'
 })
 class OpenLapApp implements OnInit {
@@ -34,7 +36,7 @@ class OpenLapApp implements OnInit {
   @ViewChild(Nav) nav: Nav;
 
   constructor(private cu: ControlUnit, private rc: RaceControl,
-    private logger: Logger, private plugins: Plugins, private storage: Storage,
+    private logger: Logger, private storage: Storage,
     private platform: Platform)
   {
     storage.get('logging', {level: 'info'}).then(logging => {
@@ -48,16 +50,6 @@ class OpenLapApp implements OnInit {
     for (let i = 0; i != 6; ++i) {
       this.settings.push({ id: i, speed: 8, brake: 8, fuel: 8 });
     }
-
-    this.plugins.get('insomnia').then(insomnia => {
-      return new Promise((resolve, reject) => {
-        insomnia.keepAwake(resolve, reject);
-      });
-    }).then(() => {
-      this.logger.info('Keeping app awake...');
-    }).catch(error => {
-      this.logger.error('Not using insomnia plugin', error);
-    });
   }
 
   startPractice() {
@@ -82,7 +74,13 @@ class OpenLapApp implements OnInit {
   }
 
   ngOnInit() {
-    this.logger.info('Initializing application');
+    this.platform.ready().then(readySource => {
+      this.logger.info('Initializing ' + readySource + ' application');
+      Insomnia.keepAwake();
+      this.nav.setRoot(pages.ConnectionPage).then(() => {
+        Splashscreen.hide();
+      });
+    });
   }
 
   ngOnDestroy() {

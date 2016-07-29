@@ -126,7 +126,7 @@ export class DemoBackend implements Backend {
   }  
 
   private createObservable(connected?: NextObserver<void>) {
-    return new Observable(subscriber => {
+    return new Observable<ArrayBuffer>(subscriber => {
       this.logger.info('Creating Demo observable');
       this.subscriber = subscriber;
       if (this.startSequence == 0) {
@@ -150,7 +150,7 @@ export class DemoBackend implements Backend {
         if (toString(value) == 'T2') {
           this.onStart();
         }
-        if (Math.round(random(0, 200)) === 42) {
+        if (Math.round(random(0, 1000)) === 42) {
           console.log('Random Demo timeout');
           return;
         }

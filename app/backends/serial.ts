@@ -1,11 +1,13 @@
 import { Injectable, NgZone } from '@angular/core';
 
+import { Cordova, Plugin } from 'ionic-native';
+
 import { Observable } from 'rxjs/Observable';
 import { Observer, NextObserver } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 
 import { Backend } from './backend';
-import { Logger, Plugins } from '../providers';
+import { Logger } from '../providers';
 
 const BAUD_RATE = 19200;
 
@@ -24,27 +26,51 @@ function concat(lhs: Uint8Array, rhs: Uint8Array) {
   }
 }
 
+@Plugin({
+  plugin: 'cordovarduino',
+  pluginRef: 'serial',
+  repo: 'https://github.com/xseignard/cordovarduino',
+  platforms: ['Android']
+})
+class Serial {
+  @Cordova()
+  static requestPermission(): Promise<any> { return; }
+
+  @Cordova()
+  static open(options: any): Promise<any> { return; }
+
+  @Cordova()
+  static close(): Promise<any> { return; }
+
+  @Cordova({
+    observable: true
+  })
+  static registerReadCallback(): Observable<ArrayBuffer> { return; }
+
+  @Cordova()
+  static write(data: string): Promise<any> { return; }
+
+  @Cordova()
+  static writeHex(data: string): Promise<any> { return; }
+}
+
 @Injectable()
 export class SerialBackend implements Backend {
 
-  private serial: Promise<any>;
-
-  constructor(private logger: Logger, private zone: NgZone, plugins: Plugins) {
-    this.serial = plugins.get('serial');
-  }
+  constructor(private logger: Logger, private zone: NgZone) {}
 
   connect(id?: string, connected?: NextObserver<void>) {
     return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable(connected));
   }
 
   private createObservable(connected?: NextObserver<void>) {
-    return new Observable(subscriber => {
+    return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to serial port');
-      this.open({ baudRate: BAUD_RATE }).then(serial => {
+      this.open({ baudRate: BAUD_RATE }).then(() => {
         this.logger.info('Connected to serial port');
         let buffer = new Uint8Array(0);
-        serial.registerReadCallback(
-          data => {
+        Serial.registerReadCallback().subscribe({
+          next: data => {
             buffer = concat(buffer, new Uint8Array(data));
             let index = -1;
             while ((index = buffer.indexOf(DOLLAR)) != -1) {
@@ -53,11 +79,11 @@ export class SerialBackend implements Backend {
               this.zone.run(() => subscriber.next(array.buffer));
             }
           },
-          error => {
-            this.logger.error('Error reading from serial port:', error);
-            this.zone.run(() => subscriber.error(error));
+          error: err=> {
+            this.logger.error('Error reading from serial port:', err);
+            this.zone.run(() => subscriber.error(err));
           }
-        );
+        });
         if (connected) {
           connected.next(undefined);
         }
@@ -74,9 +100,7 @@ export class SerialBackend implements Backend {
   private createObserver() {
     return {
       next: (value: ArrayBuffer) => {
-        this.serial.then(serial => {
-          serial.write('"' + String.fromCharCode.apply(null, new Uint8Array(value)) + '$');
-        });
+        Serial.write('"' + String.fromCharCode.apply(null, new Uint8Array(value)) + '$');
       },
       error: (err: any) => {
         this.logger.error('Serial connection error:', err);
@@ -90,21 +114,16 @@ export class SerialBackend implements Backend {
   }
 
   private open(options: any) {
-    return this.serial.then(serial => {
-      return new Promise<any>((resolve, reject) => {
-        serial.requestPermission(
-          () => serial.open(options, () => resolve(serial), reject),
-          () => reject(new Error('Permission denied'))
-        );
-      });
+    return Serial.requestPermission().then(() => {
+      return Serial.open(options);
     });
   }
 
   private close() {
-    this.logger.debug('Closing serial port');
-    return this.serial.then(serial => {
-      serial.close();
-      this.logger.debug('Closed serial port');
+    Serial.close().then(() => {
+      this.logger.debug('Serial port closed');
+    }).catch(error => {
+      this.logger.error('Serial close error:', error);
     });
   }
 }

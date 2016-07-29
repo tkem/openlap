@@ -2,7 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { ControlUnit, Logger, Plugins } from '../../providers';
+import { ControlUnit, Logger } from '../../providers';
 
 import { Backend, BLEBackend, DemoBackend, SerialBackend } from '../../backends';
 
@@ -17,7 +17,7 @@ export class ConnectionPage implements OnInit {
 
   status = '';
 
-  constructor(private cu: ControlUnit, private logger: Logger, private plugins: Plugins, 
+  constructor(private cu: ControlUnit, private logger: Logger, 
               private ble: BLEBackend, private demo: DemoBackend, private serial: SerialBackend,
               private nav: NavController)
   {
@@ -61,17 +61,16 @@ export class ConnectionPage implements OnInit {
   }
 
   ngOnInit() {
-    this.plugins.get('splashscreen').then(splashscreen => {
-      splashscreen.hide();
-    }).catch(() => {
-      this.logger.info('Splash screen not enabled');
-    });
-    this.ble.scan().subscribe(device => {
-      this.logger.debug('Found new device', device);
-      this._items[device.id] = device;
-      let items = Object.keys(this._items).map(id => this._items[id]);
-      items.sort((a, b) => a.name.localeCompare(b.name));
-      this.items = items;
-    });
+    try {
+      this.ble.scan().subscribe(device => {
+        this.logger.debug('Found new device', device);
+        this._items[device.id] = device;
+        let items = Object.keys(this._items).map(id => this._items[id]);
+        items.sort((a, b) => a.name.localeCompare(b.name));
+        this.items = items;
+      });
+    } catch (e) {
+      this.logger.error('Error scanning for BLE devices: ', e);
+    }
   }
 }
