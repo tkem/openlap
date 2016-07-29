@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 
 import { NavParams } from 'ionic-angular';
 
-import { ControlUnit } from '../../providers/cu';
-
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+
+import { ControlUnit } from '../../providers';
 
 @Component({
   templateUrl: 'build/pages/car-setup/car-setup.html',

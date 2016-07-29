@@ -38,13 +38,13 @@ export class MainPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.stateSubscription = this.cu.state.debounceTime(1000).distinctUntilChanged().subscribe(state => {
+    this.stateSubscription = this.cu.state.debounceTime(100).distinctUntilChanged().subscribe(state => {
       switch (state) {
       case 'connected':
-        this.toast('Connected to ' + this.cu.deviceId, 1000);
+        this.toast('Connected to ' + this.cu.peripheral.name, 1000);
         break;
       case 'connecting':
-        this.toast('Connecting to ' + this.cu.deviceId, 1000);
+        this.toast('Connecting to ' + this.cu.peripheral.name, 1000);
         break;
       case 'disconnected':
         this.toast('CU disconnected', 1000);
@@ -58,6 +58,13 @@ export class MainPage implements OnDestroy, OnInit {
   }
 
   toast(message: string, duration: number) {
-    this.nav.present(Toast.create({message: message, duration: duration}));
+    console.log('Creating toast', message)
+    let toast = Toast.create({message: message/*, duration: duration*/});
+    toast.onDismiss(() => { console.log('Toast dismissed', message); });
+    setTimeout(() => {
+      console.log('Dismissing toast', message);
+      toast.dismiss();
+    }, duration);
+    this.nav.present(toast);
   }
 }

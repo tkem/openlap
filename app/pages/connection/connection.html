@@ -8,18 +8,12 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item [ngClass]="{selected: cu.deviceId == item.id}" *ngFor="let item of items" (click)="connect(item.id)">
+    <button ion-item *ngFor="let item of items | async" 
+            [ngClass]="{selected: item.equals(cu.peripheral)}" 
+            (click)="onClick(item)">
       <h1>{{item.name}}</h1>
-      <h2>{{item.id}}</h2>
-      <h2 *ngIf="cu.deviceId == item.id">{{status}}</h2>
-    </button>
-    <button ion-item [ngClass]="{selected: cu.deviceId == 'serial'}" (click)="connect('serial')">
-      <h1>Serial/USB</h1>
-      <h2 *ngIf="cu.deviceId == 'serial'">{{status}}</h2>
-    </button>
-    <button ion-item [ngClass]="{selected: cu.deviceId == 'demo'}" (click)="connect('demo')">
-      <h1>Demo Connection</h1>
-      <h2 *ngIf="cu.deviceId == 'demo'">{{status}}</h2>
+      <h2 *ngIf="item.address">{{item.address}}</h2>
+      <h3 *ngIf="item.equals(cu.peripheral)">{{cu.getVersion() | async}}</h3>
     </button>
   </ion-list>
 </ion-content>

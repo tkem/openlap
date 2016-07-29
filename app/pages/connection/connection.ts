@@ -1,76 +1,39 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, Inject } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
 import { ControlUnit, Logger } from '../../providers';
 
-import { Backend, BLEBackend, DemoBackend, SerialBackend } from '../../backends';
+import { Backend, Peripheral } from '../../backends';
 
 import { MainPage } from '../../pages';
+
+import { Observable } from 'rxjs/Observable';
+import { ArrayObservable } from 'rxjs/observable/ArrayObservable';
+
+import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/scan';
 
 @Component({
   templateUrl: 'build/pages/connection/connection.html'
 })
-export class ConnectionPage implements OnInit {
-  _items = {};
-  items = [];
+export class ConnectionPage {
 
-  status = '';
+  items: Observable<Peripheral[]>;
 
-  constructor(private cu: ControlUnit, private logger: Logger, 
-              private ble: BLEBackend, private demo: DemoBackend, private serial: SerialBackend,
-              private nav: NavController)
+  constructor(private cu: ControlUnit, private logger: Logger, private nav: NavController,
+              @Inject(Backend) backends: Backend[])
   {
-    if (cu.deviceId) {
-      cu.getVersion().then(version => {
-        this.logger.info('CU version ' + version);
-        this.status = 'Version ' + version;
-      }).catch(error => {
-        this.logger.error(error);
-        this.status = 'Error: ' + error;
-      });
-    }
+    this.items = ArrayObservable.create(backends).mergeAll().scan(
+      (result, value) => result.concat(value), []
+    );
   }
 
-  connect(deviceId: string) {
-    let backend: Backend;
-    switch (deviceId) {
-      case 'demo':
-        backend = this.demo;
-        break;
-      case 'serial':
-        backend = this.serial;
-        break;
-      default:
-        backend = this.ble;
-        break;
-    }
-    this.cu.connect(backend, deviceId).then(() => {
-      this.logger.info('Connected to ' + deviceId);
-      return this.cu.getVersion();
-    }).then(version => {
-      this.logger.info('CU version ' + version);
-      this.status = 'Version ' + version;
-      if (!this.nav.canGoBack()) {
-        return this.nav.setRoot(MainPage);
-      }
-    }).catch(error => {
-      this.logger.error(error);
-      this.status = 'Error: ' + error;
-    });
-  }
-
-  ngOnInit() {
-    try {
-      this.ble.scan().subscribe(device => {
-        this.logger.debug('Found new device', device);
-        this._items[device.id] = device;
-        let items = Object.keys(this._items).map(id => this._items[id]);
-        items.sort((a, b) => a.name.localeCompare(b.name));
-        this.items = items;
-      });
-    } catch (e) {
-      this.logger.error('Error scanning for BLE devices: ', e);
-    }
+  onClick(item: Peripheral) {
+    this.cu.connect(item);
+    if (!this.nav.canGoBack()) {
+      // TODO: wait for cu.state == 'connected'?
+      this.nav.setRoot(MainPage);
+    };
   }
 }

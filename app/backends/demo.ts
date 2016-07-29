@@ -4,8 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import { Observer, NextObserver } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 
-import { Backend } from './backend';
+import { Backend, Peripheral } from './backend';
 import { Logger } from '../providers';
+
+const VERSION = '0815';
 
 const DOLLAR = '$'.charCodeAt(0);
 
@@ -84,10 +86,9 @@ class Car {
   }
 }
 
-@Injectable()
-export class DemoBackend implements Backend {
+class DemoPeripheral implements Peripheral {
 
-  private static start = Date.now();
+  private start = Date.now();
 
   private startSequence = 0;
 
@@ -111,30 +112,37 @@ export class DemoBackend implements Backend {
     maxLapTime: 5000
   };
 
-  private version: string;
- 
-  private subscriber: any
+  private version: Uint8Array;
 
-  constructor(private logger: Logger) {}
+  private subscriber: any;
 
-  connect(id?: string, connected?: NextObserver<void>) {
-    this.version = (Math.random() * 10000).toFixed(0);
-    for (let i = 0; i != this.config.numCars; ++i) {
-      this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
-    }
-    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable(connected));
-  }  
+  type = 'demo';
 
-  private createObservable(connected?: NextObserver<void>) {
+  constructor(public name: string, private mode: number, private logger: Logger) {
+    this.version = new Uint8Array(('0' + VERSION).split('').map(c => c.charCodeAt(0)));
+  }
+
+  connect() {
+    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable());
+  }
+
+  equals(other: Peripheral) {
+    return other && other.type === this.type && other.name == this.name;
+  }
+
+  private createObservable() {
     return new Observable<ArrayBuffer>(subscriber => {
-      this.logger.info('Creating Demo observable');
+      this.logger.info('Creating Demo observable with mode=' + this.mode);
       this.subscriber = subscriber;
-      if (this.startSequence == 0) {
-        this.startAll();
-      }
-      if (connected) {
-        connected.next(undefined);
-      }
+      setTimeout(() => {
+        subscriber.next(this.version);
+        for (let i = 0; i != this.config.numCars; ++i) {
+          this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
+        }
+        if (this.startSequence == 0) {
+          this.startAll();
+        }
+      }, 1000);
       return () => {
         this.logger.info('Destroying Demo observable');
         this.stopAll();
@@ -155,14 +163,15 @@ export class DemoBackend implements Backend {
           return;
         }
         setTimeout(() => {
-          //console.log('Demo connection response');
-          if (toString(value) == '0') {
-            let version = new Uint8Array(('0' + this.version).split('').map(c => c.charCodeAt(0)));
-            this.subscriber.next(version.buffer);
-          } else {
-            this.subscriber.next(this.laps.length ? this.laps.shift() : this.createStatus());
+          if (this.subscriber) {
+            //console.log('Demo connection response');
+            if (toString(value) == '0') {
+              this.subscriber.next(this.version.buffer);
+            } else {
+              this.subscriber.next(this.laps.length ? this.laps.shift() : this.createStatus());
+            }
           }
-        }, 50);
+        }, 100);
       },
       error: (err: any) => {
         console.log('Demo connection error:', err);
@@ -175,7 +184,7 @@ export class DemoBackend implements Backend {
   }
 
   private createLap(id: string) {
-    let time = Date.now() - DemoBackend.start;
+    let time = Date.now() - this.start;
     let view = new Uint8Array(11);
     view[0] = '?'.charCodeAt(0);
     view[1] = id.charCodeAt(0);;
@@ -199,7 +208,7 @@ export class DemoBackend implements Backend {
       view[i + 2] = 0x30 + ((this.cars[i].fuel) >> 4 & 0xf);
     }
     view[10] = 0x30 + this.startSequence; // start
-    view[11] = 0x30 + 0x02; // mode
+    view[11] = 0x30 + this.mode;
     view[12] = 0x30 + this.getPitMask(0, 4);
     view[13] = 0x30 + this.getPitMask(4, 8);
     view[14] = 0x36;  // display
@@ -242,3 +251,17 @@ export class DemoBackend implements Backend {
     }
   }
 }
+
+@Injectable()
+export class DemoBackend extends Backend {
+
+  constructor(private logger: Logger) {
+    super();
+  }
+
+  protected _subscribe(subscriber) {
+    subscriber.next(new DemoPeripheral('Demo', 0x2, this.logger));
+    subscriber.next(new DemoPeripheral('Demo (no pit lane)', 0x0, this.logger));
+    subscriber.complete();
+  }
+};

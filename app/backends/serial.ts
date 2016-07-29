@@ -3,10 +3,10 @@ import { Injectable, NgZone } from '@angular/core';
 import { Cordova, Plugin } from 'ionic-native';
 
 import { Observable } from 'rxjs/Observable';
-import { Observer, NextObserver } from 'rxjs/Observer';
+import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 
-import { Backend } from './backend';
+import { Backend, Peripheral } from './backend';
 import { Logger } from '../providers';
 
 const BAUD_RATE = 19200;
@@ -54,16 +54,23 @@ class Serial {
   static writeHex(data: string): Promise<any> { return; }
 }
 
-@Injectable()
-export class SerialBackend implements Backend {
+class SerialPeripheral implements Peripheral {
+
+  type = 'serial';
+
+  name = 'USB Serial';
 
   constructor(private logger: Logger, private zone: NgZone) {}
 
-  connect(id?: string, connected?: NextObserver<void>) {
-    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable(connected));
+  connect() {
+    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable());
   }
 
-  private createObservable(connected?: NextObserver<void>) {
+  equals(other: Peripheral) {
+    return other && other.type === this.type;
+  }
+
+  private createObservable() {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to serial port');
       this.open({ baudRate: BAUD_RATE }).then(() => {
@@ -84,9 +91,7 @@ export class SerialBackend implements Backend {
             this.zone.run(() => subscriber.error(err));
           }
         });
-        if (connected) {
-          connected.next(undefined);
-        }
+        this.write(Uint8Array.from(['0'.charCodeAt(0)]).buffer);
       }).catch(error => {
         this.logger.error('Error connecting to serial port:', error);
         this.zone.run(() => subscriber.error(error));
@@ -99,17 +104,9 @@ export class SerialBackend implements Backend {
 
   private createObserver() {
     return {
-      next: (value: ArrayBuffer) => {
-        Serial.write('"' + String.fromCharCode.apply(null, new Uint8Array(value)) + '$');
-      },
-      error: (err: any) => {
-        this.logger.error('Serial connection error:', err);
-      },
-      complete: () => {
-        // TODO: handle via close/tearDown?
-        this.logger.debug('Serial connection complete');
-        this.close();
-      }
+      next: (value: ArrayBuffer) => this.write(value),
+      error: (err: any) => this.logger.error('Serial user error:', err),
+      complete: () => this.close()
     };
   }
 
@@ -119,7 +116,15 @@ export class SerialBackend implements Backend {
     });
   }
 
+  private write(value: ArrayBuffer) {
+    let str = String.fromCharCode.apply(null, new Uint8Array(value));
+    Serial.write('"' + str + '$').catch(error => {
+      this.logger.error('Serial write error', error);
+    });
+  }
+
   private close() {
+    this.logger.debug('Closing serial port');
     Serial.close().then(() => {
       this.logger.debug('Serial port closed');
     }).catch(error => {
@@ -127,3 +132,16 @@ export class SerialBackend implements Backend {
     });
   }
 }
+
+@Injectable()
+export class SerialBackend extends Backend {
+
+  constructor(private logger: Logger, private zone: NgZone) {
+    super();
+  }
+
+  protected _subscribe(subscriber) {
+    subscriber.next(new SerialPeripheral(this.logger, this.zone));
+    subscriber.complete();
+  }
+};

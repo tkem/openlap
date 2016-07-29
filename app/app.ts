@@ -4,10 +4,10 @@ import { ionicBootstrap, Modal, Nav, NavController, Platform } from 'ionic-angul
 
 import { Insomnia, Splashscreen } from 'ionic-native';
 
+import { Observable } from 'rxjs/Observable';
+
+import { Backend, BLEBackend, SerialBackend, DemoBackend } from './backends';
 import { ControlUnit, Logger, RaceControl, Storage } from './providers';
-
-import { BACKENDS } from './backends';
-
 import * as pages from './pages';
 
 const DEFAULT_DRIVERS = [
@@ -22,7 +22,7 @@ const DEFAULT_DRIVERS = [
 ];
 
 @Component({
-  providers: [ControlUnit, RaceControl, BACKENDS],
+  providers: [ControlUnit, RaceControl],
   templateUrl: 'build/app.html'
 })
 class OpenLapApp implements OnInit {
@@ -103,6 +103,9 @@ ionicBootstrap(OpenLapApp, [
   Logger,
   provide(ExceptionHandler, { useClass: LoggingExceptionHandler }),
   provide(Storage, { useFactory: () => new Storage('at.co.kemmer.openlap') }),
+  provide(Backend, { useClass: BLEBackend, multi: true }),
+  provide(Backend, { useClass: SerialBackend, multi: true }),
+  provide(Backend, { useClass: DemoBackend, multi: true })
 ], { 
   prodMode: !!window['cordova'] 
 });

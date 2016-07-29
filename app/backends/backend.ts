@@ -1,6 +1,13 @@
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { NextObserver } from 'rxjs/Observer';
 
-export interface Backend {
-  connect(id?: string, connected?: NextObserver<void>): Subject<ArrayBuffer>;
+export interface Peripheral {
+  type: string; // 'ble' | 'serial' | 'demo';
+  name: string;
+  address?: any;
+  connect(): Subject<ArrayBuffer>;
+  equals(other: Peripheral);
+}
+
+export class Backend extends Observable<Peripheral> {
 }

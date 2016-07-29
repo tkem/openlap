@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
-import { ControlUnit } from './cu';
+import { ControlUnit } from './control-unit';
 import { Logger } from './logger';
 
 import { Observable } from 'rxjs/Observable';

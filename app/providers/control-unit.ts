@@ -13,7 +13,11 @@ import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/timeout';
 
 import { Logger } from './logger';
-import { Backend } from '../backends';
+
+import { Peripheral } from '../backends';
+
+const CONNECTION_TIMEOUT = 3000;
+const RECONNECT_DELAY = 1000;
 
 class DataView {
   private array: Uint8Array;
@@ -78,6 +82,18 @@ class DataView {
     return String.fromCharCode.apply(null, this.subarray(byteOffset, byteLength));
   }
 
+  static from(cmd: string, ...values: number[]) {
+    let array = new Uint8Array(values.length + 2);
+    let crc = array[0] = cmd.charCodeAt(0);
+    for (let i = 0; i != values.length; ++i) {
+      const value = values[i];
+      array[i + 1] = 0x30 | value;
+      crc += value;
+    }
+    array[array.length - 1] = 0x30 | (crc & 0xf);
+    return new DataView(array.buffer);
+  }
+
   static fromString(s: string) {
     return new DataView(Uint8Array.from(s.split('').map(c => c.charCodeAt(0))).buffer);
   }
@@ -109,33 +125,24 @@ function getUint32(array: ArrayLike<number>, offset = 0) {
   return n;
 }
 
-export type Connection = Subject<ArrayBuffer>;
-
-export interface Device {
-  id?: any;
-
-  name: string;
-
-  connect(): Promise<Connection>;
-}
-
 @Injectable()
 export class ControlUnit {
 
-  deviceId: string;
+  peripheral: Peripheral;
 
-  private connection: Connection;
+  private connection: Subject<ArrayBuffer>;
+
   private subscription: any;
   
   private requests = Array<ArrayBuffer>();
-  private version = null;
-
+  
   private stateSubject = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
   private fuelSubject = new BehaviorSubject<ArrayLike<number>>([]);
-  private startSubject = new BehaviorSubject<number>(undefined);
+  private startSubject = new BehaviorSubject<number>(0);
   private modeSubject = new BehaviorSubject<number>(undefined);
   private pitSubject = new BehaviorSubject<number>(0);
   private timeSubject = new Subject<[number, number, number]>();
+  private versionSubject = new BehaviorSubject<string>(undefined);
 
   state = this.stateSubject.distinctUntilChanged();
 
@@ -145,8 +152,7 @@ export class ControlUnit {
     //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
   );
 
-  // TODO: initial value?
-  start = this.startSubject.filter(value => value !== undefined).distinctUntilChanged();
+  start = this.startSubject.distinctUntilChanged();
 
   // TODO: initial value?
   mode = this.modeSubject.filter(value => value !== undefined).distinctUntilChanged();
@@ -158,44 +164,38 @@ export class ControlUnit {
     (a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2]
   );
 
+  version = this.versionSubject.asObservable();
+
   constructor(private logger: Logger) {}
 
-  connect(backend: Backend, deviceId: string) {
+  connect(peripheral: Peripheral) {
     this.disconnect();
-    this.deviceId = deviceId;
-    this.logger.info('CU: Connecting to ' + deviceId);
+    this.logger.info('CU: Connecting to ' + peripheral.name);
+    this.peripheral = peripheral;
+    this.connection = peripheral.connect();
     this.stateSubject.next('connecting');
-
-    return new Promise<void>((resolve, reject) => {
-      this.connection = backend.connect(deviceId, {
-        next: () => {
-          console.log('CU connected');
-          this.stateSubject.next('connected');
-          resolve();
-          this.poll();
-        }
+    this.subscription = this.connection.timeout(CONNECTION_TIMEOUT).retryWhen(errors => {
+      return errors.do(error => {
+        this.logger.error('CU: Connection error:', error)
+        this.stateSubject.next('disconnected');
+      }).delay(RECONNECT_DELAY).do(() => {
+        this.logger.error('CU: Reconnecting');
+        this.stateSubject.next('connecting');
       });
-      this.subscription = this.connection.timeout(3000).retryWhen(errors => {
-        return errors.do(error => {
-          this.logger.error('CU: Connection error:', error)
-          this.stateSubject.next('disconnected');
-        }).delay(2000).do(() => {
-          this.logger.error('CU: Reconnecting');
-          this.stateSubject.next('connecting');
-        });
-      }).subscribe(
-        data => this.onData(data),
-        error => this.onError(error),
-        () => this.onClose()
-      );
-    });
+    }).subscribe(
+      data => this.onData(data),
+      error => this.onError(error),
+      () => this.onClose()
+    );
   }
 
   disconnect() {
     if (this.connection) {
       this.connection.complete();
       this.subscription.unsubscribe();
+      this.versionSubject.next(undefined);  // TODO: complete(), renew
       this.connection = null;
+      this.peripheral = null;
     }
   }
 
@@ -220,12 +220,9 @@ export class ControlUnit {
         }
         break;
       case '0':
-        if (this.version) {
-          this.version(view.toString(1, 4));
-        }
+        this.versionSubject.next(view.toString(1, 4));
         break;
       case 'J':
-        // TODO: command promises?
         // this.logger.debug('CU received', view.toString());
         break;
       default:
@@ -235,6 +232,7 @@ export class ControlUnit {
     if (!requestsPending) {
       this.poll();
     }
+    this.stateSubject.next('connected');
   }
 
   private onError(error: any) {
@@ -248,10 +246,12 @@ export class ControlUnit {
   }
 
   getVersion() {
-    return new Promise((resolve, reject) => {
-      this.requests.push(DataView.fromString('0').buffer);
-      this.version = resolve;
-    });
+    console.log('CU.getVersion() called');
+    return this.versionSubject.asObservable();
+  }
+
+  reset() {
+    this.requests.push(DataView.fromString('=10').buffer);
   }
 
   toggleStart() {
@@ -279,12 +279,8 @@ export class ControlUnit {
     this.set(6, 0, 9);
   }
 
-  setMask(value) {
-    this.command(':', value & 0xf, value >> 4);
-  }
-
-  reset() {
-    this.requests.push(DataView.fromString('=10').buffer);
+  setMask(value: number) {
+    this.requests.push(DataView.from(':', value & 0xf, value >> 4).buffer);
   }
 
   setSpeed(id: number, value: number) {
@@ -300,20 +296,8 @@ export class ControlUnit {
   }
 
   private set(address: number, id: number, value: number, repeat = 1) {
-    this.command('J', address & 0x0f, (address >> 4) | (id << 1), value, repeat);
-  }
-
-  private command(cmd: string, ...values: number[]) {
-    let a = new Uint8Array(values.length + 2);
-    let c = a[0] = cmd.charCodeAt(0);
-    // TODO: CRC necessary?
-    for (let i = 0; i != values.length; ++i) {
-      let v = values[i];
-      a[i + 1] = 0x30 | v;
-      c += v;
-    }
-    a[a.length - 1] = 0x30 | (c & 0xf);
-    this.requests.push(a.buffer);
+    const args = [address & 0x0f, (address >> 4) | (id << 1), value, repeat];
+    this.requests.push(DataView.from('J', ...args).buffer);
   }
 
   poll() {
