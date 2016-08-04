@@ -59,8 +59,8 @@
         <fuel-gauge max="15" [value]="fuel[item.id]"></fuel-gauge>
       </td>
       <td text-left>
-        <span *ngIf="item.finished" class="checkered">&nbsp;&nbsp;</span>
-        <span *ngIf="item.pit" class="pit">PIT</span>
+        <chequered-flag *ngIf="item.finished"></chequered-flag>
+        <span *ngIf="!item.finished && item.pit" class="pit">PIT</span>
       </td>
     </tr>
   </tbody>

@@ -2,13 +2,14 @@ import { Component, Input } from '@angular/core';
 
 import { ControlUnit, RaceControl } from '../../providers';
 
+import { ChequeredFlag } from '../chequered-flag/chequered-flag';
 import { FuelGauge } from '../fuel-gauge/fuel-gauge';
 import { Stripe } from '../stripe/stripe';
 import { TimePipe } from '../../pipes';
 
 @Component({
   selector: 'leaderboard',
-  directives: [FuelGauge, Stripe],
+  directives: [ChequeredFlag, FuelGauge, Stripe],
   pipes: [TimePipe],
   templateUrl: 'build/components/leaderboard/leaderboard.html'
 })

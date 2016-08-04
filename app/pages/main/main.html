@@ -3,22 +3,26 @@
     <button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title [ngSwitch]="rc.mode">
-      <span *ngSwitchCase="'practice'">Free Practice</span>
-      <span *ngSwitchCase="'qualifying'">Qualifying</span>
-      <span *ngSwitchCase="'race'">Race</span>
-    </ion-title>
-    <ion-buttons class="main-buttons" end [ngSwitch]="rc.mode">
-      <span *ngSwitchCase="'qualifying'" light>
-        {{rc.timer | async | time:'m:ss'}}
+    <ion-title>
+      <chequered-flag *ngIf="rc.finished"></chequered-flag>
+      <span [ngSwitch]="rc.mode">
+        <template ngSwitchCase="practice">Free Practice</template>
+        <template ngSwitchCase="qualifying">Qualifying</template>
+        <template ngSwitchCase="race">Race</template>
       </span>
-      <span *ngSwitchCase="'race'" light>
-        Lap {{rc.lap}}/{{rc.laps}}
-        <span *ngIf="rc.time">
+      <span [ngSwitch]="rc.mode">
+        <template ngSwitchCase="qualifying">
           {{rc.timer | async | time:'m:ss'}}
-        </span>
+        </template>
+        <template ngSwitchCase="race">
+          Lap {{rc.lap}}/{{rc.laps}}
+          <span *ngIf="rc.time">
+            {{rc.timer | async | time:'m:ss'}}
+          </span>
+        </template>
       </span>
-    </ion-buttons>
+      <chequered-flag *ngIf="rc.finished"></chequered-flag>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 

@@ -9,11 +9,11 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 
 import { ControlUnit, RaceControl } from '../../providers';
-import { Leaderboard, Startlight } from '../../components';
+import { ChequeredFlag, Leaderboard, Startlight } from '../../components';
 import { TimePipe } from '../../pipes';
 
 @Component({
-  directives: [Leaderboard, Startlight],
+  directives: [ChequeredFlag, Leaderboard, Startlight],
   pipes: [TimePipe],
   templateUrl: 'build/pages/main/main.html',
 })

@@ -5,6 +5,7 @@ import { Logger } from './logger';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
@@ -60,6 +61,8 @@ export class RaceControl {
   timer = Observable.interval(1000).map(() => {
     if (!this.time) {
       return undefined;
+    } else if (this.finished) {
+      return 0;
     } else if (this.realStartTime) {
       return Math.max(0, this.realStartTime + this.time - Date.now());
     } else {
@@ -78,6 +81,8 @@ export class RaceControl {
   });
 
   mode = 'practice';
+
+  finished = false;
 
   private _drivers = [];
 
@@ -128,6 +133,7 @@ export class RaceControl {
     this.options = options;
     this.startTime = this.currentTime = this.realStartTime = undefined;
     this.bestlap = undefined;
+    this.finished = false;
 
     // FIXME: wait until startlights
     this.cu.start.take(1).toPromise().then(value => {
@@ -150,6 +156,14 @@ export class RaceControl {
       return;
     }
     if (this.startTime === undefined) {
+      if (this.time) {
+        this.timer.filter(value => value === 0).take(1).subscribe({
+          complete: () => {
+            console.log('Timer finished');
+            this.finished = true;
+          }
+        });
+      }
       this.startTime = this.currentTime = time;
       this.realStartTime = Date.now();
     }
@@ -162,11 +176,11 @@ export class RaceControl {
     }
     if (car.laps > this.lap) {
       this.lap = car.laps;
-      if ((this.lap & 0xf) == 0) {
-        this.cu.setLapHi(this.lap >> 4);
-      }
-      this.cu.setLapLo(this.lap & 0xf);
+      this.cu.setLap(this.lap);
       this.currentTime = time;
+      if (this.laps && this.lap >= this.laps) {
+        this.finished = true;
+      }
     }
     if ((this.laps && car.laps >= this.laps) || (this.time && time >= this.startTime + this.time)) {
       this.logger.debug('Car #' + car.id + ' finished');

@@ -1,0 +1,10 @@
+$chequered-flag-height: 1em !default;
+
+chequered-flag {
+    height: $chequered-flag-height;
+    vertical-align: -0.2em;
+}
+
+chequered-flag > svg {
+    height: $chequered-flag-height;
+}
