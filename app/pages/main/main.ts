@@ -23,22 +23,25 @@ export class MainPage implements OnDestroy, OnInit {
   startBlink: Observable<boolean>;
   usePitlane: Observable<boolean>;
 
-  private stateSubscription: any;
+  private subscription: any;
 
   constructor(public cu: ControlUnit, public rc: RaceControl, private nav: NavController) {
-    this.startCount = cu.start.map(value => {
+    let start = cu.getStart();
+    let state = cu.getState();
+    let mode = cu.getMode();
+    this.startCount = start.map(value => {
       return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
     });
-    this.startBlink = cu.state.combineLatest(cu.start, (state, value) => {
+    this.startBlink = state.combineLatest(start, (state, value) => {
       return state !== 'connected' || value >= 8;
     });
-    this.usePitlane = cu.mode.map(value => {
+    this.usePitlane = mode.map(value => {
       return (value & 0x03) != 0;  // TODO: 4 added for pitlane - ignore or insist?
     });
   }
 
   ngOnInit() {
-    this.stateSubscription = this.cu.state.debounceTime(100).distinctUntilChanged().subscribe(state => {
+    this.subscription = this.cu.getState().debounceTime(100).distinctUntilChanged().subscribe(state => {
       switch (state) {
       case 'connected':
         this.toast('Connected to ' + this.cu.peripheral.name, 1000);
@@ -54,7 +57,7 @@ export class MainPage implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.stateSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   toast(message: string, duration: number) {

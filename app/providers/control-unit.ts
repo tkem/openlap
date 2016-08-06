@@ -109,7 +109,7 @@ class DataView {
   }
 }
 
-const POLL_REQUEST = DataView.fromString('?').buffer;
+const POLL_BUFFER = DataView.fromString('?').buffer;
 
 // TODO: remove
 function getUint32(array: ArrayLike<number>, offset = 0) {
@@ -136,35 +136,13 @@ export class ControlUnit {
   
   private requests = Array<ArrayBuffer>();
   
-  private stateSubject = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
-  private fuelSubject = new BehaviorSubject<ArrayLike<number>>([]);
-  private startSubject = new BehaviorSubject<number>(0);
-  private modeSubject = new BehaviorSubject<number>(undefined);
-  private pitSubject = new BehaviorSubject<number>(0);
-  private timeSubject = new Subject<[number, number, number]>();
-  private versionSubject = new BehaviorSubject<string>(undefined);
-
-  state = this.stateSubject.distinctUntilChanged();
-
-  // TODO: better equality check
-  fuel = this.fuelSubject.distinctUntilChanged(
-    null, array => array.length ? getUint32(array) : -1
-    //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
-  );
-
-  start = this.startSubject.distinctUntilChanged();
-
-  // TODO: initial value?
-  mode = this.modeSubject.filter(value => value !== undefined).distinctUntilChanged();
-
-  pit = this.pitSubject.distinctUntilChanged();
-
-  // TODO: array equality?
-  time = this.timeSubject.distinctUntilChanged(
-    (a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2]
-  );
-
-  version = this.versionSubject.asObservable();
+  private state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
+  private fuel = new Subject<ArrayLike<number>>();
+  private start = new Subject<number>();
+  private mode = new Subject<number>();
+  private pit = new Subject<number>();
+  private time = new Subject<[number, number, number]>();
+  private version = new BehaviorSubject<string>(undefined);
 
   constructor(private logger: Logger) {}
 
@@ -173,14 +151,14 @@ export class ControlUnit {
     this.logger.info('CU: Connecting to ' + peripheral.name);
     this.peripheral = peripheral;
     this.connection = peripheral.connect();
-    this.stateSubject.next('connecting');
+    this.state.next('connecting');
     this.subscription = this.connection.timeout(CONNECTION_TIMEOUT).retryWhen(errors => {
       return errors.do(error => {
         this.logger.error('CU: Connection error:', error)
-        this.stateSubject.next('disconnected');
+        this.state.next('disconnected');
       }).delay(RECONNECT_DELAY).do(() => {
         this.logger.error('CU: Reconnecting');
-        this.stateSubject.next('connecting');
+        this.state.next('connecting');
       });
     }).subscribe(
       data => this.onData(data),
@@ -193,61 +171,47 @@ export class ControlUnit {
     if (this.connection) {
       this.connection.complete();
       this.subscription.unsubscribe();
-      this.versionSubject.next(undefined);  // TODO: complete(), renew
+      this.version.next(undefined);
       this.connection = null;
       this.peripheral = null;
     }
   }
 
-  private onData(data: ArrayBuffer) {
-    let requestsPending = this.requests.length !== 0;
-    if (requestsPending) {
-      this.poll();
-    }
-    let view = new DataView(data);
-    switch (view.toString(0, 1)) {
-      case '?':
-        if (view.toString(1, 1) == ':') {
-          this.fuelSubject.next(view.getUint8Array(2, 8));
-          this.startSubject.next(view.getUint4(10));
-          this.modeSubject.next(view.getUint4(11));
-          this.pitSubject.next(view.getUint8(12));
-        } else {
-          let id = view.getUint4(1) - 1;
-          let time = view.getUint32(2);
-          let sector = view.getUint4(10);  // TODO: check with new checklane
-          this.timeSubject.next([id, time, sector]);
-        }
-        break;
-      case '0':
-        this.versionSubject.next(view.toString(1, 4));
-        break;
-      case 'J':
-        // this.logger.debug('CU received', view.toString());
-        break;
-      default:
-        this.logger.debug('CU received', view.toString());
-        break;
-    }
-    if (!requestsPending) {
-      this.poll();
-    }
-    this.stateSubject.next('connected');
+  getState() {
+    return this.state.distinctUntilChanged();
   }
 
-  private onError(error: any) {
-    this.logger.error('CU: Fatal error ', error);
-    this.stateSubject.next('disconnected');
+  getFuel() {
+    // TODO: better equality check
+    return this.fuel.distinctUntilChanged(
+      null, array => array.length ? getUint32(array) : -1
+      //null, array => array.reduce((prev, curr, index) =>  prev | (curr << (index * 4)))
+    );
   }
 
-  private onClose() {
-    this.logger.info('CU: Connection closed');
-    this.stateSubject.next('disconnected');
+  getStart() {
+    return this.start.distinctUntilChanged();
+  }
+
+  getMode() {
+    return this.mode.filter(value => value !== undefined).distinctUntilChanged();
+  }
+
+  getPit() {
+    return this.pit.distinctUntilChanged();
+  }
+
+  getTime() {
+    return this.time.distinctUntilChanged(
+      (a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2]
+    );
   }
 
   getVersion() {
-    console.log('CU.getVersion() called');
-    return this.versionSubject.asObservable();
+    if (!this.version.value) {
+      this.requests.push(DataView.fromString('0').buffer);
+    }
+    return this.version.asObservable();
   }
 
   reset() {
@@ -300,9 +264,55 @@ export class ControlUnit {
     this.requests.push(DataView.from('J', ...args).buffer);
   }
 
+  private onData(data: ArrayBuffer) {
+    let requestsPending = this.requests.length !== 0;
+    if (requestsPending) {
+      this.poll();
+    }
+    let view = new DataView(data);
+    switch (view.toString(0, 1)) {
+      case '?':
+        if (view.toString(1, 1) == ':') {
+          this.fuel.next(view.getUint8Array(2, 8));
+          this.start.next(view.getUint4(10));
+          this.mode.next(view.getUint4(11));
+          this.pit.next(view.getUint8(12));
+        } else {
+          let id = view.getUint4(1) - 1;
+          let time = view.getUint32(2);
+          let sector = view.getUint4(10);  // TODO: check with new checklane
+          this.time.next([id, time, sector]);
+        }
+        break;
+      case '0':
+        this.version.next(view.toString(1, 4));
+        break;
+      case 'J':
+        // this.logger.debug('CU received', view.toString());
+        break;
+      default:
+        this.logger.debug('CU received', view.toString());
+        break;
+    }
+    if (!requestsPending) {
+      this.poll();
+    }
+    this.state.next('connected');
+  }
+
+  private onError(error: any) {
+    this.logger.error('CU: Fatal error ', error);
+    this.state.next('disconnected');
+  }
+
+  private onClose() {
+    this.logger.info('CU: Connection closed');
+    this.state.next('disconnected');
+  }
+
   poll() {
     if (this.connection) {
-      let request = this.requests.shift() || POLL_REQUEST;
+      let request = this.requests.shift() || POLL_BUFFER;
       this.connection.next(request);
     }
   }

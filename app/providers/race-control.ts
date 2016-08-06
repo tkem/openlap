@@ -111,8 +111,8 @@ export class RaceControl {
   private compare = qualifyingCompare;
 
   constructor(private cu: ControlUnit, private logger: Logger) {
-    cu.time.subscribe(args => this.update.apply(this, args));
-    cu.pit.subscribe(value => this.onPitChange(value));
+    cu.getTime().subscribe(args => this.update.apply(this, args));
+    cu.getPit().subscribe(value => this.onPitChange(value));
   }
 
   start(mode: 'practice' | 'qualifying' | 'race', options: any = {}) {
@@ -136,7 +136,7 @@ export class RaceControl {
     this.finished = false;
 
     // FIXME: wait until startlights
-    this.cu.start.take(1).toPromise().then(value => {
+    this.cu.getStart().take(1).toPromise().then(value => {
       // FIXME: cu.reset() no effect if start light is on?
       this.cu.clearPosition();
       this.cu.reset();
