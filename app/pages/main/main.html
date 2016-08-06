@@ -4,30 +4,32 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <chequered-flag *ngIf="rc.finished"></chequered-flag>
       <span [ngSwitch]="rc.mode">
         <template ngSwitchCase="practice">Free Practice</template>
         <template ngSwitchCase="qualifying">Qualifying</template>
         <template ngSwitchCase="race">Race</template>
       </span>
-      <span [ngSwitch]="rc.mode">
+      <span [ngSwitch]="rc.mode" style="float: right">
         <template ngSwitchCase="qualifying">
-          {{rc.timer | async | time:'m:ss'}}
+          <chequered-flag *ngIf="rc.finished"></chequered-flag>
+          <span>{{rc.timer | async | time:'m:ss'}}</span>
+          <chequered-flag *ngIf="rc.finished"></chequered-flag>
         </template>
         <template ngSwitchCase="race">
-          Lap {{rc.lap}}/{{rc.laps}}
+          <chequered-flag *ngIf="rc.finished"></chequered-flag>
+          <span>Lap {{rc.lap}}/{{rc.laps}}</span>
           <span *ngIf="rc.time">
             {{rc.timer | async | time:'m:ss'}}
           </span>
+          <chequered-flag *ngIf="rc.finished"></chequered-flag>
         </template>
       </span>
-      <chequered-flag *ngIf="rc.finished"></chequered-flag>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <leaderboard [fuel]="cu.fuel | async" [pitlane]="usePitlane | async" [rc]="rc">
+  <leaderboard [fuel]="cu.fuel | async" [pitlane]="usePitlane | async" [mode]="rc.mode" [ranking]="rc.ranking | async" [bestlap]="rc.bestlap">
   </leaderboard>
 </ion-content>
 

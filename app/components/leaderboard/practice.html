@@ -1,0 +1,29 @@
+<td text-left class="stripe-container">
+    {{index + 1}}<stripe [color]="item.driver.color"></stripe>
+</td>
+<td text-left>
+    <span showWhen="landscape">{{item.driver.name}}</span>
+    <span showWhen="portrait">{{item.driver.code}}</span>
+</td>
+<td text-right>
+    {{item.bestlap | time:'s.sss'}}
+</td>
+<td text-right>
+    {{(index && item.bestlap ? item.bestlap - items[0].bestlap : null) | time:'+s.sss'}}
+</td>
+<td text-right>
+    {{(index && item.bestlap ? item.bestlap - items[index - 1].bestlap : null) | time:'+s.sss'}}
+</td>
+<td text-right [ngClass]="{bestlap: item.laptime == item.bestlap, allbest: item.laptime == bestlap}">
+    {{item.laptime | time:'s.sss'}}
+</td>
+<td text-right>
+    {{item.laps}}
+</td>
+<td text-left *ngIf="fuel != null">
+    <fuel-gauge max="15" [value]="fuel"></fuel-gauge>
+</td>
+<td text-left>
+    <chequered-flag *ngIf="item.finished"></chequered-flag>
+    <span *ngIf="!item.finished && item.pit" class="pit">PIT</span>
+</td>

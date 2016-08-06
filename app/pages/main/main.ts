@@ -61,13 +61,9 @@ export class MainPage implements OnDestroy, OnInit {
   }
 
   toast(message: string, duration: number) {
-    console.log('Creating toast', message)
-    let toast = Toast.create({message: message/*, duration: duration*/});
-    toast.onDismiss(() => { console.log('Toast dismissed', message); });
-    setTimeout(() => {
-      console.log('Dismissing toast', message);
-      toast.dismiss();
-    }, duration);
+    let toast = Toast.create({
+      message: message, duration: duration, showCloseButton: true
+    });
     this.nav.present(toast);
   }
 }

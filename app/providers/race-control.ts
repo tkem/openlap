@@ -40,8 +40,6 @@ class Car {
 
   bestlap: number;
   finished = false;
-  gap: number;
-  int: number;
 
   update(time: number) {
     this.times.push(time);
@@ -170,7 +168,7 @@ export class RaceControl {
     let car = this.cars[id] || (
       this.cars[id] = new Car(id, this.drivers[id], (this.pit & (1 << id)) != 0)
     );
-    car.update(time);
+    car.update(time - this.startTime);
     if (!this.bestlap || car.laptime < this.bestlap) {
       this.bestlap = car.laptime;
     }
@@ -192,15 +190,6 @@ export class RaceControl {
     let items = Object.keys(this.cars).map(id => this.cars[id]);
     items.sort(this.compare);
     items.forEach((item, index) => {
-      if (index === 0) {
-        item.gap = item.int = undefined;
-      } else if (this.mode === 'race') {
-        item.gap = [items[0].laps - item.laps, item.time - items[0].time];
-        item.int = [items[index - 1].laps - item.laps, item.time - items[index - 1].time];
-      } else {
-        item.gap = item.bestlap - items[0].bestlap;
-        item.int = item.bestlap - items[index - 1].bestlap;
-      }
       // TODO: more efficient update?
       // this.cu.setPosition(item.id, index + 1);
     });
