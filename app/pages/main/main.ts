@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { NavController, Toast } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/combineLatest';
@@ -25,7 +25,7 @@ export class MainPage implements OnDestroy, OnInit {
 
   private subscription: any;
 
-  constructor(public cu: ControlUnit, public rc: RaceControl, private nav: NavController) {
+  constructor(public cu: ControlUnit, public rc: RaceControl, private toast: ToastController) {
     let start = cu.getStart();
     let state = cu.getState();
     let mode = cu.getMode();
@@ -44,13 +44,13 @@ export class MainPage implements OnDestroy, OnInit {
     this.subscription = this.cu.getState().debounceTime(100).distinctUntilChanged().subscribe(state => {
       switch (state) {
       case 'connected':
-        this.toast('Connected to ' + this.cu.peripheral.name, 1000);
+        this.presentToast('Connected to ' + this.cu.peripheral.name, 1000);
         break;
       case 'connecting':
-        this.toast('Connecting to ' + this.cu.peripheral.name, 1000);
+        this.presentToast('Connecting to ' + this.cu.peripheral.name, 1000);
         break;
       case 'disconnected':
-        this.toast('CU disconnected', 1000);
+        this.presentToast('CU disconnected', 1000);
         break;
       }
     });
@@ -60,10 +60,9 @@ export class MainPage implements OnDestroy, OnInit {
     this.subscription.unsubscribe();
   }
 
-  toast(message: string, duration: number) {
-    let toast = Toast.create({
+  presentToast(message: string, duration: number) {
+    this.toast.create({
       message: message, duration: duration, showCloseButton: true
-    });
-    this.nav.present(toast);
+    }).present();
   }
 }

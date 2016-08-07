@@ -6,9 +6,8 @@
 
 @import 'globals.core';
 
-$text-input-md-highlight-color: transparent;
-$text-input-md-hightlight-color-invalid: transparent;
-$text-input-md-hightlight-color-valid: transparent;
+$text-input-md-show-focus-highlight: false !default;
+$text-input-ios-show-invalid-highlight: true !default;
 $toolbar-md-active-color: #fff;
 
 // $item-md-detail-push-show: true;

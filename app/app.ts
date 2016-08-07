@@ -1,6 +1,6 @@
 import { provide, Component, ExceptionHandler, Injectable, OnInit, ViewChild } from '@angular/core';
 
-import { ionicBootstrap, Modal, Nav, NavController, Platform } from 'ionic-angular';
+import { ionicBootstrap, ModalController, Nav, NavController, Platform } from 'ionic-angular';
 
 import { Insomnia, Splashscreen } from 'ionic-native';
 
@@ -37,7 +37,7 @@ class OpenLapApp implements OnInit {
 
   constructor(private cu: ControlUnit, private rc: RaceControl,
     private logger: Logger, private storage: Storage,
-    private platform: Platform)
+    private modal: ModalController, private platform: Platform)
   {
     storage.get('logging', {level: 'info'}).then(logging => {
       logger.setLevel(logging.level || 'info');
@@ -57,13 +57,31 @@ class OpenLapApp implements OnInit {
   }
 
   startQualifying() {
-    let modal = Modal.create(pages.QualifyingPage);
-    this.nav.present(modal);
+    this.storage.get('qualifying', { time: 3, auto: false }).then(options => {
+      let modal = this.modal.create(pages.QualifyingPage, options);
+      modal.onDidDismiss(options => {
+        this.logger.info('Qualifying options: ', options);
+        if (options) {
+          this.storage.set('qualifying', options);
+          this.rc.start('qualifying', options);
+        }
+      });
+      modal.present();
+    });
   }
 
   startRace() {
-    let modal = Modal.create(pages.RacePage);
-    this.nav.present(modal);
+    this.storage.get('race', { laps: 10, auto: true }).then(options => {
+      let modal = this.modal.create(pages.RacePage, options);
+      modal.onDidDismiss(options => {
+        this.logger.info('Race options: ', options);
+        if (options) {
+          this.storage.set('race', options);
+          this.rc.start('race', options);
+        }
+      });
+      modal.present();
+    });
   }
 
   exitApp() {

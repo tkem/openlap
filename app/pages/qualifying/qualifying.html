@@ -2,12 +2,12 @@
   <ion-toolbar>
     <ion-title>Qualifying</ion-title>
     <ion-buttons left>
-      <button (click)="onClose()">
+      <button (click)="onCancel()">
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
     <ion-buttons right>
-      <button (click)="onSubmit(formData.value)" [disabled]="!formData.form.valid" type="submit">
+      <button (click)="onSubmit(form.value)" [disabled]="!form.form.valid" type="submit">
         Start
       </button>
     </ion-buttons>
@@ -15,23 +15,19 @@
 </ion-header>
 
 <ion-content>
-  <form #formData="ngForm" (ngSubmit)="onSubmit(formData.value)">
+  <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
     <ion-list>
       <ion-item>
-        <ion-label>Time (minutes)</ion-label>
-        <ion-input [(ngModel)]="options.time" ngControl="time" type="number" min="1"></ion-input>
+        <ion-label light>Time (minutes)</ion-label>
+        <ion-input name="time" [(ngModel)]="options.time" type="number" min="1" required text-right padding-right></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Laps</ion-label>
-        <ion-input [(ngModel)]="options.laps" ngControl="laps" type="number" min="0"></ion-input>
+        <ion-label light>Autonomous Car</ion-label>
+        <ion-toggle name="auto" [(ngModel)]="options.auto"></ion-toggle>
       </ion-item>
       <ion-item>
-        <ion-label>Autonomous Car</ion-label>
-        <ion-toggle [(ngModel)]="options.auto" ngControl="auto"></ion-toggle>
-      </ion-item>
-      <ion-item>
-        <ion-label>Pace Car</ion-label>
-        <ion-toggle [(ngModel)]="options.pace" ngControl="pace"></ion-toggle>
+        <ion-label light>Pace Car</ion-label>
+        <ion-toggle name="pace" [(ngModel)]="options.pace"></ion-toggle>
       </ion-item>
     </ion-list>
   </form>

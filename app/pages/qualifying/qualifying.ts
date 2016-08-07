@@ -1,29 +1,23 @@
 import { Component } from '@angular/core';
 
-import { ViewController } from 'ionic-angular';
-
-import { RaceControl, Storage } from '../../providers';
+import { NavParams, ViewController } from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/qualifying/qualifying.html'
 })
 export class QualifyingPage {
 
-  options = {};
+  options: any;
 
-  constructor(private rc: RaceControl, private storage: Storage, private view: ViewController) {
-    this.storage.get('qualifying', { time: 3, auto: false }).then(options => {
-      this.options = options;
-    });
+  constructor(params: NavParams, private view: ViewController) {
+    this.options = params.data;
   }
 
   onSubmit(options) {
-    this.rc.start('qualifying', options);
-    this.storage.set('qualifying', options);
-    this.view.dismiss();
+    this.view.dismiss(options);
   }
 
-  onClose() {
+  onCancel() {
     this.view.dismiss();
   }
 }
