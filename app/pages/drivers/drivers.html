@@ -7,16 +7,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
     <ion-item *ngFor="let driver of drivers; let id = index">
       <ion-label>#{{id + 1}}</ion-label>
-      <ion-input [(ngModel)]="driver.name" (keyup)="driver.code = getCode(driver.name)"></ion-input>
-      <ion-buttons item-right>
-        <ion-note>
-          {{driver.code}}
-        </ion-note>
-        <input [(ngModel)]="driver.color" type="color">
-      </ion-buttons>
+      <ion-input placeholder="Driver #{{id + 1}}" 
+                 [ngModel]="driver.name" 
+                 (ngModelChange)="driver.code = getCode(driver.name = $event)" 
+                 clearInput>
+      </ion-input>
+      <!-- ion-input style="max-width: 3em" item-right placeholder="#{{id}}" item-right [(ngModel)]="driver.code" maxlength="3"></ion-input -->
+      <ion-note item-right>{{driver.code || '#' + (id + 1)}}</ion-note>
+      <button clear item-right (click)="speak(id)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
     </ion-item>
   </ion-list>
 </ion-content>

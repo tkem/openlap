@@ -2,6 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 
 import { ControlUnit } from './control-unit';
 import { Logger } from './logger';
+import { Speech } from './speech';
+import { Storage } from './storage';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
@@ -19,7 +21,7 @@ function qualifyingCompare(lhs, rhs) {
 }
 
 class Car {
-  constructor(public id, public driver, public pit) { }
+  constructor(public id, public driver, public color, public pit) { }
 
   times: number[] = [];
   stops: number = 0;
@@ -84,16 +86,36 @@ export class RaceControl {
 
   private _drivers = [];
 
+  private _colors = [];
+
   get drivers() {
     return this._drivers;
   }
 
   set drivers(drivers) {
     for (let id of Object.keys(this.cars)) {
-      this.cars[id].driver = drivers[id];
+      const driver = drivers[id];
+      this.cars[id].driver = {
+        name: driver.name || 'Driver #' + (parseInt(id) + 1),
+        code: driver.code || '#' + (parseInt(id) + 1)
+      };
+      console.log('set driver #' + (parseInt(id) + 1) + ' to', driver);
     }
     this._drivers = drivers;
   }
+
+  get colors() {
+    return this._colors;
+  }
+
+  set colors(colors) {
+    for (let id of Object.keys(this.cars)) {
+      this.cars[id].color = colors[id];
+    }
+    this._colors = colors;
+  }
+
+  messages = {};
 
   private options: any = {};
 
@@ -108,13 +130,17 @@ export class RaceControl {
   private realStartTime: number;
   private compare = qualifyingCompare;
 
-  constructor(private cu: ControlUnit, private logger: Logger) {
+  constructor(private cu: ControlUnit, private logger: Logger, private speech: Speech, private storage: Storage) {
     cu.getTime().subscribe(args => this.update.apply(this, args));
     cu.getPit().subscribe(value => this.onPitChange(value));
   }
 
   start(mode: 'practice' | 'qualifying' | 'race', options: any = {}) {
     this.logger.info('Start ' + mode, options);
+    this.messages = this.storage.get('speech', {}).then(obj => {
+      this.logger.debug('Messages: ', obj);
+      this.messages = obj;
+    });
     if (mode === 'race') {
       this.compare = raceCompare;
     } else {
@@ -135,14 +161,12 @@ export class RaceControl {
 
     // FIXME: wait until startlights
     this.cu.getStart().take(1).toPromise().then(value => {
-      // FIXME: cu.reset() no effect if start light is on?
-      this.cu.clearPosition();
-      this.cu.reset();
-
-      if ((mode == 'qualifying' || mode == 'race') && value !== 1) {
+      if ((mode == 'qualifying' || mode == 'race') && value === 0) {
         this.cu.toggleStart();
       }
 
+      this.cu.reset(); // FIXME: cu.reset() no effect if start light is on?
+      this.cu.clearPosition();
       this.mask = (this.options.auto ? 0 : 1 << 6) | (this.options.pace ? 0 : 1 << 7);
       this.cu.setMask(this.mask);  // TODO: effective w/startlights?
     });
@@ -165,18 +189,29 @@ export class RaceControl {
       this.startTime = this.currentTime = time;
       this.realStartTime = Date.now();
     }
-    let car = this.cars[id] || (
-      this.cars[id] = new Car(id, this.drivers[id], (this.pit & (1 << id)) != 0)
-    );
+    let car = this.cars[id];
+    if (!car) {
+      const driver = {
+        name: this.drivers[id].name || 'Driver #' + (id + 1),
+        code: this.drivers[id].code || '#' + (id + 1)
+      };
+      car = this.cars[id] = new Car(id, driver, this.colors[id], (this.pit & (1 << id)) != 0);
+    }
     car.update(time - this.startTime);
     if (!this.bestlap || car.laptime < this.bestlap) {
       this.bestlap = car.laptime;
+      if (this.lap > 2 && this.messages['bestlap']) {
+        this.speech.speak(this.messages['bestlap'], car.driver);
+      }
     }
     if (car.laps > this.lap) {
       this.lap = car.laps;
       this.cu.setLap(this.lap);
       this.currentTime = time;
       if (this.laps && this.lap >= this.laps) {
+      if (this.messages['finished']) {
+        this.speech.speak(this.messages['finished'], car.driver);
+      }
         this.finished = true;
       }
     }

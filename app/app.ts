@@ -7,7 +7,8 @@ import { Insomnia, Splashscreen } from 'ionic-native';
 import { Observable } from 'rxjs/Observable';
 
 import { Backend, BLEBackend, SerialBackend, DemoBackend } from './backends';
-import { ControlUnit, Logger, RaceControl, Storage } from './providers';
+import { TargetDirective } from './directives';
+import { ControlUnit, Logger, RaceControl, Speech, Storage } from './providers';
 import * as pages from './pages';
 
 const DEFAULT_DRIVERS = [
@@ -21,11 +22,24 @@ const DEFAULT_DRIVERS = [
   { name: 'Pace Car', code: 'PAC', color: '#00fbff' }
 ];
 
+const DEFAULT_COLORS = [
+  '#ff0000',
+  '#0000ff',
+  '#ffff00',
+  '#00ff00',
+  '#808080',
+  '#000000',
+  '#870275',
+  '#00fbff'
+];
+
 @Component({
-  providers: [ControlUnit, RaceControl],
+  directives: [TargetDirective],
+  providers: [ControlUnit, RaceControl, Speech],
   templateUrl: 'build/app.html'
 })
 class OpenLapApp implements OnInit {
+  colorsPage = pages.ColorsPage;
   driversPage = pages.DriversPage;
   carSetupPage = pages.CarSetupPage;
   connectionPage = pages.ConnectionPage;
@@ -44,6 +58,9 @@ class OpenLapApp implements OnInit {
     });
     storage.get('drivers', DEFAULT_DRIVERS).then(drivers => {
       rc.drivers = drivers;
+    })
+    storage.get('colors', DEFAULT_COLORS).then(colors => {
+      rc.colors = colors;
     })
 
     // TODO: initial values, mark as touched, etc.

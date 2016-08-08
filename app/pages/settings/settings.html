@@ -8,33 +8,17 @@
 
 <ion-content>
   <ion-list>
-    <ion-list-header>
-      Logging
-    </ion-list-header>
-    <ion-item>
-      <ion-label light>Log level</ion-label>
-      <ion-select [(ngModel)]="logging.level" (ionChange)="logger.setLevel(logging.level)">
-        <ion-option value="debug">Debug</ion-option>
-        <ion-option value="info">Info</ion-option>
-        <ion-option value="warning">Warning</ion-option>
-        <ion-option value="error">Error</ion-option>
-      </ion-select>
-    </ion-item>
-    <button ion-item (click)="nav.push(loggingPage)">
-      View log
+    <button ion-item [navPush]="speechPage">
+      Speech
     </button>
-  </ion-list>
-
-  <ion-list>
-    <ion-list-header>
+    <button ion-item [navPush]="loggingPage">
+      Logging
+    </button>
+    <button ion-item [navPush]="licensesPage">
+      Licenses
+    </button>
+    <button ion-item [navPush]="aboutPage">
       About
-    </ion-list-header>
-    <a ion-item href="https://github.com/tkem/openlap/" target="_system">
-      <h2>Open Lap {{version | async}}</h2>
-      <p>Copyright &copy; 2016 Thomas Kemmer</p>
-    </a>
-    <button ion-item (click)="nav.push(licensesPage)">
-      Open source licenses
     </button>
   </ion-list>
 </ion-content>

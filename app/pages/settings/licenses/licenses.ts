@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 
-import { TargetDirective } from '../../directives';
-
 @Component({
-  directives: [TargetDirective],
-  templateUrl: 'build/pages/licenses/licenses.html',
+  templateUrl: 'build/pages/settings/licenses/licenses.html',
 })
 export class LicensesPage {
   items = [{
@@ -28,6 +25,11 @@ export class LicensesPage {
     copyright: 'Copyright © 2012, 2013, 2015 The Apache Software Foundation',
     license: 'Apache-2.0'
   }, {
+    name: 'cordova-plugin-appversion',
+    url: 'https://github.com/Rareloop/cordova-plugin-app-version',
+    copyright: 'Copyright (c) 2015 Rareloop Ltd',
+    license: 'MIT'
+  }, {
     name: 'cordova-plugin-ble-central',
     url: 'https://github.com/don/cordova-plugin-ble-central',
     copyright: 'Copyright 2014-2016 Don Coleman',
@@ -36,11 +38,6 @@ export class LicensesPage {
     name: 'cordovarduino',
     url: 'https://github.com/xseignard/cordovarduino',
     copyright: 'Copyright (c) 2015 Xavier Seignard',
-    license: 'MIT'
-  }, {
-    name: 'cordova-plugin-appversion',
-    url: 'https://github.com/Rareloop/cordova-plugin-app-version',
-    copyright: 'Copyright (c) 2015 Rareloop Ltd',
     license: 'MIT'
   }];
 }

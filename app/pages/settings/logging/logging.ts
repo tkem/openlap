@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
-import { Logger } from '../../providers';
+import { Logger } from '../../../providers';
 
 @Component({
-  templateUrl: 'build/pages/logging/logging.html',
+  templateUrl: 'build/pages/settings/logging/logging.html',
 })
 export class LoggingPage {
   icons = [
