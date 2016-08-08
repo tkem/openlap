@@ -3,7 +3,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Cordova, Plugin } from 'ionic-native';
 
 import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observer, NextObserver } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 
 import { Backend, Peripheral } from './backend';
@@ -62,15 +62,17 @@ class SerialPeripheral implements Peripheral {
 
   constructor(private logger: Logger, private zone: NgZone) {}
 
-  connect() {
-    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable());
+  connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
+    const observable = this.createObservable(connected, disconnected);
+    const observer = this.createObserver(disconnected);
+    return new Subject<ArrayBuffer>(observer, observable);
   }
 
   equals(other: Peripheral) {
     return other && other.type === this.type;
   }
 
-  private createObservable() {
+  private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to serial port');
       this.open({ baudRate: BAUD_RATE }).then(() => {
@@ -91,22 +93,24 @@ class SerialPeripheral implements Peripheral {
             this.zone.run(() => subscriber.error(err));
           }
         });
-        this.write(Uint8Array.from(['0'.charCodeAt(0)]).buffer);
+        if (connected) {
+          connected.next(undefined);
+        }
       }).catch(error => {
         this.logger.error('Error connecting to serial port:', error);
         this.zone.run(() => subscriber.error(error));
       });
       return () => {
-        this.close();
+        this.close(disconnected);
       };
     });
   }
 
-  private createObserver() {
+  private createObserver(disconnected?: NextObserver<void>) {
     return {
       next: (value: ArrayBuffer) => this.write(value),
       error: (err: any) => this.logger.error('Serial user error:', err),
-      complete: () => this.close()
+      complete: () => this.close(disconnected)
     };
   }
 
@@ -123,12 +127,16 @@ class SerialPeripheral implements Peripheral {
     });
   }
 
-  private close() {
+  private close(disconnected?: NextObserver<void>) {
     this.logger.debug('Closing serial port');
     Serial.close().then(() => {
       this.logger.debug('Serial port closed');
     }).catch(error => {
       this.logger.error('Serial close error:', error);
+    }).then(() => {
+      if (disconnected) {
+        disconnected.next(undefined);
+      }
     });
   }
 }

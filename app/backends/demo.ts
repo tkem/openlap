@@ -120,32 +120,34 @@ class DemoPeripheral implements Peripheral {
 
   constructor(public name: string, private mode: number, private logger: Logger) {
     this.version = new Uint8Array(('0' + VERSION).split('').map(c => c.charCodeAt(0)));
+    for (let i = 0; i != this.config.numCars; ++i) {
+      this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
+    }
+    this.startAll();
   }
 
-  connect() {
-    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable());
+  connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
+    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable(connected, disconnected));
   }
 
   equals(other: Peripheral) {
     return other && other.type === this.type && other.name == this.name;
   }
 
-  private createObservable() {
+  private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.info('Creating Demo observable with mode=' + this.mode);
       this.subscriber = subscriber;
       setTimeout(() => {
-        subscriber.next(this.version);
-        for (let i = 0; i != this.config.numCars; ++i) {
-          this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
+        if (connected) {
+          connected.next(undefined);
         }
-        if (this.startSequence == 0) {
-          this.startAll();
-        }
-      }, 1000);
+      }, 100);
       return () => {
         this.logger.info('Destroying Demo observable');
-        this.stopAll();
+        if (disconnected) {
+          disconnected.next(undefined);
+        }
         delete this.subscriber;
       }
     });

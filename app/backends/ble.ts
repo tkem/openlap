@@ -5,7 +5,7 @@ import { Platform } from 'ionic-angular';
 import { BLE } from 'ionic-native';
 
 import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observer, NextObserver } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -31,33 +31,37 @@ class BLEPeripheral implements Peripheral {
     this.address = device.id;
   }
 
-  connect() {
-    return new Subject<ArrayBuffer>(this.createObserver(), this.createObservable());
+  connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
+    const observable = this.createObservable(connected, disconnected)
+    const observer = this.createObserver(disconnected);
+    return new Subject<ArrayBuffer>(observer, observable);
   }
 
   equals(other: Peripheral) {
     return other && other.type === this.type && other.address === this.address;
   }
 
-  private createObservable() {
+  private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to BLE device ' + this.address);
-      let connected = false;
+      let isConnected = false;
       BLE.connect(this.address).subscribe({
         next: peripheral => {
           this.logger.info('Connected to BLE device:', peripheral);
-          connected = true;
+          isConnected = true;
           BLE.startNotification(this.address, SERVICE_UUID, NOTIFY_UUID).subscribe({
             next: data => this.onNotify(data, subscriber),
             error: err => this.onError(err, subscriber)
           });
-          this.write(Uint8Array.from(['0'.charCodeAt(0)]).buffer);
+          if (connected) {
+            connected.next(undefined);
+          }
         },
         error: obj => {
           if (obj instanceof Error) {
             this.logger.error('BLE connection error:', obj);
             subscriber.error(obj);
-          } else if (!connected) {
+          } else if (!isConnected) {
             this.logger.error('BLE connection error:', obj);
             subscriber.error(new Error('Connection error'));
           } else {
@@ -71,16 +75,16 @@ class BLEPeripheral implements Peripheral {
         }
       });
       return () => {
-        this.disconnect();
+        this.disconnect(disconnected);
       };
     });
   }
 
-  private createObserver() {
+  private createObserver(disconnected?: NextObserver<void>) {
     return {
       next: (value: ArrayBuffer) => this.write(value),
       error: (err: any) => this.logger.error('BLE user error:', err),
-      complete: () => this.disconnect()
+      complete: () => this.disconnect(disconnected)
     };
   }
 
@@ -90,13 +94,17 @@ class BLEPeripheral implements Peripheral {
     });
   }
 
-  private disconnect() {
+  private disconnect(disconnected?: NextObserver<void>) {
     BLE.isConnected(this.address).then(() => {
       this.logger.info('Closing BLE connection to ' + this.address);
       BLE.disconnect(this.address).then(() => {
         this.logger.debug('BLE disconnected from ' + this.address);
       }).catch(error => {
         this.logger.error('BLE disconnect error:', error);
+      }).then(() => {
+        if (disconnected) {
+          disconnected.next(undefined);
+        }
       });
     }).catch(() => {
       this.logger.debug('BLE not connected to ' + this.address);

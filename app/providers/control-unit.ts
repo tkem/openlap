@@ -148,16 +148,27 @@ export class ControlUnit {
 
   connect(peripheral: Peripheral) {
     this.disconnect();
-    this.logger.info('CU: Connecting to ' + peripheral.name);
     this.peripheral = peripheral;
-    this.connection = peripheral.connect();
+    this.connection = peripheral.connect({
+      next: () => {
+        this.logger.info('CU: Connected to ' + peripheral.name);
+        this.state.next('connected');
+        this.poll();
+      }
+    }, {
+      next: () => {
+        this.logger.info('CU: Disconnected from ' + peripheral.name);
+        this.state.next('disconnected');
+      }
+    });
+
+    this.logger.info('CU: Connecting to ' + peripheral.name);
     this.state.next('connecting');
     this.subscription = this.connection.timeout(CONNECTION_TIMEOUT).retryWhen(errors => {
       return errors.do(error => {
         this.logger.error('CU: Connection error:', error)
-        this.state.next('disconnected');
       }).delay(RECONNECT_DELAY).do(() => {
-        this.logger.error('CU: Reconnecting');
+        this.logger.info('CU: Reconnecting to ' + peripheral.name);
         this.state.next('connecting');
       });
     }).subscribe(
@@ -297,17 +308,14 @@ export class ControlUnit {
     if (!requestsPending) {
       this.poll();
     }
-    this.state.next('connected');
   }
 
   private onError(error: any) {
     this.logger.error('CU: Fatal error ', error);
-    this.state.next('disconnected');
   }
 
   private onClose() {
     this.logger.info('CU: Connection closed');
-    this.state.next('disconnected');
   }
 
   poll() {
