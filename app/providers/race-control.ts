@@ -2,8 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 
 import { ControlUnit } from './control-unit';
 import { Logger } from './logger';
+import { Settings } from './settings';
 import { Speech } from './speech';
-import { Storage } from './storage';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
@@ -130,17 +130,17 @@ export class RaceControl {
   private realStartTime: number;
   private compare = qualifyingCompare;
 
-  constructor(private cu: ControlUnit, private logger: Logger, private speech: Speech, private storage: Storage) {
+  constructor(private cu: ControlUnit, private logger: Logger, private speech: Speech, settings: Settings) {
     cu.getTime().subscribe(args => this.update.apply(this, args));
     cu.getPit().subscribe(value => this.onPitChange(value));
+    settings.get('speech').subscribe((value) => {
+      console.log('New messages: ', value);
+      this.messages = value
+    });
   }
 
   start(mode: 'practice' | 'qualifying' | 'race', options: any = {}) {
     this.logger.info('Start ' + mode, options);
-    this.messages = this.storage.get('speech', {}).then(obj => {
-      this.logger.debug('Messages: ', obj);
-      this.messages = obj;
-    });
     if (mode === 'race') {
       this.compare = raceCompare;
     } else {

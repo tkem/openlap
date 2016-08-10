@@ -10,7 +10,7 @@
   <ion-list>
     <ion-item *ngFor="let item of items">
       <ion-label>{{item.label}}</ion-label>
-      <ion-input [placeholder]="item.default" [ngModel]="item.text" clearInput>
+      <ion-input [placeholder]="item.default" [(ngModel)]="item.text" clearInput>
       </ion-input>
       <button clear item-right (click)="speak(item.text || item.default)">
         <ion-icon name="volume-up"></ion-icon>

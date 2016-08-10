@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Backend, BLEBackend, SerialBackend, DemoBackend } from './backends';
 import { TargetDirective } from './directives';
-import { ControlUnit, Logger, RaceControl, Speech, Storage } from './providers';
+import { ControlUnit, Logger, RaceControl, Speech, Settings, Storage } from './providers';
 import * as pages from './pages';
 
 const DEFAULT_DRIVERS = [
@@ -35,7 +35,7 @@ const DEFAULT_COLORS = [
 
 @Component({
   directives: [TargetDirective],
-  providers: [ControlUnit, RaceControl, Speech],
+  providers: [ControlUnit, RaceControl, Settings, Speech],
   templateUrl: 'build/app.html'
 })
 class OpenLapApp implements OnInit {
