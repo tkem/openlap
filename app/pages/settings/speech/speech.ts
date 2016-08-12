@@ -5,8 +5,8 @@ import { Settings, Speech } from '../../../providers';
 const DEFAULT_SPEECH = {
   enabled: false,
   'bestlap': '{name}: Fastest lap!',
-  'finished': '{name}: Good job!',
-  'lowfuel': '{name}: Box! Box! Box!'
+  'finished': '{name}: Great job!',
+  'lowfuel': '{name}: Box!'
 };
 
 @Component({

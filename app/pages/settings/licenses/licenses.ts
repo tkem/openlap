@@ -35,6 +35,16 @@ export class LicensesPage {
     copyright: 'Copyright 2014-2016 Don Coleman',
     license: 'Apache-2.0'
   }, {
+    name: 'cordova-plugin-insomnia',
+    url: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin',
+    copyright: 'Copyright Eddy Verbruggen',
+    license: 'MIT'
+  }, {
+    name: 'cordova-plugin-tts',
+    url: 'https://github.com/vilic/cordova-plugin-tts',
+    copyright: 'Copyright VILIC VANE',
+    license: 'MIT'
+  }, {
     name: 'cordovarduino',
     url: 'https://github.com/xseignard/cordovarduino',
     copyright: 'Copyright (c) 2015 Xavier Seignard',
