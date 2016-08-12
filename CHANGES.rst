@@ -1,3 +1,9 @@
+0.5.1 2016-08-12
+----------------
+
+- Add ``cordova-plugin-app-version`` required by ``ionic-native``.
+
+
 0.5.0 2016-08-12
 ----------------
 
