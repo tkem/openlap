@@ -94,7 +94,7 @@ class SerialPeripheral implements Peripheral {
           }
         });
         if (connected) {
-          connected.next(undefined);
+          this.zone.run(() => connected.next(undefined));
         }
       }).catch(error => {
         this.logger.error('Error connecting to serial port:', error);
@@ -135,7 +135,7 @@ class SerialPeripheral implements Peripheral {
       this.logger.error('Serial close error:', error);
     }).then(() => {
       if (disconnected) {
-        disconnected.next(undefined);
+        this.zone.run(() => disconnected.next(undefined));
       }
     });
   }

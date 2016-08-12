@@ -7,7 +7,7 @@
       </button>
     </ion-buttons>
     <ion-buttons right>
-      <button (click)="onSubmit(form.value)" [disabled]="!form.form.valid" type="submit">
+      <button (click)="onSubmit(form.value)" [disabled]="!form.valid" type="submit">
         Start
       </button>
     </ion-buttons>
@@ -15,19 +15,20 @@
 </ion-header>
 
 <ion-content>
-  <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
     <ion-list>
       <ion-item>
         <ion-label light>Time (minutes)</ion-label>
-        <ion-input name="time" [(ngModel)]="options.time" type="number" min="1" required text-right padding-right></ion-input>
+        <ion-input formControlName="time" type="number" min="1" text-right padding-right>
+        </ion-input>
       </ion-item>
       <ion-item>
         <ion-label light>Autonomous Car</ion-label>
-        <ion-toggle name="auto" [(ngModel)]="options.auto"></ion-toggle>
+        <ion-toggle formControlName="auto"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label light>Pace Car</ion-label>
-        <ion-toggle name="pace" [(ngModel)]="options.pace"></ion-toggle>
+        <ion-toggle formControlName="pace"></ion-toggle>
       </ion-item>
     </ion-list>
   </form>

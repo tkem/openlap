@@ -16,8 +16,8 @@ import { Logger } from './logger';
 
 import { Peripheral } from '../backends';
 
-const CONNECTION_TIMEOUT = 3000;
-const RECONNECT_DELAY = 1000;
+const CONNECTION_TIMEOUT = 5000;
+const RECONNECT_DELAY = 2000;
 
 class DataView {
   private array: Uint8Array;
@@ -151,9 +151,8 @@ export class ControlUnit {
     this.peripheral = peripheral;
     this.connection = peripheral.connect({
       next: () => {
-        this.logger.info('CU: Connected to ' + peripheral.name);
-        this.state.next('connected');
-        this.poll();
+        this.logger.info('CU: Start polling ' + peripheral.name);
+        this.connection.next(POLL_BUFFER);
       }
     }, {
       next: () => {
@@ -307,6 +306,10 @@ export class ControlUnit {
     }
     if (!requestsPending) {
       this.poll();
+    }
+    if (this.state.value != 'connected') {
+        this.logger.info('CU: Connected to ' + this.peripheral.name);
+        this.state.next('connected');
     }
   }
 

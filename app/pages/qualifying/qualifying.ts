@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { NavParams, ViewController } from 'ionic-angular';
 
 @Component({
@@ -7,10 +9,14 @@ import { NavParams, ViewController } from 'ionic-angular';
 })
 export class QualifyingPage {
 
-  options: any;
+  form: FormGroup;
 
-  constructor(params: NavParams, private view: ViewController) {
-    this.options = params.data;
+  constructor(fb: FormBuilder, params: NavParams, private view: ViewController) {
+    this.form = fb.group({
+      time: [params.get('time') || 3],
+      auto: [params.get('auto') || false],
+      pace: [params.get('pace') || false]
+    });
   }
 
   onSubmit(options) {

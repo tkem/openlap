@@ -12,6 +12,28 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
 
+const DEFAULT_DRIVERS = [
+  { name: 'Driver #1', code: '#1', color: '#ff0000' },
+  { name: 'Driver #2', code: '#2', color: '#0000ff' },
+  { name: 'Driver #3', code: '#3', color: '#ffff00' },
+  { name: 'Driver #4', code: '#4', color: '#00ff00' },
+  { name: 'Driver #5', code: '#5', color: '#808080' },
+  { name: 'Driver #6', code: '#6', color: '#000000' },
+  { name: 'Autonomous Car', code: 'AUT', color: '#870275' },
+  { name: 'Pace Car', code: 'PAC', color: '#00fbff' }
+];
+
+const DEFAULT_COLORS = [
+  '#ff0000',
+  '#0000ff',
+  '#ffff00',
+  '#00ff00',
+  '#808080',
+  '#000000',
+  '#870275',
+  '#00fbff'
+];
+
 function raceCompare(lhs, rhs) {
   return (rhs.laps - lhs.laps) || (lhs.time - rhs.time)
 }
@@ -46,7 +68,7 @@ class Car {
   update(time: number) {
     this.times.push(time);
     let laptime = this.laptime;
-    if (!this.bestlap || laptime < this.bestlap ) {
+    if (laptime > 1 && (!this.bestlap || laptime < this.bestlap)) {
       this.bestlap = laptime;
     }
   }
@@ -115,7 +137,7 @@ export class RaceControl {
     this._colors = colors;
   }
 
-  messages = {};
+  messages: any;
 
   private options: any = {};
 
@@ -133,8 +155,13 @@ export class RaceControl {
   constructor(private cu: ControlUnit, private logger: Logger, private speech: Speech, settings: Settings) {
     cu.getTime().subscribe(args => this.update.apply(this, args));
     cu.getPit().subscribe(value => this.onPitChange(value));
-    settings.get('speech').subscribe((value) => {
-      console.log('New messages: ', value);
+    settings.get('drivers', DEFAULT_DRIVERS).subscribe((drivers) => {
+      this.drivers = drivers;
+    });
+    settings.get('colors', DEFAULT_COLORS).subscribe((colors) => {
+      this.colors = colors;
+    });
+    settings.get('speech', {}).subscribe((value) => {
       this.messages = value
     });
   }
@@ -161,12 +188,11 @@ export class RaceControl {
 
     // FIXME: wait until startlights
     this.cu.getStart().take(1).toPromise().then(value => {
+      this.cu.reset(); // FIXME: cu.reset() no effect if start light is on?
+      this.cu.clearPosition();
       if ((mode == 'qualifying' || mode == 'race') && value === 0) {
         this.cu.toggleStart();
       }
-
-      this.cu.reset(); // FIXME: cu.reset() no effect if start light is on?
-      this.cu.clearPosition();
       this.mask = (this.options.auto ? 0 : 1 << 6) | (this.options.pace ? 0 : 1 << 7);
       this.cu.setMask(this.mask);  // TODO: effective w/startlights?
     });
@@ -198,10 +224,10 @@ export class RaceControl {
       car = this.cars[id] = new Car(id, driver, this.colors[id], (this.pit & (1 << id)) != 0);
     }
     car.update(time - this.startTime);
-    if (!this.bestlap || car.laptime < this.bestlap) {
+    if (car.laptime > 1 && (!this.bestlap || car.laptime < this.bestlap)) {
       this.bestlap = car.laptime;
-      if (this.lap > 2 && this.messages['bestlap']) {
-        this.speech.speak(this.messages['bestlap'], car.driver);
+      if (this.lap > 2) {
+        this.speak('bestlap', car.driver);
       }
     }
     if (car.laps > this.lap) {
@@ -209,9 +235,7 @@ export class RaceControl {
       this.cu.setLap(this.lap);
       this.currentTime = time;
       if (this.laps && this.lap >= this.laps) {
-      if (this.messages['finished']) {
-        this.speech.speak(this.messages['finished'], car.driver);
-      }
+        this.speak('finished', car.driver);
         this.finished = true;
       }
     }
@@ -242,5 +266,11 @@ export class RaceControl {
       car.pit = pit;
     }
     this.pit = value;
+  }
+
+  private speak(action, params) {
+    if (this.messages && this.messages.enabled && this.messages[action]) {
+      this.speech.speak(this.messages[action], params);
+    }
   }
 }

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NavParams, ViewController } from 'ionic-angular';
 
-function required(...names: string[]) {
+function anyRequired(...names: string[]) {
   return (group: FormGroup): {[key: string]: any} => {
     for (let name of names) {
       if (!Validators.required(group.controls[name])) {
@@ -22,14 +22,14 @@ export class RacePage {
 
   form: FormGroup;
 
-  constructor(fb: FormBuilder, private params: NavParams, private view: ViewController) {
+  constructor(fb: FormBuilder, params: NavParams, private view: ViewController) {
     this.form = fb.group({
-      laps: [params.get('laps')],
+      laps: [params.get('laps') || 10],
       time: [params.get('time')],
-      auto: [params.get('auto')],
-      pace: [params.get('pace')]
+      auto: [params.get('auto') || false],
+      pace: [params.get('pace') || false]
     }, {
-      validator: required('laps', 'time')
+      validator: anyRequired('laps', 'time')
     });
   }
 

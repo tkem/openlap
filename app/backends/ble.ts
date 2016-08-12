@@ -54,24 +54,24 @@ class BLEPeripheral implements Peripheral {
             error: err => this.onError(err, subscriber)
           });
           if (connected) {
-            connected.next(undefined);
+            this.zone.run(() => connected.next(undefined));
           }
         },
         error: obj => {
           if (obj instanceof Error) {
             this.logger.error('BLE connection error:', obj);
-            subscriber.error(obj);
+            this.zone.run(() => subscriber.error(obj));
           } else if (!isConnected) {
             this.logger.error('BLE connection error:', obj);
-            subscriber.error(new Error('Connection error'));
+            this.zone.run(() => subscriber.error(new Error('Connection error')));
           } else {
             this.logger.info('BLE device disconnected:', obj);
-            subscriber.complete();
+            this.zone.run(() => subscriber.complete());
           }
         },
         complete: () => {
           this.logger.info('BLE connection closed');
-          subscriber.complete();
+          this.zone.run(() => subscriber.complete());
         }
       });
       return () => {
@@ -89,26 +89,23 @@ class BLEPeripheral implements Peripheral {
   }
 
   private write(value: ArrayBuffer) {
+    //this.logger.debug('BLE write', this.address, value);
     BLE.writeWithoutResponse(this.address, SERVICE_UUID, OUTPUT_UUID, value).catch(error => {
       this.logger.error('BLE write error', error);
     });
   }
 
   private disconnect(disconnected?: NextObserver<void>) {
-    BLE.isConnected(this.address).then(() => {
-      this.logger.info('Closing BLE connection to ' + this.address);
-      BLE.disconnect(this.address).then(() => {
-        this.logger.debug('BLE disconnected from ' + this.address);
-      }).catch(error => {
-        this.logger.error('BLE disconnect error:', error);
-      }).then(() => {
-        if (disconnected) {
-          disconnected.next(undefined);
-        }
-      });
-    }).catch(() => {
-      this.logger.debug('BLE not connected to ' + this.address);
-    })
+    this.logger.debug('Closing BLE connection to ' + this.address);
+    BLE.disconnect(this.address).then(() => {
+      this.logger.info('BLE disconnected from ' + this.address);
+    }).catch(error => {
+      this.logger.error('BLE disconnect error:', error);
+    }).then(() => {
+      if (disconnected) {
+        this.zone.run(() => disconnected.next(undefined));
+      }
+    });
   }
 
   private onNotify(data, subscriber) {
@@ -169,7 +166,7 @@ export class BLEBackend extends Backend {
         this.logger.debug('Scanning for BLE devices');
         resolve(subscription);
       }).catch(error => {
-        subscriber.complete();
+        this.zone.run(() => subscriber.complete());
         reject(error);
       });
     });
