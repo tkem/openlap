@@ -1,3 +1,15 @@
+0.5.0 2016-08-12
+----------------
+
+- Upgrade to Ionic 2 Beta 11.
+
+- Use ``TTS`` plugin for speech notifications.
+
+- Improve CU reconnect handling.
+
+- Various refactorings and improvements.
+
+
 0.4.6 2016-07-26
 ----------------
 
