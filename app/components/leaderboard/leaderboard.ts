@@ -1,64 +1,68 @@
 import { ChangeDetectionStrategy, Component, Input, Optional } from '@angular/core';
 
-import { ControlUnit, RaceControl } from '../../providers';
-
 import { ChequeredFlag } from '../chequered-flag/chequered-flag';
 import { FuelGauge } from '../fuel-gauge/fuel-gauge';
 import { Stripe } from '../stripe/stripe';
 import { TimePipe } from '../../pipes';
 
-@Component({
-  selector: 'leaderboard tbody > tr[practice]',
-  directives: [ChequeredFlag, FuelGauge, Stripe],
-  pipes: [TimePipe],
-  templateUrl: 'build/components/leaderboard/practice.html'
-})
-class PracticeRow {
-  @Input() item: any;
-  @Input() index: number;
-  @Input() items: any[];
-  @Input() bestlap: number;
-  @Optional() @Input() fuel: number;
+export interface LeaderboardItem {
+  driver: any;
+  color: string;
+  time: number;
+  laps: number;
+  lastLap: number;
+  bestLap: number;
+  fuel?: number;
+  pits?: number;
+  pit?: boolean;
+  finished?: boolean
 }
 
 @Component({
-  selector: 'leaderboard tbody > tr[qualifying]',
-  directives: [ChequeredFlag, FuelGauge, Stripe],
-  pipes: [TimePipe],
-  templateUrl: 'build/components/leaderboard/qualifying.html'
+  selector: 'leaderboard thead tr[head]',
+  templateUrl: 'build/components/leaderboard/leaderboard-head.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-class QualifyingRow {
-  @Input() item: any;
-  @Input() index: number;
-  @Input() items: any[];
-  @Input() bestlap: number;
-  @Optional() @Input() fuel: number;
+class LeaderboardHeadComponent {
+  @Input() fields: string[];
 }
 
 @Component({
-  selector: 'leaderboard tbody > tr[race]',
+  selector: 'leaderboard tbody tr[item]',
   directives: [ChequeredFlag, FuelGauge, Stripe],
   pipes: [TimePipe],
-  templateUrl: 'build/components/leaderboard/race.html'
+  templateUrl: 'build/components/leaderboard/leaderboard-item.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-class RaceRow {
-  @Input() item: any;
+class LeaderboardItemComponent {
+  @Input() fields: string[];
+  @Input() item: LeaderboardItem;
   @Input() index: number;
-  @Input() items: any[];
+  @Input() items: LeaderboardItem[];
   @Input() bestlap: number;
-  @Optional() @Input() fuel: number;
 }
 
 @Component({
   selector: 'leaderboard',
-  directives: [PracticeRow, QualifyingRow, RaceRow],
+  directives: [LeaderboardHeadComponent, LeaderboardItemComponent],
   templateUrl: 'build/components/leaderboard/leaderboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Leaderboard {
-  @Input() fuel: number[];
-  @Input() pitlane: boolean;
-  @Input() ranking: any[];
-  @Input() mode: 'practice' | 'qualifying' | 'race';
-  @Input() bestlap: number;
+
+  private _items: LeaderboardItem[];
+
+  public bestlap: number;
+
+  @Input() fields: string[];
+
+  @Input() set items(items: LeaderboardItem[]) {
+    this._items = items;
+    // TBD: NaN if *any* item has no bestLap set
+    this.bestlap = Math.min(...(items || []).map(item => item.bestLap));
+  }
+
+  get items() {
+    return this._items;
+  }
 }

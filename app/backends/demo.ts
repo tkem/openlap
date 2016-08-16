@@ -1,11 +1,12 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer, NextObserver } from 'rxjs/Observer';
-import { Subject } from 'rxjs/Subject';
+import { Peripheral } from '../carrera';
 
-import { Backend, Peripheral } from './backend';
+import { Observable, Observer, NextObserver, Subject } from '../rxjs';
+
 import { Logger } from '../providers';
+
+import { Backend } from './backend';
 
 const VERSION = '0815';
 
@@ -107,9 +108,9 @@ class DemoPeripheral implements Peripheral {
 
   private config = {
     numCars: 8,
-    maxStartTime: 500,
-    minLapTime: 3000,
-    maxLapTime: 5000
+    maxStartTime: 5000,
+    minLapTime: 10000,
+    maxLapTime: 12000
   };
 
   private version: Uint8Array;
@@ -157,6 +158,9 @@ class DemoPeripheral implements Peripheral {
     return {
       next: (value: ArrayBuffer) => {
         //console.log('Demo connection next:', toString(value));
+        if (toString(value) != '?') {
+          console.log('Demo CU received ' + toString(value));
+        }
         if (toString(value) == 'T2') {
           this.onStart();
         }

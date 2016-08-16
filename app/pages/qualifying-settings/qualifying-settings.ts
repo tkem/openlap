@@ -4,32 +4,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NavParams, ViewController } from 'ionic-angular';
 
-function anyRequired(...names: string[]) {
-  return (group: FormGroup): {[key: string]: any} => {
-    for (let name of names) {
-      if (!Validators.required(group.controls[name])) {
-        return null;
-      }
-    }
-    return {'required': true};
-  }
-}
-
+// TODO: merge with race-settings!
 @Component({
-  templateUrl: 'build/pages/race/race.html'
+  templateUrl: 'build/pages/qualifying-settings/qualifying-settings.html'
 })
-export class RacePage {
+export class QualifyingSettingsPage {
 
   form: FormGroup;
 
   constructor(fb: FormBuilder, params: NavParams, private view: ViewController) {
     this.form = fb.group({
-      laps: [params.get('laps') || 10],
-      time: [params.get('time')],
+      time: [params.get('time') || 3],
       auto: [params.get('auto') || false],
       pace: [params.get('pace') || false]
-    }, {
-      validator: anyRequired('laps', 'time')
     });
   }
 

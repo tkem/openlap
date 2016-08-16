@@ -2,13 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { Settings, Speech } from '../../../providers';
 
-const DEFAULT_SPEECH = {
-  enabled: false,
-  'bestlap': '{name}: Fastest lap!',
-  'finished': '{name}: Great job!',
-  'lowfuel': '{name}: Box!'
-};
-
 @Component({
   templateUrl: 'build/pages/settings/speech/speech.html'
 })
@@ -21,7 +14,7 @@ export class SpeechPage implements OnDestroy {
   constructor(private settings: Settings, private speech: Speech) {}
 
   ngOnInit() {
-    this.subscription = this.settings.get('speech', DEFAULT_SPEECH).subscribe((options) => {
+    this.subscription = this.settings.get('speech').subscribe((options) => {
       this.options = options;
     });
   }

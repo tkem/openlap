@@ -1,75 +1,85 @@
-leaderboard table {
-    table-layout: fixed;
-    border-collapse: collapse;
-    border-spacing: 0;
-    empty-cells: show;
-    width: 100%;
-}
+leaderboard {
+    table {
+        table-layout: fixed;
+        border-collapse: collapse;
+        border-spacing: 0;
+        empty-cells: show;
+        width: 100%;
+    }
 
-leaderboard tr {
-    padding-bottom: 6px;
-}
+    tr {
+        padding-bottom: 6px;
+    }
 
-leaderboard th, td {
-    padding: 0.25rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+    th, td {
+        padding: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
-leaderboard th {
-    font-size: smaller;
-}
+    th {
+        font-size: smaller;
+    }
 
-leaderboard .position {
-    width: 2.5em;
-}
+    span.bestlap {
+        color: #0f0;
+    }
 
-leaderboard .time {
-    width: 6em;
-}
+    span.allbest {
+        color: magenta !important;
+    }
 
-leaderboard .count {
-    width: 3em;
-}
+    span.pit {
+        background: yellow;
+        padding: 0 2px 0 2px 0;
+        color: black;
+        font-size: smaller;
+        vertical-align: middle;
+    }
 
-leaderboard .gauge {
-    width: 6em;
+    .position {
+        @extend .stripe-container;
+        text-align: left;
+        width: 3em;
+    }
+    .name {
+        text-align: left;
+    }
+    .time {
+        text-align: right;
+        width: 6em;
+    }
+    .bestlap {
+        text-align: right;
+        width: 6em;
+    }
+    .gap {
+        text-align: right;
+        width: 6em;
+    }
+    .int {
+        text-align: right;
+        width: 6em;
+    }
+    .laptime {
+        text-align: right;
+        width: 6em;
+    }
+    .laps {
+        text-align: right;
+        width: 3em;
+    }
+    .pits {
+        text-align: right;
+        width: 3em;
+    }
+    .fuel {
+        text-align: left;
+        width: 6em;
+    }
+    .status {
+        text-align: left;
+        width: 4em;
+    }
 }
-
-leaderboard .status {
-    width: 4em;
-}
-
-leaderboard .bestlap {
-    color: #0f0;
-}
-
-leaderboard .allbest {
-    color: magenta !important;
-}
-
-leaderboard span.pit {
-    background: yellow;
-    padding: 0 2px 0 2px 0;
-    color: black;
-    font-size: smaller;
-    vertical-align: middle;
-}
-/*
-leaderboard span.pit {
-    color: magenta;
-    font-size: smaller;
-    vertical-align: middle;
-}
-
-leaderboard span.pit:before {
-    content: "[";
-    color: white;
-}
-
-leaderboard span.pit:after {
-    content: "]";
-    color: white;
-}
-*/

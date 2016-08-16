@@ -1,11 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
-
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { Injectable } from '@angular/core';
 
 export enum LogLevel { DEBUG, INFO, WARNING, ERROR };
 

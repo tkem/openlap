@@ -1,0 +1,52 @@
+<td *ngFor="let field of fields" [ngSwitch]="field" [class]="field">
+    <template ngSwitchCase="position">
+        {{index + 1}}<stripe [color]="item.color"></stripe>
+    </template>
+    <template ngSwitchCase="name">
+        <span showWhen="landscape">{{item.driver.name}}</span>
+        <span showWhen="portrait">{{item.driver.code}}</span>
+    </template>
+    <template ngSwitchCase="time">
+        <span [ngSwitch]="index == 0 ? '' : (items[0].laps - item.laps).toString()">
+            <template ngSwitchCase="">
+                {{item.time | time:'m:ss.sss'}}
+            </template>
+            <template ngSwitchCase="0">
+                +{{(item.time - items[0].time) | time:'s.sss'}}
+            </template>
+            <template ngSwitchCase="1">
+                +1 Lap
+            </template>
+            <template ngSwitchDefault>
+                +{{items[0].laps - item.laps}} Laps
+            </template>
+        </span>
+    </template>
+    <template ngSwitchCase="bestlap">
+        {{item.bestLap | time:'s.sss'}}
+    </template>
+    <template ngSwitchCase="gap">
+        {{(index && item.bestLap ? item.bestLap - items[0].bestLap : null) | time:'+s.sss'}}
+    </template>
+    <template ngSwitchCase="int">
+        {{(index && item.bestLap ? item.bestLap - items[index - 1].bestLap : null) | time:'+s.sss'}}
+    </template>
+    <template ngSwitchCase="laptime">
+        <span [ngClass]="{bestlap: item.lastLap == item.bestLap, allbest: item.lastLap == bestlap}">
+            {{item.lastLap | time:'s.sss'}}
+        </span>
+    </template>
+    <template ngSwitchCase="laps">
+        {{item.laps}}
+    </template>
+    <template ngSwitchCase="pits">
+        {{item.pits}}
+    </template>
+    <template ngSwitchCase="fuel">
+        <fuel-gauge max="15" [value]="item.fuel"></fuel-gauge>
+    </template>
+    <template ngSwitchCase="status">
+        <chequered-flag *ngIf="item.finished"></chequered-flag>
+        <span *ngIf="!item.finished && item.pit" class="pit">PIT</span>
+    </template>
+</td>

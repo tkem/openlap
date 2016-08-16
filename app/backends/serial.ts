@@ -2,12 +2,13 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Cordova, Plugin } from 'ionic-native';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer, NextObserver } from 'rxjs/Observer';
-import { Subject } from 'rxjs/Subject';
+import { Peripheral } from '../carrera';
 
-import { Backend, Peripheral } from './backend';
+import { Observable, Observer, NextObserver, Subject } from '../rxjs';
+
 import { Logger } from '../providers';
+
+import { Backend } from './backend';
 
 const BAUD_RATE = 19200;
 

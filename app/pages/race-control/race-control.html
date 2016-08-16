@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <span [ngSwitch]="options.mode">
+        <template ngSwitchCase="practice">Free Practice</template>
+        <template ngSwitchCase="qualifying">Qualifying</template>
+        <template ngSwitchCase="race">Race</template>
+      </span>
+      <span [ngSwitch]="options.mode" style="float: right">
+        <template ngSwitchCase="qualifying">
+          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+          <span>{{session.timer | async | time:'m:ss'}}</span>
+          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+        </template>
+        <template ngSwitchCase="race">
+          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+          <span>Lap {{session.lap | async}}/{{options.laps}}</span>
+          <span *ngIf="options.time">{{session.timer | async | time:'m:ss'}}</span>
+          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+        </template>
+      </span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <leaderboard [fields]="fields | async" [items]="ranking | async">
+  </leaderboard>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar text-center transparent>
+    <startlight tappable (click)="cu.toggleStart()" [count]="start | async" [blink]="blink | async"></startlight>
+  </ion-toolbar>
+</ion-footer>

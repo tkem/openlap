@@ -1,8 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { RaceControl, Storage } from '../../providers';
-
-import { Cordova, Plugin } from 'ionic-native';
+import { Logger, Settings } from '../../providers';
 
 @Component({
   templateUrl: 'build/pages/colors/colors.html'
@@ -11,15 +9,20 @@ export class ColorsPage implements OnDestroy {
 
   colors: any[];
 
-  constructor(private rc: RaceControl, private storage: Storage) {
-    console.log('RC Colors:', rc.colors);
-    this.colors = rc.colors.map((color) => { return { value: color } });
-    console.log('Colors:', this.colors);
-  }
+  constructor(private logger: Logger, private settings: Settings) {}
   
+  ngOnInit() {
+    this.settings.get('colors').take(1).toPromise().then(colors => {
+      this.colors = colors.map(value => ({ value: value }));
+    }).catch(error => {
+      this.logger.error('Error getting colors', error);
+    });
+  }
+
   ngOnDestroy() {
-    this.rc.colors = this.colors.map((color) => color.value);
-    this.storage.set('colors', this.rc.colors);
+    this.settings.set('colors', this.colors.map(item => item.value)).catch(error => {
+      this.logger.error('Error setting colors', error);
+    });
   }
 
   reorderItems(indexes) {

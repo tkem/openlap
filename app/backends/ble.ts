@@ -4,13 +4,13 @@ import { Platform } from 'ionic-angular';
 
 import { BLE } from 'ionic-native';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer, NextObserver } from 'rxjs/Observer';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Peripheral } from '../carrera';
 
-import { Backend, Peripheral } from './backend';
+import { Observable, Observer, NextObserver, Subject, Subscription } from '../rxjs';
+
 import { Logger } from '../providers';
+
+import { Backend } from './backend';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
 const OUTPUT_UUID = '39df8888-b1b4-b90b-57f1-7144ae4e4a6a';

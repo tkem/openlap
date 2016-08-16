@@ -1,36 +1,39 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, OpaqueToken, Optional } from '@angular/core';
 
-import { Storage } from './storage';
+import { Storage } from 'ionic-angular';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { Observable, ReplaySubject } from '../rxjs';
+
+export const DEFAULT_SETTINGS = new OpaqueToken('app.default.settings');
 
 @Injectable()
 export class Settings {
 
+  private defaults = {};
+
   private subjects = {};
 
-  constructor(private storage: Storage) {}
-
-  get(key: string, fallback?: any): Observable<any> {
-    if (key in this.subjects) {
-      return this.subjects[key].map((value) => value === undefined ? fallback : value);
-    } else {
-      const subject = this.subjects[key] = new BehaviorSubject<any>(undefined);
-      this.storage.get(key).then((value) => {
-        console.log(key, value, fallback);
-        subject.next(value);
-      }).catch((error) => {
-        subject.error(error);
-      });
-      return subject.map((value) => value === undefined ? fallback : value);
+  constructor(private storage: Storage, @Optional() @Inject(DEFAULT_SETTINGS) defaults) {
+    if (defaults) {
+      this.defaults = defaults;
     }
   }
 
+  get(key: string): Observable<any> {
+    let subject = this.subjects[key];
+    if (!subject) {
+      subject = this.subjects[key] = new ReplaySubject<any>(1);
+      this.storage.getJson(key).then(value => {
+        subject.next(value !== null ? value : this.defaults[key])
+      }).catch(error => {
+        subject.error(error)
+      });
+    }
+    return subject;
+  }
+
   set(key: string, value: any): Promise<void> {
-    console.log('Update settings: ', key, value);
-    return this.storage.set(key, value).then(() => {
+    return this.storage.setJson(key, value).then(() => {
       const subject = this.subjects[key];
       if (subject) {
         subject.next(value);
@@ -41,7 +44,7 @@ export class Settings {
   clear() {
     return this.storage.clear().then(() => {
       for (let key of Object.keys(this.subjects)) {
-        this.subjects[key].next(null);
+        this.subjects[key].next(this.defaults[key]);
       }
     });
   }

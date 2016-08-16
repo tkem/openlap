@@ -41,7 +41,7 @@ const TIME_FORMATS = {
 @Injectable()
 export class TimePipe implements PipeTransform {
   transform(value: number, pattern: string = 'h:mm:ss'): string {
-    if (value === null || value === undefined) {
+    if (value === null || value === undefined || Number.isNaN(value)) {
       return null;
     } else if (pattern in TIME_FORMATS) {
       return TIME_FORMATS[pattern](value >= 0 ? value : 0);

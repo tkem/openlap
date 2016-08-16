@@ -35,7 +35,7 @@ class LoggingPopover {
   constructor(public logger: Logger, private settings: Settings, private view: ViewController) {}
 
   ngOnInit() {
-    this.subscription = this.settings.get('logging', {}).subscribe({
+    this.subscription = this.settings.get('logging').subscribe({
       next: (logging) => {
         this.logger.info('Logging settings: ', logging);
         this.logging = logging;

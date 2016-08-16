@@ -1,18 +1,12 @@
-import { Component, NgZone, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { ControlUnit, Peripheral } from '../../carrera';
 
-import { ControlUnit, Logger } from '../../providers';
+import { ArrayObservable, BehaviorSubject, Observable } from '../../rxjs';
 
-import { Backend, Peripheral } from '../../backends';
+import { Backend } from '../../backends';
 
-import { MainPage } from '../../pages';
-
-import { Observable } from 'rxjs/Observable';
-import { ArrayObservable } from 'rxjs/observable/ArrayObservable';
-
-import 'rxjs/add/operator/mergeAll';
-import 'rxjs/add/operator/scan';
+import { CONTROL_UNIT_SUBJECT } from '../../providers';
 
 @Component({
   templateUrl: 'build/pages/connection/connection.html'
@@ -21,7 +15,7 @@ export class ConnectionPage {
 
   items: Observable<Peripheral[]>;
 
-  constructor(private cu: ControlUnit, private logger: Logger, private nav: NavController,
+  constructor(@Inject(CONTROL_UNIT_SUBJECT) private cus: BehaviorSubject<ControlUnit>,
               @Inject(Backend) backends: Backend[])
   {
     this.items = ArrayObservable.create(backends).mergeAll().scan(
@@ -29,11 +23,12 @@ export class ConnectionPage {
     );
   }
 
-  onClick(item: Peripheral) {
-    this.cu.connect(item);
-    if (!this.nav.canGoBack()) {
-      // TODO: wait for cu.state == 'connected'?
-      this.nav.setRoot(MainPage);
-    };
+  onClick(peripheral: Peripheral) {
+    if (this.cus.value) {
+      this.cus.value.disconnect();
+    }
+    const cu = new ControlUnit(peripheral);
+    this.cus.next(cu);
+    cu.connect();
   }
 }

@@ -1,43 +1,10 @@
 <table [ngClass]="mode" [class.pitstop]="pitlane">
-  <thead [ngSwitch]="mode">
-    <tr *ngSwitchCase="'race'">
-      <th class="position" text-left>POS</th>
-      <th text-left>NAME</th>
-      <th text-right>TIME</th>
-      <th class="time" text-right>BEST LAP</th>
-      <th class="time" text-right>LAP TIME</th>
-      <th class="count" text-right>LAPS</th>
-      <th *ngIf="pitlane" class="count" text-right>PITS</th>
-      <th *ngIf="pitlane" class="gauge" text-left>FUEL</th>
-      <th class="status" text-left></th>
-    </tr>
-    <tr *ngSwitchDefault>
-      <th class="position" text-left>POS</th>
-      <th text-left>NAME</th>
-      <th class="time" text-right>BEST LAP</th>
-      <th class="time" text-right>GAP</th>
-      <th class="time" text-right>INT</th>
-      <th class="time" text-right>LAP TIME</th>
-      <th class="count" text-right>LAPS</th>
-      <th *ngIf="pitlane" class="gauge" text-left>FUEL</th>
-      <th class="status" text-left></th>
-    </tr>
+  <thead>
+    <tr head [fields]="fields"></tr>
   </thead>
-  <tbody [ngSwitch]="mode">
-    <template ngSwitchCase="practice">
-      <tr practice *ngFor="let item of ranking; let i = index;"  
-          [item]="item" [index]="i" [items]="ranking" [fuel]="pitlane ? fuel[item.id] : null" [bestlap]="bestlap">
-      </tr>
-    </template>
-    <template ngSwitchCase="qualifying">
-      <tr qualifying *ngFor="let item of ranking; let i = index;" 
-          [item]="item" [index]="i" [items]="ranking" [fuel]="pitlane ? fuel[item.id] : null" [bestlap]="bestlap">
-      </tr>
-    </template>
-    <template ngSwitchCase="race">
-      <tr race *ngFor="let item of ranking; let i = index;" 
-          [item]="item" [index]="i" [items]="ranking" [fuel]="pitlane ? fuel[item.id] : null" [bestlap]="bestlap">
-      </tr>
-    </template>
+  <tbody>
+    <tr item *ngFor="let item of items; let i = index;"  
+        [fields]="fields" [item]="item" [index]="i" [items]="items" [bestlap]="bestlap">
+    </tr>
   </tbody>
 </table>
