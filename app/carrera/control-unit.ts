@@ -66,6 +66,7 @@ export class ControlUnit {
   }
 
   connect() {
+    this.state.next('connecting');
     this.subscription = this.data.connect();
   }
 

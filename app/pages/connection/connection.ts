@@ -28,7 +28,7 @@ export class ConnectionPage {
       this.cus.value.disconnect();
     }
     const cu = new ControlUnit(peripheral);
-    this.cus.next(cu);
     cu.connect();
+    this.cus.next(cu);
   }
 }

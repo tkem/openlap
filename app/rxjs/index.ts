@@ -36,6 +36,7 @@ import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/toPromise';
