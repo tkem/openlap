@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Logger, Settings } from '../../providers';
+import { Logger, Settings } from '../../../providers';
 
 @Component({
-  templateUrl: 'build/pages/colors/colors.html'
+  templateUrl: 'build/pages/settings/colors/colors.html'
 })
 export class ColorsPage implements OnDestroy {
 
@@ -25,9 +25,4 @@ export class ColorsPage implements OnDestroy {
     });
   }
 
-  reorderItems(indexes) {
-    let element = this.colors[indexes.from];
-    this.colors.splice(indexes.from, 1);
-    this.colors.splice(indexes.to, 0, element);
-  }
 }

@@ -5,6 +5,7 @@ import { AlertController, PopoverController, ViewController } from 'ionic-angula
 import { Logger, Settings } from '../../providers';
 
 import { AboutPage } from './about/about';
+import { ColorsPage } from './colors/colors';
 import { LicensesPage } from './licenses/licenses';
 import { LoggingPage } from './logging/logging';
 import { SpeechPage } from './speech/speech';
@@ -49,6 +50,7 @@ class SettingsPopover {
   templateUrl: 'build/pages/settings/settings.html',
 })
 export class SettingsPage {
+  colorsPage = ColorsPage;
   speechPage = SpeechPage;
   licensesPage = LicensesPage;
   loggingPage = LoggingPage;

@@ -1,5 +1,4 @@
 export * from './car-setup/car-setup';
-export * from './colors/colors';
 export * from './connection/connection';
 export * from './drivers/drivers';
 export * from './qualifying-settings/qualifying-settings';

@@ -18,7 +18,6 @@ import * as pages from './pages';
   templateUrl: 'build/app.html'
 })
 export class OpenLapApp implements OnInit {
-  colorsPage = pages.ColorsPage;
   driversPage = pages.DriversPage;
   carSetupPage = pages.CarSetupPage;
   connectionPage = pages.ConnectionPage;
