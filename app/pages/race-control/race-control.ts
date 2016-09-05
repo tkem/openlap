@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { NavParams } from 'ionic-angular';
 
@@ -109,17 +109,20 @@ function createSession(cu: ControlUnit, settings: Settings, options: any) {
     ).share();
   }).share();
 
+  const laps = options.laps ? parseInt(options.laps) : null;
   const lap = grid.mergeAll().scan((lap, event) => {
     // TODO: get from times directly?
     if (lap < event.laps) {
       lap = event.laps;
-      if (options.laps && lap >= options.laps) {
+      if (laps && lap >= laps) {
         finished.next(true);
       }
       cu.setLap(lap);
     }
     return lap;
-  }, 0).startWith(0).distinctUntilChanged();
+  }, 0).share().startWith(0).distinctUntilChanged().map(lap => {
+    return <[number, number]>[lap, laps];
+  });
 
   const realTimer = Observable.interval(1000).map(() => {
     const delta = Math.max(0, endTime - Date.now());
@@ -145,7 +148,15 @@ function createSession(cu: ControlUnit, settings: Settings, options: any) {
 }
 
 @Component({
-  directives: [ChequeredFlag, Leaderboard, Startlight],
+  selector: 'lap',
+  template: '{{value[0]}}<span *ngIf="value[1]">/{{value[1]}}</span>'
+})
+class Lap {
+  @Input() value: [number, number];
+}
+
+@Component({
+  directives: [ChequeredFlag, Lap, Leaderboard, Startlight],
   pipes: [TimePipe],
   providers: [CONTROL_UNIT_PROVIDER],
   templateUrl: 'build/pages/race-control/race-control.html',
@@ -163,7 +174,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   session: {
     grid: Observable<Observable<Car>>,
     finished: Observable<boolean>,
-    lap: Observable<number>,
+    lap: Observable<[number, number]>,
     bestlap: Observable<Car>,
     timer: Observable<number>,
     start: () => void
@@ -210,20 +221,23 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return ranks;
     });
 
-    this.events =  this.session.grid.map(obs => obs.pairwise()).mergeAll().map(([prev, curr]): [string, Car] => {
-      if (prev.finished !== curr.finished) {
-        return ['finished', curr];
-      // TODO: personal best?
-//      } else if (curr.lastLap === bestlap && curr.lastLap != prev.lastLap && curr.laps >= 3) {
-//        return ['bestlap', curr];
-      } else if (prev.fuel >= 3 && curr.fuel < 3) {
-        return ['lowfuel', curr];
-      } else {
-        return null;
-      }
-    }).merge(this.session.bestlap.filter(car => car && car.laps >= 3).map((car): [string, Car] => {
-      return ['bestlap', car];
-    })).filter(event => !!event);
+    this.events = Observable.merge(
+      this.session.grid.map(obs => obs.pairwise()).mergeAll().filter(([prev, curr]) => {
+        // TODO: driver finished, driver best lap, ...
+        return prev.fuel >= 3 && curr.fuel < 3;
+      }).map(([prev, curr]) => {
+        return <[string, Car]>['lowfuel', curr];
+      }),
+      this.session.bestlap.filter(car => car && car.laps >= 3).map((car): [string, Car] => {
+        return <[string, Car]>['bestlap', car];
+      }),
+      this.session.lap.filter(([lap, laps]) => lap === laps - 1).map(() => {
+        return <[string, Car]>['finallap', null];
+      }),
+      this.session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
+        return <[string, Car]>['finished', null];
+      })
+    );
 
     // TODO: move to ngOnInit
     start.take(1).toPromise().then(value => {
@@ -239,7 +253,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.subscription = this.events.combineLatest(this.settings.get('speech')).subscribe(([[event, car], speech]) => {
       console.log('New race event: ' + event, car);
       if (speech.enabled && speech[event]) {
-        this.speech.speak(speech[event], car.driver);
+        this.speech.speak(speech[event], car ? car.driver : {});
       }
     });
   }

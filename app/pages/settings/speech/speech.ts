@@ -25,6 +25,6 @@ export class SpeechPage implements OnDestroy {
   }
 
   speak(text) {
-    this.speech.speak(text, {name: 'Driver name'});
+    this.speech.speak(text, {name: 'Driver'});
   }
 }

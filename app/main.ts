@@ -36,9 +36,10 @@ const APP_DEFAULT_SETTINGS = {
   },
   speech: {
     enabled: false,
-    'bestlap': '{name}: Fastest lap!',
-    'finished': '{name}: Finished!',
-    'lowfuel': '{name}: Low fuel!'
+    finished: 'Race finished!',
+    finallap: 'Final lap!',
+    bestlap: '{name}: Fastest lap!',
+    lowfuel: '{name}: Low fuel!'
   }
 };
 

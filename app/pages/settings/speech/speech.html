@@ -12,33 +12,37 @@
       <ion-label>Enable speech</ion-label>
       <ion-toggle [(ngModel)]="options.enabled"></ion-toggle>
     </ion-item>
-
     <ion-item>
-      <ion-label>Fastest lap</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.bestlap" clearInput>
-      </ion-input>
-      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.bestlap)">
-        <ion-icon name="volume-up"></ion-icon>
-      </button>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Race finished</ion-label>
+      <ion-label floating>Race finished</ion-label>
       <ion-input [disabled]="!options.enabled" [(ngModel)]="options.finished" clearInput>
       </ion-input>
       <button [disabled]="!options.enabled" clear item-right (click)="speak(options.finished)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
-
     <ion-item>
-      <ion-label>Low fuel</ion-label>
+      <ion-label floating>Final lap</ion-label>
+      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.finallap" clearInput>
+      </ion-input>
+      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.finallap)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Fastest lap</ion-label>
+      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.bestlap" clearInput>
+      </ion-input>
+      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.bestlap)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Low fuel</ion-label>
       <ion-input [disabled]="!options.enabled" [(ngModel)]="options.lowfuel" clearInput>
       </ion-input>
       <button [disabled]="!options.enabled" clear item-right (click)="speak(options.lowfuel)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
-
   </ion-list>
 </ion-content>

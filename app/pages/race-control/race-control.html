@@ -17,7 +17,7 @@
         </template>
         <template ngSwitchCase="race">
           <chequered-flag *ngIf="session.finished | async"></chequered-flag>
-          <span>Lap {{session.lap | async}}/{{options.laps}}</span>
+          <span>Lap <lap [value]="session.lap | async"></lap></span>
           <span *ngIf="options.time">{{session.timer | async | time:'m:ss'}}</span>
           <chequered-flag *ngIf="session.finished | async"></chequered-flag>
         </template>

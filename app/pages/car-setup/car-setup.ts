@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 
 import { NavParams } from 'ionic-angular';
 
@@ -37,7 +37,7 @@ export class CarSetupPage {
 
   private subject = new Subject<{type: string, id: number}>();
   
-  constructor(private cu: ControlUnit) {
+  constructor(private cu: ControlUnit, private ref: ChangeDetectorRef) {
     // TODO: is this kind of single debounce correct for multiple individual ranges/types?
     // TODO: move to ngOnInit(), unsibscribe in destroy?
     this.subject.debounceTime(400).subscribe((event) => {
@@ -63,6 +63,7 @@ export class CarSetupPage {
         model[type] = value;
       });
     }
+    this.ref.detectChanges();
     this.subject.next({id: id, type: type});  
   }
 }
