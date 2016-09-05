@@ -8,9 +8,9 @@
 
 <ion-content>
   <ion-list>
-    <a ion-item [href]="item.url" target="_system" *ngFor="let item of items">
+    <a ion-item [href]="item.homepage" target="_system" *ngFor="let item of items">
       <h1>{{item.name}}</h1>
-      <h2>{{item.copyright}}</h2>
+      <h2>{{item.copyright || item.author}}</h2>
       <p>License: {{item.license}}</p>
     </a>
   </ion-list>

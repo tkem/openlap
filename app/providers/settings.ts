@@ -24,7 +24,7 @@ export class Settings {
     if (!subject) {
       subject = this.subjects[key] = new ReplaySubject<any>(1);
       this.storage.getJson(key).then(value => {
-        subject.next(value !== null ? value : this.defaults[key])
+        subject.next(value !== null ? value : this.getDefault(key));
       }).catch(error => {
         subject.error(error)
       });
@@ -41,11 +41,29 @@ export class Settings {
     });
   }
 
+  remove(key: string): Promise<void> {
+    return this.storage.remove(key).then(() => {
+      const subject = this.subjects[key];
+      if (subject) {
+        subject.next(this.getDefault(key));
+      }
+    });
+  }
+
   clear() {
     return this.storage.clear().then(() => {
       for (let key of Object.keys(this.subjects)) {
         this.subjects[key].next(this.defaults[key]);
       }
     });
+  }
+
+  private getDefault(key: string) {
+    const value = this.defaults[key];
+    if (value !== undefined) {
+      return JSON.parse(JSON.stringify(value));
+    } else  {
+      return value;
+    }
   }
 }

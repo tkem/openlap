@@ -6,48 +6,54 @@ import { Component } from '@angular/core';
 export class LicensesPage {
   items = [{
     name: 'Ionic 2',
-    url: 'http://ionic.io/2',
-    copyright: 'Copyright 2015-2016 Drifty Co.',
-    license: 'MIT'
+    copyright: 'Copyright (c) 2015-2016 Drifty Co.',
+    license: 'MIT',
+    homepage: 'http://ionic.io/2',
+
   }, {
     name: 'Angular 2',
-    url: 'https://angular.io/',
     copyright: 'Copyright (c) 2014-2016 Google, Inc.',
-    license: 'MIT'
+    license: 'MIT',
+    homepage: 'https://angular.io/'
   }, {
     name: 'RxJS',
-    url: 'https://github.com/ReactiveX/RxJS',
-    copyright: 'Copyright 2015-2016 Netflix, Inc., Microsoft Corp. and contributors',
-    license: 'Apache-2.0'
+    copyright: 'Copyright (c) 2015-2016 Netflix, Inc., Microsoft Corp. and contributors',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/ReactiveX/RxJS'
   }, {
     name: 'Apache Cordova',
-    url: 'https://cordova.apache.org/',
-    copyright: 'Copyright © 2012, 2013, 2015 The Apache Software Foundation',
-    license: 'Apache-2.0'
+    copyright: 'Copyright (c) 2012, 2013, 2015 The Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://cordova.apache.org/'
   }, {
-    name: 'cordova-plugin-appversion',
-    url: 'https://github.com/Rareloop/cordova-plugin-app-version',
-    copyright: 'Copyright (c) 2015 Rareloop Ltd',
-    license: 'MIT'
+    name: 'cordova-plugin-app-version',
+    author: 'whiteoctober',
+    license: 'MIT',
+    homepage: 'https://github.com/whiteoctober/cordova-plugin-app-version#readme'
   }, {
     name: 'cordova-plugin-ble-central',
-    url: 'https://github.com/don/cordova-plugin-ble-central',
-    copyright: 'Copyright 2014-2016 Don Coleman',
+    url: 'https://github.com/don/cordova-plugin-ble-central#readme',
+    author: 'Don Coleman <don.coleman@gmail.com>',
     license: 'Apache-2.0'
   }, {
     name: 'cordova-plugin-insomnia',
-    url: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin',
-    copyright: 'Copyright Eddy Verbruggen',
+    url: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme',
+    author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
     license: 'MIT'
   }, {
     name: 'cordova-plugin-tts',
-    url: 'https://github.com/vilic/cordova-plugin-tts',
-    copyright: 'Copyright VILIC VANE',
-    license: 'MIT'
+    author: 'VILIC VANE',
+    license: 'MIT',
+    homepage: 'https://github.com/vilic/cordova-plugin-tts#readme'
+  }, {
+    name: 'cordova-plugin-x-toast',
+    author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
+    license: 'MIT',
+    homepage: 'https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin#readme'
   }, {
     name: 'cordovarduino',
-    url: 'https://github.com/xseignard/cordovarduino',
-    copyright: 'Copyright (c) 2015 Xavier Seignard',
-    license: 'MIT'
+    copyright: 'Xavier Seignard <xavier.seignard@gmail.com>',
+    license: 'MIT',
+    homepage: 'https://github.com/xseignard/cordovarduino#readme'
   }];
 }

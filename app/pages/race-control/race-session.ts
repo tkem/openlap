@@ -12,11 +12,11 @@ export interface Car extends LeaderboardItem{
 
 export class RaceSession {
   grid: Observable<Observable<Car>>;
-  lap: Observable<[number, number]>;
+  lap: Observable<[number, number]>;         // TODO: event?
   
-  finished = new BehaviorSubject(false);
-  bestlap = new BehaviorSubject<Car>(null);
-  timer = Observable.of(0);
+  finished = new BehaviorSubject(false);     // TODO: event?
+  bestlap = new BehaviorSubject<Car>(null);  // TODO: event?
+  timer = Observable.of(0);                  // TODO: event?
 
   private endTime: number;
 
@@ -29,7 +29,6 @@ export class RaceSession {
     const pit = cu.getPit();
     const drivers = settings.get('drivers');
     const colors = settings.get('colors');
-
   
     this.grid = timer.groupBy(([id]) => id, ([id, time]) => time).map(group => {
       const times = group.scan(([prev, lastlap, bestlap, laps, fini]: [number, number, number, number, boolean], time) => {
