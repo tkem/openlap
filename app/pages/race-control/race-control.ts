@@ -12,9 +12,7 @@ import { ChequeredFlag, Leaderboard, LeaderboardItem, Startlight } from '../../c
 
 import { TimePipe } from '../../pipes';
 
-interface Car extends LeaderboardItem {
-  id: number
-}
+import { Car, RaceSession } from './race-session';
 
 const FIELDS = {
   'practice': (mode: number) => {
@@ -40,113 +38,6 @@ const FIELDS = {
   }
 };
 
-function createSession(cu: ControlUnit, settings: Settings, options: any) {
-  let mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
-  let offset: number;
-  let endTime: number;
-  
-  const isFinished = (laps: number) => {
-    if (options.laps && laps >= options.laps) {
-      return true;
-    } else if (endTime && Date.now() >= endTime) {
-      return true;  // FIXME: use timer
-    } else {
-      return false;
-    }
-  }
-
-  const finished = new BehaviorSubject(false);
-  const bestlap = new BehaviorSubject<Car>(null);
-
-  const timer = cu.getTimer().filter(([id, time]) => (mask & (1 << id)) == 0);
-  const fuel = cu.getFuel();
-  const pit = cu.getPit();
-  const drivers = settings.get('drivers');
-  const colors = settings.get('colors');
-  
-  const grid = timer.groupBy(([id]) => id, ([id, time]) => time).map(group => {
-    const times = group.scan(([prev, lastlap, bestlap, laps, fini]: [number, number, number, number, boolean], time) => {
-      if (time > prev) {
-        if (!fini && isFinished(laps + 1)) {
-          mask |= (1 << group.key);
-          cu.setMask(mask);
-          finished.next(true);
-          return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps + 1, true];
-        } else {
-          return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps + 1, fini];
-        }
-      } else {
-        return [time, NaN, bestlap, laps, fini];
-      }
-    }, [NaN, NaN, NaN, 0, false]);
-    // TODO: count when starting from pitlane, memoize lap for stats?
-    const pits = pit.map(mask => (mask & (1 << group.key)) != 0).distinctUntilChanged().scan(
-      ([count, flag]: [number, boolean], pit: boolean) => {
-        return [pit ? count + 1 : count, pit]
-      }, [0, false]);
-    return times.combineLatest(
-      pits,
-      fuel.map(fuel => fuel[group.key]).distinctUntilChanged(),
-      drivers.map(drivers => drivers[group.key]),
-      colors.map(colors => colors[group.key])
-    ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel, driver, color]) => ({
-      id: group.key,
-      driver: driver,
-      color: color,
-      time: time - (offset || (offset = time)),  // TODO: reconnect, CU timer reset...
-      lastLap: lastlap,
-      bestLap: bestlap,
-      laps: laps,
-      fuel: fuel,
-      pits: <number>pits,
-      pit: <boolean>pit,
-      finished: fini
-    })).do(car => {
-      if (car.bestLap && (!bestlap.value || car.bestLap < bestlap.value.bestLap)) {
-        bestlap.next(car);
-      }
-    }
-    ).share();
-  }).share();
-
-  const laps = options.laps ? parseInt(options.laps) : null;
-  const lap = grid.mergeAll().scan((lap, event) => {
-    // TODO: get from times directly?
-    if (lap < event.laps) {
-      lap = event.laps;
-      if (laps && lap >= laps) {
-        finished.next(true);
-      }
-      cu.setLap(lap);
-    }
-    return lap;
-  }, 0).share().startWith(0).distinctUntilChanged().map(lap => {
-    return <[number, number]>[lap, laps];
-  });
-
-  const realTimer = Observable.interval(1000).map(() => {
-    const delta = Math.max(0, endTime - Date.now());
-    if (delta === 0) {
-      finished.next(true);
-    }
-    return delta;
-  }).share().startWith(parseInt(options.time) * 60 * 1000);
-
-  return {
-    grid: grid,
-    finished: finished,
-    lap: lap,
-    bestlap: bestlap,
-    timer: options.time ? realTimer : Observable.of(0),
-    start: () => {
-      endTime = Date.now() + parseInt(options.time) * 60 * 1000;
-      cu.reset(); // FIXME: cu.reset() no effect if start light is on?
-      cu.setMask(mask);  // TODO: ditto
-      cu.clearPosition();  // TODO: not sure...
-    }
-  }
-}
-
 @Component({
   selector: 'lap',
   template: '{{value[0]}}<span *ngIf="value[1]">/{{value[1]}}</span>'
@@ -171,14 +62,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   blink: Observable<boolean>;
   timer: Observable<number>;
 
-  session: {
-    grid: Observable<Observable<Car>>,
-    finished: Observable<boolean>,
-    lap: Observable<[number, number]>,
-    bestlap: Observable<Car>,
-    timer: Observable<number>,
-    start: () => void
-  };
+  session: RaceSession;
 
   private ranking: Observable<Car[]>;
 
@@ -205,7 +89,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return state !== 'connected' || value >= 8;
     });
 
-    this.session = createSession(cu, settings, this.options);
+    this.session = new RaceSession(cu, settings, this.options);
 
     this.ranking = this.session.grid.mergeAll().scan((grid, event) => {
       const newgrid = [...grid];
