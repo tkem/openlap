@@ -74,7 +74,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.logger.info('Main page', cu, params.data);
     this.options = params.data;
 
-    let start = this.cu.getStart().distinctUntilChanged().do(value => console.log('Start: ' + value));
+    let start = this.cu.getStart().distinctUntilChanged();
     let state = this.cu.getState().distinctUntilChanged();
     let mode = this.cu.getMode().distinctUntilChanged().do(value => console.log('Mode: ' + value));
 
@@ -108,9 +108,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.events = Observable.merge(
       this.session.grid.map(obs => obs.pairwise()).mergeAll().filter(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
-        return prev.fuel >= 3 && curr.fuel < 3;
+        return prev.fuel > curr.fuel && curr.fuel < 3;
       }).map(([prev, curr]) => {
-        return <[string, Car]>['lowfuel', curr];
+        return <[string, Car]>['fuel' + curr.fuel, curr];
       }),
       this.session.bestlap.filter(car => car && car.laps >= 3).map((car): [string, Car] => {
         return <[string, Car]>['bestlap', car];
@@ -122,15 +122,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
         return <[string, Car]>['finished', null];
       })
     );
-
-    // TODO: move to ngOnInit
-    start.take(1).toPromise().then(value => {
-      // FIXME: wait until startlights
-      this.session.start();
-      if ((this.options.mode == 'qualifying' || this.options.mode == 'race') && value === 0) {
-        this.cu.toggleStart();
-      }
-    });
   }
 
   ngOnInit() {
@@ -140,6 +131,23 @@ export class RaceControlPage implements OnDestroy, OnInit {
         this.speech.speak(speech[event], car ? car.driver : {});
       }
     });
+
+    if (this.options.mode != 'practice') {
+      const session = this.session;
+      const start = this.cu.getStart();
+      start.take(1).toPromise().then(value => {
+        if (value === 0) {
+          this.cu.toggleStart();
+        }
+        // wait until startlight goes off; TODO: subscribe/unsibscribe?
+        this.cu.getStart().pairwise().filter(([prev, curr]) => {
+          return prev != 0 && curr == 0;
+        }).take(1).toPromise().then(() => {
+          this.logger.info('Start ' + this.options.mode);
+          session.start();
+        });
+      });
+    }
   }
 
   ngOnDestroy() {

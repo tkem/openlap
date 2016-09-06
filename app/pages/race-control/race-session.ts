@@ -20,6 +20,7 @@ export class RaceSession {
 
   private endTime: number;
 
+  // TODO: move settings handling/combine to race-control!
   constructor(private cu: ControlUnit, private settings: Settings, private options: any) {
     let mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
     let offset: number;
@@ -91,22 +92,27 @@ export class RaceSession {
     });
 
     if (options.time) {
+      const time = parseInt(options.time) * 60 * 1000;
       this.timer = Observable.interval(1000).map(() => {
-        const delta = Math.max(0, this.endTime - Date.now());
-        if (delta === 0) {
-          this.finished.next(true);
+        if (this.endTime) {
+          const delta = Math.max(0, this.endTime - Date.now());
+          if (delta === 0) {
+            this.finished.next(true);
+          }
+          return delta;
+        } else {
+          return time;
         }
-        return delta;
-      }).share().startWith(parseInt(options.time) * 60 * 1000);
+      }).share().startWith(time);
     }
 
+    this.cu.reset(); // FIXME: cu.reset() no effect if start light is on?
     this.cu.setMask(mask);  // startlight?
   }
 
   start() {
     this.endTime = Date.now() + parseInt(this.options.time) * 60 * 1000;
-    this.cu.reset(); // FIXME: cu.reset() no effect if start light is on?
-    this.cu.clearPosition();  // TODO: not sure...
+    // this.cu.clearPosition();  // TODO: not sure...
   }
 
   private isFinished = (laps: number) => {

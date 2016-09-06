@@ -39,7 +39,9 @@ const APP_DEFAULT_SETTINGS = {
     finished: 'Race finished!',
     finallap: 'Final lap!',
     bestlap: '{name}: Fastest lap!',
-    lowfuel: '{name}: Low fuel!'
+    fuel2: '{name}: Low fuel!',
+    fuel1: '{name}: Box!',
+    fuel0: '{name}: Box! Box! Box!',
   }
 };
 

@@ -37,10 +37,26 @@
       </button>
     </ion-item>
     <ion-item>
-      <ion-label floating>Low fuel</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.lowfuel" clearInput>
+      <ion-label floating>Fuel < 20%</ion-label>
+      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.fuel2" clearInput>
       </ion-input>
-      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.lowfuel)">
+      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.fuel2)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Fuel < 10%</ion-label>
+      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.fuel1" clearInput>
+      </ion-input>
+      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.fuel1)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>No fuel</ion-label>
+      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.fuel0" clearInput>
+      </ion-input>
+      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.fuel0)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
