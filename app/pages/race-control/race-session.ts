@@ -1,46 +1,73 @@
 import { ControlUnit } from '../../carrera';
 
-import { Settings } from '../../providers';
-
-import { LeaderboardItem } from '../../components';
-
 import { BehaviorSubject, Observable, Subscription } from '../../rxjs';
 
-export interface Car extends LeaderboardItem{
+export interface RaceItem {
   id: number
+  time: number;
+  laps: number;
+  lastLap: number;
+  bestLap: number;
+  fuel?: number;
+  pits?: number;
+  pit?: boolean;
+  finished?: boolean
+}
+
+export interface RaceOptions {
+  mode?: string;
+  laps?: number;
+  time?: number;
+  auto?: boolean;
+  pace?: boolean;
+  slotmode?: boolean;
+}
+
+function timeCompare(lhs: RaceItem, rhs: RaceItem) {
+  return (lhs.bestLap || Infinity) - (rhs.bestLap || Infinity);
+}
+
+function raceCompare(lhs: RaceItem, rhs: RaceItem) {
+  return (rhs.laps - lhs.laps) || (lhs.time - rhs.time);
+}
+
+const COMPARE = {
+  'practice': timeCompare,
+  'qualifying': timeCompare,
+  'race': raceCompare
 }
 
 export class RaceSession {
-  grid: Observable<Observable<Car>>;
+  grid: Observable<Observable<RaceItem>>;
+  ranking: Observable<RaceItem[]>;
   lap: Observable<[number, number]>;         // TODO: event?
   
   finished = new BehaviorSubject(false);     // TODO: event?
-  bestlap = new BehaviorSubject<Car>(null);  // TODO: event?
+  bestlap = new BehaviorSubject<RaceItem>(null);  // TODO: event?
   timer = Observable.of(0);                  // TODO: event?
 
   private endTime: number;
 
   // TODO: move settings handling/combine to race-control!
-  constructor(private cu: ControlUnit, private settings: Settings, private options: any) {
+  constructor(private cu: ControlUnit, private options: RaceOptions) {
     let mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
     let offset: number;
 
     const timer = cu.getTimer().filter(([id, time]) => (mask & (1 << id)) == 0);
     const fuel = cu.getFuel();
     const pit = cu.getPit();
-    const drivers = settings.get('drivers');
-    const colors = settings.get('colors');
   
     this.grid = timer.groupBy(([id]) => id, ([id, time]) => time).map(group => {
       const times = group.scan(([prev, lastlap, bestlap, laps, fini]: [number, number, number, number, boolean], time) => {
         if (time > prev) {
-          if (!fini && this.isFinished(laps + 1)) {
+          ++laps;
+          if (!fini && this.isFinished(laps)) {
             mask |= (1 << group.key);
             cu.setMask(mask);
             this.finished.next(true);
-            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps + 1, true];
+            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, true];
           } else {
-            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps + 1, fini];
+            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, fini];
           }
         } else {
           return [time, NaN, bestlap, laps, fini];
@@ -53,13 +80,9 @@ export class RaceSession {
         }, [0, false]);
       return times.combineLatest(
         pits,
-        fuel.map(fuel => fuel[group.key]).distinctUntilChanged(),
-        drivers.map(drivers => drivers[group.key]),
-        colors.map(colors => colors[group.key])
-      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel, driver, color]) => ({
+        fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
+      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel]) => ({
         id: group.key,
-        driver: driver,
-        color: color,
         time: time - (offset || (offset = time)),  // TODO: reconnect, CU timer reset...
         lastLap: lastlap,
         bestLap: bestlap,
@@ -76,7 +99,19 @@ export class RaceSession {
       ).share();
     }).share();
 
-    const laps = options.laps ? parseInt(options.laps) : null;
+
+    const compare = COMPARE[options.mode];
+    this.ranking = this.grid.mergeAll().scan((grid, event) => {
+      const newgrid = [...grid];
+      newgrid[event.id] = event;
+      return newgrid;
+    }, []).map((cars: Array<RaceItem>) => {
+      const ranks = cars.filter(car => !!car); 
+      ranks.sort(compare);
+      return ranks;
+    });
+
+    const laps = options.laps ? options.laps : null;
     this.lap = this.grid.mergeAll().scan((lap, event) => {
       // TODO: get from times directly?
       if (lap < event.laps) {
@@ -92,7 +127,7 @@ export class RaceSession {
     });
 
     if (options.time) {
-      const time = parseInt(options.time) * 60 * 1000;
+      const time = options.time;
       this.timer = Observable.interval(1000).map(() => {
         if (this.endTime) {
           const delta = Math.max(0, this.endTime - Date.now());
@@ -111,15 +146,17 @@ export class RaceSession {
   }
 
   start() {
-    this.endTime = Date.now() + parseInt(this.options.time) * 60 * 1000;
+    this.endTime = Date.now() + this.options.time;
     // this.cu.clearPosition();  // TODO: not sure...
   }
 
-  private isFinished = (laps: number) => {
-    if (this.options.laps && laps >= parseInt(this.options.laps)) {
+  private isFinished(laps: number) {
+    if (this.options.laps && laps >= this.options.laps) {
       return true;
     } else if (this.endTime && Date.now() >= this.endTime) {
       return true;  // FIXME: use timer
+    } else if (!this.options.slotmode && this.finished.value) {
+      return true;
     } else {
       return false;
     }

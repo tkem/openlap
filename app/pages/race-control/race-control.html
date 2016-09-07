@@ -7,15 +7,17 @@
       <span [ngSwitch]="options.mode">
         <template ngSwitchCase="practice">Free Practice</template>
         <template ngSwitchCase="qualifying">Qualifying</template>
-        <template ngSwitchCase="race">Race</template>
+        <template ngSwitchDefault>Race</template>
       </span>
       <span [ngSwitch]="options.mode" style="float: right">
+        <template ngSwitchCase="practice">
+        </template>
         <template ngSwitchCase="qualifying">
           <chequered-flag *ngIf="session.finished | async"></chequered-flag>
           <span>{{session.timer | async | time:'m:ss'}}</span>
           <chequered-flag *ngIf="session.finished | async"></chequered-flag>
         </template>
-        <template ngSwitchCase="race">
+        <template ngSwitchDefault>
           <chequered-flag *ngIf="session.finished | async"></chequered-flag>
           <span>Lap <lap [value]="session.lap | async"></lap></span>
           <span *ngIf="options.time">{{session.timer | async | time:'m:ss'}}</span>

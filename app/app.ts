@@ -74,11 +74,11 @@ export class OpenLapApp implements OnInit {
 
   startQualifying() {
     this.settings.get('qualifying').take(1).subscribe((options) => {
-      let modal = this.modal.create(pages.QualifyingSettingsPage, options);
+      options.mode = options.mode || 'qualifying';
+      let modal = this.modal.create(pages.RaceSettingsPage, options);
       modal.onDidDismiss((options) => {
         if (options) {
           this.settings.set('qualifying', options).then(() => {
-            options.mode = 'qualifying';  // FIXME
             this.nav.setRoot(pages.RaceControlPage, options);
           });
         }
@@ -89,11 +89,11 @@ export class OpenLapApp implements OnInit {
 
   startRace() {
     this.settings.get('race').take(1).subscribe((options) => {
+      options.mode = options.mode || 'race';
       let modal = this.modal.create(pages.RaceSettingsPage, options);
       modal.onDidDismiss((options) => {
         if (options) {
           this.settings.set('race', options).then(() => {
-            options.mode = 'race';  // FIXME
             this.nav.setRoot(pages.RaceControlPage, options);
           });
         }

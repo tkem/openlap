@@ -1,6 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Race</ion-title>
+    <ion-title [ngSwitch]="mode">
+      <template ngSwitchCase="practice">Practice</template>
+      <template ngSwitchCase="qualifying">Qualifying</template>
+      <template ngSwitchDefault>Race</template>
+    </ion-title>
     <ion-buttons left>
       <button (click)="onCancel()">
         <ion-icon name="close"></ion-icon>
@@ -17,15 +21,19 @@
 <ion-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
     <ion-list>
-      <ion-item>
+      <ion-item *ngIf="mode == 'race'">
         <ion-label light>Laps</ion-label>
-        <ion-input formControlName="laps" type="number" min="1" text-right padding-right>
+        <ion-input formControlName="laps" type="number" text-right padding-right>
         </ion-input>
       </ion-item>
       <ion-item>
-        <ion-label light>Time (minutes)</ion-label>
-        <ion-input formControlName="time" type="number" min="1" text-right padding-right>
+        <ion-label light>Time</ion-label>
+        <ion-input formControlName="time" placeholder="HH:MM:SS" text-right padding-right>
         </ion-input>
+      </ion-item>
+      <ion-item *ngIf="mode == 'race'">
+        <ion-label light>Finish all laps</ion-label>
+        <ion-toggle formControlName="slotmode" [disabled]="!form.value.laps"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label light>Autonomous Car</ion-label>

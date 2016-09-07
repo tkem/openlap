@@ -12,7 +12,7 @@ import { ChequeredFlag, Leaderboard, LeaderboardItem, Startlight } from '../../c
 
 import { TimePipe } from '../../pipes';
 
-import { Car, RaceSession } from './race-session';
+import { RaceSession } from './race-session';
 
 const FIELDS = {
   'practice': (mode: number) => {
@@ -64,9 +64,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
   session: RaceSession;
 
-  private ranking: Observable<Car[]>;
+  private ranking: Observable<LeaderboardItem[]>;
 
-  private events: Observable<[string, Car]>;
+  private events: Observable<[string, any]>;
 
   private subscription: Subscription;
 
@@ -89,20 +89,15 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return state !== 'connected' || value >= 8;
     });
 
-    this.session = new RaceSession(cu, settings, this.options);
+    this.session = new RaceSession(cu, this.options);
 
-    this.ranking = this.session.grid.mergeAll().scan((grid, event) => {
-      const newgrid = [...grid];
-      newgrid[event.id] = event;
-      return newgrid;
-    }, []).map((cars: Array<Car>) => {
-      const ranks = cars.filter(car => !!car); 
-      if (this.options.mode == 'race') {
-        ranks.sort((lhs, rhs) => (rhs.laps - lhs.laps) || (lhs.time - rhs.time));
-      } else {
-        ranks.sort((lhs, rhs) => (lhs.bestLap || Infinity) - (rhs.bestLap || Infinity))
-      }
-      return ranks;
+    this.ranking = this.session.ranking.combineLatest(
+      settings.get('drivers'),
+      settings.get('colors')
+    ).map(([ranks, drivers, colors]) => {
+      return ranks.map(item => {
+        return Object.assign({}, item, { driver: drivers[item.id], color: colors[item.id] });
+      });
     });
 
     this.events = Observable.merge(
@@ -110,25 +105,27 @@ export class RaceControlPage implements OnDestroy, OnInit {
         // TODO: driver finished, driver best lap, ...
         return prev.fuel > curr.fuel && curr.fuel < 3;
       }).map(([prev, curr]) => {
-        return <[string, Car]>['fuel' + curr.fuel, curr];
+        return ['fuel' + curr.fuel, curr.id];
       }),
-      this.session.bestlap.filter(car => car && car.laps >= 3).map((car): [string, Car] => {
-        return <[string, Car]>['bestlap', car];
+      this.session.bestlap.filter(car => car && car.laps >= 3).map(car => {
+        return ['bestlap', car.id];
       }),
       this.session.lap.filter(([lap, laps]) => lap === laps - 1).map(() => {
-        return <[string, Car]>['finallap', null];
+        return ['finallap', null];
       }),
       this.session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
-        return <[string, Car]>['finished', null];
+        return ['finished', null];
       })
-    );
+    ).withLatestFrom(settings.get('drivers')).map(([[event, id], drivers]) => {
+      return <[string, any]>[event, id !== null ? drivers[id] : null];
+    });
   }
 
   ngOnInit() {
-    this.subscription = this.events.combineLatest(this.settings.get('speech')).subscribe(([[event, car], speech]) => {
-      console.log('New race event: ' + event, car);
+    this.subscription = this.events.combineLatest(this.settings.get('speech')).subscribe(([[event, driver], speech]) => {
+      console.log('New race event: ' + event, driver);
       if (speech.enabled && speech[event]) {
-        this.speech.speak(speech[event], car ? car.driver : {});
+        this.speech.speak(speech[event], driver || {});
       }
     });
 
@@ -143,7 +140,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
         this.cu.getStart().pairwise().filter(([prev, curr]) => {
           return prev != 0 && curr == 0;
         }).take(1).toPromise().then(() => {
-          this.logger.info('Start ' + this.options.mode);
+          this.logger.info('Start ' + this.options.mode + ' mode');
           session.start();
         });
       });
