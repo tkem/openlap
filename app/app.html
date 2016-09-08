@@ -1,15 +1,15 @@
 <ion-menu [content]="content">
   <ion-content>
     <ion-item-group>
-      <button ion-item menuClose (click)="startPractice()">
+      <button ion-item menuClose [disabled]="!(cu | async)" (click)="startPractice()">
         <ion-icon name="speedometer" item-left></ion-icon>
         Free Practice
       </button>
-      <button ion-item menuClose (click)="startQualifying()">
+      <button ion-item menuClose [disabled]="!(cu | async)" (click)="startQualifying()">
         <ion-icon name="stopwatch" item-left></ion-icon>
         Qualifying
       </button>
-      <button ion-item menuClose (click)="startRace()">
+      <button ion-item menuClose [disabled]="!(cu | async)" (click)="startRace()">
         <ion-icon name="trophy" item-left></ion-icon>
         Race
       </button>
@@ -19,7 +19,7 @@
         <ion-icon name="people" item-left></ion-icon>
         Drivers
       </button>
-      <button ion-item menuClose (click)="nav.push(carSetupPage)">
+      <button ion-item menuClose [disabled]="!(cu | async)" (click)="nav.push(carSetupPage)">
         <ion-icon name="build" item-left></ion-icon>
         Car Setup
       </button>

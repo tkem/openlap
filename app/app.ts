@@ -27,7 +27,7 @@ export class OpenLapApp implements OnInit {
 
   private subscription: Subscription;
 
-  constructor(@Inject(CONTROL_UNIT_SUBJECT) private cus: BehaviorSubject<ControlUnit>,
+  constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
               private logger: Logger, private settings: Settings,
               private modal: ModalController, private platform: Platform, private toast: Toast)
   {
@@ -45,7 +45,7 @@ export class OpenLapApp implements OnInit {
       Insomnia.keepAwake();
     });
 
-    this.subscription = this.cus.filter((cu) => !!cu).do(cu => {
+    this.subscription = this.cu.filter((cu) => !!cu).do(cu => {
       this.startPractice();
     }).switchMap(cu => {
       return cu.getState().debounceTime(200).distinctUntilChanged().map(state => [state, cu.peripheral.name]);
@@ -103,8 +103,8 @@ export class OpenLapApp implements OnInit {
   }
 
   exitApp() {
-    if (this.cus.value) {
-      this.cus.value.disconnect();
+    if (this.cu.value) {
+      this.cu.value.disconnect();
     }
     this.logger.info('Exiting application');
     this.platform.exitApp();

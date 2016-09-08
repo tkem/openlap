@@ -170,7 +170,7 @@ class DemoPeripheral implements Peripheral {
         }
         setTimeout(() => {
           if (this.subscriber) {
-            //console.log('Demo connection response');
+            // console.log('Demo connection response to ' + toString(value));
             if (toString(value) == '0') {
               this.subscriber.next(this.version.buffer);
             } else {

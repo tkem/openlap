@@ -9,11 +9,13 @@
 <ion-content>
   <ion-list>
     <button ion-item *ngFor="let item of items | async" 
-            [ngClass]="{selected: item.equals(cus?.value?.peripheral)}" 
+            [ngClass]="{selected: item.equals((cu | async)?.peripheral)}" 
             (click)="onClick(item)">
       <h1>{{item.name}}</h1>
       <h2 *ngIf="item.address">{{item.address}}</h2>
-      <!-- h3 *ngIf="item.equals(cu.peripheral)">{{cu.getVersion() | async}}</h3 -->
+      <h3 *ngIf="item.equals((cu | async)?.peripheral)">
+        {{version | async}}
+      </h3>
     </button>
   </ion-list>
 </ion-content>

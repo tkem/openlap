@@ -113,16 +113,15 @@ export class ControlUnit {
     );
   }
 
-  getVersion() {
-    return Observable.create((subscriber) => {
-      // TODO: timeout?
-      this.data.filter((view) => {
-        return view.toString(0, 1) == '0';
-      }).map((view) => {
-        return view.toString(1, 4);
-      });
-      this.requests.push(DataView.fromString('0'));
+  getVersion(): Observable<string> {
+    // TODO: timeout, retry?
+    const observable = this.data.filter((view) => {
+      return view.toString(0, 1) == '0';
+    }).map((view) => {
+      return view.toString(1, 4);
     });
+    this.requests.push(DataView.fromString('0'));
+    return observable;
   }
 
   reset() {
