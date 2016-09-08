@@ -103,7 +103,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.events = Observable.merge(
       this.session.grid.map(obs => obs.pairwise()).mergeAll().filter(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
-        return prev.fuel > curr.fuel && curr.fuel < 3;
+        return prev.fuel > curr.fuel && curr.fuel < 3 && !curr.finished;
       }).map(([prev, curr]) => {
         return ['fuel' + curr.fuel, curr.id];
       }),
