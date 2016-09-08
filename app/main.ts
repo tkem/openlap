@@ -36,6 +36,7 @@ const APP_DEFAULT_SETTINGS = {
   },
   speech: {
     enabled: false,
+    falsestart: 'False start!',
     finished: 'Race finished!',
     finallap: 'Final lap!',
     bestlap: '{name}: Fastest lap!',

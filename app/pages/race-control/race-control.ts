@@ -115,6 +115,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
       }),
       this.session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
         return ['finished', null];
+      }),
+      start.filter(value => value == 9).map(() => {
+        return ['falsestart', null];
       })
     ).withLatestFrom(settings.get('drivers')).map(([[event, id], drivers]) => {
       return <[string, any]>[event, id !== null ? drivers[id] : null];

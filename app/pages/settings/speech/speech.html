@@ -29,6 +29,14 @@
       </button>
     </ion-item>
     <ion-item>
+      <ion-label floating>False start</ion-label>
+      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.falsestart" clearInput>
+      </ion-input>
+      <button [disabled]="!options.enabled" clear item-right (click)="speak(options.falsestart)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
       <ion-label floating>Fastest lap</ion-label>
       <ion-input [disabled]="!options.enabled" [(ngModel)]="options.bestlap" clearInput>
       </ion-input>
