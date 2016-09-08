@@ -1,9 +1,28 @@
+0.6.0 2016-09-08
+----------------
+
+- Require Android >= version 4.4.
+
+- Add "finish all laps" option to race settings (a.k.a. "slotcar mode"). 
+
+- Add "lock-all" slider to car setup.
+
+- Add more speech notifications.
+
+- Move controller color setup to settings menu.
+
+- Use native ``Toast`` plugin.
+
+- Various refactorings and smaller improvements.
+
+
 0.5.1 2016-08-12
 ----------------
 
 - Add ``cordova-plugin-app-version`` required by ``ionic-native``.
 
 - Add ``android-versionCode`` to ``config.xml``.
+
 
 0.5.0 2016-08-12
 ----------------
