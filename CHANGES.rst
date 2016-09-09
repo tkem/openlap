@@ -1,3 +1,11 @@
+0.6.1 2016-09-09
+----------------
+
+- Race settings usability improvements.
+
+- Upgrade ``ionic-native``.
+
+
 0.6.0 2016-09-08
 ----------------
 
