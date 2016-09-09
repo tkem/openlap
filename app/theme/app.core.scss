@@ -12,3 +12,20 @@
 .item.selected {
     background: color($colors, primary);
 }
+
+ion-input[type=number] {
+    input {
+        text-align: right;
+        &:focus {
+            text-align: left;
+        }
+    }
+}
+
+.picker-opt {
+    color: $text-color;
+}
+
+.picker-opt-selected {
+    color: color($colors, primary) !important;
+}
