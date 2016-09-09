@@ -1,19 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { Cordova, Plugin } from 'ionic-native';
+import { TextToSpeech } from 'ionic-native';
 
 import { Logger } from './logger';
-
-@Plugin({
-  plugin: 'cordova-plugin-tts',
-  pluginRef: 'TTS',
-  repo: 'https://github.com/vilic/cordova-plugin-tts',
-  platforms: ['Android']
-})
-class TTS {
-  @Cordova()
-  static speak(args: string | any): Promise<any> { return; }
-}
 
 const RE = /{(name)}/g;
 
@@ -35,7 +24,7 @@ export class Speech {
     this.promise = this.promise.then(() => {
       if (--this.pending === 0) {
         this.logger.info('Speak ', str);
-        return TTS.speak(str);
+        return TextToSpeech.speak(str);
       } else {
         this.logger.warn('Speech cancelled', str);
       }
