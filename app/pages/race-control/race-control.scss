@@ -1,5 +1,15 @@
-.main-buttons {
-    font-size: 2rem;
+.startlight {
+    min-height: 8rem;
+
+    button {
+        min-height: 8rem;
+        ion-button-effect {
+            display: none;
+        }
+        &.activated {
+            background-color: inherit;
+        }   
+    }   
 }
 
 @media (min-width: 320px) {

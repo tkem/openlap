@@ -34,7 +34,9 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar text-center transparent>
-    <startlight tappable (click)="cu.toggleStart()" [count]="start | async" [blink]="blink | async"></startlight>
+  <ion-toolbar class="startlight" text-center transparent>
+    <button clear padding (click)="cu.toggleStart()">
+      <startlight [count]="start | async" [blink]="blink | async"></startlight>
+    </button>
   </ion-toolbar>
 </ion-footer>
