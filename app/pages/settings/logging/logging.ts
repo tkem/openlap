@@ -7,11 +7,11 @@ import { Logger, LogLevel, Settings } from '../../../providers';
 @Component({
   template: `
     <ion-list>
-      <ion-item>
+      <ion-item no-lines>
         <ion-label>Debug</ion-label>
         <ion-checkbox [(ngModel)]="debugEnabled"></ion-checkbox>
       </ion-item>
-      <button ion-item (click)="logger.clear()">Clear</button>
+      <button ion-item no-lines (click)="logger.clear()">Clear</button>
     </ion-list>
   `
 })

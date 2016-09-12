@@ -7,7 +7,7 @@
 @import 'app.variables';
 
 
-$popover-md-background: #101010;
+$popover-md-background: #282828;
 
 // App Material Design Variables
 // --------------------------------------------------
@@ -107,3 +107,16 @@ $toggle-md-handle-background-color-off: color($colors-md, light) !default;
 // All Sass files that make up this app goes into the app.core.scss file.
 // For simpler CSS overrides, custom app CSS must come after Ionic's CSS.
 @import 'app.core';
+
+
+.menu {
+    .item {
+        border-width: 0;
+    }
+    .item-inner {
+        border-width: 0;
+    }
+    ion-item-group {
+        border-bottom: 1px solid $list-md-border-color;
+    }
+}

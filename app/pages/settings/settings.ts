@@ -12,8 +12,8 @@ import { SpeechPage } from './speech/speech';
 
 @Component({
   template: `
-    <ion-list>
-      <button ion-item (click)="reset()">Reset</button>
+    <ion-list class="menu">
+      <button ion-item no-lines (click)="reset()">Reset</button>
     </ion-list>
   `
 })

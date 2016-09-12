@@ -1,5 +1,5 @@
 <ion-menu [content]="content">
-  <ion-content>
+  <ion-content class="menu">
     <ion-item-group>
       <button ion-item menuClose [disabled]="!(cu | async)" (click)="startPractice()">
         <ion-icon name="speedometer" item-left></ion-icon>
@@ -27,6 +27,8 @@
         <ion-icon name="wifi" item-left></ion-icon>
         Connection
       </button>
+    </ion-item-group>
+    <ion-item-group>
       <button ion-item menuClose (click)="nav.push(settingsPage)">
         <ion-icon name="settings" item-left></ion-icon>
         Settings
