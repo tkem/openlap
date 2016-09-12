@@ -1,3 +1,11 @@
+0.6.2 2016-09-12
+----------------
+
+- Improve startlight usability.
+
+- Improve look of menus.
+
+
 0.6.1 2016-09-09
 ----------------
 
