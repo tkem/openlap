@@ -146,14 +146,16 @@ export class RaceSession {
   }
 
   start() {
-    this.endTime = Date.now() + this.options.time;
-    // this.cu.clearPosition();  // TODO: not sure...
+    if (this.options.time) {
+      this.endTime = Date.now() + this.options.time;
+      // this.cu.clearPosition();  // TODO: not sure...
+    }
   }
 
   private isFinished(laps: number) {
     if (this.options.laps && laps >= this.options.laps) {
       return true;
-    } else if (this.endTime && Date.now() >= this.endTime) {
+    } else if (this.options.time && Date.now() >= this.endTime) {
       return true;  // FIXME: use timer
     } else if (!this.options.slotmode && this.finished.value) {
       return true;
