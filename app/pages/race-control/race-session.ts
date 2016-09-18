@@ -141,14 +141,14 @@ export class RaceSession {
       }).share().startWith(time);
     }
 
-    this.cu.reset(); // FIXME: cu.reset() no effect if start light is on?
-    this.cu.setMask(mask);  // startlight?
+    this.cu.clearPosition();  // TODO: not sure...
+    this.cu.setMask(mask);    // startlight?
+    this.cu.reset();          // FIXME: cu.reset() no effect if start light is on?
   }
 
   start() {
     if (this.options.time) {
       this.endTime = Date.now() + this.options.time;
-      // this.cu.clearPosition();  // TODO: not sure...
     }
   }
 

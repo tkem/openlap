@@ -66,8 +66,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
   private ranking: Observable<LeaderboardItem[]>;
 
-  private events: Observable<[string, any]>;
-
   private subscription: Subscription;
 
   constructor(private cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech, params: NavParams) {
@@ -81,51 +79,63 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.fields = mode.startWith(0).distinctUntilChanged().map(mode => {
       return FIELDS[this.options.mode](mode);
     });
-
     this.start = start.map(value => {
       return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
     });
     this.blink = state.combineLatest(start, (state, value) => {
       return state !== 'connected' || value >= 8;
     });
+  }
 
-    this.session = new RaceSession(cu, this.options);
+  ngOnInit() {
+    this.onStart();
+  }
 
-    this.ranking = this.session.ranking.combineLatest(
-      settings.get('drivers'),
-      settings.get('colors')
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  onStart() {
+    const session = this.session = new RaceSession(this.cu, this.options);
+
+    const events = Observable.merge(
+      session.grid.map(obs => obs.pairwise()).mergeAll().filter(([prev, curr]) => {
+        // TODO: driver finished, driver best lap, ...
+        return prev.fuel > curr.fuel && curr.fuel < 3 && !curr.finished;
+      }).map(([prev, curr]) => {
+        return ['fuel' + curr.fuel, curr.id];
+      }),
+      session.bestlap.filter(car => car && car.laps >= 3).map(car => {
+        return ['bestlap', car.id];
+      }),
+      session.lap.filter(([lap, laps]) => lap === laps - 1).map(() => {
+        return ['finallap', null];
+      }),
+      session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
+        return ['finished', null];
+      }),
+      this.start.filter(value => value == 9).map(() => {
+        return ['falsestart', null];
+      })
+    ).withLatestFrom(this.settings.get('drivers')).map(([[event, id], drivers]) => {
+      return <[string, any]>[event, id !== null ? drivers[id] : null];
+    });
+
+    this.ranking = session.ranking.combineLatest(
+      this.settings.get('drivers'),
+      this.settings.get('colors')
     ).map(([ranks, drivers, colors]) => {
       return ranks.map(item => {
         return Object.assign({}, item, { driver: drivers[item.id], color: colors[item.id] });
       });
     });
 
-    this.events = Observable.merge(
-      this.session.grid.map(obs => obs.pairwise()).mergeAll().filter(([prev, curr]) => {
-        // TODO: driver finished, driver best lap, ...
-        return prev.fuel > curr.fuel && curr.fuel < 3 && !curr.finished;
-      }).map(([prev, curr]) => {
-        return ['fuel' + curr.fuel, curr.id];
-      }),
-      this.session.bestlap.filter(car => car && car.laps >= 3).map(car => {
-        return ['bestlap', car.id];
-      }),
-      this.session.lap.filter(([lap, laps]) => lap === laps - 1).map(() => {
-        return ['finallap', null];
-      }),
-      this.session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
-        return ['finished', null];
-      }),
-      start.filter(value => value == 9).map(() => {
-        return ['falsestart', null];
-      })
-    ).withLatestFrom(settings.get('drivers')).map(([[event, id], drivers]) => {
-      return <[string, any]>[event, id !== null ? drivers[id] : null];
-    });
-  }
-
-  ngOnInit() {
-    this.subscription = this.events.combineLatest(this.settings.get('speech')).subscribe(([[event, driver], speech]) => {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.subscription = events.combineLatest(this.settings.get('speech')).subscribe(([[event, driver], speech]) => {
       console.log('New race event: ' + event, driver);
       if (speech.enabled && speech[event]) {
         this.speech.speak(speech[event], driver || {});
@@ -133,7 +143,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
     });
 
     if (this.options.mode != 'practice') {
-      const session = this.session;
       const start = this.cu.getStart();
       start.take(1).toPromise().then(value => {
         if (value === 0) {
@@ -147,12 +156,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
           session.start();
         });
       });
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
     }
   }
 }
