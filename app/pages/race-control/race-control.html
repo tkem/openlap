@@ -4,25 +4,21 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
+      <chequered-flag *ngIf="session.finished | async"></chequered-flag>
       <span [ngSwitch]="options.mode">
-        <template ngSwitchCase="practice">Free Practice</template>
-        <template ngSwitchCase="qualifying">Qualifying</template>
-        <template ngSwitchDefault>Race</template>
-      </span>
-      <span [ngSwitch]="options.mode" style="float: right">
         <template ngSwitchCase="practice">
+          Free Practice
         </template>
         <template ngSwitchCase="qualifying">
-          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
-          <span>{{session.timer | async | time:'m:ss'}}</span>
-          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+          Qualifying
         </template>
-        <template ngSwitchDefault>
-          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
-          <span>Lap <lap [value]="session.lap | async"></lap></span>
-          <span *ngIf="options.time">{{session.timer | async | time:'m:ss'}}</span>
-          <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+        <template ngSwitchCase="race">
+          Lap <lap [value]="session.lap | async"></lap>
         </template>
+      </span>
+      <chequered-flag *ngIf="session.finished | async"></chequered-flag>
+      <span *ngIf="options.time && !(session.finished | async)" style="float: right">
+        {{session.timer | async | time:'h:mm:ss'}}
       </span>
     </ion-title>
   </ion-navbar>

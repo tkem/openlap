@@ -12,6 +12,22 @@
     }   
 }
 
+@keyframes blink-flag {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    40%  { opacity: 0; }
+    60%  { opacity: 1; }
+    80%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+ion-title {
+    chequered-flag {
+        animation-name: blink-flag;
+        animation-duration: 3s;
+    }
+}
+
 @media (min-width: 320px) {
     leaderboard table {
         font-size: 1rem;
