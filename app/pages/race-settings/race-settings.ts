@@ -44,7 +44,7 @@ function createQualifyingForm(fb: FormBuilder, params: NavParams) {
 function createRaceForm(fb: FormBuilder, params: NavParams) {
   return fb.group({
     laps: [params.get('laps') || 10, Validators.pattern('\\d*')],
-    time: [formatTime(params.get('time'))],
+    time: [formatTime(params.get('time') || 0)],
     auto: [params.get('auto') || false],
     pace: [params.get('pace') || false],
     slotmode: [params.get('slotmode') || false]
