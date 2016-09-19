@@ -72,8 +72,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.logger.info('Main page', cu, params.data);
     this.options = params.data;
 
-    let start = this.cu.getStart().distinctUntilChanged();
-    let state = this.cu.getState().distinctUntilChanged();
+    let start = this.cu.getStart();  // TODO: distinctUntilChanged
+    let state = this.cu.getState();  // TODO: distinctUntilChanged
     let mode = this.cu.getMode().distinctUntilChanged().do(value => console.log('Mode: ' + value));
 
     this.fields = mode.startWith(0).distinctUntilChanged().map(mode => {
