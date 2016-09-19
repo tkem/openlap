@@ -1,3 +1,15 @@
+0.6.4 2016-09-19
+----------------
+
+- Reset position tower and fuel on start.
+
+- Add possible workaround for startlight update issues.
+
+- Add default race time.
+
+- Add chequered flag animation.
+
+
 0.6.3 2016-09-14
 ----------------
 
