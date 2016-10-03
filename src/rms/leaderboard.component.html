@@ -1,0 +1,10 @@
+<table>
+  <thead>
+    <tr head [fields]="fields"></tr>
+  </thead>
+  <tbody>
+    <tr item *ngFor="let item of items; let i = index;"  
+        [fields]="fields" [item]="item" [index]="i" [items]="items" [bestlap]="bestlap">
+    </tr>
+  </tbody>
+</table>

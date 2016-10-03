@@ -1,9 +1,8 @@
+*.log
+*.tmp
+*.tmp.*
+
 node_modules/
 platforms/
 plugins/
-resources/android/icon/
-resources/android/splash/
-resources/ios/icon/
-resources/ios/splash/
-www/build
-.io-config.json
+www/

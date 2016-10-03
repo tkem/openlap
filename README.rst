@@ -6,13 +6,15 @@ Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
 
-- Connect your mobile device via Bluetooth (using Carrera AppConnect®)
+- Connect your mobile device via Bluetooth using Carrera AppConnect®,
   or a suitable serial to USB adapter.
 - Take it easy during free practice, or compete in lap or time based
   qualifying and race sessions.
 - Selectively track times for both autonomous and pace cars.
 - Adjust vehicle speed, brake force and fuel tank size for each car
   individually, even during a race or qualifying session.
+- Get informed about important events, such as fastest laps or low
+  fuel conditions, by personalized voice messages.
 
 This project is still at an early stage, so there will be some
 features missing and it may not always work as expected.  Please feel
@@ -36,9 +38,11 @@ make sure you have everything needed for Android development.  Then
 run::
 
   npm install
-  ionic resources android
-  ionic platform add android
-  ionic run android
+  ionic build android
+
+Please refer the `Ionic CLI <http://ionicframework.com/docs/v2/cli/>`_
+documentation for further information on how to run the application on
+an actual device, or in a Web browser or emulator for testing.
 
 
 License
@@ -50,6 +54,9 @@ Licensed under the `Apache License, Version 2.0`_.
 
 Carrera and Carrera AppConnect are registered trademarks of Stadlbauer
 Marketing + Vertrieb GmbH.
+
+Open Lap is not affiliated with or endorsed by Stadlbauer Marketing +
+Vertrieb GmbH.  Use at your own risk.
 
 Thanks to Stephan Heß (a.k.a. slotbaer_) for doing all the hard work.
 
