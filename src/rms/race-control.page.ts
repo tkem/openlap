@@ -113,26 +113,25 @@ export class RaceControlPage implements OnDestroy, OnInit {
       this.start.filter(value => value == 9).map(() => {
         return ['falsestart', null];
       })
-    ).withLatestFrom(this.settings.get('drivers')).map(([[event, id], drivers]) => {
+    ).withLatestFrom(this.settings.getDrivers()).map(([[event, id], drivers]) => {
       return <[string, any]>[event, id !== null ? drivers[id] : null];
     });
 
     this.ranking = session.ranking.combineLatest(
-      this.settings.get('drivers'),
-      this.settings.get('colors')
-    ).map(([ranks, drivers, colors]) => {
+      this.settings.getDrivers(),
+    ).map(([ranks, drivers]) => {
       return ranks.map(item => {
-        return Object.assign({}, item, { driver: drivers[item.id], color: colors[item.id] });
+        return Object.assign({}, item, { driver: drivers[item.id] });
       });
     });
 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.subscription = events.combineLatest(this.settings.get('speech')).subscribe(([[event, driver], speech]) => {
+    this.subscription = events.combineLatest(this.settings.getOptions(), this.settings.getMessages()).subscribe(([[event, driver], options, messages]) => {
       console.log('New race event: ' + event, driver);
-      if (speech.enabled && speech[event]) {
-        this.speech.speak(speech[event], driver || {});
+      if (options.speech && messages[event]) {
+        this.speech.speak(messages[event], driver || {});
       }
     });
 

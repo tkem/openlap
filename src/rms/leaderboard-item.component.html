@@ -1,6 +1,6 @@
 <td *ngFor="let field of fields" [ngSwitch]="field" [class]="field">
     <template ngSwitchCase="position">
-        {{index + 1}}<stripe [color]="item.color"></stripe>
+        {{index + 1}}<stripe [color]="item.driver.color"></stripe>
     </template>
     <template ngSwitchCase="name">
         <span showWhen="landscape">{{item.driver.name}}</span>

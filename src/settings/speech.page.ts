@@ -1,27 +1,36 @@
 import { Component, OnDestroy } from '@angular/core';
 
-import { Settings, Speech } from '../core';
+import { Options, Settings, Speech } from '../core';
 
 @Component({
   templateUrl: 'speech.page.html'
 })
 export class SpeechPage implements OnDestroy {
 
-  options: any = {};
+  options = new Options();
 
-  private subscription: any;
+  messages: any = {};
+
+  private subscription1: any;
+
+  private subscription2: any;
 
   constructor(private settings: Settings, private speech: Speech) {}
 
   ngOnInit() {
-    this.subscription = this.settings.get('speech').subscribe((options) => {
+    this.subscription1 = this.settings.getOptions().subscribe((options) => {
       this.options = options;
+    });
+    this.subscription2 = this.settings.getMessages().subscribe((messages) => {
+      this.messages = messages;
     });
   }
 
   ngOnDestroy() {
-    this.settings.set('speech', this.options);
-    this.subscription.unsubscribe();
+    this.settings.setOptions(this.options);
+    this.settings.setMessages(this.messages);
+    this.subscription1.unsubscribe();
+    this.subscription2.unsubscribe();
   }
 
   speak(text) {

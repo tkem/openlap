@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface LeaderboardItem {
   driver: any;
-  color: string;
   time: number;
   laps: number;
   lastLap: number;

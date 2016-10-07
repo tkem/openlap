@@ -10,61 +10,61 @@
   <ion-list>
     <ion-item>
       <ion-label>Enable speech</ion-label>
-      <ion-toggle [(ngModel)]="options.enabled"></ion-toggle>
+      <ion-toggle [(ngModel)]="options.speech"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label floating>Race finished</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.finished" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.finished" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.finished)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.finished)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
     <ion-item>
       <ion-label floating>Final lap</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.finallap" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.finallap" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.finallap)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.finallap)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
     <ion-item>
       <ion-label floating>False start</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.falsestart" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.falsestart" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.falsestart)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.falsestart)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
     <ion-item>
       <ion-label floating>Fastest lap</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.bestlap" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.bestlap" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.bestlap)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.bestlap)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
     <ion-item>
       <ion-label floating>Fuel < 20%</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.fuel2" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.fuel2" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.fuel2)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.fuel2)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
     <ion-item>
       <ion-label floating>Fuel < 10%</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.fuel1" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.fuel1" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.fuel1)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.fuel1)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
     <ion-item>
       <ion-label floating>No fuel</ion-label>
-      <ion-input [disabled]="!options.enabled" [(ngModel)]="options.fuel0" clearInput>
+      <ion-input [disabled]="!options.speech" [(ngModel)]="messages.fuel0" clearInput>
       </ion-input>
-      <button ion-button [disabled]="!options.enabled" clear item-right (click)="speak(options.fuel0)">
+      <button ion-button [disabled]="!options.speech" clear item-right (click)="speak(messages.fuel0)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>

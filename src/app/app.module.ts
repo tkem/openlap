@@ -7,6 +7,7 @@ import { CoreModule } from '../core';
 import { LoggingModule } from '../logging';
 import { RMSModule } from '../rms';
 import { SettingsModule } from '../settings';
+import { StorageModule } from '../storage';
 import { SharedModule } from '../shared';
 
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
+    StorageModule.forRoot({ prefix: 'at.co.kemmer.openlap.' }),
     BackendModule,
     CoreModule,
     LoggingModule,

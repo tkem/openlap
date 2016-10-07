@@ -24,15 +24,14 @@ export class AppComponent implements OnInit {
   connectionPage = ConnectionPage;
   settingsPage = SettingsPage;
 
-
   private subscription: Subscription;
 
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
               private logger: Logger, private settings: Settings,
               private modal: ModalController, private platform: Platform, private toast: Toast)
   {
-    settings.get('logging').subscribe((logging) => {
-      logger.setLevel(logging.level);
+    settings.getOptions().subscribe((options) => {
+      logger.setLevel(options.debug ? 'debug' : 'info');
     });
   }
 
@@ -73,12 +72,11 @@ export class AppComponent implements OnInit {
   }
 
   startQualifying() {
-    this.settings.get('qualifying').take(1).subscribe((options) => {
-      options.mode = options.mode || 'qualifying';
+    this.settings.getQualifyingSettings().take(1).subscribe((options) => {
       let modal = this.modal.create(RaceSettingsPage, options);
       modal.onDidDismiss((options) => {
         if (options) {
-          this.settings.set('qualifying', options).then(() => {
+          this.settings.setQualifyingSettings(options).then(() => {
             this.nav.setRoot(RaceControlPage, options);
           });
         }
@@ -88,12 +86,11 @@ export class AppComponent implements OnInit {
   }
 
   startRace() {
-    this.settings.get('race').take(1).subscribe((options) => {
-      options.mode = options.mode || 'race';
+    this.settings.getRaceSettings().take(1).subscribe((options) => {
       let modal = this.modal.create(RaceSettingsPage, options);
       modal.onDidDismiss((options) => {
         if (options) {
-          this.settings.set('race', options).then(() => {
+          this.settings.setRaceSettings(options).then(() => {
             this.nav.setRoot(RaceControlPage, options);
           });
         }

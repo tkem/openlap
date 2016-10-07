@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Settings, Speech } from '../core';
+import { Driver, Settings, Speech } from '../core';
 import { Logger } from '../logging';
 
 @Component({
@@ -8,7 +8,7 @@ import { Logger } from '../logging';
 })
 export class DriversPage implements OnDestroy, OnInit {
 
-  drivers: any[];
+  drivers: Driver[];
 
   constructor(private logger: Logger, private settings: Settings, private speech: Speech) {}
 
@@ -21,7 +21,7 @@ export class DriversPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.settings.get('drivers').take(1).toPromise().then(drivers => {
+    this.settings.getDrivers().take(1).toPromise().then(drivers => {
       this.drivers = drivers;
     }).catch(error => {
       this.logger.error('Error getting drivers', error);
@@ -29,14 +29,18 @@ export class DriversPage implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.settings.set('drivers', this.drivers).catch(error => {
+    this.settings.setDrivers(this.drivers).catch(error => {
       this.logger.error('Error setting drivers', error);
     });
   }
 
   reorderItems(indexes) {
+    let colors = this.drivers.map(driver => driver.color);
     let element = this.drivers[indexes.from];
     this.drivers.splice(indexes.from, 1);
     this.drivers.splice(indexes.to, 0, element);
+    colors.forEach((color, index) => {
+      this.drivers[index].color = color;
+    });
   }
 }

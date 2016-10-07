@@ -1,69 +1,114 @@
-import { Inject, Injectable, OpaqueToken, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { Storage } from '@ionic/storage';
+import { Storage } from '../storage';
 
-import { Observable, ReplaySubject } from '../rxjs';
+import { Observable } from '../rxjs';
 
-export const DEFAULT_SETTINGS = new OpaqueToken('app.default.settings');
+const DRIVERS = [
+  { name: 'Driver #1', code: '#1', color: '#ff0000' },
+  { name: 'Driver #2', code: '#2', color: '#0000ff' },
+  { name: 'Driver #3', code: '#3', color: '#ffff00' },
+  { name: 'Driver #4', code: '#4', color: '#00ff00' },
+  { name: 'Driver #5', code: '#5', color: '#808080' },
+  { name: 'Driver #6', code: '#6', color: '#202020' },
+  { name: 'Autonomous Car', code: 'AUT', color: '#870275' },
+  { name: 'Pace Car', code: 'PAC', color: '#00fbff' }
+];
+
+const MESSAGES = {
+  falsestart: 'False start!',
+  finished: 'Race finished!',
+  finallap: 'Final lap!',
+  bestlap: '{name}: Fastest lap!',
+  fuel2: '{name}: Low fuel!',
+  fuel1: '{name}: Box!',
+  fuel0: '{name}: Box! Box! Box!'
+};
+
+export class Options {
+  debug = false;
+  speech = false;
+}
+
+export class Driver {
+  constructor(id: number) {
+    Object.assign(this, DRIVERS[id]);
+  }
+  name: string;
+  code: string;
+  color: string;
+}
+
+export class RaceSettings {
+  constructor(public mode: 'practice' | 'qualifying' | 'race') {}
+  laps: number;
+  time: number;
+  auto = false;
+  pace = false;
+  slotmode = false;
+}
 
 @Injectable()
 export class Settings {
 
-  private defaults = {};
-
-  private subjects = {};
-
-  constructor(private storage: Storage, @Optional() @Inject(DEFAULT_SETTINGS) defaults) {
-    if (defaults) {
-      this.defaults = defaults;
-    }
+  constructor(private storage: Storage) {
   }
 
-  get(key: string): Observable<any> {
-    let subject = this.subjects[key];
-    if (!subject) {
-      subject = this.subjects[key] = new ReplaySubject<any>(1);
-      this.storage.get(key).then(value => {
-        subject.next(value !== null ? JSON.parse(value) : this.getDefault(key));
-      }).catch(error => {
-        subject.error(error);
-      });
-    }
-    return subject;
-  }
-
-  set(key: string, value: any): any {
-    return this.storage.set(key, JSON.stringify(value)).then(() => {
-      const subject = this.subjects[key];
-      if (subject) {
-        subject.next(value);
-      }
+  getOptions(): Observable<Options> {
+    return this.storage.get('options').map(value => {
+      return Object.assign(new Options(), value);
     });
   }
 
-  remove(key: string): any {
-    return this.storage.remove(key).then(() => {
-      const subject = this.subjects[key];
-      if (subject) {
-        subject.next(this.getDefault(key));
+  setOptions(value: Options): Promise<void> {
+    return this.storage.set('options', value);
+  }
+
+  getDrivers(): Observable<Array<Driver>> {
+    return this.storage.get('drivers').map(values => {
+      const drivers = new Array<Driver>(8);
+      for (let i = 0; i != drivers.length; ++i) {
+        drivers[i] = Object.assign(new Driver(i), values ? values[i] : null);
       }
+      return drivers;
     });
   }
 
-  clear() {
-    return this.storage.clear().then(() => {
-      for (let key of Object.keys(this.subjects)) {
-        this.subjects[key].next(this.defaults[key]);
-      }
+  setDrivers(value: Array<Driver>): Promise<void> {
+    return this.storage.set('drivers', value);
+  }
+
+  getMessages(): Observable<{[key: string]: string}> {
+    return this.storage.get('messages').map(values => {
+      return Object.assign({}, MESSAGES, values);
     });
   }
 
-  private getDefault(key: string) {
-    const value = this.defaults[key];
-    if (value !== undefined) {
-      return JSON.parse(JSON.stringify(value));
-    } else  {
-      return value;
-    }
+  setMessages(value: {[key: string]: string}): Promise<void> {
+    return this.storage.set('messages', value);
+  }
+
+  getQualifyingSettings(): Observable<RaceSettings> {
+    return this.storage.get('qualifying').map(value => {
+      return Object.assign(new RaceSettings('qualifying'), value);
+    });
+  }
+
+  setQualifyingSettings(value: any): Promise<void> {
+    return this.storage.set('qualifying', value);
+  }
+
+  getRaceSettings(): Observable<RaceSettings> {
+    return this.storage.get('race').map(value => {
+      return Object.assign(new RaceSettings('race'), value);
+    });
+  }
+
+  setRaceSettings(value: any): Promise<void> {
+    return this.storage.set('race', value);
+  }
+
+  clear(): Promise<void> {
+    return this.storage.clear();
   }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { PopoverController, ViewController } from 'ionic-angular';
 
-import { Settings } from '../core';
+import { Options, Settings } from '../core';
 import { Logger } from '../logging';
 
 @Component({
@@ -18,28 +18,27 @@ import { Logger } from '../logging';
 })
 export class LoggingPopover {
 
-  private logging = { level: 'info' };
+  private options = new Options();
 
   private subscription: any;
 
   get debugEnabled() {
-    return this.logging.level === 'debug';
+    return this.options.debug;
   }
 
   set debugEnabled(value) {
-    console.log('Setting debugEnabled');
-    this.logging.level = value ? 'debug' : 'info';
-    this.settings.set('logging', this.logging);
+    this.options.debug = value;
+    this.settings.setOptions(this.options);
     this.close();
   }
 
   constructor(public logger: Logger, private settings: Settings, private view: ViewController) {}
 
   ngOnInit() {
-    this.subscription = this.settings.get('logging').subscribe({
-      next: (logging) => {
-        this.logger.info('Logging settings: ', logging);
-        this.logging = logging;
+    this.subscription = this.settings.getOptions().subscribe({
+      next: (options) => {
+        this.logger.info('Logging settings: ', options);
+        this.options = options;
       },
       error: (error) => {
         this.logger.error('Logging settings: ', error);

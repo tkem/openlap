@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Settings } from '../core';
+import { Driver, Settings } from '../core';
 import { Logger } from '../logging';
 
 @Component({
@@ -8,20 +8,20 @@ import { Logger } from '../logging';
 })
 export class ColorsPage implements OnDestroy, OnInit {
 
-  colors: any[];
+  drivers: Driver[];
 
   constructor(private logger: Logger, private settings: Settings) {}
   
   ngOnInit() {
-    this.settings.get('colors').take(1).toPromise().then(colors => {
-      this.colors = colors.map(value => ({ value: value }));
+    this.settings.getDrivers().take(1).toPromise().then(drivers => {
+      this.drivers = drivers;
     }).catch(error => {
       this.logger.error('Error getting colors', error);
     });
   }
 
   ngOnDestroy() {
-    this.settings.set('colors', this.colors.map(item => item.value)).catch(error => {
+    this.settings.setDrivers(this.drivers).catch(error => {
       this.logger.error('Error setting colors', error);
     });
   }
