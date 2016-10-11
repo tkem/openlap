@@ -7,7 +7,6 @@ import { IonicModule } from 'ionic-angular';
 import { SharedModule } from '../shared';
 
 import { CarSetupPage } from './car-setup.page';
-import { ConnectionPage } from './connection.page';
 import { Lap, RaceControlPage } from './race-control.page';
 import { RaceSettingsPage } from './race-settings.page';
 
@@ -26,20 +25,17 @@ import { StartlightComponent } from './startlight.component';
     StartlightComponent,
 
     CarSetupPage,
-    ConnectionPage,
     Lap,
     RaceControlPage,
     RaceSettingsPage
   ],
   entryComponents: [
     CarSetupPage,
-    ConnectionPage,
     RaceControlPage,
     RaceSettingsPage
   ],
   exports: [
     CarSetupPage,
-    ConnectionPage,
     RaceControlPage,
     RaceSettingsPage
   ], 

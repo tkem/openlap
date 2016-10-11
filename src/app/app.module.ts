@@ -5,16 +5,18 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 import { BackendModule } from '../backend';
 import { CoreModule } from '../core';
 import { LoggingModule } from '../logging';
+import { MenuModule } from '../menu';
 import { RMSModule } from '../rms';
 import { SettingsModule } from '../settings';
 import { StorageModule } from '../storage';
 import { SharedModule } from '../shared';
 
-import { AppComponent } from './app.component';
+import { AppComponent, RootPage } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RootPage
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
@@ -22,13 +24,15 @@ import { AppComponent } from './app.component';
     BackendModule,
     CoreModule,
     LoggingModule,
+    MenuModule,
     RMSModule,
     SettingsModule,
     SharedModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    AppComponent
+    AppComponent,
+    RootPage
   ],
 })
 export class AppModule {}

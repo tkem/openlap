@@ -71,11 +71,6 @@ export class ControlUnit {
 
   disconnect() {
     if (this.subscription) {
-      this.data.subscribe(
-        () => console.log('Got value'),
-        () => console.log('Got error'),
-        () => console.log('Got complete')
-      );
       this.subscription.unsubscribe();
     }
   }

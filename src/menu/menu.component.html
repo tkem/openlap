@@ -1,0 +1,66 @@
+<ion-menu [content]="nav" (ionClose)="onMenuClose()">
+  <ion-content>
+    <ion-item-group>
+      <ion-item *ngIf="(cu | async)" color="primary" (click)="mode = !mode">
+        <h1>{{(cu | async).peripheral.name}}</h1>
+        <p>{{(cu | async).peripheral.address}}</p>
+        <p color="light">Version {{(version | async) || 'n/a'}}</p>
+        <ion-icon item-right [name]="mode ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="!(cu | async)" padding>
+        Please select a device
+      </ion-item>
+    </ion-item-group>
+    <div *ngIf="(cu | async) && mode">
+      <ion-item-group>
+        <button ion-item menuClose [disabled]="!(cu | async)" (click)="startPractice()">
+          <ion-icon name="speedometer" item-left></ion-icon>
+          Free Practice
+        </button>
+        <button ion-item menuClose [disabled]="!(cu | async)" (click)="startQualifying()">
+          <ion-icon name="stopwatch" item-left></ion-icon>
+          Qualifying
+        </button>
+        <button ion-item menuClose [disabled]="!(cu | async)" (click)="startRace()">
+          <ion-icon name="trophy" item-left></ion-icon>
+          Race
+        </button>
+      </ion-item-group>
+      <ion-item-group>
+        <button ion-item menuClose (click)="nav.push(driversPage)">
+          <ion-icon name="people" item-left></ion-icon>
+          Drivers
+        </button>
+        <button ion-item menuClose (click)="nav.push(colorsPage)">
+          <ion-icon name="color-palette" item-left></ion-icon>
+          Colors
+        </button>
+        <button ion-item menuClose [disabled]="!(cu | async)" (click)="nav.push(setupPage)">
+          <ion-icon name="build" item-left></ion-icon>
+          Car Setup
+        </button>
+      </ion-item-group>
+      <ion-item-group>
+        <button ion-item menuClose (click)="nav.push(settingsPage)">
+          <ion-icon name="settings" item-left></ion-icon>
+          Settings
+        </button>
+        <button ion-item menuClose (click)="exitApp()">
+          <ion-icon name="exit" item-left></ion-icon>
+          Exit
+        </button>
+      </ion-item-group>
+    </div>
+    <div *ngIf="!(cu | async) || !mode">
+      <ion-item-group>
+        <app-connections></app-connections>
+      </ion-item-group>
+      <ion-item-group *ngIf="cu | async">
+        <button ion-item (click)="reconnect()">
+          <ion-icon name="refresh" item-left></ion-icon>
+          Reconnect
+        </button>
+      </ion-item-group>
+    </div>
+  </ion-content>
+</ion-menu>

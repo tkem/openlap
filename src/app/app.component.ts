@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 
-import { ModalController, Nav, Platform } from 'ionic-angular';
+import { MenuController, ModalController, Nav, Platform } from 'ionic-angular';
 
 import { Insomnia, Splashscreen } from 'ionic-native';
 
@@ -9,25 +9,28 @@ import { BehaviorSubject, Subscription } from '../rxjs';
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_SUBJECT, Settings } from '../core';
 import { Logger } from '../logging';
-import { CarSetupPage, ConnectionPage, RaceSettingsPage, RaceControlPage } from '../rms';
-import { DriversPage, SettingsPage } from '../settings';
+import { RaceControlPage } from '../rms';
 import { Toast } from '../shared';
+
+@Component({
+  templateUrl: 'root.html'
+})
+export class RootPage {}
 
 @Component({
   templateUrl: 'app.html'
 })
 export class AppComponent implements OnInit {
+  
   @ViewChild(Nav) nav: Nav;
 
-  driversPage = DriversPage;
-  carSetupPage = CarSetupPage;
-  connectionPage = ConnectionPage;
-  settingsPage = SettingsPage;
+  rootPage = RootPage;  // FIXME: get rid of this!
 
   private subscription: Subscription;
 
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
               private logger: Logger, private settings: Settings,
+              private menu: MenuController,
               private modal: ModalController, private platform: Platform, private toast: Toast)
   {
     settings.getOptions().subscribe((options) => {
@@ -38,14 +41,14 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.platform.ready().then(readySource => {
       this.logger.info('Initializing ' + readySource + ' application');
-      this.nav.setRoot(ConnectionPage).then(() => {
-        Splashscreen.hide();
-      });
+      this.menu.open();
       Insomnia.keepAwake();
+      Splashscreen.hide();
     });
 
+    // TODO: move this to RaceControl?
     this.subscription = this.cu.filter((cu) => !!cu).do(cu => {
-      this.startPractice();
+      this.nav.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
     }).switchMap((cu: ControlUnit) => {
       return cu.getState().debounceTime(200).distinctUntilChanged().map(state => [state, cu.peripheral.name]);
     }).subscribe(([state, device]) => {
@@ -65,46 +68,5 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  startPractice() {
-    this.nav.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
-  }
-
-  startQualifying() {
-    this.settings.getQualifyingSettings().take(1).subscribe((options) => {
-      let modal = this.modal.create(RaceSettingsPage, options);
-      modal.onDidDismiss((options) => {
-        if (options) {
-          this.settings.setQualifyingSettings(options).then(() => {
-            this.nav.setRoot(RaceControlPage, options);
-          });
-        }
-      });
-      modal.present();
-    });
-  }
-
-  startRace() {
-    this.settings.getRaceSettings().take(1).subscribe((options) => {
-      let modal = this.modal.create(RaceSettingsPage, options);
-      modal.onDidDismiss((options) => {
-        if (options) {
-          this.settings.setRaceSettings(options).then(() => {
-            this.nav.setRoot(RaceControlPage, options);
-          });
-        }
-      });
-      modal.present();
-    });
-  }
-
-  exitApp() {
-    if (this.cu.value) {
-      this.cu.value.disconnect();
-    }
-    this.logger.info('Exiting application');
-    this.platform.exitApp();
-    this.logger.info('Exited application');
   }
 }
