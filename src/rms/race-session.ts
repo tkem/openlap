@@ -90,7 +90,7 @@ export class RaceSession {
         pits: <number>pits,
         pit: <boolean>pit,
         finished: fini
-      })).do(car => {
+      })).do((car: RaceItem) => {
         if (car.bestLap && (!this.bestlap.value || car.bestLap < this.bestlap.value.bestLap)) {
           this.bestlap.next(car);
         }

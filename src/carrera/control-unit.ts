@@ -55,7 +55,7 @@ export class ControlUnit {
         this.state.next('connected');
       }
       this.poll();
-    }).map((data) => {
+    }).map((data: ArrayBuffer) => {
       return new DataView(data);
     }).publish();
     // like publishBehavior() with no initial value

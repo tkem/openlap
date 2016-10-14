@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
 
     this.subscription = this.cu.filter((cu) => !!cu).do(cu => {
       this.startPractice();
-    }).switchMap(cu => {
+    }).switchMap((cu: ControlUnit) => {
       return cu.getState().debounceTime(200).distinctUntilChanged().map(state => [state, cu.peripheral.name]);
     }).subscribe(([state, device]) => {
       switch (state) {
