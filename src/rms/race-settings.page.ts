@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { NavParams, ViewController } from 'ionic-angular';
 
@@ -24,10 +24,11 @@ function timeRequired(control: AbstractControl): {[key: string]: any} {
 }
 
 function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
-  if (parseInt(group.controls['laps'].value)) {
+  const laps = parseInt(group.get('laps').value);
+  if (laps && laps > 0) {
     return null;
   }
-  if (!timeRequired(group.controls['time'])) {
+  if (!timeRequired(group.get('time'))) {
     return null;
   }
   return {'required': true};
@@ -35,19 +36,19 @@ function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
 
 function createQualifyingForm(fb: FormBuilder, params: NavParams) {
   return fb.group({
-    time: [formatTime(params.get('time') || 180000), timeRequired],
-    auto: [params.get('auto') || false],
-    pace: [params.get('pace') || false]
+    time: new FormControl(formatTime(params.get('time') || 180000), timeRequired),
+    auto: new FormControl(params.get('auto') || false),
+    pace: new FormControl(params.get('pace') || false)
   });
 }
 
 function createRaceForm(fb: FormBuilder, params: NavParams) {
   return fb.group({
-    laps: [params.get('laps') || 10, Validators.pattern('\\d*')],
-    time: [formatTime(params.get('time') || 0)],
-    auto: [params.get('auto') || false],
-    pace: [params.get('pace') || false],
-    slotmode: [params.get('slotmode') || false]
+    laps: new FormControl(params.get('laps') || 10, Validators.pattern('\\d*')),
+    time: new FormControl(formatTime(params.get('time') || 0)),
+    auto: new FormControl(params.get('auto') || false),
+    pace: new FormControl(params.get('pace') || false),
+    slotmode: new FormControl(params.get('slotmode') || false)
   }, {
     validator: lapsOrTimeRequired
   });

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-// FIXME: interface not working in Ionic 2 RC1?
+// FIXME: @Input() with interface not working in Ionic 2 RC1?
 export class LeaderboardItem {
   driver: any;
   time: number;
