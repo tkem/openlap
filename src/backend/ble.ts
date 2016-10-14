@@ -126,8 +126,6 @@ export class BLEBackend extends Backend {
 
   private enabled: Promise<void>;
 
-  private peripherals = {};
-
   constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
     this.enabled = this.platform.ready().then(() => {
@@ -136,20 +134,19 @@ export class BLEBackend extends Backend {
   }
 
   protected _subscribe(subscriber) {
-    // TODO: BLE.startScanWithOptions()?
-    for (let id of Object.keys(this.peripherals)) {
-      this.zone.run(() => subscriber.next(this.peripherals[id]));
-    }
     let promise = new Promise<Subscription>((resolve, reject) => {
       // TODO: BLE.enabled(), since user may activate Bluetooth later...
       this.enabled.then(() => {
+        let devices = {};
         // TODO: BLE.startScan([SERVICE_UUID]) not working?
-        let subscription = BLE.startScan([]).subscribe({
+        let subscription = BLE.startScanWithOptions([], { reportDuplicates: true }).subscribe({
           next: device => {
-            if (!(device.id in this.peripherals)) {
-              let peripheral = new BLEPeripheral(device, this.logger, this.zone);
+            this.logger.debug('Found BLE device: ', device);
+            // TODO: use and adapt rssi?
+            if (!(device.id in devices)) {
+              const peripheral = new BLEPeripheral(device, this.logger, this.zone);
               this.zone.run(() => subscriber.next(peripheral));
-              this.peripherals[device.id] = peripheral;
+              devices[device.id] = true;
             }
           }, 
           error: err => {
