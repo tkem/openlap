@@ -7,19 +7,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-list >
+  <ion-list>
     <ion-item *ngFor="let driver of drivers; let id = index">
-      <ion-label fixed [ngSwitch]="id.toString()">
-        <template ngSwitchCase="7">
-          Pace car
-        </template>
-        <template ngSwitchCase="6">
-          Autonomous car
-        </template>
-        <template ngSwitchDefault>
-          Driver #{{id + 1}}
-        </template>
-      </ion-label>
+      <ion-label>{{driver.name}}</ion-label>
       <input item-right [(ngModel)]="driver.color" type="color">
     </ion-item>
   </ion-list>
