@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 
-import { MenuController, ModalController, Nav, Platform } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 
 import { Insomnia, Splashscreen } from 'ionic-native';
 
@@ -30,8 +30,7 @@ export class AppComponent implements OnInit {
 
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
               private logger: Logger, private settings: Settings,
-              private menu: MenuController,
-              private modal: ModalController, private platform: Platform, private toast: Toast)
+              private platform: Platform, private toast: Toast)
   {
     settings.getOptions().subscribe((options) => {
       logger.setLevel(options.debug ? 'debug' : 'info');
@@ -41,7 +40,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.platform.ready().then(readySource => {
       this.logger.info('Initializing ' + readySource + ' application');
-      this.menu.open();
       Insomnia.keepAwake();
       Splashscreen.hide();
     });

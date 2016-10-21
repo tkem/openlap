@@ -5,26 +5,35 @@ import { Component } from '@angular/core';
 })
 export class LicensesPage {
   items = [{
-    name: 'Ionic 2',
-    copyright: 'Copyright (c) 2015-2016 Drifty Co.',
-    license: 'MIT',
-    homepage: 'http://ionic.io/2',
-
+    name: 'Apache Cordova',
+    copyright: 'Copyright (c) 2012, 2013, 2015 The Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://cordova.apache.org/'
   }, {
-    name: 'Angular 2',
+    name: 'Angular',
     copyright: 'Copyright (c) 2014-2016 Google, Inc.',
     license: 'MIT',
     homepage: 'https://angular.io/'
+  }, {
+    name: 'Ionic 2',
+    copyright: 'Copyright (c) 2015-2016 Drifty Co.',
+    license: 'MIT',
+    homepage: 'https://github.com/driftyco/ionic#readme',
+  }, {
+    name: 'Ionic Native',
+    copyright: 'Copyright 2015-present Drifty Co.',
+    license: 'MIT',
+    homepage: 'https://github.com/driftyco/ionic-native',
+  }, {
+    name: 'Ionicons',
+    copyright: 'Copyright (c) 2015-present Ionic (http://ionic.io/)',
+    license: 'MIT',
+    homepage: 'http://ionicons.com/',
   }, {
     name: 'RxJS',
     copyright: 'Copyright (c) 2015-2016 Netflix, Inc., Microsoft Corp. and contributors',
     license: 'Apache-2.0',
     homepage: 'https://github.com/ReactiveX/RxJS'
-  }, {
-    name: 'Apache Cordova',
-    copyright: 'Copyright (c) 2012, 2013, 2015 The Apache Software Foundation',
-    license: 'Apache-2.0',
-    homepage: 'https://cordova.apache.org/'
   }, {
     name: 'cordova-plugin-app-version',
     author: 'whiteoctober',
@@ -40,6 +49,11 @@ export class LicensesPage {
     url: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme',
     author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
     license: 'MIT'
+  }, {
+    name: 'cordova-plugin-nativestorage',
+    url: 'https://github.com/TheCocoaProject/cordova-plugin-nativestorage',
+    author: 'TheCocoaProject',
+    license: 'Apache-2.0'
   }, {
     name: 'cordova-plugin-tts',
     author: 'VILIC VANE',

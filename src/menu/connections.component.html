@@ -1,4 +1,4 @@
 <button ion-item menuClose *ngFor="let device of devices | async" (click)="connect(device)">
-  {{device.name}}
-  <p *ngIf="device.address">{{device.address}}</p>
+  <h2>{{device.name}}</h2>
+  <h4 *ngIf="device.address">{{device.address}}</h4>
 </button>

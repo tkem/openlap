@@ -1,14 +1,11 @@
 <ion-menu [content]="nav" (ionClose)="onMenuClose()">
   <ion-content>
-    <ion-item-group>
-      <ion-item *ngIf="(cu | async)" color="primary" (click)="mode = !mode">
+    <ion-item-group *ngIf="(cu | async)">
+      <ion-item color="primary" (click)="mode = !mode">
         <h1>{{(cu | async).peripheral.name}}</h1>
-        <p>{{(cu | async).peripheral.address}}</p>
-        <p color="light">Version {{(version | async) || 'n/a'}}</p>
+        <h2>{{(cu | async).peripheral.address}}</h2>
+        <h3>Version {{(version | async) || 'n/a'}}</h3>
         <ion-icon item-right [name]="mode ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
-      </ion-item>
-      <ion-item *ngIf="!(cu | async)" padding>
-        Please select a device
       </ion-item>
     </ion-item-group>
     <div *ngIf="(cu | async) && mode">

@@ -27,7 +27,7 @@ const MESSAGES = {
 
 export class Options {
   debug = false;
-  speech = false;
+  speech = true;
 }
 
 export class Driver {
