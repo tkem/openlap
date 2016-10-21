@@ -1,3 +1,15 @@
+0.7.0 2016-10-21
+----------------
+
+- New side menu for improved connection access.
+
+- Add custom storage provider (will reset user settings).
+
+- Show driver names in colors page.
+
+- Upgrade to Ionic RC 1.
+
+
 0.6.4 2016-09-19
 ----------------
 
