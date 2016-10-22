@@ -77,6 +77,14 @@ export class LoggingPage {
 
   constructor(public logger: Logger, private popover: PopoverController) {}
 
+  stringify(obj) {
+    try {
+      return JSON.stringify(obj);
+    } catch(error) {
+      return '' + obj;
+    }
+  }
+
   presentPopover(event) {
     let popover = this.popover.create(LoggingPopover);
     popover.present({ev: event});

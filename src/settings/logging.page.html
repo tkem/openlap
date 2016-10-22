@@ -17,7 +17,7 @@
       <ion-icon item-left [name]="icons[record.level].name" [ngStyle]="icons[record.level].style"></ion-icon>
       <span>{{record.time | date:'HH:mm:ss'}}.{{(record.time % 1000) | number:'3.0-0'}}</span>
       <span *ngFor="let arg of record.args">
-        {{record.json ? (arg | json) : arg}}
+        {{record.json ? stringify(arg) : arg}}
       </span>
     </button>
   </ion-list>
