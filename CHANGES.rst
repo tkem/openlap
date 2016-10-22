@@ -1,3 +1,11 @@
+0.7.1 2016-10-22
+----------------
+
+- Improve error handling when displaying log records.
+
+- Remove clear button for driver input.
+
+
 0.7.0 2016-10-21
 ----------------
 

@@ -55,8 +55,8 @@ Licensed under the `Apache License, Version 2.0`_.
 Carrera and Carrera AppConnect are registered trademarks of Stadlbauer
 Marketing + Vertrieb GmbH.
 
-Open Lap is not affiliated with or endorsed by Stadlbauer Marketing +
-Vertrieb GmbH.  Use at your own risk.
+Open Lap is not an official Carrera® product, and is not affiliated
+with or endorsed by Stadlbauer Marketing + Vertrieb GmbH.
 
 Thanks to Stephan Heß (a.k.a. slotbaer_) for doing all the hard work.
 
