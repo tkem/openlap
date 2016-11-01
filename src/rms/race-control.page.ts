@@ -5,33 +5,32 @@ import { NavParams } from 'ionic-angular';
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
 import { Logger } from '../logging';
-import { Observable, Subscription } from '../rxjs';
 
 import { LeaderboardItem } from './leaderboard.component';
 import { RaceSession } from './race-session';
 
+import { Observable, Subscription } from 'rxjs';
+import 'rxjs/observable/fromEvent';
+
 const FIELDS = {
-  'practice': (mode: number) => {
-    if (mode & 0x03) {
-      return ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'];
-    } else {
-      return ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'];
-    }
-  },
-  'qualifying': (mode: number) => {
-    if (mode & 0x03) {
-      return ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'];
-    } else {
-      return ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'];
-    }
-  },
-  'race': (mode: number) => {
-    if (mode & 0x03) {
-      return ['position', 'name', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status'];
-    } else {
-      return ['position', 'name', 'time', 'bestlap', 'laptime', 'laps', 'status'];
-    }
-  }
+  'practice': [
+    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
+    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
+    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'],
+    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
+  ],
+  'qualifying': [
+    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
+    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
+    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'],
+    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
+  ],
+  'race': [
+    ['position', 'code', 'time', 'bestlap', 'laptime', 'laps', 'status'],
+    ['position', 'name', 'time', 'bestlap', 'laptime', 'laps', 'status'],
+    ['position', 'code', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status'],
+    ['position', 'name', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status']
+  ]
 };
 
 @Component({
@@ -62,7 +61,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
   private subscription: Subscription;
 
-  constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech, params: NavParams) {
+  constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech, 
+    params: NavParams) 
+  {
     this.logger.info('Main page', cu, params.data);
     this.options = params.data;
 
@@ -70,9 +71,16 @@ export class RaceControlPage implements OnDestroy, OnInit {
     let state = this.cu.getState();  // TODO: distinctUntilChanged
     let mode = this.cu.getMode().distinctUntilChanged().do(value => console.log('Mode: ' + value));
 
-    this.fields = mode.startWith(0).distinctUntilChanged().map(mode => {
-      return FIELDS[this.options.mode](mode);
+    // use "resize" event for easier testing on browsers
+    const orientation = Observable.fromEvent(window, 'resize').startWith(undefined).map(() => {
+      return window.innerWidth < window.innerHeight ? 'portrait' : 'landscape';
+    }).distinctUntilChanged();
+
+    this.fields = mode.startWith(0).combineLatest(orientation).map(([mode, orientation]) => {
+      const index = (orientation === 'portrait' ? 0 : 1) + (mode & 0x03 ? 2 : 0);
+      return FIELDS[this.options.mode][index];
     });
+
     this.start = start.map(value => {
       return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
     });

@@ -1,6 +1,7 @@
 <th *ngFor="let field of fields" [ngSwitch]="field" [class]="field">
     <template ngSwitchCase="position">POS</template>
     <template ngSwitchCase="name">NAME</template>
+    <template ngSwitchCase="code">NAME</template>
     <template ngSwitchCase="time">TIME</template>
     <template ngSwitchCase="laptime">LAP TIME</template>
     <template ngSwitchCase="bestlap">BEST LAP</template>

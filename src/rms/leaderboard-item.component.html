@@ -3,8 +3,10 @@
         {{index + 1}}<stripe [color]="item.driver.color"></stripe>
     </template>
     <template ngSwitchCase="name">
-        <span showWhen="landscape">{{item.driver.name}}</span>
-        <span showWhen="portrait">{{item.driver.code}}</span>
+        {{item.driver.name}}
+    </template>
+    <template ngSwitchCase="code">
+        {{item.driver.code}}
     </template>
     <template ngSwitchCase="time">
         <span [ngSwitch]="index == 0 ? '' : (items[0].laps - item.laps).toString()">
