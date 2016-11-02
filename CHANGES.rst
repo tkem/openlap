@@ -1,3 +1,13 @@
+0.7.2 2016-11-02
+----------------
+
+- Show car number on leaderboard.
+
+- Improve device orientation handling.
+
+- Don't repeat last message when changing Speech settings.
+
+
 0.7.1 2016-10-22
 ----------------
 
