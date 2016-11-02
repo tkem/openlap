@@ -2,6 +2,9 @@
     <template ngSwitchCase="position">
         {{index + 1}}<stripe [color]="item.driver.color"></stripe>
     </template>
+    <template ngSwitchCase="number">
+        {{item.id + 1}}
+    </template>
     <template ngSwitchCase="name">
         {{item.driver.name}}
     </template>

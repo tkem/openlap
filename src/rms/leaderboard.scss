@@ -37,11 +37,16 @@ leaderboard {
         font-size: smaller;
         vertical-align: middle;
     }
-
     .position {
-        @extend .stripe-container;
         text-align: left;
         width: 3em;
+    }
+    td.position {
+        @extend .stripe-container;
+    }   
+    .number {
+        text-align: left;
+        width: 2em;
     }
     .name {
         text-align: left;

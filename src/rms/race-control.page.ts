@@ -15,21 +15,21 @@ import 'rxjs/observable/fromEvent';
 const FIELDS = {
   'practice': [
     ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
-    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
     ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'],
-    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
   ],
   'qualifying': [
     ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
-    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
     ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'],
-    ['position', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
   ],
   'race': [
     ['position', 'code', 'time', 'bestlap', 'laptime', 'laps', 'status'],
-    ['position', 'name', 'time', 'bestlap', 'laptime', 'laps', 'status'],
+    ['position', 'number', 'name', 'time', 'bestlap', 'laptime', 'laps', 'status'],
     ['position', 'code', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status'],
-    ['position', 'name', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status']
+    ['position', 'number', 'name', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status']
   ]
 };
 
