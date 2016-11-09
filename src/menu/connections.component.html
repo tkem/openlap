@@ -1,4 +1,6 @@
-<button ion-item menuClose *ngFor="let device of devices | async" (click)="connect(device)">
-  <h2>{{device.name}}</h2>
-  <h4 *ngIf="device.address">{{device.address}}</h4>
-</button>
+<template ngFor let-peripheral [ngForOf]="peripherals | async">
+  <button ion-item menuClose (click)="onSelect(peripheral)" *ngIf="!peripheral.equals(selected)">
+    <h2>{{peripheral.name}}</h2>
+    <h4>{{peripheral.address}}</h4>
+  </button>
+</template>

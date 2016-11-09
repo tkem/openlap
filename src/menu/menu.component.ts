@@ -1,11 +1,11 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { ModalController, Nav, Platform } from 'ionic-angular';
 
-import { BehaviorSubject, Observable } from '../rxjs';
+import { Observable } from '../rxjs';
 
 import { ControlUnit } from '../carrera';
-import { CONTROL_UNIT_SUBJECT, Settings } from '../core';
+import { Settings } from '../core';
 import { Logger } from '../logging';
 import { CarSetupPage, RaceSettingsPage, RaceControlPage } from '../rms';
 import { ColorsPage, DriversPage, SettingsPage } from '../settings';
@@ -14,35 +14,48 @@ import { ColorsPage, DriversPage, SettingsPage } from '../settings';
   selector: 'app-menu',
   templateUrl: 'menu.component.html'
 })
-export class MenuComponent {
+export class MenuComponent implements OnChanges {
+
+  @Input() cu: ControlUnit;
 
   @Input() nav: Nav;
+
+  mode: boolean;
+
+  version: Observable<string>;
 
   colorsPage = ColorsPage;
   driversPage = DriversPage;
   setupPage = CarSetupPage;
   settingsPage = SettingsPage;
 
-  mode = true;
-
-  version: Observable<string>;
-
-  constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
-              private logger: Logger, 
+  constructor(private logger: Logger, 
               private settings: Settings,
               private modal: ModalController,
               private platform: Platform)
-  {
-    this.version = cu.switchMap(cu => cu.getVersion().startWith(null));
+  {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ('cu' in changes) {
+      // TODO: make version a property of ControlUnit?
+      this.mode = !!this.cu;
+      this.version = this.cu ? this.cu.getVersion() : Observable.of('n/a');
+    }
   }
 
   onMenuClose() {
-    this.mode = true;
+    this.mode = !!this.cu;
+  }
+
+  onMenuToggle() {
+    this.mode = !this.mode;
   }
 
   reconnect() {
-    this.cu.value.disconnect();
-    setTimeout(() => this.cu.value.connect(), 1000);
+    if (this.cu) {
+      this.cu.disconnect();
+      setTimeout(() => this.cu.connect(), 1000);
+    }
   }
 
   startPractice() {
@@ -78,8 +91,8 @@ export class MenuComponent {
   }
 
   exitApp() {
-    if (this.cu.value) {
-      this.cu.value.disconnect();
+    if (this.cu) {
+      this.cu.disconnect();
     }
     this.logger.info('Exiting application');
     this.platform.exitApp();

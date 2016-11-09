@@ -2,4 +2,7 @@ import { Peripheral } from '../carrera';
 
 import { Observable } from '../rxjs';
 
-export class Backend extends Observable<Peripheral> {}
+export abstract class Backend {
+
+    abstract scan(): Observable<Peripheral>;
+}

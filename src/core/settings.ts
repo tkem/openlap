@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { Peripheral } from '../carrera';
 import { Storage } from '../storage';
-
 import { Observable } from '../rxjs';
 
 const DRIVERS = [
@@ -51,17 +51,22 @@ export class RaceSettings {
 @Injectable()
 export class Settings {
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage) { }
+
+  clear(): Promise<void> {
+    return this.storage.clear();
   }
 
-  getOptions(): Observable<Options> {
-    return this.storage.get('options').map(value => {
-      return Object.assign(new Options(), value);
+  getConnection(): Observable<any> {
+    return this.storage.get('connection');
+  }
+
+  setConnection(value: Peripheral) {
+    return this.storage.set('connection', { 
+      type: value.type, 
+      name: value.name, 
+      address: value.address 
     });
-  }
-
-  setOptions(value: Options): Promise<void> {
-    return this.storage.set('options', value);
   }
 
   getDrivers(): Observable<Array<Driver>> {
@@ -88,6 +93,16 @@ export class Settings {
     return this.storage.set('messages', value);
   }
 
+  getOptions(): Observable<Options> {
+    return this.storage.get('options').map(value => {
+      return Object.assign(new Options(), value);
+    });
+  }
+
+  setOptions(value: Options): Promise<void> {
+    return this.storage.set('options', value);
+  }
+
   getQualifyingSettings(): Observable<RaceSettings> {
     return this.storage.get('qualifying').map(value => {
       return Object.assign(new RaceSettings('qualifying'), value);
@@ -106,9 +121,5 @@ export class Settings {
 
   setRaceSettings(value: any): Promise<void> {
     return this.storage.set('race', value);
-  }
-
-  clear(): Promise<void> {
-    return this.storage.clear();
   }
 }

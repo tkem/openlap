@@ -260,9 +260,7 @@ export class DemoBackend extends Backend {
     super();
   }
 
-  protected _subscribe(subscriber) {
-    subscriber.next(new DemoPeripheral('Demo', 0x2, this.logger));
-    // subscriber.next(new DemoPeripheral('Demo (no pit lane)', 0x0, this.logger));
-    subscriber.complete();
+  scan(): Observable<Peripheral> {
+    return Observable.of(new DemoPeripheral('Demo', 0x2, this.logger));
   }
 };

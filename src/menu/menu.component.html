@@ -1,24 +1,22 @@
 <ion-menu [content]="nav" (ionClose)="onMenuClose()">
   <ion-content>
-    <ion-item-group *ngIf="(cu | async)">
-      <ion-item color="primary" (click)="mode = !mode">
-        <h1>{{(cu | async).peripheral.name}}</h1>
-        <h2>{{(cu | async).peripheral.address}}</h2>
-        <h3>Version {{(version | async) || 'n/a'}}</h3>
-        <ion-icon item-right [name]="mode ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
-      </ion-item>
-    </ion-item-group>
-    <div *ngIf="(cu | async) && mode">
+    <ion-item [color]="cu ? 'primary' : 'danger'" (click)="onMenuToggle()">
+      <h1>{{cu ? cu.peripheral.name : 'No connection'}}</h1>
+      <h2>{{cu?.peripheral.address}}</h2>
+      <h3>Version {{(version | async) || 'n/a'}}</h3>
+      <ion-icon item-right [name]="mode ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
+    </ion-item>
+    <div *ngIf="mode">
       <ion-item-group>
-        <button ion-item menuClose [disabled]="!(cu | async)" (click)="startPractice()">
+        <button ion-item menuClose [disabled]="!cu" (click)="startPractice()">
           <ion-icon name="speedometer" item-left></ion-icon>
           Free Practice
         </button>
-        <button ion-item menuClose [disabled]="!(cu | async)" (click)="startQualifying()">
+        <button ion-item menuClose [disabled]="!cu" (click)="startQualifying()">
           <ion-icon name="stopwatch" item-left></ion-icon>
           Qualifying
         </button>
-        <button ion-item menuClose [disabled]="!(cu | async)" (click)="startRace()">
+        <button ion-item menuClose [disabled]="!cu" (click)="startRace()">
           <ion-icon name="trophy" item-left></ion-icon>
           Race
         </button>
@@ -32,7 +30,7 @@
           <ion-icon name="color-palette" item-left></ion-icon>
           Colors
         </button>
-        <button ion-item menuClose [disabled]="!(cu | async)" (click)="nav.push(setupPage)">
+        <button ion-item menuClose [disabled]="!cu" (click)="nav.push(setupPage)">
           <ion-icon name="build" item-left></ion-icon>
           Car Setup
         </button>
@@ -48,11 +46,11 @@
         </button>
       </ion-item-group>
     </div>
-    <div *ngIf="!(cu | async) || !mode">
+    <div *ngIf="!mode">
       <ion-item-group>
-        <app-connections></app-connections>
+        <app-connections [selected]="cu?.peripheral"></app-connections>
       </ion-item-group>
-      <ion-item-group *ngIf="cu | async">
+      <ion-item-group *ngIf="cu">
         <button ion-item (click)="reconnect()">
           <ion-icon name="refresh" item-left></ion-icon>
           Reconnect

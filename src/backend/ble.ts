@@ -6,7 +6,7 @@ import { BLE } from 'ionic-native';
 
 import { Backend } from './backend';
 import { Peripheral } from '../carrera';
-import { Observable, NextObserver, Subject, Subscription } from '../rxjs';
+import { Observable, NextObserver, Subject } from '../rxjs';
 import { Logger } from '../logging';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -14,6 +14,19 @@ const OUTPUT_UUID = '39df8888-b1b4-b90b-57f1-7144ae4e4a6a';
 const NOTIFY_UUID = '39df9999-b1b4-b90b-57f1-7144ae4e4a6a';
 
 const DOLLAR = '$'.charCodeAt(0);
+
+function wrapNative<T>(observable: Observable<T>, zone: NgZone) {
+  return new Observable<T>(subscriber => {
+    const subscription = observable.subscribe({
+      next: obj => zone.run(() => subscriber.next(obj)),
+      error: obj => zone.run(() => subscriber.error(obj)),
+      complete: () => zone.run(() => subscriber.complete())
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  });
+}
 
 class BLEPeripheral implements Peripheral {
 
@@ -113,7 +126,7 @@ class BLEPeripheral implements Peripheral {
       view.copyWithin(1, 0);
       view[0] = view.length == 6 ? 0x30 : 0x3f;
     }
-    this.zone.run(() => subscriber.next(view.buffer)); 
+    this.zone.run(() => subscriber.next(view.buffer));
   }
 
   private onError(error, subscriber) {
@@ -126,47 +139,33 @@ export class BLEBackend extends Backend {
 
   private enabled: Promise<any>;
 
+  private scanner: Observable<any>;
+
   constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
     this.enabled = this.platform.ready().then(() => {
       return BLE.enable();  // only present Bluetooth dialog once
     });
+    this.scanner = Observable.from(this.enabled).switchMap(() => {
+      return wrapNative(BLE.startScanWithOptions([], { reportDuplicates: true }), this.zone).do(device => {
+        console.log('BLE device', device);
+      }); 
+    }).share();
   }
 
-  protected _subscribe(subscriber) {
-    let promise = new Promise<Subscription>((resolve, reject) => {
-      // TODO: BLE.enabled(), since user may activate Bluetooth later...
-      this.enabled.then(() => {
-        let devices = {};
-        // TODO: BLE.startScan([SERVICE_UUID]) not working?
-        let subscription = BLE.startScanWithOptions([], { reportDuplicates: true }).subscribe({
-          next: device => {
-            this.logger.debug('Found BLE device: ', device);
-            // TODO: use and adapt rssi?
-            if (!(device.id in devices)) {
-              const peripheral = new BLEPeripheral(device, this.logger, this.zone);
-              this.zone.run(() => subscriber.next(peripheral));
-              devices[device.id] = true;
-            }
-          }, 
-          error: err => {
-            this.zone.run(() => subscriber.error(err))
-          }
-        });
-        this.logger.debug('Scanning for BLE devices');
-        resolve(subscription);
-      }).catch(error => {
-        this.zone.run(() => subscriber.complete());
-        reject(error);
-      });
-    });
-    return () => {
-      promise.then(subscription => {
-        this.logger.debug('Stop scanning for BLE devices');
-        subscription.unsubscribe();
-      }).catch(error => {
-        this.logger.error('Error scanning BLE devices: ', error);
-      });
-    };
+  scan(): Observable<Peripheral> {
+    let devices = {};
+    return this.scanner.filter(device => {
+      // TODO: use and adapt rssi?
+      return !(device.id in devices);
+    }).map(device => {
+      this.logger.debug('Found new BLE device: ', device);
+      const peripheral = new BLEPeripheral(device, this.logger, this.zone);
+      devices[device.id] = true;
+      return peripheral;
+    }).catch(error => {
+      this.logger.error('BLE error:', error);
+      return Observable.empty();
+    });;
   }
 }

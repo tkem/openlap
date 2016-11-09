@@ -4,13 +4,16 @@ import { Nav, Platform } from 'ionic-angular';
 
 import { Insomnia, Splashscreen } from 'ionic-native';
 
-import { BehaviorSubject, Subscription } from '../rxjs';
+import { ArrayObservable, BehaviorSubject, Subscription } from '../rxjs';
 
+import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_SUBJECT, Settings } from '../core';
 import { Logger } from '../logging';
 import { RaceControlPage } from '../rms';
 import { Toast } from '../shared';
+
+const CONNECTION_TIMEOUT = 3000;
 
 @Component({
   templateUrl: 'root.html'
@@ -21,7 +24,7 @@ export class RootPage {}
   templateUrl: 'app.html'
 })
 export class AppComponent implements OnInit {
-  
+
   @ViewChild(Nav) nav: Nav;
 
   rootPage = RootPage;  // FIXME: get rid of this!
@@ -29,25 +32,48 @@ export class AppComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
+              @Inject(Backend) private backends: Backend[],
               private logger: Logger, private settings: Settings,
               private platform: Platform, private toast: Toast)
   {
-    settings.getOptions().subscribe((options) => {
-      logger.setLevel(options.debug ? 'debug' : 'info');
+    settings.getOptions().subscribe(options => {
+      this.logger.setLevel(options.debug ? 'debug' : 'info');
     });
   }
 
   ngOnInit() {
     this.platform.ready().then(readySource => {
       this.logger.info('Initializing ' + readySource + ' application');
-      Insomnia.keepAwake();
-      Splashscreen.hide();
+      if (readySource === 'cordova') {
+        Insomnia.keepAwake();
+      }
+      this.settings.getConnection().subscribe(connection => {
+        if (this.cu.value) {
+          this.cu.value.disconnect();
+        }
+        if (connection) {
+          this.logger.info('Connecting to ' + connection.name);
+          ArrayObservable.create(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
+            return device.equals(connection);
+          }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
+            const cu = new ControlUnit(device);
+            this.cu.next(cu);
+            cu.connect();
+          }).catch(error => {
+            this.logger.warn('Error connecting to ' + connection.name + ':', error);
+          }).then(() => {
+            this.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
+          });
+        } else {
+          this.logger.info('No connection set');
+          this.cu.next(null);
+          this.setRoot(this.rootPage);
+        }
+      });
     });
 
     // TODO: move this to RaceControl?
-    this.subscription = this.cu.filter((cu) => !!cu).do(cu => {
-      this.nav.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
-    }).switchMap((cu: ControlUnit) => {
+    this.subscription = this.cu.filter((cu) => !!cu).switchMap((cu: ControlUnit) => {
       return cu.getState().debounceTime(200).distinctUntilChanged().map(state => [state, cu.peripheral.name]);
     }).subscribe(([state, device]) => {
       switch (state) {
@@ -66,5 +92,11 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  private setRoot(page: Component, params?: any) {
+    this.nav.setRoot(page, params).then(() => {
+      Splashscreen.hide();
+    });
   }
 }

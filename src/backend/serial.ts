@@ -1,5 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 
+import { Platform } from 'ionic-angular';
+
 import { Cordova, Plugin } from 'ionic-native';
 
 import { Backend } from './backend';
@@ -113,9 +115,7 @@ class SerialPeripheral implements Peripheral {
   }
 
   private open(options: any) {
-    return Serial.requestPermission().then(() => {
-      return Serial.open(options);
-    });
+    return Serial.open(options);
   }
 
   private write(value: ArrayBuffer) {
@@ -142,12 +142,21 @@ class SerialPeripheral implements Peripheral {
 @Injectable()
 export class SerialBackend extends Backend {
 
-  constructor(private logger: Logger, private zone: NgZone) {
+  private enabled: Promise<any>;
+
+  constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
+    this.enabled = this.platform.ready().then(() => {
+      return Serial.requestPermission();
+    });
   }
 
-  protected _subscribe(subscriber) {
-    subscriber.next(new SerialPeripheral(this.logger, this.zone));
-    subscriber.complete();
+  scan(): Observable<Peripheral> {
+    return Observable.from(this.enabled).switchMap(() => {
+      return Observable.of(new SerialPeripheral(this.logger, this.zone));
+    }).catch(error => {
+      this.logger.error('Serial error:', error);
+      return Observable.empty();
+    });
   }
 };
