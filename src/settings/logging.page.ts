@@ -69,6 +69,7 @@ export class LoggingPopover {
 export class LoggingPage {
 
   icons = [
+    {name: 'bug', style: {color: 'white'}}, 
     {name: 'bug', style: {color: 'green'}}, 
     {name: 'information-circle', style: {color: 'blue'}},
     {name: 'warning', style: {color: 'yellow'}},

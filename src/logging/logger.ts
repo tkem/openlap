@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export enum LogLevel { DEBUG, INFO, WARNING, ERROR };
+export enum LogLevel { TRACE, DEBUG, INFO, WARNING, ERROR };
 
 export class LogRecord {
   level: LogLevel;
@@ -17,10 +17,13 @@ export class Logger {
 
   records = new Array<LogRecord>();
 
-  // TODO: logError, logGroup, ... for ExceptionHandler!
+  // TODO: logError, logGroup, ... for ExceptionHandler
 
   setLevel(level: string) {
     switch (level) {
+    case 'trace':
+      this.level = LogLevel.TRACE;
+      break;
     case 'debug':
       this.level = LogLevel.DEBUG;
       break;
@@ -38,7 +41,10 @@ export class Logger {
     }
   }
 
-  // TODO: rename to "log"?
+  trace(...args: any[]) {
+    this.log(LogLevel.TRACE, args);
+  }
+
   debug(...args: any[]) {
     this.log(LogLevel.DEBUG, args);
   }
