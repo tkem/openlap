@@ -1,3 +1,15 @@
+0.7.3 2016-11-14
+----------------
+
+- Try to connect to last device on startup.
+
+- Improve USB permission handling.
+
+- Improve side menu UI.
+
+- Upgrade to Ionic RC 2.
+
+
 0.7.2 2016-11-02
 ----------------
 
