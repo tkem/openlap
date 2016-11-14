@@ -124,7 +124,7 @@ class BLEPeripheral implements Peripheral {
 @Injectable()
 export class BLEBackend extends Backend {
 
-  private enabled: Promise<void>;
+  private enabled: Promise<any>;
 
   constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();

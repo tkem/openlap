@@ -57,7 +57,8 @@ export class RaceSession {
     const pit = cu.getPit();
   
     this.grid = timer.groupBy(([id]) => id, ([_id, time]) => time).map(group => {
-      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: [number, number, number, number, boolean], time) => {
+      type TimeInfo = [number, number, number, number, boolean];
+      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time): TimeInfo => {
         if (time > prev) {
           ++laps;
           if (!fini && this.isFinished(laps)) {
@@ -80,7 +81,7 @@ export class RaceSession {
       return times.combineLatest(
         pits,
         fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
-      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel]) => ({
+      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => ({
         id: group.key,
         time: time - (offset || (offset = time)),  // TODO: reconnect, CU timer reset...
         lastLap: lastlap,

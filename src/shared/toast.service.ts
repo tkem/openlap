@@ -42,7 +42,7 @@ class IonicToastProvider implements ToastProvider {
       toast.onDidDismiss(() => {
         this.dismissCurrentToast = () => Promise.resolve();
       });
-      this.dismissCurrentToast = () => toast.dismiss();
+      this.dismissCurrentToast = () => toast.dismiss().then(() => { return });
       return toast.present();
     });
   }
