@@ -1,5 +1,6 @@
+import { BehaviorSubject, Observable } from 'rxjs';
+
 import { ControlUnit } from '../carrera';
-import { BehaviorSubject, Observable } from '../rxjs';
 
 export interface RaceItem {
   id: number

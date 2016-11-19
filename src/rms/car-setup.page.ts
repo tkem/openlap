@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 
+import { Observable, Subject } from 'rxjs';
+
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER } from '../core';
-import { Observable, Subject } from '../rxjs';
 
 // TODO: store with CU or settings?
 // TODO: initial values, mark as touched, etc.

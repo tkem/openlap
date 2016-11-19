@@ -2,7 +2,7 @@ import { Component, Inject, Input } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
 
-import { ArrayObservable, Observable } from '../rxjs';
+import { Observable } from 'rxjs';
 
 import { Backend } from '../backend';
 import { Peripheral } from '../carrera';
@@ -24,7 +24,7 @@ export class ConnectionsComponent {
 
   ngOnInit() {
     this.platform.ready().then(readySource => {
-      this.peripherals = ArrayObservable.create(this.backends.map(backend => backend.scan())).mergeAll().scan(
+      this.peripherals = Observable.from(this.backends.map(backend => backend.scan())).mergeAll().scan(
         (result, value) => result.concat(value), []
       );
     });

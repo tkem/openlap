@@ -4,7 +4,7 @@ import { Nav, Platform } from 'ionic-angular';
 
 import { Cordova, Insomnia, Plugin, Splashscreen } from 'ionic-native';
 
-import { ArrayObservable, BehaviorSubject, Subscription } from '../rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
         }
         if (connection) {
           this.logger.info('Connecting to ' + connection.name);
-          ArrayObservable.create(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
+          Observable.from(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
             return device.equals(connection);
           }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
             const cu = new ControlUnit(device);

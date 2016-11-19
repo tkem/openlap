@@ -1,9 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
+import { Observable, Subject } from 'rxjs';
+import { NextObserver } from 'rxjs/Observer';
+
 import { Backend } from './backend';
 import { Peripheral } from '../carrera';
 import { Logger } from '../logging';
-import { Observable, NextObserver, Subject } from '../rxjs';
 
 const VERSION = '0815';
 

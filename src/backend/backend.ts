@@ -1,6 +1,6 @@
-import { Peripheral } from '../carrera';
+import { Observable } from 'rxjs';
 
-import { Observable } from '../rxjs';
+import { Peripheral } from '../carrera';
 
 export abstract class Backend {
 

@@ -1,7 +1,8 @@
 import { OpaqueToken } from '@angular/core';
 
+import { BehaviorSubject } from 'rxjs';
+
 import { ControlUnit } from '../carrera';
-import { BehaviorSubject } from '../rxjs';
 
 export function controlUnitFactory(subject: BehaviorSubject<ControlUnit>) {
   return subject.value;

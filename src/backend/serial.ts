@@ -4,10 +4,12 @@ import { Platform } from 'ionic-angular';
 
 import { Cordova, Plugin } from 'ionic-native';
 
+import { Observable, Subject } from 'rxjs';
+import { NextObserver } from 'rxjs/Observer';
+
 import { Backend } from './backend';
 import { Peripheral } from '../carrera';
 import { Logger } from '../logging';
-import { Observable, NextObserver, Subject } from '../rxjs';
 
 const BAUD_RATE = 19200;
 

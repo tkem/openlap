@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { ModalController, Nav, Platform } from 'ionic-angular';
 
-import { Observable } from '../rxjs';
+import { Observable } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
 import { Settings } from '../core';
