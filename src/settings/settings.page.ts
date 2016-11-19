@@ -9,7 +9,8 @@ import { AboutPage } from './about.page';
 import { ColorsPage } from './colors.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingPage } from './logging.page';
-import { SpeechPage } from './speech.page';
+import { MessagesPage } from './messages.page';
+import { OptionsPage } from './options.page';
 
 @Component({
   template: `
@@ -51,12 +52,13 @@ export class SettingsPopover {
   templateUrl: 'settings.page.html'
 })
 export class SettingsPage {
+  aboutPage = AboutPage;
   colorsPage = ColorsPage;
-  speechPage = SpeechPage;
   licensesPage = LicensesPage;
   loggingPage = LoggingPage;
-  aboutPage = AboutPage;
-
+  messagesPage = MessagesPage;
+  optionsPage = OptionsPage;
+  
   constructor(private popover: PopoverController) {}
 
     presentPopover(event) {

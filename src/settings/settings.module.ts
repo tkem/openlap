@@ -11,8 +11,9 @@ import { ColorsPage } from './colors.page';
 import { DriversPage } from './drivers.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingPage, LoggingPopover } from './logging.page';
+import { MessagesPage } from './messages.page';
+import { OptionsPage } from './options.page';
 import { SettingsPage, SettingsPopover } from './settings.page';
-import { SpeechPage } from './speech.page';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SpeechPage } from './speech.page';
     LicensesPage,
     LoggingPage,
     LoggingPopover,
-    SpeechPage
+    MessagesPage,
+    OptionsPage
   ],
   entryComponents: [
     SettingsPage,
@@ -35,7 +37,8 @@ import { SpeechPage } from './speech.page';
     LicensesPage,
     LoggingPage,
     LoggingPopover,
-    SpeechPage
+    MessagesPage,
+    OptionsPage,
   ],
   exports: [
     DriversPage,

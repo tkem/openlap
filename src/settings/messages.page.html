@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Messages
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <ion-label floating>{{item.label}}</ion-label>
+      <ion-input [(ngModel)]="messages[item.id]"></ion-input>
+      <button ion-button clear item-right (click)="speak(messages[item.id])">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+    </ion-item>
+
+  </ion-list>
+</ion-content>

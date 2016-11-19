@@ -4,8 +4,6 @@ import { TextToSpeech } from 'ionic-native';
 
 import { Logger } from '../logging';
 
-const RE = /{(name)}/g;
-
 @Injectable()
 export class Speech {
 
@@ -15,18 +13,16 @@ export class Speech {
 
   constructor(private logger: Logger) {}
 
-  speak(message: string, args?: any) {
+  speak(message: string) {
     // TODO: priorities?
-    // TODO: remove regexp/args-handling from this!
     // TODO: returned promise vs. this.promise for chaining
-    const str = message.replace(RE, (match, p) => args[p]);
     this.pending++;
     this.promise = this.promise.then(() => {
       if (--this.pending === 0) {
-        this.logger.info('Speak ', str);
-        return TextToSpeech.speak(str);
+        this.logger.debug('Speak ', message);
+        return TextToSpeech.speak(message);
       } else {
-        this.logger.warn('Speech cancelled', str);
+        this.logger.debug('Speech cancelled', message);
       }
     }).catch((error) => {
       this.logger.error('Speech error', error);

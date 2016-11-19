@@ -21,10 +21,10 @@ const MESSAGES = {
   falsestart: 'False start!',
   finished: 'Race finished!',
   finallap: 'Final lap!',
-  bestlap: '{name}: Fastest lap!',
-  fuel2: '{name}: Low fuel!',
-  fuel1: '{name}: Box!',
-  fuel0: '{name}: Box! Box! Box!'
+  bestlap: 'Fastest lap!',
+  fuel2: 'Low fuel!',
+  fuel1: 'Box!',
+  fuel0: 'Box! Box! Box!'
 };
 
 export class Options {
