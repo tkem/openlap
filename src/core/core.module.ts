@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 
-import { BehaviorSubject } from '../rxjs';
+import { Storage } from '@ionic/storage';
+
+import { BehaviorSubject } from 'rxjs';
+
 import { ControlUnit } from '../carrera';
 
 import { CONTROL_UNIT_SUBJECT } from './control-unit';
@@ -13,6 +16,7 @@ export function controlUnitSubject()  {
 
 @NgModule({
   providers: [
+    Storage,
     Settings,
     { provide: CONTROL_UNIT_SUBJECT, useFactory: controlUnitSubject },
     Speech

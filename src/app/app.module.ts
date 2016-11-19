@@ -8,7 +8,6 @@ import { LoggingModule } from '../logging';
 import { MenuModule } from '../menu';
 import { RMSModule } from '../rms';
 import { SettingsModule } from '../settings';
-import { StorageModule } from '../storage';
 import { SharedModule } from '../shared';
 
 import { AppComponent, RootPage } from './app.component';
@@ -20,7 +19,6 @@ import { AppComponent, RootPage } from './app.component';
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
-    StorageModule.forRoot({ prefix: 'at.co.kemmer.openlap.' }),
     BackendModule,
     CoreModule,
     LoggingModule,

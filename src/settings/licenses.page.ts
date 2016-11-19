@@ -50,11 +50,6 @@ export class LicensesPage {
     author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
     license: 'MIT'
   }, {
-    name: 'cordova-plugin-nativestorage',
-    url: 'https://github.com/TheCocoaProject/cordova-plugin-nativestorage',
-    author: 'TheCocoaProject',
-    license: 'Apache-2.0'
-  }, {
     name: 'cordova-plugin-tts',
     author: 'VILIC VANE',
     license: 'MIT',
