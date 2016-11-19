@@ -31,12 +31,10 @@ leaderboard {
     }
 
     span.pit {
-        background: yellow;
-        padding: 0 2px 0 2px 0;
-        color: black;
         font-size: smaller;
         vertical-align: middle;
     }
+
     .position {
         text-align: left;
         width: 3em;
@@ -87,8 +85,9 @@ leaderboard {
         width: 6em;
     }
     .status {
+        padding: 0 4px 0 4px;
         text-align: left;
-        width: 4em;
+        width: 2.5em;
     }
 }
 
