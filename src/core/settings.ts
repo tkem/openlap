@@ -29,6 +29,7 @@ const MESSAGES = {
 
 export class Options {
   debug = false;
+  fullscreen = false;
   speech = true;
 }
 

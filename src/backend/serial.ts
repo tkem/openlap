@@ -28,6 +28,7 @@ function concat(lhs: Uint8Array, rhs: Uint8Array) {
 
 @Plugin({
   plugin: 'cordovarduino',
+  pluginName: 'serial',
   pluginRef: 'serial',
   repo: 'https://github.com/xseignard/cordovarduino',
   platforms: ['Android']

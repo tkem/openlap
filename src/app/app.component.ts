@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 
 import { Nav, Platform } from 'ionic-angular';
 
-import { Insomnia, Splashscreen } from 'ionic-native';
+import { Cordova, Insomnia, Plugin, Splashscreen } from 'ionic-native';
 
 import { ArrayObservable, BehaviorSubject, Subscription } from '../rxjs';
 
@@ -14,6 +14,25 @@ import { RaceControlPage } from '../rms';
 import { Toast } from '../shared';
 
 const CONNECTION_TIMEOUT = 3000;
+
+@Plugin({
+  plugin: 'cordova-plugin-fullscreen',
+  pluginName: 'AndroidFullScreen',
+  pluginRef: 'AndroidFullScreen',
+  repo: 'https://github.com/mesmotronic/cordova-plugin-fullscreen',
+  platforms: ['Android']
+})
+class AndroidFullScreen {
+
+  @Cordova()
+  static isSupported(): Promise<void> { return; }
+
+  @Cordova()
+  static showSystemUI(): Promise<void> { return; }
+
+  @Cordova()
+  static immersiveMode(): Promise<void> { return; }
+}
 
 @Component({
   templateUrl: 'root.html'
@@ -35,11 +54,7 @@ export class AppComponent implements OnInit {
               @Inject(Backend) private backends: Backend[],
               private logger: Logger, private settings: Settings,
               private platform: Platform, private toast: Toast)
-  {
-    settings.getOptions().subscribe(options => {
-      this.logger.setLevel(options.debug ? 'debug' : 'info');
-    });
-  }
+  {}
 
   ngOnInit() {
     this.platform.ready().then(readySource => {
@@ -47,6 +62,18 @@ export class AppComponent implements OnInit {
       if (readySource === 'cordova') {
         Insomnia.keepAwake();
       }
+      this.settings.getOptions().subscribe(options => {
+        this.logger.setLevel(options.debug ? 'debug' : 'info');
+        AndroidFullScreen.isSupported().then(() => {
+          if (options.fullscreen) {
+            return AndroidFullScreen.immersiveMode();
+          } else {
+            return AndroidFullScreen.showSystemUI();
+          }
+        }).catch(error => {
+          this.logger.error('Fullscreen error: ', error);
+        });
+      });
       this.settings.getConnection().subscribe(connection => {
         if (this.cu.value) {
           this.cu.value.disconnect();

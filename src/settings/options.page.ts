@@ -13,6 +13,10 @@ export class OptionsPage implements OnDestroy {
 
   constructor(private settings: Settings) {}
 
+  update() {
+    this.settings.setOptions(this.options);
+  }
+
   ngOnInit() {
     this.subscription = this.settings.getOptions().subscribe(options => {
       this.options = options;
@@ -20,7 +24,6 @@ export class OptionsPage implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.settings.setOptions(this.options);
     this.subscription.unsubscribe();
   }
 }

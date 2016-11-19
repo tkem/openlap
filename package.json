@@ -38,6 +38,7 @@
     "cordova-plugin-ble-central",
     "cordova-plugin-console",
     "cordova-plugin-device",
+    "cordova-plugin-fullscreen",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-insomnia",
     "cordova-plugin-splashscreen",

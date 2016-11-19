@@ -41,14 +41,19 @@ export class LicensesPage {
     homepage: 'https://github.com/whiteoctober/cordova-plugin-app-version#readme'
   }, {
     name: 'cordova-plugin-ble-central',
-    url: 'https://github.com/don/cordova-plugin-ble-central#readme',
     author: 'Don Coleman <don.coleman@gmail.com>',
-    license: 'Apache-2.0'
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/don/cordova-plugin-ble-central#readme'
+  }, {
+    name: 'cordova-plugin-fullscreen',
+    author: 'Neil Rackett',
+    license: 'BSD',
+    homepage: 'https://github.com/mesmotronic/cordova-fullscreen-plugin#readme'
   }, {
     name: 'cordova-plugin-insomnia',
-    url: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme',
     author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
-    license: 'MIT'
+    license: 'MIT',
+    homepage: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme'
   }, {
     name: 'cordova-plugin-tts',
     author: 'VILIC VANE',
