@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { NavParams } from 'ionic-angular';
+import { NavParams, PopoverController, ViewController } from 'ionic-angular';
 
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
@@ -42,6 +42,41 @@ export class Lap {
 }
 
 @Component({
+  template: `
+    <ion-item-group>
+      <button ion-item [disabled]="!options.restart" (click)="restart()">
+        Restart
+      </button>
+      <button ion-item [disabled]="!options.stop" (click)="stop()">
+        Stop
+      </button>
+    </ion-item-group>
+  `
+})
+export class RaceControlPopover {
+
+  options: { restart: any , stop: any }; 
+
+  constructor(private view: ViewController, private params: NavParams) {
+    this.options = params.data;
+  }
+
+  restart() {
+    this.options.restart();
+    this.close();
+  }
+
+  stop() {
+    this.options.stop();
+    this.close();
+  }
+
+  private close() {
+    this.view.dismiss();
+  }
+}
+
+@Component({
   providers: [CONTROL_UNIT_PROVIDER],
   templateUrl: 'race-control.page.html',
 })
@@ -62,7 +97,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   private subscription: Subscription;
 
   constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech, 
-    params: NavParams) 
+    params: NavParams, private popover: PopoverController) 
   {
     this.logger.info('Main page', cu, params.data);
     this.options = params.data;
@@ -172,5 +207,13 @@ export class RaceControlPage implements OnDestroy, OnInit {
         });
       });
     }
+  }
+
+  presentPopover(event) {
+    let popover = this.popover.create(RaceControlPopover, {
+      restart: () => this.onStart(),
+      stop: this.session && !this.session.finished.value ? () => this.session.stop() : null
+    });
+    popover.present({ev: event});
   }
 }

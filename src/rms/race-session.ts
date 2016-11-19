@@ -152,10 +152,14 @@ export class RaceSession {
     }
   }
 
+  stop() {
+    this.endTime = Date.now();
+  }
+
   private isFinished(laps: number) {
     if (this.options.laps && laps >= this.options.laps) {
       return true;
-    } else if (this.options.time && Date.now() >= this.endTime) {
+    } else if (this.endTime && Date.now() >= this.endTime) {
       return true;  // FIXME: use timer
     } else if (!this.options.slotmode && this.finished.value) {
       return true;

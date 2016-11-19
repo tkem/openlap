@@ -7,7 +7,7 @@ import { IonicModule } from 'ionic-angular';
 import { SharedModule } from '../shared';
 
 import { CarSetupPage } from './car-setup.page';
-import { Lap, RaceControlPage } from './race-control.page';
+import { Lap, RaceControlPage, RaceControlPopover } from './race-control.page';
 import { RaceSettingsPage } from './race-settings.page';
 
 import { ChequeredFlagComponent } from './chequered-flag.component';
@@ -23,15 +23,16 @@ import { StartlightComponent } from './startlight.component';
     LeaderboardHeadComponent,
     LeaderboardItemComponent,
     StartlightComponent,
-
     CarSetupPage,
     Lap,
     RaceControlPage,
+    RaceControlPopover,
     RaceSettingsPage
   ],
   entryComponents: [
     CarSetupPage,
     RaceControlPage,
+    RaceControlPopover,
     RaceSettingsPage
   ],
   exports: [
