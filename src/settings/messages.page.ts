@@ -27,7 +27,10 @@ export class MessagesPage implements OnDestroy {
     label: 'Fuel < 10%'
   }, {
     id: 'fuel0',
-    label: 'No Fuel'
+    label: 'No fuel'
+  }, {
+    id: 'pitenter',
+    label: 'Car enters pit'
   }];
 
   messages: {[key: string]: string} = {};

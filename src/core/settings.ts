@@ -24,7 +24,8 @@ const MESSAGES = {
   bestlap: 'Fastest lap!',
   fuel2: 'Low fuel!',
   fuel1: 'Box!',
-  fuel0: 'Box! Box! Box!'
+  fuel0: 'Box! Box! Box!',
+  pitenter: 'In pit!'
 };
 
 export class Options {

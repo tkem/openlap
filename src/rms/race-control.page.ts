@@ -103,11 +103,21 @@ export class RaceControlPage implements OnDestroy, OnInit {
     const session = this.session = new RaceSession(this.cu, this.options);
 
     const events = Observable.merge(
-      session.grid.map(obs => obs.pairwise()).mergeAll().filter(([prev, curr]) => {
+      session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
-        return prev.fuel > curr.fuel && curr.fuel < 3 && !curr.finished;
-      }).map(([_prev, curr]) => {
-        return ['fuel' + curr.fuel, curr.id];
+        const events = [];
+        if (!curr.finished) {
+          if (curr.pit && !prev.pit) {
+            events.push(['pitenter', curr.id]);
+          }
+          if (!curr.pit && prev.pit) {
+            events.push(['pitleave', curr.id]);
+          }
+          if (curr.fuel < prev.fuel) {
+            events.push(['fuel' + curr.fuel, curr.id]);
+          }
+        }
+        return Observable.from(events);
       }),
       session.bestlap.filter(car => car && car.laps >= 3).map(car => {
         return ['bestlap', car.id];
@@ -137,7 +147,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       this.subscription.unsubscribe();
     }
     this.subscription = events.withLatestFrom(this.settings.getOptions(), this.settings.getMessages()).subscribe(([[event, driver], options, messages]) => {
-      console.log('New race event: ' + event, driver);
+      this.logger.debug('New race event: ' + event, driver);
       if (options.speech && messages[event]) {
         if (driver && driver.name) {
           this.speech.speak(driver.name + ': ' + messages[event]);
