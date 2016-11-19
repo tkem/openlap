@@ -36,19 +36,26 @@
   "cordovaPlugins": [
     "cordova-plugin-app-version",
     "cordova-plugin-ble-central",
+    "cordova-plugin-compat",
     "cordova-plugin-console",
     "cordova-plugin-device",
     "cordova-plugin-fullscreen",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-insomnia",
     "cordova-plugin-splashscreen",
+    "cordova-plugin-statusbar",
     "cordova-plugin-tts",
     "cordova-plugin-whitelist",
     "cordova-plugin-x-toast",
-    "cordovarduino",
+    "fr.drangies.cordova.serial",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
-    "android"
+    "android",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    }
   ]
 }

@@ -1,3 +1,19 @@
+0.8.0 2016-11-19
+----------------
+
+- Upgrade to Ionic RC 3.
+
+- Switch to ``ionic-storage`` for storing user settings.
+
+- Add options to prematurely stop or restart a race.
+
+- Add fullscreen option.
+
+- Add "in pit" message.
+
+- Various minor UI improvements.
+
+
 0.7.3 2016-11-14
 ----------------
 
