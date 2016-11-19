@@ -34,6 +34,18 @@ ion-menu {
     }
 }
 
+ion-popover {
+    ion-item-group + ion-item-group {
+        border-top: 1px solid $list-md-border-color;
+    }
+    .item {
+        border-width: 0 !important;
+    }
+    .item-inner {
+        border-width: 0 !important;
+    }
+}
+
 ion-modal {
     ion-content {
         background: color($colors, dark) !important;

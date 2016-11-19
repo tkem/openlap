@@ -14,9 +14,9 @@ import { OptionsPage } from './options.page';
 
 @Component({
   template: `
-    <ion-list no-margin>
-      <button ion-item no-lines (click)="reset()">Reset</button>
-    </ion-list>
+    <ion-item-group>
+      <button ion-item (click)="reset()">Reset</button>
+    </ion-item-group>
   `
 })
 export class SettingsPopover {

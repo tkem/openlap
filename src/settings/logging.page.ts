@@ -7,13 +7,13 @@ import { Logger } from '../logging';
 
 @Component({
   template: `
-    <ion-list no-margin>
-      <ion-item no-lines>
+    <ion-item-group>
+      <ion-item>
         <ion-label>Debug</ion-label>
         <ion-checkbox [(ngModel)]="debugEnabled"></ion-checkbox>
       </ion-item>
-      <button ion-item no-lines (click)="logger.clear()">Clear</button>
-    </ion-list>
+      <button ion-item (click)="logger.clear()">Clear</button>
+    </ion-item-group>
   `
 })
 export class LoggingPopover {
