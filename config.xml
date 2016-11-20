@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="8000" id="at.co.kemmer.openlap" version="0.8.0" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="8001" id="at.co.kemmer.openlap" version="0.8.1" xmlns="http://www.w3.org/ns/widgets">
   <name>Open Lap</name>
   <description>Open Source Slotcar Race App for Carrera(R) Digital 124/132</description>
   <author email="tkemmer@computer.org">Thomas Kemmer</author>

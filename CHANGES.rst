@@ -1,3 +1,11 @@
+0.8.1 2016-11-20
+----------------
+
+- Improve backend/connection handling.
+
+- Update splash screen resources.
+
+
 0.8.0 2016-11-19
 ----------------
 
