@@ -59,7 +59,7 @@ class BLEPeripheral implements Peripheral {
       let isConnected = false;
       BLE.connect(this.address).subscribe({
         next: peripheral => {
-          this.logger.info('Connected to BLE device:', peripheral);
+          this.logger.info('Connected to BLE device', peripheral);
           isConnected = true;
           BLE.startNotification(this.address, SERVICE_UUID, NOTIFY_UUID).subscribe({
             next: data => this.onNotify(data, subscriber),
@@ -71,13 +71,13 @@ class BLEPeripheral implements Peripheral {
         },
         error: obj => {
           if (obj instanceof Error) {
-            this.logger.error('BLE connection error:', obj);
+            this.logger.error('BLE connection error', obj);
             this.zone.run(() => subscriber.error(obj));
           } else if (!isConnected) {
-            this.logger.error('BLE connection error:', obj);
+            this.logger.error('BLE connection error', obj);
             this.zone.run(() => subscriber.error(new Error('Connection error')));
           } else {
-            this.logger.info('BLE device disconnected:', obj);
+            this.logger.info('BLE device disconnected', obj);
             this.zone.run(() => subscriber.complete());
           }
         },
@@ -95,7 +95,7 @@ class BLEPeripheral implements Peripheral {
   private createObserver(disconnected?: NextObserver<void>) {
     return {
       next: (value: ArrayBuffer) => this.write(value),
-      error: (err: any) => this.logger.error('BLE user error:', err),
+      error: (err: any) => this.logger.error('BLE user error', err),
       complete: () => this.disconnect(disconnected)
     };
   }
@@ -112,7 +112,7 @@ class BLEPeripheral implements Peripheral {
     BLE.disconnect(this.address).then(() => {
       this.logger.info('BLE disconnected from ' + this.address);
     }).catch(error => {
-      this.logger.error('BLE disconnect error:', error);
+      this.logger.error('BLE disconnect error', error);
     }).then(() => {
       if (disconnected) {
         this.zone.run(() => disconnected.next(undefined));
@@ -139,19 +139,28 @@ class BLEPeripheral implements Peripheral {
 @Injectable()
 export class BLEBackend extends Backend {
 
-  private enabled: Promise<any>;
-
   private scanner: Observable<any>;
 
   constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
-    this.enabled = this.platform.ready().then(() => {
-      return BLE.enable();  // only present Bluetooth dialog once
-    });
-    this.scanner = Observable.from(this.enabled).switchMap(() => {
-      return wrapNative(BLE.startScanWithOptions([], { reportDuplicates: true }), this.zone).do(device => {
-        console.log('BLE device', device);
-      }); 
+
+    this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
+      if (readySource == 'cordova') {
+        // TODO: use BLE state listeners when available in ionic-native?
+        return Observable.interval(1000).startWith(null).switchMap(() => {
+          return Observable.from(BLE.isEnabled().then(() => true, () => false));
+        });
+      } else {
+        return Observable.of(false);
+      }
+    }).distinctUntilChanged().switchMap(enabled => {
+      if (enabled) {
+        return wrapNative(BLE.startScanWithOptions([], { reportDuplicates: true }), this.zone);
+      } else {
+        return Observable.empty();
+      } 
+    }).do(device => {
+      this.logger.debug('Found BLE device', device);
     }).share();
   }
 
@@ -161,12 +170,12 @@ export class BLEBackend extends Backend {
       // TODO: use and adapt rssi?
       return !(device.id in devices);
     }).map(device => {
-      this.logger.debug('Found new BLE device: ', device);
+      this.logger.info('New BLE device', device);
       const peripheral = new BLEPeripheral(device, this.logger, this.zone);
       devices[device.id] = true;
       return peripheral;
     }).catch(error => {
-      this.logger.error('BLE error:', error);
+      this.logger.error('BLE error', error);
       return Observable.empty();
     });;
   }

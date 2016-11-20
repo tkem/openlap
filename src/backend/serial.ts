@@ -61,7 +61,7 @@ class SerialPeripheral implements Peripheral {
 
   type = 'serial';
 
-  name = 'USB Serial';
+  name = 'Serial USB OTG';
 
   constructor(private logger: Logger, private zone: NgZone) {}
 
@@ -92,7 +92,7 @@ class SerialPeripheral implements Peripheral {
             }
           },
           error: err=> {
-            this.logger.error('Error reading from serial port:', err);
+            this.logger.error('Error reading from serial port', err);
             this.zone.run(() => subscriber.error(err));
           }
         });
@@ -100,7 +100,7 @@ class SerialPeripheral implements Peripheral {
           this.zone.run(() => connected.next(undefined));
         }
       }).catch(error => {
-        this.logger.error('Error connecting to serial port:', error);
+        this.logger.error('Error connecting to serial port', error);
         this.zone.run(() => subscriber.error(error));
       });
       return () => {
@@ -112,7 +112,7 @@ class SerialPeripheral implements Peripheral {
   private createObserver(disconnected?: NextObserver<void>) {
     return {
       next: (value: ArrayBuffer) => this.write(value),
-      error: (err: any) => this.logger.error('Serial user error:', err),
+      error: (err: any) => this.logger.error('Serial user error', err),
       complete: () => this.close(disconnected)
     };
   }
@@ -133,7 +133,7 @@ class SerialPeripheral implements Peripheral {
     Serial.close().then(() => {
       this.logger.debug('Serial port closed');
     }).catch(error => {
-      this.logger.error('Serial close error:', error);
+      this.logger.error('Error closing serial port', error);
     }).then(() => {
       if (disconnected) {
         this.zone.run(() => disconnected.next(undefined));
@@ -145,21 +145,30 @@ class SerialPeripheral implements Peripheral {
 @Injectable()
 export class SerialBackend extends Backend {
 
-  private enabled: Promise<any>;
+  private scanner: Observable<any>;
 
   constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
-    this.enabled = this.platform.ready().then(() => {
-      return Serial.requestPermission();
-    });
+
+    this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
+      if (readySource == 'cordova') {
+        // TODO: this should probably run in some kind of loop...
+        return Observable.from(Serial.requestPermission().then(() => true, () => false));
+      } else {
+        return Observable.of(false);
+      }
+    }).do(enabled => {
+      this.logger.debug('Serial device ' + (enabled ? '' : 'not') + ' enabled');
+    }).share();
   }
 
   scan(): Observable<Peripheral> {
-    return Observable.from(this.enabled).switchMap(() => {
-      return Observable.of(new SerialPeripheral(this.logger, this.zone));
-    }).catch(error => {
-      this.logger.error('Serial error:', error);
-      return Observable.empty();
-    });
+    return this.scanner.switchMap(enabled => {
+      if (enabled) {
+        return Observable.of(new SerialPeripheral(this.logger, this.zone));
+      } else {
+        return Observable.empty();
+      }
+    })
   }
 };

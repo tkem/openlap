@@ -99,7 +99,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
   constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech, 
     params: NavParams, private popover: PopoverController) 
   {
-    this.logger.info('Main page', cu, params.data);
     this.options = params.data;
 
     let start = this.cu.getStart();  // TODO: distinctUntilChanged

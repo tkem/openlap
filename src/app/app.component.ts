@@ -86,10 +86,11 @@ export class AppComponent implements OnInit {
             const cu = new ControlUnit(device);
             this.cu.next(cu);
             cu.connect();
-          }).catch(error => {
-            this.logger.warn('Error connecting to ' + connection.name + ':', error);
           }).then(() => {
             this.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
+          }).catch(error => {
+            this.logger.warn('Error connecting to ' + connection.name + ':', error);
+            this.setRoot(this.rootPage);
           });
         } else {
           this.logger.info('No connection set');
@@ -122,7 +123,11 @@ export class AppComponent implements OnInit {
   }
 
   private setRoot(page: Component, params?: any) {
-    this.nav.setRoot(page, params).then(() => {
+    console.log('Setting root page');
+    this.nav.setRoot(page, params).catch(error => {
+      this.logger.error('Error setting root page', error);
+    }).then(() => {
+      console.log('Hiding splash screen');
       Splashscreen.hide();
     });
   }
