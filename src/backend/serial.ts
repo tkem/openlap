@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
 
-import { Cordova, Plugin } from 'ionic-native';
+import { Cordova, Device, Plugin } from 'ionic-native';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
@@ -78,7 +78,7 @@ class SerialPeripheral implements Peripheral {
   private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to serial port');
-      this.open({ baudRate: BAUD_RATE }).then(() => {
+      this.open({ baudRate: BAUD_RATE, sleepOnPause: false }).then(() => {
         this.logger.info('Connected to serial port');
         let buffer = new Uint8Array(0);
         Serial.registerReadCallback().subscribe({
@@ -151,7 +151,7 @@ export class SerialBackend extends Backend {
     super();
 
     this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
-      if (readySource == 'cordova') {
+      if (readySource == 'cordova' && platform.is('android') && !Device.device.isVirtual) {
         // TODO: this should probably run in some kind of loop...
         return Observable.from(Serial.requestPermission().then(() => true, () => false));
       } else {
