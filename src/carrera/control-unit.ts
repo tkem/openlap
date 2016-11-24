@@ -17,8 +17,9 @@ import 'rxjs/add/operator/timeout';
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
 
-const CONNECTION_TIMEOUT = 5000;
-const RECONNECT_DELAY = 2000;
+const CONNECTION_TIMEOUT = 3000;
+const MIN_RECONNECT_DELAY = 250;
+const MAX_RECONNECT_DELAY = 3000;
 
 const POLL_COMMAND = DataView.fromString('?');
 
@@ -41,19 +42,15 @@ export class ControlUnit {
       next: () => {
         this.connection.next(POLL_COMMAND.buffer);
       }
-    }, {
-      next: () => {
-        this.state.next('disconnected');
-      }
     });
+    // TODO: different timeout for reconnect/polling 
     this.data = this.connection.timeout(CONNECTION_TIMEOUT).retryWhen(errors => {
-      return errors.delay(RECONNECT_DELAY).do(() => {
-        this.state.next('connecting');
-      });
+      return this.reconnect(errors);
     }).do(() => {
       if (this.state.value !== 'connected') {
         this.state.next('connected');
       }
+    }).do(() => {
       this.poll();
     }).map((data: ArrayBuffer) => {
       return new DataView(data);
@@ -171,5 +168,18 @@ export class ControlUnit {
   private poll() {
     const request = this.requests.shift() || POLL_COMMAND;
     this.connection.next(request.buffer);
+  }
+
+  private reconnect(errors: Observable<any>) {
+    const state = this.state;
+    return errors.scan((count, error) => {
+      return state.value === 'connected' ? 0 : count + 1;
+    }, 0).do(() => {
+      state.next('disconnected');
+    }).concatMap(value => {
+      return Observable.timer(Math.min(MIN_RECONNECT_DELAY * (1 << value), MAX_RECONNECT_DELAY));
+    }).do(() => {
+      state.next('connecting');
+    });
   }
 }

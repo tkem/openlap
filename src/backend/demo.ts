@@ -9,6 +9,8 @@ import { Logger } from '../logging';
 
 const VERSION = '0815';
 
+const TIMEOUT_RATE = 0.0001;
+
 function random(min: number, max: number) {
   return min + Math.random() * (max - min);
 }
@@ -161,7 +163,7 @@ class DemoPeripheral implements Peripheral {
         if (toString(value) == 'T2') {
           this.onStart();
         }
-        if (Math.round(random(0, 1000)) === 42) {
+        if (Math.random() < TIMEOUT_RATE) {
           console.log('Random Demo timeout');
           return;
         }
