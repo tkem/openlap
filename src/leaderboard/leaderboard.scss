@@ -7,10 +7,6 @@ leaderboard {
         width: 100%;
     }
 
-    tr {
-        padding-bottom: 6px;
-    }
-
     th, td {
         padding: 0.25rem;
         overflow: hidden;
@@ -35,13 +31,25 @@ leaderboard {
         vertical-align: middle;
     }
 
+    gauge {
+        span {
+            background: -webkit-linear-gradient(left, red, #ee0 25%, green 50%, darkGreen);
+            background: -o-linear-gradient(left, red, #ee0 25%, green 50%, darkGreen);
+            background: linear-gradient(to right, red, #ee0 25%, green 50%, darkGreen);
+        }
+    }
+
+    td.position {
+        height: 1em;
+        padding: 0;
+        .slant-content {
+            padding: 0.25rem 0.5rem;
+        }              
+    }   
     .position {
         text-align: left;
-        width: 3em;
+        width: 2.8em;
     }
-    td.position {
-        @extend .stripe-container;
-    }   
     .number {
         text-align: left;
         width: 2em;
@@ -88,47 +96,5 @@ leaderboard {
         padding: 0 4px 0 4px;
         text-align: left;
         width: 2.5em;
-    }
-}
-
-@media (min-width: 320px) {
-    leaderboard table {
-        font-size: 1rem;
-    }
-}
-
-@media (min-width: 400px) {
-    leaderboard table {
-        font-size: 1.2rem;
-    }
-}
-
-@media (min-width: 480px) {
-    leaderboard table {
-        font-size: 1.4rem;
-    }
-}
-
-@media (min-width: 640px) {
-    leaderboard table {
-        font-size: 1.6rem;
-    }
-}
-
-@media (min-width: 800px) {
-    leaderboard table {
-        font-size: 2rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    leaderboard table {
-        font-size: 2.5rem;
-    }
-}
-
-@media (min-width: 1280px) {
-    leaderboard table {
-        font-size: 3rem;
     }
 }

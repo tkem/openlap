@@ -8,10 +8,9 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
-import { CONTROL_UNIT_SUBJECT, Settings } from '../core';
+import { CONTROL_UNIT_SUBJECT, Settings, Toast } from '../core';
 import { Logger } from '../logging';
 import { RaceControlPage } from '../rms';
-import { Toast } from '../shared';
 
 const CONNECTION_TIMEOUT = 3000;
 

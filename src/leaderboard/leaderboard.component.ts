@@ -15,31 +15,9 @@ export class LeaderboardItem {
 }
 
 @Component({
-  selector: 'leaderboard thead tr[head]',
-  templateUrl: 'leaderboard-head.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class LeaderboardHeadComponent {
-  @Input() fields: string[];
-}
-
-@Component({
-  selector: 'leaderboard tbody tr[item]',
-  templateUrl: 'leaderboard-item.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class LeaderboardItemComponent {
-  @Input() fields: string[];
-  @Input() item: LeaderboardItem;
-  @Input() index: number;
-  @Input() items: LeaderboardItem[];
-  @Input() bestlap: number;
-}
-
-@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'leaderboard',
-  templateUrl: 'leaderboard.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'leaderboard.component.html'
 })
 export class LeaderboardComponent {
 

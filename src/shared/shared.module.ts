@@ -1,25 +1,32 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import { StripeDirective } from './stripe.directive';
+import { CheckerboardComponent } from './checkerboard.component';
+import { GaugeComponent } from './gauge.component';
+import { SlantComponent } from './slant.component';
+import { StartlightComponent } from './startlight.component';
 import { TargetDirective } from './target.directive';
 import { TimePipe } from './time.pipe';
-import { Toast } from './toast.service';
 
 @NgModule({
   declarations: [
-    StripeDirective,
+    CheckerboardComponent,
+    GaugeComponent,
+    SlantComponent,
+    StartlightComponent,
     TargetDirective,
     TimePipe
   ],
   exports: [
-    StripeDirective,
+    CheckerboardComponent,
+    GaugeComponent,
+    SlantComponent,
+    StartlightComponent,
     TargetDirective,
     TimePipe
   ],
   imports: [
-  ],
-  providers: [
-    Toast
+    CommonModule
   ]
 })
 export class SharedModule {}

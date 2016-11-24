@@ -4,25 +4,15 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from 'ionic-angular';
 
+import { LeaderboardModule } from '../leaderboard';
 import { SharedModule } from '../shared';
 
 import { CarSetupPage } from './car-setup.page';
 import { Lap, RaceControlPage, RaceControlPopover } from './race-control.page';
 import { RaceSettingsPage } from './race-settings.page';
 
-import { ChequeredFlagComponent } from './chequered-flag.component';
-import { FuelGaugeComponent } from './fuel-gauge.component';
-import { LeaderboardComponent, LeaderboardHeadComponent, LeaderboardItemComponent } from './leaderboard.component';
-import { StartlightComponent } from './startlight.component';
-
 @NgModule({
   declarations: [
-    ChequeredFlagComponent,
-    FuelGaugeComponent,
-    LeaderboardComponent,
-    LeaderboardHeadComponent,
-    LeaderboardItemComponent,
-    StartlightComponent,
     CarSetupPage,
     Lap,
     RaceControlPage,
@@ -44,6 +34,7 @@ import { StartlightComponent } from './startlight.component';
     CommonModule,
     FormsModule,
     IonicModule,
+    LeaderboardModule,
     SharedModule
   ],
   providers: [

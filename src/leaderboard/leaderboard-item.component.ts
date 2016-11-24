@@ -1,0 +1,16 @@
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { LeaderboardItem } from './leaderboard.component';
+
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'leaderboard tr[item]',
+  templateUrl: 'leaderboard-item.component.html'
+})
+export class LeaderboardItemComponent {
+  @Input() fields: string[];
+  @Input() item: LeaderboardItem;
+  @Input() index: number;
+  @Input() items: LeaderboardItem[];
+  @Input() bestlap: number;
+}

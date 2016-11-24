@@ -4,9 +4,9 @@ import { NavParams, PopoverController, ViewController } from 'ionic-angular';
 
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
+import { LeaderboardItem } from '../leaderboard';
 import { Logger } from '../logging';
 
-import { LeaderboardItem } from './leaderboard.component';
 import { RaceSession } from './race-session';
 
 import { Observable, Subscription } from 'rxjs';

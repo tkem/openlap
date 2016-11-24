@@ -15,6 +15,15 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+@keyframes blink-flag {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    40%  { opacity: 0; }
+    60%  { opacity: 1; }
+    80%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
 .item.selected {
     background: color($colors, primary);
 }
@@ -53,6 +62,26 @@ ion-modal {
     }
 }
 
+ion-title checkerboard {
+    animation-name: blink-flag;
+    animation-duration: 3s;
+    vertical-align: -0.2em;
+}
+
+leaderboard table {
+    font-size: 1rem;
+}
+
+ion-footer {
+  ion-toolbar {
+    min-height: 8rem;
+    button {
+      background-color: inherit;
+      font-size: 3rem;
+    }  
+  }
+}
+
 /* FIXME: is this really such a smart idea? */
 ion-input[type=number] {
     input {
@@ -67,3 +96,5 @@ ion-input[type=number] {
 .picker-opt {
     color: $text-color;
 }
+
+@import "media";
