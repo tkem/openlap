@@ -1,63 +1,39 @@
 leaderboard {
-    table {
-        table-layout: fixed;
-        border-collapse: collapse;
-        border-spacing: 0;
-        empty-cells: show;
+    display: block;
+    width: 100%;
+    
+    .row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: no-wrap;
         width: 100%;
     }
 
-    th, td {
-        padding: 0.25rem;
+    .cell {
+        flex-grow: 0;
+        flex-shrink: 1;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        padding: 0.25rem;
     }
 
-    th {
-        font-size: smaller;
-    }
-
-    span.bestlap {
-        color: #0f0;
-    }
-
-    span.allbest {
-        color: magenta !important;
-    }
-
-    span.pit {
-        font-size: smaller;
-        vertical-align: middle;
-    }
-
-    gauge {
-        span {
-            background: -webkit-linear-gradient(left, red, #ee0 25%, green 50%, darkGreen);
-            background: -o-linear-gradient(left, red, #ee0 25%, green 50%, darkGreen);
-            background: linear-gradient(to right, red, #ee0 25%, green 50%, darkGreen);
-        }
-    }
-
-    td.position {
-        height: 1em;
-        padding: 0;
-        .slant-content {
-            padding: 0.25rem 0.5rem;
-        }              
-    }   
     .position {
         text-align: left;
-        width: 2.8em;
+        width: 2.5em;
     }
     .number {
         text-align: left;
         width: 2em;
     }
     .name {
+        flex-basis: 4em;
+        flex-grow: 1;
         text-align: left;
     }
     .code {
+        flex-basis: 3em;
+        flex-grow: 1;
         text-align: left;
     }
     .time {
@@ -66,19 +42,19 @@ leaderboard {
     }
     .bestlap {
         text-align: right;
-        width: 6em;
+        width: 5em;
     }
     .gap {
         text-align: right;
-        width: 6em;
+        width: 5em;
     }
     .int {
         text-align: right;
-        width: 6em;
+        width: 5em;
     }
     .laptime {
         text-align: right;
-        width: 6em;
+        width: 5em;
     }
     .laps {
         text-align: right;
@@ -90,11 +66,40 @@ leaderboard {
     }
     .fuel {
         text-align: left;
-        width: 6em;
+        width: 4em;
     }
     .status {
-        padding: 0 4px 0 4px;
         text-align: left;
-        width: 2.5em;
+        width: 2em;
+    }
+
+    span.title {
+        font-size: 75%;
+    }
+
+    span.bestlap {
+        color: #0f0;
+    }
+
+    span.allbest {
+        color: magenta !important;
+    }
+
+    span.pit {
+        font-size: 75%;
+        vertical-align: middle;
+    }
+
+    gauge {
+        span {
+            background: linear-gradient(to right, red, #ee0 25%, green 50%, darkGreen);
+        }
+    }
+
+    leaderboard-item .position {
+        padding: 0;
+        .text {
+            padding: 0.25rem 0.5rem;
+        }
     }
 }

@@ -68,16 +68,10 @@ ion-title checkerboard {
     vertical-align: -0.2em;
 }
 
-leaderboard table {
-    font-size: 1rem;
-}
-
 ion-footer {
   ion-toolbar {
-    min-height: 8rem;
     button {
       background-color: inherit;
-      font-size: 3rem;
     }  
   }
 }
@@ -97,4 +91,20 @@ ion-input[type=number] {
     color: $text-color;
 }
 
-@import "media";
+@media (orientation: portrait) {
+    leaderboard {
+        font-size: 3vw;
+    }
+    ion-footer ion-toolbar button {
+        font-size: 9vw;
+    }
+}
+
+@media (orientation: landscape) {
+    leaderboard {
+        font-size: 2vw;
+    }
+    ion-footer ion-toolbar button {
+        font-size: 6vw;
+    }
+}

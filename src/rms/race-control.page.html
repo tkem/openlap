@@ -34,9 +34,9 @@
   </leaderboard>
 </ion-content>
 
-<ion-footer>
+<ion-footer padding-bottom>
   <ion-toolbar text-center color="transparent">
-    <button padding (click)="cu.toggleStart()">
+    <button (click)="cu.toggleStart()">
       <startlight [active]="(start | async) >= 1" [blink]="blink | async"></startlight>
       <startlight [active]="(start | async) >= 2" [blink]="blink | async"></startlight>
       <startlight [active]="(start | async) >= 3" [blink]="blink | async"></startlight>

@@ -1,8 +1,8 @@
-<td *ngFor="let field of fields" [ngSwitch]="field" [class]="field">
+<div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
     <template ngSwitchCase="position">
-      <slant [color]="item.driver.color">
-        {{index + 1}}
-      </slant>
+        <slant [color]="item.driver.color">
+            <div class="text">{{index + 1}}</div>
+        </slant>
     </template>
     <template ngSwitchCase="number">
         {{item.id + 1}}
@@ -50,10 +50,10 @@
         {{item.pits}}
     </template>
     <template ngSwitchCase="fuel">
-        <gauge max="15" [value]="item.fuel"></gauge>
+        <gauge max="15" [value]="item.fuel">&nbsp;</gauge>
     </template>
     <template ngSwitchCase="status">
         <checkerboard cols="7" rows="5" *ngIf="item.finished"></checkerboard>
         <span *ngIf="!item.finished && item.pit" class="pit">PIT</span>
     </template>
-</td>
+</div>

@@ -22,7 +22,7 @@ import { Component, Input } from '@angular/core';
              left: 0;
              transform: skew(-30deg);
              transform-origin: top right;
-             border-right: 0.5em solid;
+             border-right: 0.3em solid;
              background: #999;
              z-index: -1
            }`

@@ -4,7 +4,7 @@ import { LeaderboardItem } from './leaderboard.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'leaderboard tr[item]',
+  selector: 'leaderboard-item',
   templateUrl: 'leaderboard-item.component.html'
 })
 export class LeaderboardItemComponent {

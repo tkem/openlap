@@ -1,15 +1,15 @@
-<th *ngFor="let field of fields" [ngSwitch]="field" [class]="field">
-    <template ngSwitchCase="position">POS</template>
-    <template ngSwitchCase="number">NO</template>
-    <template ngSwitchCase="name">NAME</template>
-    <template ngSwitchCase="code">NAME</template>
-    <template ngSwitchCase="time">TIME</template>
-    <template ngSwitchCase="laptime">LAP TIME</template>
-    <template ngSwitchCase="bestlap">BEST LAP</template>
-    <template ngSwitchCase="gap">GAP</template>
-    <template ngSwitchCase="int">INT</template>
-    <template ngSwitchCase="laps">LAPS</template>
-    <template ngSwitchCase="pits">PITS</template>
-    <template ngSwitchCase="fuel">FUEL</template>
-    <template ngSwitchCase="status"></template>
-</th>
+<div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
+    <span class="title" *ngSwitchCase="'position'">POS</span>
+    <span class="title" *ngSwitchCase="'number'">NO</span>
+    <span class="title" *ngSwitchCase="'name'">NAME</span>
+    <span class="title" *ngSwitchCase="'code'">NAME</span>
+    <span class="title" *ngSwitchCase="'time'">TIME</span>
+    <span class="title" *ngSwitchCase="'laptime'">LAP TIME</span>
+    <span class="title" *ngSwitchCase="'bestlap'">BEST LAP</span>
+    <span class="title" *ngSwitchCase="'gap'">GAP</span>
+    <span class="title" *ngSwitchCase="'int'">INT</span>
+    <span class="title" *ngSwitchCase="'laps'">LAPS</span>
+    <span class="title" *ngSwitchCase="'pits'">PITS</span>
+    <span class="title" *ngSwitchCase="'fuel'">FUEL</span>
+    <span class="title" *ngSwitchCase="'status'"></span>
+</div>
