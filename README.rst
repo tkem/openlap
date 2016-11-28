@@ -1,7 +1,7 @@
 Open Lap
 ========================================================================
 
-Open Lap aims to be a simple, easy to use hybrid_ slotcar race app for
+Open Lap is a simple, no-nonsense hybrid_ slotcar race app for
 Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
@@ -40,9 +40,10 @@ run::
   npm install
   ionic build android
 
-Please refer the `Ionic CLI <http://ionicframework.com/docs/v2/cli/>`_
-documentation for further information on how to run the application on
-an actual device, or in a Web browser or emulator for testing.
+Please refer to the `Ionic CLI
+<http://ionicframework.com/docs/v2/cli/>`_ documentation for further
+information on how to run the application on an actual device, or in a
+Web browser or emulator for testing.
 
 
 License
@@ -58,11 +59,10 @@ Marketing + Vertrieb GmbH.
 Open Lap is not an official Carrera® product, and is not affiliated
 with or endorsed by Stadlbauer Marketing + Vertrieb GmbH.
 
-Thanks to Stephan Heß (a.k.a. slotbaer_) for doing all the hard work.
+Thanks to Stephan Heß (a.k.a. `slotbaer <http://www.slotbaer.de/>`_)
+for doing all the hard work.
 
 
 .. _hybrid: http://en.wikipedia.org/wiki/HTML5_in_mobile_devices#Hybrid_Mobile_Apps
 
 .. _Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
-
-.. _slotbaer: http://www.slotbaer.de/

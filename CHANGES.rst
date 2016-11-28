@@ -1,3 +1,15 @@
+0.8.2 2016-11-28
+----------------
+
+- Disable "stop" during practice.
+
+- Do not close serial port when inactive.
+
+- Use responsive layout for leaderboard.
+
+- Improve reconnect handling.
+
+
 0.8.1 2016-11-20
 ----------------
 
