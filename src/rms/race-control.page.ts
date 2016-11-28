@@ -211,7 +211,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   presentPopover(event) {
     let popover = this.popover.create(RaceControlPopover, {
       restart: () => this.onStart(),
-      stop: this.session && !this.session.finished.value ? () => this.session.stop() : null
+      stop: this.session && !this.session.finished.value && this.options.mode != 'practice' ? () => this.session.stop() : null
     });
     popover.present({ev: event});
   }
