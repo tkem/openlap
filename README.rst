@@ -1,8 +1,8 @@
 Open Lap
 ========================================================================
 
-Open Lap is a simple, no-nonsense hybrid_ slotcar race app for
-Carrera® DIGITAL 124/132 systems.
+Open Lap is a simple, no-nonsense hybrid_ slotcar race management app
+for Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
 
@@ -38,6 +38,7 @@ make sure you have everything needed for Android development.  Then
 run::
 
   npm install
+  npm run ionic:build
   ionic build android
 
 Please refer to the `Ionic CLI
