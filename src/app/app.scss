@@ -58,21 +58,25 @@ ion-popover {
 ion-modal {
     ion-content {
         background: color($colors, dark) !important;
-        // background: color($colors, transparent);
     }
 }
 
-ion-title checkerboard {
-    animation-name: blink-flag;
-    animation-duration: 3s;
-    vertical-align: -0.2em;
+ion-title {
+    checkerboard {
+        animation-name: blink-flag;
+        animation-duration: 3s;
+        vertical-align: -0.2em;
+    }
+    svg {
+        max-width: 2em;  // Android 4.4
+    }
 }
 
 ion-footer {
   ion-toolbar {
     button {
       background-color: inherit;
-    }  
+    }
   }
 }
 
@@ -89,6 +93,13 @@ ion-input[type=number] {
 /* FIXME: $picker-md-option-text-color not working? */
 .picker-opt {
     color: $text-color;
+}
+
+/* FIXME: Ionic bug on Android 4.4? */
+.noscroll {
+    .scroll-content {
+        overflow: hidden;
+    }
 }
 
 @media (orientation: portrait) {
