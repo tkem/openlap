@@ -1,7 +1,7 @@
 Open Lap
 ========================================================================
 
-Open Lap is a simple, no-nonsense hybrid_ slotcar race management app
+Open Lap is a simple, no-nonsense hybrid_ slot car race management app
 for Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
