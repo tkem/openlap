@@ -31,6 +31,7 @@
   <preference name="BackgroundColor" value="0xff000000"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="DisallowOverscroll" value="true"/>
+  <preference name="LoadUrlTimeoutValue" value="60000"/>
   <preference name="ShowSplashScreenSpinner" value="false"/>
   <preference name="SplashShowOnlyFirstTime" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
