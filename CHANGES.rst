@@ -1,3 +1,13 @@
+0.8.4 2016-12-03
+----------------
+
+- Reset driver mask after startlight and reconnect.
+
+- Increase page load timeout.
+
+- Upgrade ionic-native.
+
+
 0.8.3 2016-11-29
 ----------------
 
