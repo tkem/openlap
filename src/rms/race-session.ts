@@ -56,7 +56,15 @@ export class RaceSession {
     const timer = cu.getTimer().filter(([id]) => (mask & (1 << id)) == 0);
     const fuel = cu.getFuel();
     const pit = cu.getPit();
-  
+
+    const reset = Observable.merge(
+      cu.getStart().distinctUntilChanged().filter(start => start != 0),
+      cu.getState().distinctUntilChanged().filter(state => state == 'connected')
+    ).map(value => {
+      console.log('Resetting mask to', mask, 'on', value);
+      cu.setMask(mask);
+    });
+
     this.grid = timer.groupBy(([id]) => id, ([_id, time]) => time).map(group => {
       type TimeInfo = [number, number, number, number, boolean];
       const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time): TimeInfo => {
@@ -96,13 +104,14 @@ export class RaceSession {
         if (car.bestLap && (!this.bestlap.value || car.bestLap < this.bestlap.value.bestLap)) {
           this.bestlap.next(car);
         }
-      }
-      ).share();
+      }).share();
     }).share();
 
-
     const compare = COMPARE[options.mode];
-    this.ranking = this.grid.mergeAll().scan((grid, event) => {
+
+    this.ranking = reset.startWith(null).combineLatest(this.grid).map(([_reset, grid]) => {
+      return grid;  // for reset side effects only...
+    }).mergeAll().scan((grid, event) => {
       const newgrid = [...grid];
       newgrid[event.id] = event;
       return newgrid;
@@ -143,7 +152,6 @@ export class RaceSession {
     }
 
     this.cu.clearPosition();  // TODO: not sure...
-    this.cu.setMask(mask);    // startlight?
     this.cu.reset();          // FIXME: cu.reset() no effect if start light is on?
   }
 
