@@ -39,6 +39,7 @@ run::
 
   npm install
   npm run ionic:build
+  ionic state restore
   ionic build android
 
 Please refer to the `Ionic CLI
