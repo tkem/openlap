@@ -167,7 +167,7 @@ export class SerialBackend extends Backend {
       if (enabled) {
         return Observable.of(new SerialPeripheral(this.logger, this.zone));
       } else {
-        return Observable.empty();
+        return Observable.empty<SerialPeripheral>();
       }
     })
   }

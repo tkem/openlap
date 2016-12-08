@@ -159,24 +159,18 @@ export class BLEBackend extends Backend {
       } else {
         return Observable.empty();
       } 
-    }).do(device => {
-      this.logger.debug('Found BLE device', device);
     }).share();
   }
 
   scan(): Observable<Peripheral> {
-    let devices = {};
-    return this.scanner.filter(device => {
-      // TODO: use and adapt rssi?
-      return !(device.id in devices);
+    // TODO: use and adapt rssi?
+    return this.scanner.distinctKey('id').do(device => {
+      this.logger.debug('Found BLE device', device);
+    }).filter(device => {
+      return /Control.Unit/i.test(device.name || '');
     }).map(device => {
       this.logger.info('New BLE device', device);
-      const peripheral = new BLEPeripheral(device, this.logger, this.zone);
-      devices[device.id] = true;
-      return peripheral;
-    }).catch(error => {
-      this.logger.error('BLE error', error);
-      return Observable.empty();
-    });;
+      return new BLEPeripheral(device, this.logger, this.zone);
+    });
   }
 }
