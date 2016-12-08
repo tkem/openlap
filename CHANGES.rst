@@ -1,3 +1,13 @@
+0.8.5 2016-12-08
+----------------
+
+- Filter Bluetooth devices.
+
+- Upgrade ``ionic-native``.
+
+- Make builds more reproducible.
+
+
 0.8.4 2016-12-03
 ----------------
 
@@ -5,7 +15,7 @@
 
 - Increase page load timeout.
 
-- Upgrade ionic-native.
+- Upgrade ``ionic-native``.
 
 
 0.8.3 2016-11-29
@@ -131,7 +141,7 @@
 
 - Require Android >= version 4.4.
 
-- Add "finish all laps" option to race settings (a.k.a. "slotcar mode"). 
+- Add "finish all laps" option to race settings (a.k.a. "slotcar mode").
 
 - Add "lock-all" slider to car setup.
 
