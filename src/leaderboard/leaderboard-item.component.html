@@ -38,7 +38,7 @@
     <template ngSwitchCase="int">
         {{(index && item.bestLap ? item.bestLap - items[index - 1].bestLap : null) | time:'+s.sss'}}
     </template>
-    <template ngSwitchCase="laptime">
+    <template ngSwitchCase="lastlap">
         <span [ngClass]="{bestlap: item.lastLap == item.bestLap, allbest: item.lastLap == bestlap}">
             {{item.lastLap | time:'s.sss'}}
         </span>

@@ -14,22 +14,22 @@ import 'rxjs/observable/fromEvent';
 
 const FIELDS = {
   'practice': [
-    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
-    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
+    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
+    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status'],
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status']
   ],
   'qualifying': [
-    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'status'],
-    ['position', 'code', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'laptime', 'laps', 'fuel', 'status']
+    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
+    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status'],
+    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status']
   ],
   'race': [
-    ['position', 'code', 'time', 'bestlap', 'laptime', 'laps', 'status'],
-    ['position', 'number', 'name', 'time', 'bestlap', 'laptime', 'laps', 'status'],
-    ['position', 'code', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status'],
-    ['position', 'number', 'name', 'time', 'bestlap', 'laptime', 'laps', 'pits', 'fuel', 'status']
+    ['position', 'code', 'time', 'bestlap', 'lastlap', 'laps', 'status'],
+    ['position', 'number', 'name', 'time', 'bestlap', 'lastlap', 'laps', 'status'],
+    ['position', 'code', 'time', 'bestlap', 'lastlap', 'laps', 'pits', 'fuel', 'status'],
+    ['position', 'number', 'name', 'time', 'bestlap', 'lastlap', 'laps', 'pits', 'fuel', 'status']
   ]
 };
 
