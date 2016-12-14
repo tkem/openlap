@@ -43,13 +43,29 @@ export class Driver {
   color: string;
 }
 
-export class RaceSettings {
-  constructor(public mode: 'practice' | 'qualifying' | 'race') {}
+export class RaceOptions {
+  constructor(public mode: 'practice' | 'qualifying' | 'race') {
+    switch (mode) {
+    case 'practice':
+      this.laps = 0;
+      this.time = 0;
+      break;
+    case 'qualifying':
+      this.laps = 0;
+      this.time = 3 * 60 * 1000;
+      break;
+    case 'race':
+      this.laps = 30;
+      this.time = 0;
+      break;
+    }
+  }
   laps: number;
   time: number;
+  pause: false;
+  slotmode = false;
   auto = false;
   pace = false;
-  slotmode = false;
 }
 
 @Injectable()
@@ -113,9 +129,9 @@ export class Settings {
     return this.set('options', value);
   }
 
-  getQualifyingSettings(): Observable<RaceSettings> {
+  getQualifyingSettings(): Observable<RaceOptions> {
     return this.get('qualifying').map(value => {
-      return Object.assign(new RaceSettings('qualifying'), value);
+      return Object.assign(new RaceOptions('qualifying'), value);
     });
   }
 
@@ -123,16 +139,15 @@ export class Settings {
     return this.set('qualifying', value);
   }
 
-  getRaceSettings(): Observable<RaceSettings> {
+  getRaceSettings(): Observable<RaceOptions> {
     return this.get('race').map(value => {
-      return Object.assign(new RaceSettings('race'), value);
+      return Object.assign(new RaceOptions('race'), value);
     });
   }
 
   setRaceSettings(value: any): Promise<void> {
     return this.set('race', value);
   }
-
 
   private get(key: string): Observable<any> {
     let subject = this.subjects.get(key);

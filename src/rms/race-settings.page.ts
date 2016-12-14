@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -37,18 +37,30 @@ function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
 function createQualifyingForm(fb: FormBuilder, params: NavParams) {
   return fb.group({
     time: new FormControl(formatTime(params.get('time') || 180000), timeRequired),
+    pause: new FormControl({
+      value: params.get('pause') || false,
+      disabled: !params.get('time')
+    }),
     auto: new FormControl(params.get('auto') || false),
     pace: new FormControl(params.get('pace') || false)
   });
 }
 
 function createRaceForm(fb: FormBuilder, params: NavParams) {
+  console.log('time:' + !!params.get('time'));
   return fb.group({
-    laps: new FormControl(params.get('laps') || 10, Validators.pattern('\\d*')),
+    laps: new FormControl(params.get('laps') || 0, Validators.pattern('\\d*')),
     time: new FormControl(formatTime(params.get('time') || 0)),
+    pause: new FormControl({
+      value: !!params.get('pause'),
+      disabled: !params.get('time')
+    }),
+    slotmode: new FormControl({
+      value: !!params.get('slotmode'),
+      disabled: !params.get('laps')
+    }),
     auto: new FormControl(params.get('auto') || false),
-    pace: new FormControl(params.get('pace') || false),
-    slotmode: new FormControl(params.get('slotmode') || false)
+    pace: new FormControl(params.get('pace') || false)
   }, {
     validator: lapsOrTimeRequired
   });
@@ -57,11 +69,15 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
 @Component({
   templateUrl: 'race-settings.page.html'
 })
-export class RaceSettingsPage {
+export class RaceSettingsPage implements AfterViewInit {
 
   mode: string;
 
   form: FormGroup;
+
+  @ViewChild('pause') pauseToggle;
+
+  @ViewChild('slotmode') slotmodeToggle;
 
   constructor(fb: FormBuilder, params: NavParams, private view: ViewController) {
     this.mode = params.get('mode');
@@ -72,11 +88,44 @@ export class RaceSettingsPage {
     }
   }
 
+  ngAfterViewInit() {
+    // see https://github.com/driftyco/ionic/issues/9041
+    if (this.pauseToggle) {
+      this.pauseToggle.disabled = this.form.get('pause').disabled;
+    }
+    if (this.slotmodeToggle) {
+      this.slotmodeToggle.disabled = this.form.get('slotmode').disabled;
+    }
+  }
+
+  onChangeLaps(value) {
+    if (parseInt(value || '0') > 0) {
+      this.form.get('slotmode').enable();
+    } else {
+      this.form.get('slotmode').disable();
+    }
+    if (this.slotmodeToggle) {
+      this.slotmodeToggle.disabled = this.form.get('slotmode').disabled;
+    }
+  }
+
+  onChangeTime(value) {
+    if (value.hour.value != 0 || value.minute.value != 0 || value.second.value != 0) {
+      this.form.get('pause').enable();
+    } else {
+      this.form.get('pause').disable();
+    }
+    if (this.pauseToggle) {
+      this.pauseToggle.disabled = this.form.get('pause').disabled;
+    }
+  }
+
   onSubmit(options) {
     this.view.dismiss({
       mode: this.mode,
-      laps: parseInt(options.laps || ''),
+      laps: parseInt(options.laps || '0'),
       time: parseTime(options.time || ''),
+      pause: options.pause,
       auto: options.auto,
       pace: options.pace,
       slotmode: options.slotmode

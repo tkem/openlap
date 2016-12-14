@@ -23,15 +23,26 @@
     <ion-list>
       <ion-item *ngIf="mode == 'race'">
         <ion-label color="light">Laps</ion-label>
-        <ion-input formControlName="laps" type="number"></ion-input>
+        <ion-input #laps formControlName="laps" type="number" 
+                   (blur)="onChangeLaps(laps.value)" 
+                   (keyup)="onChangeLaps(laps.value)" 
+                   placeholder="None">
+        </ion-input>
       </ion-item>
       <ion-item>
         <ion-label color="light">Time</ion-label>
-        <ion-datetime color="light" formControlName="time" displayFormat="H:mm:ss" pickerFormat="H mm ss"></ion-datetime>
+        <ion-datetime #time formControlName="time" 
+                      displayFormat="H:mm:ss" pickerFormat="H mm ss" 
+                      (ionChange)="onChangeTime($event)">
+        </ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label color="light">Stop time when paused</ion-label>
+        <ion-toggle #pause formControlName="pause"></ion-toggle>
       </ion-item>
       <ion-item *ngIf="mode == 'race'">
         <ion-label color="light">Finish all laps</ion-label>
-        <ion-toggle formControlName="slotmode"></ion-toggle>
+        <ion-toggle #slotmode formControlName="slotmode"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label color="light">Autonomous Car</ion-label>

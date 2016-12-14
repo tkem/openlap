@@ -1,6 +1,9 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
+import { RaceOptions } from '../core';
+
+const TIMER_INTERVAL = 500;
 
 export interface RaceItem {
   id: number
@@ -12,15 +15,6 @@ export interface RaceItem {
   pits?: number;
   pit?: boolean;
   finished?: boolean
-}
-
-export interface RaceOptions {
-  mode?: string;
-  laps?: number;
-  time?: number;
-  auto?: boolean;
-  pace?: boolean;
-  slotmode?: boolean;
 }
 
 function timeCompare(lhs: RaceItem, rhs: RaceItem) {
@@ -41,12 +35,11 @@ export class RaceSession {
   grid: Observable<Observable<RaceItem>>;
   ranking: Observable<RaceItem[]>;
   lap: Observable<[number, number]>;         // TODO: event?
-  
   finished = new BehaviorSubject(false);     // TODO: event?
   bestlap = new BehaviorSubject<RaceItem>(null);  // TODO: event?
   timer = Observable.of(0);                  // TODO: event?
-
-  private endTime: number;
+  started = false;
+  stopped = false;
 
   // TODO: move settings handling/combine to race-control!
   constructor(private cu: ControlUnit, private options: RaceOptions) {
@@ -137,18 +130,18 @@ export class RaceSession {
     });
 
     if (options.time) {
-      const time = options.time;
-      this.timer = Observable.interval(1000).map(() => {
-        if (this.endTime) {
-          const delta = Math.max(0, this.endTime - Date.now());
-          if (delta === 0) {
-            this.finished.next(true);
-          }
-          return delta;
-        } else {
-          return time;
+      this.timer = Observable.interval(TIMER_INTERVAL).withLatestFrom(
+        cu.getStart()
+      ).filter(([_, start]) => {
+        return this.started && (!this.options.pause || start == 0);
+      }).scan((time) => {
+        return Math.max(0, time - TIMER_INTERVAL);
+      }, options.time).do(time => {
+        if (time == 0) {
+          this.stopped = true;
+          this.finished.next(true);
         }
-      }).share().startWith(time);
+      }).share().startWith(options.time);
     }
 
     this.cu.clearPosition();  // TODO: not sure...
@@ -156,20 +149,19 @@ export class RaceSession {
   }
 
   start() {
-    if (this.options.time) {
-      this.endTime = Date.now() + this.options.time;
-    }
+    this.started = true;
   }
 
   stop() {
-    this.endTime = Date.now();
+    this.stopped = true;
+    this.finished.next(true);
   }
 
   private isFinished(laps: number) {
-    if (this.options.laps && laps >= this.options.laps) {
+    if (this.stopped) {
       return true;
-    } else if (this.endTime && Date.now() >= this.endTime) {
-      return true;  // FIXME: use timer
+    } else if (this.options.laps && laps >= this.options.laps) {
+      return true;
     } else if (!this.options.slotmode && this.finished.value) {
       return true;
     } else {
