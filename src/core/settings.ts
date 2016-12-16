@@ -22,9 +22,9 @@ const MESSAGES = {
   finished: 'Race finished!',
   finallap: 'Final lap!',
   bestlap: 'Fastest lap!',
-  fuel2: 'Low fuel!',
-  fuel1: 'Box!',
-  fuel0: 'Box! Box! Box!',
+  fuel2: 'Prepare to box!',
+  fuel1: 'Box, please box!',
+  fuel0: 'Box this lap!',
   pitenter: 'In pit!'
 };
 
