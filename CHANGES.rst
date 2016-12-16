@@ -1,3 +1,11 @@
+0.8.6 2016-12-16
+----------------
+
+- Add option to stop timer when race is interrupted.
+
+- Change "Lap Time" to "Last Lap" for consistency.
+
+
 0.8.5 2016-12-08
 ----------------
 
