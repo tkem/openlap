@@ -16,5 +16,9 @@
       <ion-label>Enable speech</ion-label>
       <ion-toggle [(ngModel)]="options.speech" (ionChange)="update()"></ion-toggle>
     </ion-item>
+    <ion-item>
+      <ion-label>Sort by driver number</ion-label>
+      <ion-toggle [(ngModel)]="options.fixedorder" (ionChange)="update()"></ion-toggle>
+    </ion-item>
   </ion-list>
 </ion-content>

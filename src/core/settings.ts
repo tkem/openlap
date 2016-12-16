@@ -30,6 +30,7 @@ const MESSAGES = {
 
 export class Options {
   debug = false;
+  fixedorder = false;
   fullscreen = false;
   speech = true;
 }

@@ -10,7 +10,6 @@ import { LeaderboardItem } from './leaderboard.component';
 export class LeaderboardItemComponent {
   @Input() fields: string[];
   @Input() item: LeaderboardItem;
-  @Input() index: number;
   @Input() items: LeaderboardItem[];
   @Input() bestlap: number;
 }

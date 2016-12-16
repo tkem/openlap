@@ -85,6 +85,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   options: any;
 
   fields: Observable<string[]>;
+  order: Observable<string>;
 
   start: Observable<number>;
   blink: Observable<boolean>;
@@ -114,6 +115,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
       const index = (orientation === 'portrait' ? 0 : 1) + (mode & 0x03 ? 2 : 0);
       return FIELDS[this.options.mode][index];
     });
+
+    this.order = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
 
     this.start = start.map(value => {
       return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
@@ -172,8 +175,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.ranking = session.ranking.combineLatest(
       this.settings.getDrivers(),
     ).map(([ranks, drivers]) => {
-      return ranks.map(item => {
-        return Object.assign({}, item, { driver: drivers[item.id] });
+      return ranks.map((item, index) => {
+        return Object.assign({}, item, { position: index, driver: drivers[item.id] });
       });
     });
 
