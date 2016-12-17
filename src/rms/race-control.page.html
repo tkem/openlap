@@ -37,11 +37,11 @@
 <ion-footer padding-bottom>
   <ion-toolbar text-center color="transparent">
     <button (click)="cu.toggleStart()">
-      <startlight [active]="(start | async) >= 1" [blink]="blink | async"></startlight>
-      <startlight [active]="(start | async) >= 2" [blink]="blink | async"></startlight>
-      <startlight [active]="(start | async) >= 3" [blink]="blink | async"></startlight>
-      <startlight [active]="(start | async) >= 4" [blink]="blink | async"></startlight>
-      <startlight [active]="(start | async) >= 5" [blink]="blink | async"></startlight>
+      <startlight [active]="(lights | async) >= 1" [blink]="blink | async"></startlight>
+      <startlight [active]="(lights | async) >= 2" [blink]="blink | async"></startlight>
+      <startlight [active]="(lights | async) >= 3" [blink]="blink | async"></startlight>
+      <startlight [active]="(lights | async) >= 4" [blink]="blink | async"></startlight>
+      <startlight [active]="(lights | async) >= 5" [blink]="blink | async"></startlight>
     </button>
   </ion-toolbar>
 </ion-footer>

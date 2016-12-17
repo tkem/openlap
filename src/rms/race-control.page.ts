@@ -88,6 +88,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   order: Observable<string>;
 
   start: Observable<number>;
+  lights: Observable<number>;
   blink: Observable<boolean>;
   timer: Observable<number>;
 
@@ -118,7 +119,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
     this.order = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
 
-    this.start = start.map(value => {
+    this.start = start;
+    this.lights = start.map(value => {
       return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
     });
     this.blink = state.combineLatest(start, (state, value) => {
@@ -165,7 +167,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
         return ['finished', null];
       }),
-      this.start.filter(value => value == 9).map(() => {
+      this.start.distinctUntilChanged().filter(value => value == 9).map(() => {
         return ['falsestart', null];
       })
     ).withLatestFrom(this.settings.getDrivers()).map(([[event, id], drivers]) => {
