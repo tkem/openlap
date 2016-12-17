@@ -41,12 +41,14 @@ export class RaceSession {
   started = false;
   stopped = false;
 
+  private mask: number;
+  private active = 0;
+
   // TODO: move settings handling/combine to race-control!
   constructor(private cu: ControlUnit, private options: RaceOptions) {
-    let mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
     let offset: number;
 
-    const timer = cu.getTimer().filter(([id]) => (mask & (1 << id)) == 0);
+    const timer = cu.getTimer().filter(([id]) => (this.mask & (1 << id)) == 0);
     const fuel = cu.getFuel();
     const pit = cu.getPit();
 
@@ -54,19 +56,20 @@ export class RaceSession {
       cu.getStart().distinctUntilChanged().filter(start => start != 0),
       cu.getState().distinctUntilChanged().filter(state => state == 'connected')
     ).map(value => {
-      console.log('Resetting mask to', mask, 'on', value);
-      cu.setMask(mask);
+      console.log('Resetting mask to', this.mask.toString(2), 'on', value);
+      cu.setMask(this.mask);
     });
+
+    this.mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
 
     this.grid = timer.groupBy(([id]) => id, ([_id, time]) => time).map(group => {
       type TimeInfo = [number, number, number, number, boolean];
+      this.active |= (1 << group.key);
       const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time): TimeInfo => {
         if (time > prev) {
           ++laps;
           if (!fini && this.isFinished(laps)) {
-            mask |= (1 << group.key);
-            cu.setMask(mask);
-            this.finished.next(true);
+            this.finish(group.key);
             return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, true];
           } else {
             return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, fini];
@@ -120,7 +123,7 @@ export class RaceSession {
       if (lap < event.laps) {
         lap = event.laps;
         if (laps && lap >= laps) {
-          this.finished.next(true);
+          this.finish();
         }
         cu.setLap(lap);
       }
@@ -139,13 +142,14 @@ export class RaceSession {
       }, options.time).do(time => {
         if (time == 0) {
           this.stopped = true;
-          this.finished.next(true);
+          this.finish();
         }
       }).share().startWith(options.time);
     }
 
-    this.cu.clearPosition();  // TODO: not sure...
-    this.cu.reset();          // FIXME: cu.reset() no effect if start light is on?
+    this.cu.clearPosition();
+    // FIXME: apparently, this will not reset fuel levels if startlight is active
+    this.cu.reset();
   }
 
   start() {
@@ -154,6 +158,19 @@ export class RaceSession {
 
   stop() {
     this.stopped = true;
+    this.finish();
+  }
+
+  private finish(id?: number) {
+    const mask = this.mask;
+    this.mask |= (~this.active & 0xff);
+    if (id !== undefined) {
+      this.mask |= (1 << id);
+    }
+    if (mask != this.mask) {
+      console.log('Setting mask to', this.mask.toString(2));
+      this.cu.setMask(this.mask);
+    }
     this.finished.next(true);
   }
 
