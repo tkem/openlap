@@ -1,3 +1,15 @@
+0.8.8 2016-12-17
+----------------
+
+- Ignore new cars when race is finished.
+
+- Suppress "Final lap" message if race is stopped.
+
+- Re-activate "False start" message.
+
+- Update default messages.
+
+
 0.8.7 2016-12-16
 ----------------
 

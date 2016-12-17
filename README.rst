@@ -15,6 +15,7 @@ In a nutshell, Open Lap lets you
   individually, even during a race or qualifying session.
 - Get informed about important events, such as fastest laps or low
   fuel conditions, by personalized voice messages.
+- Select whether to sort current standings by position or driver number. 
 
 This project is still at an early stage, so there will be some
 features missing and it may not always work as expected.  Please feel
