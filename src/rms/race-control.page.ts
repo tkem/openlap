@@ -161,7 +161,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       session.bestlap.filter(car => car && car.laps >= 3).map(car => {
         return ['bestlap', car.id];
       }),
-      session.lap.filter(([lap, laps]) => lap === laps - 1).map(() => {
+      session.lap.filter(([lap, laps]) => lap === laps - 1 && !session.finished.value).map(() => {
         return ['finallap', null];
       }),
       session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
