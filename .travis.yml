@@ -16,6 +16,7 @@ before_install:
 install:
 - npm install -g cordova ionic
 - npm install
+- ionic info
 
 script:
 - npm run ionic:build
