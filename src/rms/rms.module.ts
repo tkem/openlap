@@ -7,26 +7,26 @@ import { IonicModule } from 'ionic-angular';
 import { LeaderboardModule } from '../leaderboard';
 import { SharedModule } from '../shared';
 
-import { CarSetupPage } from './car-setup.page';
+import { TuningPage } from './tuning.page';
 import { Lap, RaceControlPage, RaceControlPopover } from './race-control.page';
 import { RaceSettingsPage } from './race-settings.page';
 
 @NgModule({
   declarations: [
-    CarSetupPage,
+    TuningPage,
     Lap,
     RaceControlPage,
     RaceControlPopover,
     RaceSettingsPage
   ],
   entryComponents: [
-    CarSetupPage,
+    TuningPage,
     RaceControlPage,
     RaceControlPopover,
     RaceSettingsPage
   ],
   exports: [
-    CarSetupPage,
+    TuningPage,
     RaceControlPage,
     RaceSettingsPage
   ], 

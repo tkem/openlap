@@ -10,39 +10,39 @@
       <ion-item-group>
         <button ion-item menuClose [disabled]="!cu" (click)="startPractice()">
           <ion-icon name="speedometer" item-left></ion-icon>
-          Free Practice
+          <span translate>Free Practice</span>
         </button>
         <button ion-item menuClose [disabled]="!cu" (click)="startQualifying()">
           <ion-icon name="stopwatch" item-left></ion-icon>
-          Qualifying
+          <span translate>Qualifying</span>
         </button>
         <button ion-item menuClose [disabled]="!cu" (click)="startRace()">
           <ion-icon name="trophy" item-left></ion-icon>
-          Race
+          <span translate>Race</span>
         </button>
       </ion-item-group>
       <ion-item-group>
         <button ion-item menuClose (click)="nav.push(driversPage)">
           <ion-icon name="people" item-left></ion-icon>
-          Drivers
+          <span translate>Drivers</span>
         </button>
         <button ion-item menuClose (click)="nav.push(colorsPage)">
           <ion-icon name="color-palette" item-left></ion-icon>
-          Colors
+          <span translate>Colors</span>
         </button>
-        <button ion-item menuClose [disabled]="!cu" (click)="nav.push(setupPage)">
+        <button ion-item menuClose [disabled]="!cu" (click)="nav.push(tuningPage)">
           <ion-icon name="build" item-left></ion-icon>
-          Car Setup
+          <span translate>Tuning</span>
         </button>
       </ion-item-group>
       <ion-item-group>
         <button ion-item menuClose (click)="nav.push(settingsPage)">
           <ion-icon name="settings" item-left></ion-icon>
-          Settings
+          <span translate>Settings</span>
         </button>
         <button ion-item menuClose (click)="exitApp()">
           <ion-icon name="exit" item-left></ion-icon>
-          Exit
+          <span translate>Exit</span>
         </button>
       </ion-item-group>
     </div>
@@ -53,7 +53,7 @@
       <ion-item-group *ngIf="cu">
         <button ion-item (click)="reconnect()">
           <ion-icon name="refresh" item-left></ion-icon>
-          Reconnect
+          <span translate>Reconnect</span>
         </button>
       </ion-item-group>
     </div>

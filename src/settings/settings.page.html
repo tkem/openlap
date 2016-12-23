@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Settings
+      <span translate>Settings</span>
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
@@ -17,19 +17,19 @@
 <ion-content>
   <ion-list>
     <button ion-item [navPush]="optionsPage">
-      General
+      <span translate>General</span>
     </button>
     <button ion-item [navPush]="messagesPage">
-      Messages
+      <span translate>Messages</span>
     </button>
     <button ion-item [navPush]="loggingPage">
-      Logging
+      <span translate>Logging</span>
     </button>
     <button ion-item [navPush]="licensesPage">
-      Licenses
+      <span translate>Licenses</span>
     </button>
     <button ion-item [navPush]="aboutPage">
-      About
+      <span translate>About</span>
     </button>
   </ion-list>
 </ion-content>

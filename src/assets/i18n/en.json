@@ -1,0 +1,71 @@
+{
+  "Welcome to Open Lap!":
+    "Welcome to Open Lap!",
+  "Please select a Control Unit device from the menu.":
+    "Please select a Control Unit device from the menu.",
+  "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.":
+    "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.",
+
+  "Connected to {{device}}": "Connected to {{device}}",
+  "Connecting to {{device}}": "Connecting to {{device}}",
+  "Disconnected from {{device}}": "Disconnected from {{device}}",
+
+  "Free Practice": "Free Practice",
+  "Qualifying": "Qualifying",
+  "Race": "Race",
+  "Drivers": "Drivers",
+  "Colors": "Colors",
+  "Tuning": "Tuning",
+  "Settings": "Settings",
+  "Exit": "Exit",
+  "Reconnect": "Reconnect",
+
+  "Speed": "Speed",
+  "Brake": "Brake",
+  "Fuel": "Fuel",
+
+  "Lap": "Lap",
+  "Start": "Start",
+  "Restart race": "Restart race",
+  "Cancel race": "Cancel race",
+
+  "Laps": "Laps",
+  "Time": "Time",
+  "Stop time when paused": "Stop time when paused",
+  "Finish all laps": "Finish all laps",
+  "Autonomous Car": "Autonomous Car",
+  "Pace Car": "Pace Car",
+
+  "OK": "OK",
+  "Cancel": "Cancel",
+  "Done": "Done",
+  
+  "About": "About",
+  "Licenses": "Licenses",
+  "License": "License",
+  "Logging": "Logging",
+  "Messages": "Messages",
+  "General": "General",
+
+  "Reset settings": "Reset settings",
+  "Reset all user settings to default values?": "Reset all user settings to default values?",
+
+  "Language": "Language",
+  "Default": "Default",
+  "Enable fullscreen": "Enable fullscreen",
+  "Enable speech": "Enable speech",
+  "Sort by driver number": "Sort by driver number",
+  "Share": "Share",
+  "Clear": "Clear",
+  "Debug": "Debug",
+  "Reset": "Reset",
+
+  "Race finished": "Race finished",
+  "Final lap": "Final lap",
+  "False start": "False start",
+  "Fastest lap": "Fastest lap",
+  "Fuel < 20%": "Fuel < 20%",
+  "Fuel < 10%": "Fuel < 10%",
+  "No fuel": "No fuel",
+  "Car enters pit": "Car enters pit"
+}

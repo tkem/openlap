@@ -16,9 +16,9 @@ const settings = [0, 1, 2, 3, 4, 5].map(id => ({
 
 @Component({
   providers: [CONTROL_UNIT_PROVIDER],
-  templateUrl: 'car-setup.page.html',
+  templateUrl: 'tuning.page.html',
 })
-export class CarSetupPage {
+export class TuningPage {
 
   models = settings;
 

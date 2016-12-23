@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      General
+      <span translate>General</span>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,15 +9,23 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-label>Enable fullscreen</ion-label>
+      <ion-label color="light" translate>Language</ion-label>
+      <ion-select [(ngModel)]="options.language" (ionChange)="update()">
+        <ion-option translate value="">Default</ion-option>
+        <ion-option value="de">Deutsch</ion-option>
+        <ion-option value="en">English</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label translate>Enable fullscreen</ion-label>
       <ion-toggle [(ngModel)]="options.fullscreen" (ionChange)="update()"></ion-toggle>
     </ion-item>
     <ion-item>
-      <ion-label>Enable speech</ion-label>
+      <ion-label translate>Enable speech</ion-label>
       <ion-toggle [(ngModel)]="options.speech" (ionChange)="update()"></ion-toggle>
     </ion-item>
     <ion-item>
-      <ion-label>Sort by driver number</ion-label>
+      <ion-label translate>Sort by driver number</ion-label>
       <ion-toggle [(ngModel)]="options.fixedorder" (ionChange)="update()"></ion-toggle>
     </ion-item>
   </ion-list>

@@ -1,0 +1,71 @@
+{
+  "Welcome to Open Lap!": 
+    "Willkommen bei Open Lap!",
+  "Please select a Control Unit device from the menu.": 
+    "Bitte wählen Sie eine Control Unit über das Menü.",
+  "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.":
+    "Falls keine Geräte aufscheinen, stellen Sie bitte sicher, dass Bluetooth aktiviert ist, oder verwenden Sie ein geeignetes USB OTG Kabel.",
+
+  "Connected to {{device}}": "Verbunden mit {{device}}",
+  "Connecting to {{device}}": "Verbinde mit {{device}}",
+  "Disconnected from {{device}}": "Getrennt von {{device}}",
+
+  "Free Practice": "Freies Training",
+  "Qualifying": "Qualifying",
+  "Race": "Rennen",
+  "Drivers": "Fahrer",
+  "Colors": "Farben",
+  "Tuning": "Tuning",
+  "Settings": "Einstellungen",
+  "Exit": "Beenden",
+  "Reconnect": "Wiederverbinden",
+
+  "Speed": "Geschwindigkeit",
+  "Brake": "Bremsen",
+  "Fuel": "Tank",
+
+  "Lap": "Runde",
+  "Start": "Start",
+  "Restart race": "Neustart",
+  "Cancel race": "Rennen abbrechen",
+
+  "Laps": "Runden",
+  "Time": "Zeit",
+  "Stop time when paused": "Zeit bei Unterbrechung stoppen",
+  "Finish all laps": "Alle Runden beenden",
+  "Autonomous Car": "Autonomous Car",
+  "Pace Car": "Pace Car",
+
+  "OK": "OK",
+  "Cancel": "Abbrechen",
+  "Done": "Fertig",
+
+  "About": "Über",
+  "Licenses": "Lizenzen",
+  "License": "Lizenz",
+  "Logging": "Protokoll",
+  "Messages": "Mitteilungen",
+  "General": "Allgemein",
+
+  "Reset settings": "Einstellungen zurücksetzen",
+  "Reset all user settings to default values?": "Alle Einstellungen auf Standardwerte zurücksetzen?",
+
+  "Language": "Sprache",
+  "Default": "Standard",
+  "Enable fullscreen": "Vollbildmodus",
+  "Enable speech": "Sprachausgabe",
+  "Sort by driver number": "Fahrer nach Nummern sortieren",
+  "Share": "Teilen",
+  "Clear": "Leeren",
+  "Debug": "Debug",
+  "Reset": "Zurücksetzen",
+
+  "Race finished": "Rennende",
+  "Final lap": "Letzte Runde",
+  "False start": "Fehlstart",
+  "Fastest lap": "Schnellste Runde",
+  "Fuel < 20%": "Tank < 20%",
+  "Fuel < 10%": "Tank < 10%",
+  "No fuel": "Tank leer",
+  "Car enters pit": "Fahrzeug in Box"
+}

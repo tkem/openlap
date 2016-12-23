@@ -6,14 +6,14 @@
     <ion-title>
       <checkerboard cols="9" rows="5" *ngIf="session.finished | async"></checkerboard>
       <span [ngSwitch]="options.mode">
-        <template ngSwitchCase="practice">
-          Free Practice
+        <template ngSwitchCase="practice" translate>
+          <span translate>Free Practice</span>
         </template>
-        <template ngSwitchCase="qualifying">
-          Qualifying
+        <template ngSwitchCase="qualifying" translate>
+          <span translate>Qualifying</span>
         </template>
         <template ngSwitchCase="race">
-          Lap <lap [value]="session.lap | async"></lap>
+          <span translate>Lap</span> <lap [value]="session.lap | async"></lap>
         </template>
       </span>
       <checkerboard cols="9" rows="5" *ngIf="session.finished | async"></checkerboard>

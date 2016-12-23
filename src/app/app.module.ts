@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
+import { Http } from '@angular/http';
 
 import { IonicApp, IonicModule } from 'ionic-angular';
+
+import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
 
 import { BackendModule } from '../backend';
 import { CoreModule } from '../core';
@@ -12,6 +15,10 @@ import { SharedModule } from '../shared';
 
 import { AppComponent, RootPage } from './app.component';
 
+export function createTranslateLoader(http: Http) {
+  return new TranslateStaticLoader(http, './assets/i18n', '.json');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +26,11 @@ import { AppComponent, RootPage } from './app.component';
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
+    TranslateModule.forRoot({
+      provide: TranslateLoader,
+      useFactory: createTranslateLoader,
+      deps: [Http]
+    }),
     BackendModule,
     CoreModule,
     LoggingModule,

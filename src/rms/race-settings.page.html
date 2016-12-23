@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title [ngSwitch]="mode">
-      <template ngSwitchCase="practice">Practice</template>
+      <template ngSwitchCase="practice" translate>Practice</template>
       <template ngSwitchCase="qualifying">Qualifying</template>
-      <template ngSwitchDefault>Race</template>
+      <template ngSwitchDefault translate>Race</template>
     </ion-title>
     <ion-buttons left>
       <button ion-button (click)="onCancel()">
@@ -11,7 +11,7 @@
       </button>
     </ion-buttons>
     <ion-buttons right>
-      <button ion-button (click)="onSubmit(form.value)" [disabled]="!form.valid" type="submit">
+      <button ion-button (click)="onSubmit(form.value)" [disabled]="!form.valid" translate type="submit">
         Start
       </button>
     </ion-buttons>
@@ -22,7 +22,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
     <ion-list>
       <ion-item *ngIf="mode == 'race'">
-        <ion-label color="light">Laps</ion-label>
+        <ion-label color="light" translate>Laps</ion-label>
         <ion-input #laps formControlName="laps" type="number" 
                    (blur)="onChangeLaps(laps.value)" 
                    (keyup)="onChangeLaps(laps.value)" 
@@ -30,26 +30,27 @@
         </ion-input>
       </ion-item>
       <ion-item>
-        <ion-label color="light">Time</ion-label>
+        <ion-label color="light" translate>Time</ion-label>
         <ion-datetime #time formControlName="time" 
                       displayFormat="H:mm:ss" pickerFormat="H mm ss" 
+                      cancelText="{{'Cancel' | translate}}" doneText="{{'Done' | translate}}"
                       (ionChange)="onChangeTime($event)">
         </ion-datetime>
       </ion-item>
       <ion-item>
-        <ion-label color="light">Stop time when paused</ion-label>
+        <ion-label color="light" translate>Stop time when paused</ion-label>
         <ion-toggle #pause formControlName="pause"></ion-toggle>
       </ion-item>
       <ion-item *ngIf="mode == 'race'">
-        <ion-label color="light">Finish all laps</ion-label>
+        <ion-label color="light" translate>Finish all laps</ion-label>
         <ion-toggle #slotmode formControlName="slotmode"></ion-toggle>
       </ion-item>
       <ion-item>
-        <ion-label color="light">Autonomous Car</ion-label>
+        <ion-label color="light" translate>Autonomous Car</ion-label>
         <ion-toggle formControlName="auto"></ion-toggle>
       </ion-item>
       <ion-item>
-        <ion-label color="light">Pace Car</ion-label>
+        <ion-label color="light" translate>Pace Car</ion-label>
         <ion-toggle formControlName="pace"></ion-toggle>
       </ion-item>
     </ion-list>

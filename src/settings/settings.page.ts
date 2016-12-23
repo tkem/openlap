@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 
 import { AlertController, PopoverController, ViewController } from 'ionic-angular';
 
+import { TranslateService } from 'ng2-translate';
+
 import { Settings } from '../core';
 import { Logger } from '../logging';
 
@@ -15,30 +17,42 @@ import { OptionsPage } from './options.page';
 @Component({
   template: `
     <ion-item-group>
-      <button ion-item (click)="reset()">Reset</button>
+      <button ion-item (click)="reset()">
+        <span translate>Reset</span>&hellip;
+      </button>
     </ion-item-group>
   `
 })
 export class SettingsPopover {
 
-  constructor(private logger: Logger, private settings: Settings, private alert: AlertController, private view: ViewController) {}
+  constructor(private logger: Logger, 
+    private settings: Settings, 
+    private alert: AlertController, 
+    private view: ViewController, 
+    private translate: TranslateService)
+  {}
 
   reset() {
-    const alert = this.alert.create({
-      title: 'Reset settings',
-      message: 'Reset all user settings to default values?',
-      buttons: [{
-        text: 'Cancel',
-        role: 'cancel',
-      }, {
-        text: 'OK',
-        handler: () => {
-          // TODO: Only "settings" settings, i.e. no drivers, colors, etc.
-          this.settings.clear();
-        }
-      }]
-    })
     this.close().then(() => {
+      return Promise.all([
+        this.translate.get('Reset settings').toPromise(),
+        this.translate.get('Reset all user settings to default values?').toPromise(),
+        this.translate.get('OK').toPromise(),
+        this.translate.get('Cancel').toPromise(),
+      ]);
+    }).then(([title, message, okText, cancelText]) => {
+      const alert = this.alert.create({
+        // TODO: translate
+        title: title,
+        message: message,
+        buttons: [{
+          text: cancelText,
+          role: 'cancel',
+        }, {
+          text: okText,
+          handler: () => this.settings.clear()
+        }]
+      })
       alert.present();
     });
   }

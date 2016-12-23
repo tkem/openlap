@@ -6,6 +6,8 @@ import { IonicModule } from 'ionic-angular';
 import { ConnectionsComponent } from './connections.component';
 import { MenuComponent } from './menu.component';
 
+import { SharedModule } from '../shared';
+
 @NgModule({
   declarations: [
     ConnectionsComponent,
@@ -18,6 +20,7 @@ import { MenuComponent } from './menu.component';
   ], 
   imports: [
     CommonModule,
+    SharedModule,
     IonicModule
   ],
   providers: [

@@ -19,11 +19,15 @@ function stringify(obj) {
   template: `
     <ion-item-group>
       <ion-item>
-        <ion-label>Debug</ion-label>
+        <ion-label translate>Debug</ion-label>
         <ion-checkbox [(ngModel)]="debugEnabled"></ion-checkbox>
       </ion-item>
-      <button ion-item (click)="share()">Share&hellip;</button>
-      <button ion-item (click)="clear()">Clear</button>
+      <button ion-item (click)="share()">
+        <span translate>Share</span>&hellip;
+      </button>
+      <button ion-item (click)="logger.clear()">
+        <span translate>Clear</span>
+      </button>
     </ion-item-group>
   `
 })

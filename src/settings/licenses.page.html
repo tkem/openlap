@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Licenses
+      <span translate>Licenses</span>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -11,7 +11,7 @@
     <a ion-item [href]="item.homepage || item.url" target="_system" *ngFor="let item of items">
       <h1>{{item.name}}</h1>
       <h2>{{item.copyright || item.author}}</h2>
-      <p>License: {{item.license}}</p>
+      <p><span translate>License</span>: {{item.license}}</p>
     </a>
   </ion-list>
 </ion-content>

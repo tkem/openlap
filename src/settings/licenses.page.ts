@@ -35,6 +35,11 @@ export class LicensesPage {
     license: 'Apache-2.0',
     homepage: 'https://github.com/ReactiveX/RxJS'
   }, {
+    name: 'ng2-translate',
+    copyright: 'Copyright (c) 2016 Olivier Combe',
+    license: 'MIT',
+    homepage: 'https://github.com/ocombe/ng2-translate'
+  }, {
     name: 'cordova-plugin-app-version',
     author: 'whiteoctober',
     license: 'MIT',

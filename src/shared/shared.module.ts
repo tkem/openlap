@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { TranslateModule } from 'ng2-translate';
+
 import { CheckerboardComponent } from './checkerboard.component';
 import { GaugeComponent } from './gauge.component';
 import { SlantComponent } from './slant.component';
@@ -23,10 +25,12 @@ import { TimePipe } from './time.pipe';
     SlantComponent,
     StartlightComponent,
     TargetDirective,
-    TimePipe
+    TimePipe,
+    TranslateModule
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    TranslateModule
   ]
 })
 export class SharedModule {}

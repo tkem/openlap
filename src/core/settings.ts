@@ -32,6 +32,7 @@ export class Options {
   debug = false;
   fixedorder = false;
   fullscreen = false;
+  language = "";
   speech = true;
 }
 

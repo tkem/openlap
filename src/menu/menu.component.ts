@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { ControlUnit } from '../carrera';
 import { Settings } from '../core';
 import { Logger } from '../logging';
-import { CarSetupPage, RaceSettingsPage, RaceControlPage } from '../rms';
+import { TuningPage, RaceSettingsPage, RaceControlPage } from '../rms';
 import { ColorsPage, DriversPage, SettingsPage } from '../settings';
 
 @Component({
@@ -26,8 +26,8 @@ export class MenuComponent implements OnChanges {
 
   colorsPage = ColorsPage;
   driversPage = DriversPage;
-  setupPage = CarSetupPage;
   settingsPage = SettingsPage;
+  tuningPage = TuningPage;
 
   constructor(private logger: Logger, 
               private settings: Settings,

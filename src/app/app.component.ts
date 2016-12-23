@@ -4,6 +4,8 @@ import { Nav, Platform } from 'ionic-angular';
 
 import { Cordova, Insomnia, Plugin, Splashscreen } from 'ionic-native';
 
+import { TranslateService } from 'ng2-translate';
+
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { Backend } from '../backend';
@@ -52,8 +54,11 @@ export class AppComponent implements OnInit {
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
               @Inject(Backend) private backends: Backend[],
               private logger: Logger, private settings: Settings,
-              private platform: Platform, private toast: Toast)
-  {}
+              private platform: Platform, private toast: Toast,
+              private translate: TranslateService)
+  {
+    translate.setDefaultLang('en');
+  }
 
   ngOnInit() {
     this.platform.ready().then(readySource => {
@@ -72,6 +77,7 @@ export class AppComponent implements OnInit {
         }).catch(error => {
           this.logger.error('Fullscreen error: ', error);
         });
+        this.translate.use(options.language || this.translate.getBrowserLang() || 'en');
       });
       this.settings.getConnection().subscribe(connection => {
         if (this.cu.value) {
@@ -105,13 +111,13 @@ export class AppComponent implements OnInit {
     }).subscribe(([state, device]) => {
       switch (state) {
       case 'connected':
-        this.toast.showCenter('Connected to ' + device, 2000);
+        this.showConnectionToast('Connected to {{device}}', device);
         break;
       case 'connecting':
-        this.toast.showCenter('Connecting to ' + device, 2000);
+        this.showConnectionToast('Connecting to {{device}}', device);
         break;
       case 'disconnected':
-        this.toast.showCenter('Disconnected from ' + device, 5000);
+        this.showConnectionToast('Disconnected from {{device}}', device);
         break;
       }
     });
@@ -129,5 +135,11 @@ export class AppComponent implements OnInit {
       console.log('Hiding splash screen');
       Splashscreen.hide();
     });
+  }
+
+  private showConnectionToast(message: string, device: string) {
+    this.translate.get(message, { device: device }).toPromise().then(message => {
+      this.toast.showCenter(message, 3000);
+    })
   }
 }

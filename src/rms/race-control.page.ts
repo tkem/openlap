@@ -42,20 +42,21 @@ export class Lap {
 }
 
 @Component({
+  // TODO: move to .html
   template: `
     <ion-item-group>
       <button ion-item [disabled]="!options.restart" (click)="restart()">
-        Restart
+        <span translate>Restart race</span>
       </button>
-      <button ion-item [disabled]="!options.stop" (click)="stop()">
-        Stop
+      <button ion-item [disabled]="!options.cancel" (click)="cancel()">
+        <span translate>Cancel race</span>
       </button>
     </ion-item-group>
   `
 })
 export class RaceControlPopover {
 
-  options: { restart: any , stop: any }; 
+  options: { restart: any , cancel: any };
 
   constructor(private view: ViewController, private params: NavParams) {
     this.options = params.data;
@@ -66,8 +67,8 @@ export class RaceControlPopover {
     this.close();
   }
 
-  stop() {
-    this.options.stop();
+  cancel() {
+    this.options.cancel();
     this.close();
   }
 
@@ -217,7 +218,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   presentPopover(event) {
     let popover = this.popover.create(RaceControlPopover, {
       restart: () => this.onStart(),
-      stop: this.session && !this.session.finished.value && this.options.mode != 'practice' ? () => this.session.stop() : null
+      cancel: this.session && !this.session.finished.value && this.options.mode != 'practice' ? () => this.session.stop() : null
     });
     popover.present({ev: event});
   }
