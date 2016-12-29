@@ -56,7 +56,6 @@ export class RaceSession {
       cu.getStart().distinctUntilChanged().filter(start => start != 0),
       cu.getState().distinctUntilChanged().filter(state => state == 'connected')
     ).map(value => {
-      console.log('Resetting mask to', this.mask.toString(2), 'on', value);
       cu.setMask(this.mask);
     });
 
@@ -168,7 +167,6 @@ export class RaceSession {
       this.mask |= (1 << id);
     }
     if (mask != this.mask) {
-      console.log('Setting mask to', this.mask.toString(2));
       this.cu.setMask(this.mask);
     }
     this.finished.next(true);
