@@ -1,3 +1,13 @@
+0.8.9 2016-12-29
+----------------
+
+- Optimize font size in landscape mode.
+
+- Use local storage provider for development.
+
+- Upgrade to Ionic RC 4.
+
+
 0.8.8 2016-12-17
 ----------------
 
