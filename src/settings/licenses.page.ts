@@ -60,6 +60,11 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'https://github.com/vilic/cordova-plugin-tts#readme'
   }, {
+    name: 'cordova-plugin-x-socialsharing',
+    author: 'Eddy Verbruggen - @EddyVerbruggen',
+    license: 'MIT',
+    homepage: 'https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin#readme'
+  }, {
     name: 'cordova-plugin-x-toast',
     author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
     license: 'MIT',

@@ -48,6 +48,7 @@
     "cordova-plugin-statusbar",
     "cordova-plugin-tts",
     "cordova-plugin-whitelist",
+    "cordova-plugin-x-socialsharing",
     "cordova-plugin-x-toast",
     "cordovarduino"
   ],

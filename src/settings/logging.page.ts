@@ -2,8 +2,18 @@ import { Component } from '@angular/core';
 
 import { PopoverController, ViewController } from 'ionic-angular';
 
+import { AppVersion, Device, SocialSharing } from 'ionic-native';
+
 import { Options, Settings } from '../core';
 import { Logger } from '../logging';
+
+function stringify(obj) {
+  try {
+    return JSON.stringify(obj);
+  } catch(error) {
+    return '' + obj;
+  }
+}
 
 @Component({
   template: `
@@ -12,7 +22,8 @@ import { Logger } from '../logging';
         <ion-label>Debug</ion-label>
         <ion-checkbox [(ngModel)]="debugEnabled"></ion-checkbox>
       </ion-item>
-      <button ion-item (click)="logger.clear()">Clear</button>
+      <button ion-item (click)="share()">Share&hellip;</button>
+      <button ion-item (click)="clear()">Clear</button>
     </ion-item-group>
   `
 })
@@ -34,6 +45,29 @@ export class LoggingPopover {
 
   constructor(public logger: Logger, private settings: Settings, private view: ViewController) {}
 
+  clear() {
+    this.logger.clear();
+    this.close();
+  }
+
+  close() {
+    return this.view.dismiss();
+  }
+
+  share() {
+    Promise.all([AppVersion.getAppName(), AppVersion.getVersionNumber()]).then(([name, version]) => {
+      const message = this.logger.records.map(record => {
+        return [record.level, record.time, record.args.map(stringify).join(' ')].join('\t');
+      }).join('\n');
+      const subject = name + ' ' + version + ' (' + [Device.model, Device.platform, Device.version].join(' ') + ')';
+      return SocialSharing.shareWithOptions({ message: message, subject: subject });
+    }).catch(error => {
+      this.logger.error('Error sharing log:', error);
+    }).then(() => {
+      this.close();
+    });
+  }
+
   ngOnInit() {
     this.subscription = this.settings.getOptions().subscribe({
       next: (options) => {
@@ -51,15 +85,6 @@ export class LoggingPopover {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  clear() {
-    this.logger.clear();
-    this.close();
-  }
-
-  close() {
-    this.view.dismiss();
   }
 }
 
@@ -79,16 +104,11 @@ export class LoggingPage {
   constructor(public logger: Logger, private popover: PopoverController) {}
 
   stringify(obj) {
-    try {
-      return JSON.stringify(obj);
-    } catch(error) {
-      return '' + obj;
-    }
+    return stringify(obj);
   }
 
   presentPopover(event) {
     let popover = this.popover.create(LoggingPopover);
     popover.present({ev: event});
   }
-
 }
