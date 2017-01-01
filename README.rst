@@ -52,7 +52,7 @@ Web browser or emulator for testing.
 License
 ------------------------------------------------------------------------
 
-Copyright (c) 2016 Thomas Kemmer.
+Copyright (c) 2016, 2017 Thomas Kemmer.
 
 Licensed under the `Apache License, Version 2.0`_.
 
