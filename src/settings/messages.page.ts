@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 
-import { Settings, Speech } from '../core';
+import { Message, Settings, Speech } from '../core';
 
 @Component({
   templateUrl: 'messages.page.html'
@@ -33,7 +33,7 @@ export class MessagesPage implements OnDestroy {
     label: 'Car enters pit'
   }];
 
-  messages: {[key: string]: string} = {};
+  messages: {[key: string]: Message} = {};
 
   private subscription: any;
 

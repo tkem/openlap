@@ -10,10 +10,11 @@
   <ion-list>
     <ion-item *ngFor="let item of items">
       <ion-label floating>{{item.label | translate}}</ion-label>
-      <ion-input [(ngModel)]="messages[item.id]"></ion-input>
-      <button ion-button clear item-right (click)="speak(messages[item.id])">
+      <ion-input [(ngModel)]="messages[item.id].text"></ion-input>
+      <button ion-button clear item-right (click)="speak(messages[item.id].text)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
+      <ion-toggle [(ngModel)]="messages[item.id].enabled"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

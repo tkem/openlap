@@ -18,15 +18,44 @@ const DRIVERS = [
 ];
 
 const MESSAGES = {
-  falsestart: 'False start!',
-  finished: 'Race finished!',
-  finallap: 'Final lap!',
-  bestlap: 'Fastest lap!',
-  fuel2: 'Prepare to box!',
-  fuel1: 'Box, please box!',
-  fuel0: 'Box this lap!',
-  pitenter: 'In pit!'
+  falsestart: {
+    enabled: true,
+    text: 'False start!'
+  },
+  finished: {
+    enabled: true,
+    text: 'Race finished!'
+  },
+  finallap: {
+    enabled: true,
+    text: 'Final lap!'
+  },
+  bestlap: {
+    enabled: true,
+    text: 'Fastest lap!'
+  },
+  fuel2: {
+    enabled: true,
+    text: 'Prepare to box!'
+  },
+  fuel1: {
+    enabled: true,
+    text: 'Box, please box!'
+  },
+  fuel0: {
+    enabled: true,
+    text: 'Box this lap!'
+  },
+  pitenter: {
+    enabled: false,
+    text: 'In pit!'
+  }
 };
+
+export class Message {
+  enabled: boolean;
+  text: string;
+}
 
 export class Options {
   debug = false;
@@ -111,13 +140,18 @@ export class Settings {
     return this.set('drivers', value);
   }
 
-  getMessages(): Observable<{[key: string]: string}> {
+  getMessages(): Observable<{[key: string]: Message}> {
     return this.get('messages').map(values => {
-      return Object.assign({}, MESSAGES, values);
+      // migrate from < v0.9
+      if (values['finished'] instanceof String) {
+        return Object.assign({}, MESSAGES);
+      } else {
+        return Object.assign({}, MESSAGES, values);
+      }
     });
   }
 
-  setMessages(value: {[key: string]: string}): Promise<void> {
+  setMessages(value: {[key: string]: Message}): Promise<void> {
     return this.set('messages', value);
   }
 

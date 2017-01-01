@@ -189,11 +189,11 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
     this.subscription = events.withLatestFrom(this.settings.getOptions(), this.settings.getMessages()).subscribe(([[event, driver], options, messages]) => {
       this.logger.debug('New race event: ' + event, driver);
-      if (options.speech && messages[event]) {
+      if (options.speech && messages[event] && messages[event].enabled) {
         if (driver && driver.name) {
-          this.speech.speak(driver.name + ': ' + messages[event]);
+          this.speech.speak(driver.name + ': ' + messages[event].text);
         } else {
-          this.speech.speak(messages[event]);
+          this.speech.speak(messages[event].text);
         }
       }
     });
