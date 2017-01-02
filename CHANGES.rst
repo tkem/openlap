@@ -1,3 +1,13 @@
+0.9.0 2017-01-02
+-----------------
+
+- Add internationalization support.
+
+- Disable individual messages.
+
+- Improve manual reconnect.
+
+
 0.8.10 2016-12-30
 -----------------
 
