@@ -18,8 +18,8 @@ import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
 
 const CONNECTION_TIMEOUT = 3000;
-const MIN_RECONNECT_DELAY = 250;
-const MAX_RECONNECT_DELAY = 3000;
+const MIN_RECONNECT_DELAY = 500;
+const MAX_RECONNECT_DELAY = 5000;
 
 const POLL_COMMAND = DataView.fromString('?');
 
