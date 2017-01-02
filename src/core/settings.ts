@@ -143,7 +143,7 @@ export class Settings {
   getMessages(): Observable<{[key: string]: Message}> {
     return this.get('messages').map(values => {
       // migrate from < v0.9
-      if (values['finished'] instanceof String) {
+      if (typeof values['finished'] === "string") {
         return Object.assign({}, MESSAGES);
       } else {
         return Object.assign({}, MESSAGES, values);

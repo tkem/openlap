@@ -1,5 +1,11 @@
+0.9.1 2017-01-02
+----------------
+
+- Fix update of message settings.
+
+
 0.9.0 2017-01-02
------------------
+----------------
 
 - Add internationalization support.
 
