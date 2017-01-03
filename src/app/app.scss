@@ -28,6 +28,10 @@
     background: color($colors, primary);
 }
 
+button[icon-only].active {
+    color: color($colors, primary);
+}
+
 ion-menu {
     ion-content {
         background: color($colors, dark) !important;
@@ -81,6 +85,7 @@ ion-footer {
 }
 
 ion-grid.tuning {
+    padding-top: 2px;
     ion-col {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -100,7 +105,7 @@ ion-grid.tuning {
     }
     ion-col.range {
         flex: 1 1;
-        padding: 0 1em;
+        padding: 2px 1em;
     }
 }
 
@@ -109,6 +114,13 @@ ion-grid.tuning {
     align-self: center;
     align-items: center;
     height: 100%;
+}
+
+ion-range.range-md.pristine {
+    .range-knob {
+        border: 2px solid $range-md-bar-background-color !important;
+        background: $background-md-color !important;
+    }     
 }
 
 /* FIXME: is this really such a smart idea? */

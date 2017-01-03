@@ -3,9 +3,13 @@
     <ion-title>
       <span translate>Tuning</span>
     </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only [ngClass]="{'active': link}" (click)="link = !link">
+        <ion-icon name="link"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
   <ion-segment [(ngModel)]="type">
     <ion-segment-button translate value="speed">
@@ -32,24 +36,11 @@
         {{(drivers | async)[model.id]?.code}}
       </ion-col>
       <ion-col center class="range">
-        <ion-range no-padding min="0" max="15" snaps="true" [disabled]="!(connected | async)" [(ngModel)]="model[type]" (ionChange)="update(type, $event.value, model.id)">
-        </ion-range>
-      </ion-col>
-    </ion-row>
-    <ion-row center>
-      <ion-col stretch class="number">
-        <slant color="transparent">
-          <span class="centered">#</span>
-        </slant>
-      </ion-col>
-      <ion-col center class="name" showWhen="landscape" translate>
-        All
-      </ion-col>
-      <ion-col center class="code" showWhen="portrait" translate>
-        ALL
-      </ion-col>
-      <ion-col center class="range">
-        <ion-range no-padding min="0" max="15" snaps="true" [disabled]="!(connected | async)" [(ngModel)]="all[type]" (ionChange)="update(type, $event.value)">
+        <ion-range no-padding min="0" max="15" snaps="true"
+          [ngClass]="{'pristine': model[type] == null}"
+          [disabled]="!(connected | async)" 
+          [ngModel]="model[type] || 0" 
+          (ionChange)="update(type, $event.value, link ? undefined : model.id)">
         </ion-range>
       </ion-col>
     </ion-row>
