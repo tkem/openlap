@@ -63,6 +63,7 @@ export class Options {
   fullscreen = false;
   language = "";
   speech = true;
+  finishedlaps = false;
 }
 
 export class Driver {

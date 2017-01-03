@@ -39,7 +39,8 @@
   "OK": "OK",
   "Cancel": "Cancel",
   "Done": "Done",
-  
+  "None": "None",
+
   "About": "About",
   "Licenses": "Licenses",
   "License": "License",
@@ -55,6 +56,8 @@
   "Enable fullscreen": "Enable fullscreen",
   "Enable speech": "Enable speech",
   "Sort by driver number": "Sort by driver number",
+  "Count finished laps": "Count finished laps",
+
   "Share": "Share",
   "Clear": "Clear",
   "Debug": "Debug",

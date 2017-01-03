@@ -128,11 +128,10 @@ export class AppComponent implements OnInit {
   }
 
   private setRoot(page: Component, params?: any) {
-    console.log('Setting root page');
     this.nav.setRoot(page, params).catch(error => {
       this.logger.error('Error setting root page', error);
     }).then(() => {
-      console.log('Hiding splash screen');
+      this.logger.info('Hiding splash screen');
       Splashscreen.hide();
     });
   }

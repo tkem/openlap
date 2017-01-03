@@ -34,11 +34,13 @@ const FIELDS = {
 };
 
 @Component({
-  selector: 'lap',
-  template: '{{value[0]}}<span *ngIf="value[1]">/{{value[1]}}</span>'
+  selector: 'lap-counter',
+  template: '{{(total && total < count ? total : count) || 0}}<span *ngIf="total">/{{total}}</span>'
 })
-export class Lap {
-  @Input() value: [number, number];
+export class LapCounter {
+  @Input() count: number;
+
+  @Input() total: number;
 }
 
 @Component({
@@ -86,7 +88,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
   options: any;
 
   fields: Observable<string[]>;
-  order: Observable<string>;
+  sortorder: Observable<string>;
+  lapindex: Observable<number>;
 
   start: Observable<number>;
   lights: Observable<number>;
@@ -104,9 +107,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
   {
     this.options = params.data;
 
-    let start = this.cu.getStart();  // TODO: distinctUntilChanged
-    let state = this.cu.getState();  // TODO: distinctUntilChanged
-    let mode = this.cu.getMode().distinctUntilChanged().do(value => console.log('Mode: ' + value));
+    const start = this.cu.getStart();  // TODO: distinctUntilChanged
+    const state = this.cu.getState();  // TODO: distinctUntilChanged
+    const mode = this.cu.getMode().distinctUntilChanged();
 
     // use "resize" event for easier testing on browsers
     const orientation = Observable.fromEvent(window, 'resize').startWith(undefined).map(() => {
@@ -118,7 +121,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return FIELDS[this.options.mode][index];
     });
 
-    this.order = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
+    this.sortorder = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
+    this.lapindex = settings.getOptions().map(options => options.finishedlaps).map(option => option ? 1 : 0);
 
     this.start = start;
     this.lights = start.map(value => {
@@ -162,7 +166,14 @@ export class RaceControlPage implements OnDestroy, OnInit {
       session.bestlap.filter(car => car && car.laps >= 3).map(car => {
         return ['bestlap', car.id];
       }),
-      session.lap.filter(([lap, laps]) => lap === laps - 1 && !session.finished.value).map(() => {
+      session.lap.combineLatest(this.settings.getOptions()).map(([[current, finished], options]) => {
+        const lap = options.finishedlaps ? finished : current;
+        this.logger.debug('New lap', lap);
+        this.cu.setLap(lap);
+        return current;
+      }).distinctUntilChanged().filter(current => {
+        return current === this.options.laps && !session.finished.value;
+      }).map(() => {
         return ['finallap', null];
       }),
       session.finished.distinctUntilChanged().filter(finished => finished).map(() => {

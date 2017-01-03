@@ -13,7 +13,8 @@
           <span translate>Qualifying</span>
         </template>
         <template ngSwitchCase="race">
-          <span translate>Lap</span> <lap [value]="session.lap | async"></lap>
+          <span translate>Lap</span> 
+          <lap-counter [count]="(session.lap | async)[lapindex | async]" [total]="options.laps"></lap-counter>
         </template>
       </span>
       <checkerboard cols="9" rows="5" *ngIf="session.finished | async"></checkerboard>
@@ -30,7 +31,7 @@
 </ion-header>
 
 <ion-content class="noscroll">
-  <leaderboard [fields]="fields | async" [items]="ranking | async" [order]="order | async">
+  <leaderboard [fields]="fields | async" [items]="ranking | async" [order]="sortorder | async">
   </leaderboard>
 </ion-content>
 

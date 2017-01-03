@@ -47,9 +47,8 @@ function createQualifyingForm(fb: FormBuilder, params: NavParams) {
 }
 
 function createRaceForm(fb: FormBuilder, params: NavParams) {
-  console.log('time:' + !!params.get('time'));
   return fb.group({
-    laps: new FormControl(params.get('laps') || 0, Validators.pattern('\\d*')),
+    laps: new FormControl(params.get('laps') || '', Validators.pattern('\\d*')),
     time: new FormControl(formatTime(params.get('time') || 0)),
     pause: new FormControl({
       value: !!params.get('pause'),

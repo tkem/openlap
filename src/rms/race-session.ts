@@ -34,10 +34,10 @@ const COMPARE = {
 export class RaceSession {
   grid: Observable<Observable<RaceItem>>;
   ranking: Observable<RaceItem[]>;
-  lap: Observable<[number, number]>;         // TODO: event?
-  finished = new BehaviorSubject(false);     // TODO: event?
+  lap: Observable<number[]>;                      // current/finished
+  finished = new BehaviorSubject(false);          // TODO: event?
   bestlap = new BehaviorSubject<RaceItem>(null);  // TODO: event?
-  timer = Observable.of(0);                  // TODO: event?
+  timer = Observable.of(0);                       // TODO: event?
   started = false;
   stopped = false;
 
@@ -116,19 +116,19 @@ export class RaceSession {
       return ranks;
     });
 
-    const laps = options.laps ? options.laps : null;
-    this.lap = this.grid.mergeAll().scan((lap, event) => {
-      // TODO: get from times directly?
-      if (lap < event.laps) {
-        lap = event.laps;
-        if (laps && lap >= laps) {
+    this.lap = this.grid.mergeAll().scan(([current, finished], event) => {
+      if (finished <= event.laps) {
+        finished = event.laps;
+        if (options.laps && finished >= options.laps) {
           this.finish();
         }
-        cu.setLap(lap);
+        if (!this.finished.value && event.laps >= current) {
+          current = event.laps + 1;
+        }
       }
-      return lap;
-    }, 0).share().startWith(0).distinctUntilChanged().map(lap => {
-      return <[number, number]>[lap, laps];
+      return [current, finished];
+    }, [0, 0]).share().startWith([0, 0]).distinctUntilChanged(([x1, x2], [y1, y2]) => {
+      return x1 == y1 && x2 == y2;
     });
 
     if (options.time) {
@@ -147,7 +147,6 @@ export class RaceSession {
     }
 
     this.cu.clearPosition();
-    // FIXME: apparently, this will not reset fuel levels if startlight is active
     this.cu.reset();
   }
 

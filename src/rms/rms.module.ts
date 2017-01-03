@@ -8,13 +8,13 @@ import { LeaderboardModule } from '../leaderboard';
 import { SharedModule } from '../shared';
 
 import { TuningPage } from './tuning.page';
-import { Lap, RaceControlPage, RaceControlPopover } from './race-control.page';
+import { LapCounter, RaceControlPage, RaceControlPopover } from './race-control.page';
 import { RaceSettingsPage } from './race-settings.page';
 
 @NgModule({
   declarations: [
     TuningPage,
-    Lap,
+    LapCounter,
     RaceControlPage,
     RaceControlPopover,
     RaceSettingsPage

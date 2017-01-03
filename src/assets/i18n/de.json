@@ -39,6 +39,7 @@
   "OK": "OK",
   "Cancel": "Abbrechen",
   "Done": "Fertig",
+  "None": "Keine",
 
   "About": "Über",
   "Licenses": "Lizenzen",
@@ -55,6 +56,8 @@
   "Enable fullscreen": "Vollbildmodus",
   "Enable speech": "Sprachausgabe",
   "Sort by driver number": "Fahrer nach Nummern sortieren",
+  "Count finished laps": "Zähle nur beendete Runden",
+
   "Share": "Teilen",
   "Clear": "Leeren",
   "Debug": "Debug",
