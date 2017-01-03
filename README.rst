@@ -6,20 +6,18 @@ for Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
 
-- Connect your mobile device via Bluetooth using Carrera AppConnect®,
-  or a suitable serial to USB adapter.
-- Take it easy during free practice, or compete in lap or time based
+- connect your mobile device via Bluetooth using Carrera AppConnect®,
+  or a suitable serial to USB On-The-Go adapter cable.
+- take it easy during free practice, or compete in lap or time based
   qualifying and race sessions.
-- Selectively track times for both autonomous and pace cars.
-- Adjust vehicle speed, brake force and fuel tank size for each car
+- adjust vehicle speed, brake force and fuel tank size for each car
   individually, even during a race or qualifying session.
-- Get informed about important events, such as fastest laps or low
+- get informed about important events, such as fastest laps or low
   fuel conditions, by personalized voice messages.
-- Select whether to sort current standings by position or driver number. 
 
-Open Lap is available as an Android app from the `Google Play
-<https://play.google.com/store/apps/details?id=at.co.kemmer.openlap>`_
-store.  You may also want to join the `Beta testing program
+Open Lap is available as an Android app from the `Google Play Store
+<https://play.google.com/store/apps/details?id=at.co.kemmer.openlap>`_.
+You may also want to join the `Beta testing program 
 <https://play.google.com/apps/testing/at.co.kemmer.openlap>`_ to
 preview unreleased versions.
 
@@ -42,6 +40,11 @@ Please refer to the `Ionic CLI
 <http://ionicframework.com/docs/v2/cli/>`_ documentation for further
 information on how to run the application on an actual device, or in a
 Web browser or emulator for testing.
+
+Due to lack of resources, Open Lap has *not* been tested on iOS, and is
+unlikely to run unchanged on that platform.  However, being a hybrid
+app, it shouldn't take too much effort to make it work, so please feel
+free to fork this and give it a try!
 
 
 License
