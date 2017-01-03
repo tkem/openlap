@@ -80,6 +80,37 @@ ion-footer {
   }
 }
 
+ion-grid.tuning {
+    ion-col {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    ion-col.number {
+        flex: 0 0 3em;
+        .centered {
+            padding-left: 0.5em;
+        }
+    }
+    ion-col.code {
+        flex: 0 0 3em;
+    }
+    ion-col.name {
+        flex: 0 0 6em;
+    }
+    ion-col.range {
+        flex: 1 1;
+        padding: 0 1em;
+    }
+}
+
+.centered {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    height: 100%;
+}
+
 /* FIXME: is this really such a smart idea? */
 ion-input[type=number] {
     input {

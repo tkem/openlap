@@ -18,16 +18,40 @@
       Fuel
     </ion-segment-button>
   </ion-segment>
-  <ion-list no-lines>
-    <ion-item *ngFor="let model of models">
-      <ion-range min="0" max="15" snaps="true" [disabled]="!(connected | async)" [(ngModel)]="model[type]" (ionChange)="update(type, $event.value, model.id)">
-        <ion-label range-left>#{{model.id + 1}}</ion-label>
-      </ion-range>
-    </ion-item>
-    <ion-item>
-      <ion-range min="0" max="15" snaps="true" [disabled]="!(connected | async)" [(ngModel)]="all[type]" (ionChange)="update(type, $event.value)">
-        <ion-label range-left>All</ion-label>
-      </ion-range>
-    </ion-item>
-  </ion-list>
+  <ion-grid class="tuning">
+    <ion-row *ngFor="let model of models">
+      <ion-col stretch class="number">
+        <slant [color]="(drivers | async)[model.id]?.color">
+          <span class="centered">{{model.id + 1}}</span>
+        </slant>
+      </ion-col>
+      <ion-col center class="name" showWhen="landscape">
+        <span>{{(drivers | async)[model.id]?.name}}</span>
+      </ion-col>
+      <ion-col center class="code" showWhen="portrait">
+        {{(drivers | async)[model.id]?.code}}
+      </ion-col>
+      <ion-col center class="range">
+        <ion-range no-padding min="0" max="15" snaps="true" [disabled]="!(connected | async)" [(ngModel)]="model[type]" (ionChange)="update(type, $event.value, model.id)">
+        </ion-range>
+      </ion-col>
+    </ion-row>
+    <ion-row center>
+      <ion-col stretch class="number">
+        <slant color="transparent">
+          <span class="centered">#</span>
+        </slant>
+      </ion-col>
+      <ion-col center class="name" showWhen="landscape" translate>
+        All
+      </ion-col>
+      <ion-col center class="code" showWhen="portrait" translate>
+        ALL
+      </ion-col>
+      <ion-col center class="range">
+        <ion-range no-padding min="0" max="15" snaps="true" [disabled]="!(connected | async)" [(ngModel)]="all[type]" (ionChange)="update(type, $event.value)">
+        </ion-range>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
