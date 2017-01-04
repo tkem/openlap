@@ -172,7 +172,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
         this.cu.setLap(lap);
         return current;
       }).distinctUntilChanged().filter(current => {
-        return current === this.options.laps && !session.finished.value;
+        return this.options.laps && current === this.options.laps && !session.finished.value;
       }).map(() => {
         return ['finallap', null];
       }),
