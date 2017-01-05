@@ -11,7 +11,7 @@ import { AboutPage } from './about.page';
 import { ColorsPage } from './colors.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingPage } from './logging.page';
-import { MessagesPage } from './messages.page';
+import { NotificationsPage } from './notifications.page';
 import { OptionsPage } from './options.page';
 
 @Component({
@@ -70,7 +70,7 @@ export class SettingsPage {
   colorsPage = ColorsPage;
   licensesPage = LicensesPage;
   loggingPage = LoggingPage;
-  messagesPage = MessagesPage;
+  notificationsPage = NotificationsPage;
   optionsPage = OptionsPage;
   
   constructor(private popover: PopoverController) {}

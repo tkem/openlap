@@ -198,13 +198,16 @@ export class RaceControlPage implements OnDestroy, OnInit {
       this.subscription.unsubscribe();
     }
 
-    this.subscription = events.withLatestFrom(this.settings.getOptions(), this.settings.getMessages()).subscribe(([[event, driver], options, messages]) => {
+    this.subscription = events.withLatestFrom(
+      this.settings.getOptions(), 
+      this.settings.getNotifications()
+    ).subscribe(([[event, driver], options, notifications]) => {
       this.logger.debug('New race event: ' + event, driver);
-      if (options.speech && messages[event] && messages[event].enabled) {
+      if (options.speech && notifications[event] && notifications[event].enabled) {
         if (driver && driver.name) {
-          this.speech.speak(driver.name + ': ' + messages[event].text);
+          this.speech.speak(driver.name + ': ' + notifications[event].text);
         } else {
-          this.speech.speak(messages[event].text);
+          this.speech.speak(notifications[event].text);
         }
       }
     });

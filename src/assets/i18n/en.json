@@ -42,11 +42,11 @@
   "None": "None",
 
   "About": "About",
+  "General": "General",
   "Licenses": "Licenses",
   "License": "License",
   "Logging": "Logging",
-  "Messages": "Messages",
-  "General": "General",
+  "Notifications": "Notifications",
 
   "Reset settings": "Reset settings",
   "Reset all user settings to default values?": "Reset all user settings to default values?",

@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 
-import { Message, Settings, Speech } from '../core';
+import { Notification, Settings, Speech } from '../core';
 
 @Component({
-  templateUrl: 'messages.page.html'
+  templateUrl: 'notifications.page.html'
 })
-export class MessagesPage implements OnDestroy {
+export class NotificationsPage implements OnDestroy {
 
   items = [{
     id: 'finished',
@@ -33,20 +33,20 @@ export class MessagesPage implements OnDestroy {
     label: 'Car enters pit'
   }];
 
-  messages: {[key: string]: Message} = {};
+  notifications: {[key: string]: Notification} = {};
 
   private subscription: any;
 
   constructor(private settings: Settings, private speech: Speech) {}
 
   ngOnInit() {
-    this.subscription = this.settings.getMessages().subscribe(messages => {
-      this.messages = messages;
+    this.subscription = this.settings.getNotifications().subscribe(notifications => {
+      this.notifications = notifications;
     });
   }
 
   ngOnDestroy() {
-    this.settings.setMessages(this.messages);
+    this.settings.setNotifications(this.notifications);
     this.subscription.unsubscribe();
   }
 

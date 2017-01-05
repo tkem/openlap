@@ -11,7 +11,7 @@ import { ColorsPage } from './colors.page';
 import { DriversPage } from './drivers.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingPage, LoggingPopover } from './logging.page';
-import { MessagesPage } from './messages.page';
+import { NotificationsPage } from './notifications.page';
 import { OptionsPage } from './options.page';
 import { SettingsPage, SettingsPopover } from './settings.page';
 
@@ -25,7 +25,7 @@ import { SettingsPage, SettingsPopover } from './settings.page';
     LicensesPage,
     LoggingPage,
     LoggingPopover,
-    MessagesPage,
+    NotificationsPage,
     OptionsPage
   ],
   entryComponents: [
@@ -37,7 +37,7 @@ import { SettingsPage, SettingsPopover } from './settings.page';
     LicensesPage,
     LoggingPage,
     LoggingPopover,
-    MessagesPage,
+    NotificationsPage,
     OptionsPage,
   ],
   exports: [

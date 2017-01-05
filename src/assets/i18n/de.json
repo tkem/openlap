@@ -42,11 +42,11 @@
   "None": "Keine",
 
   "About": "Über",
+  "General": "Allgemein",
   "Licenses": "Lizenzen",
   "License": "Lizenz",
   "Logging": "Protokoll",
-  "Messages": "Mitteilungen",
-  "General": "Allgemein",
+  "Notifications": "Benachrichtigungen",
 
   "Reset settings": "Einstellungen zurücksetzen",
   "Reset all user settings to default values?": "Alle Einstellungen auf Standardwerte zurücksetzen?",

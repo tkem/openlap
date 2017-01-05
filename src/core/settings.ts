@@ -17,7 +17,7 @@ const DRIVERS = [
   { name: 'Pace Car', code: 'PAC', color: '#00fbff' }
 ];
 
-const MESSAGES = {
+const NOTIFICATIONS = {
   falsestart: {
     enabled: true,
     text: 'False start!'
@@ -52,11 +52,6 @@ const MESSAGES = {
   }
 };
 
-export class Message {
-  enabled: boolean;
-  text: string;
-}
-
 export class Options {
   debug = false;
   fixedorder = false;
@@ -64,6 +59,14 @@ export class Options {
   language = "";
   speech = true;
   finishedlaps = false;
+}
+
+export class Notification {
+  constructor(id: string) {
+    Object.assign(this, NOTIFICATIONS[id]);
+  }
+  enabled: boolean;
+  text: string;
 }
 
 export class Driver {
@@ -128,12 +131,12 @@ export class Settings {
   }
 
   getDrivers(): Observable<Array<Driver>> {
-    return this.get('drivers').map(values => {
-      const drivers = new Array<Driver>(8);
-      for (let i = 0; i != drivers.length; ++i) {
-        drivers[i] = Object.assign(new Driver(i), values ? values[i] : null);
+    return this.get('drivers').map(value => {
+      const result = new Array<Driver>(8);
+      for (let i = 0; i != result.length; ++i) {
+        result[i] = Object.assign(new Driver(i), value ? value[i] : null);
       }
-      return drivers;
+      return result;
     });
   }
 
@@ -141,19 +144,18 @@ export class Settings {
     return this.set('drivers', value);
   }
 
-  getMessages(): Observable<{[key: string]: Message}> {
-    return this.get('messages').map(values => {
-      // migrate from < v0.9
-      if (!values || typeof values['finished'] === "string") {
-        return Object.assign({}, MESSAGES);
-      } else {
-        return Object.assign({}, MESSAGES, values);
+  getNotifications(): Observable<{[key: string]: Notification}> {
+    return this.get('notifications').map(value => {
+      const result = {};
+      for (let key of Object.keys(NOTIFICATIONS)) {
+        result[key] = Object.assign(new Notification(key), value ? value[key] : null);
       }
+      return result;
     });
   }
 
-  setMessages(value: {[key: string]: Message}): Promise<void> {
-    return this.set('messages', value);
+  setNotifications(value: {[key: string]: Notification}): Promise<void> {
+    return this.set('notifications', value);
   }
 
   getOptions(): Observable<Options> {

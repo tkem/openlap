@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <span translate>Notifications</span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <ion-label floating>{{item.label | translate}}</ion-label>
+      <ion-input *ngIf="notifications[item.id]" [(ngModel)]="notifications[item.id].text" ></ion-input>
+      <button ion-button clear icon-only item-right (click)="speak(notifications[item.id].text)">
+        <ion-icon name="volume-up"></ion-icon>
+      </button>
+      <ion-toggle *ngIf="notifications[item.id]" [(ngModel)]="notifications[item.id].enabled"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>
