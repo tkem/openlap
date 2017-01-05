@@ -13,7 +13,7 @@
       <ion-input placeholder="Driver #{{id + 1}}" [ngModel]="driver.name" (ngModelChange)="driver.code = getCode(driver.name = $event)">
       </ion-input>
       <ion-note item-right>{{driver.code || '#' + (id + 1)}}</ion-note>
-      <button ion-button clear item-right (click)="speak(id)">
+      <button ion-button clear icon-only item-right (click)="speak(id)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>
