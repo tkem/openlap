@@ -54,11 +54,11 @@ const NOTIFICATIONS = {
 
 export class Options {
   debug = false;
+  finishedlaps = true;
   fixedorder = false;
   fullscreen = false;
-  language = "";
+  language = '';
   speech = true;
-  finishedlaps = false;
 }
 
 export class Notification {

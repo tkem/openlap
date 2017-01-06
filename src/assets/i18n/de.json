@@ -7,7 +7,7 @@
     "Falls keine Geräte aufscheinen, stellen Sie bitte sicher, dass Bluetooth aktiviert ist, oder verwenden Sie ein geeignetes USB OTG Kabel.",
 
   "Connected to {{device}}": "Verbunden mit {{device}}",
-  "Connecting to {{device}}": "Verbinde mit {{device}}",
+  "Connecting to {{device}}": "Verbinden mit {{device}}",
   "Disconnected from {{device}}": "Getrennt von {{device}}",
 
   "Free Practice": "Freies Training",
@@ -18,10 +18,10 @@
   "Tuning": "Tuning",
   "Settings": "Einstellungen",
   "Exit": "Beenden",
-  "Reconnect": "Wiederverbinden",
+  "Reconnect": "Erneut verbinden",
 
-  "Speed": "Geschwindigkeit",
-  "Brake": "Bremsen",
+  "Speed": "Tempo",
+  "Brake": "Bremse",
   "Fuel": "Tank",
 
   "Lap {{count}}": "Runde {{count}}",
@@ -43,13 +43,11 @@
   "Done": "Fertig",
   "None": "Keine",
 
-  "About": "Über",
   "General": "Allgemein",
-  "Licenses": "Lizenzen",
-  "License": "Lizenz",
   "Logging": "Protokoll",
   "Notifications": "Benachrichtigungen",
-
+  "Open source licenses": "Open-Source-Lizenzen",
+  "About Open Lap": "Über Open Lap",
   "Reset settings": "Einstellungen zurücksetzen",
   "Reset all user settings to default values?": "Alle Einstellungen auf Standardwerte zurücksetzen?",
 
@@ -57,20 +55,22 @@
   "Default": "Standard",
   "Enable fullscreen": "Vollbildmodus",
   "Enable speech": "Sprachausgabe",
+  "Count finished laps": "Zähle beendete Runden",
   "Sort by driver number": "Fahrer nach Nummern sortieren",
-  "Count finished laps": "Zähle nur beendete Runden",
 
-  "Share": "Teilen",
   "Clear": "Leeren",
-  "Debug": "Debug",
+  "Debug messages": "Diagnosemeldungen",
   "Reset": "Zurücksetzen",
+  "Share": "Teilen",
 
-  "Race finished": "Rennende",
+  "Race finished": "Rennen beendet",
   "Final lap": "Letzte Runde",
   "False start": "Fehlstart",
   "Fastest lap": "Schnellste Runde",
   "Fuel < 20%": "Tank < 20%",
   "Fuel < 10%": "Tank < 10%",
   "No fuel": "Tank leer",
-  "Car enters pit": "Fahrzeug in Box"
+  "Car enters pit": "Fahrzeug in Box",
+
+  "License": "Lizenz"
 }

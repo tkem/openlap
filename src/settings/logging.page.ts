@@ -19,7 +19,7 @@ function stringify(obj) {
   template: `
     <ion-item-group>
       <ion-item>
-        <ion-label translate>Debug</ion-label>
+        <ion-label translate>Debug messages</ion-label>
         <ion-checkbox [(ngModel)]="debugEnabled"></ion-checkbox>
       </ion-item>
       <button ion-item (click)="share()">

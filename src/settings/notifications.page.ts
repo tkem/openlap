@@ -14,11 +14,14 @@ export class NotificationsPage implements OnDestroy {
     id: 'finallap',
     label: 'Final lap'
   }, {
+    id: 'bestlap',
+    label: 'Fastest lap'
+  }, {
     id: 'falsestart',
     label: 'False start'
   }, {
-    id: 'bestlap',
-    label: 'Fastest lap'
+    id: 'pitenter',
+    label: 'Car enters pit'
   }, {
     id: 'fuel2',
     label: 'Fuel < 20%'
@@ -28,9 +31,6 @@ export class NotificationsPage implements OnDestroy {
   }, {
     id: 'fuel0',
     label: 'No fuel'
-  }, {
-    id: 'pitenter',
-    label: 'Car enters pit'
   }];
 
   notifications: {[key: string]: Notification} = {};

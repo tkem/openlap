@@ -43,13 +43,11 @@
   "Done": "Done",
   "None": "None",
 
-  "About": "About",
   "General": "General",
-  "Licenses": "Licenses",
-  "License": "License",
   "Logging": "Logging",
   "Notifications": "Notifications",
-
+  "Open source licenses": "Open source licenses",
+  "About Open Lap": "About Open Lap",
   "Reset settings": "Reset settings",
   "Reset all user settings to default values?": "Reset all user settings to default values?",
 
@@ -57,13 +55,13 @@
   "Default": "Default",
   "Enable fullscreen": "Enable fullscreen",
   "Enable speech": "Enable speech",
-  "Sort by driver number": "Sort by driver number",
   "Count finished laps": "Count finished laps",
+  "Sort by driver number": "Sort by driver number",
 
-  "Share": "Share",
   "Clear": "Clear",
-  "Debug": "Debug",
+  "Debug messages": "Debug messages",
   "Reset": "Reset",
+  "Share": "Share",
 
   "Race finished": "Race finished",
   "Final lap": "Final lap",
@@ -72,5 +70,7 @@
   "Fuel < 20%": "Fuel < 20%",
   "Fuel < 10%": "Fuel < 10%",
   "No fuel": "No fuel",
-  "Car enters pit": "Car enters pit"
+  "Car enters pit": "Car enters pit",
+
+  "License": "License"
 }

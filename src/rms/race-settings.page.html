@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title [ngSwitch]="mode">
-      <template ngSwitchCase="practice" translate>Practice</template>
-      <template ngSwitchCase="qualifying">Qualifying</template>
-      <template ngSwitchDefault translate>Race</template>
+    <ion-title [ngSwitch]="mode" translate>
+      <span *ngSwitchCase="'practice'" translate>Free Practice</span>
+      <span *ngSwitchCase="'qualifying'" translate>Qualifying</span>
+      <span *ngSwitchDefault translate>Race</span>
     </ion-title>
     <ion-buttons left>
       <button ion-button (click)="onCancel()">
