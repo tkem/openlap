@@ -1,3 +1,13 @@
+0.9.6 2017-01-06
+----------------
+
+- Refactor lap counter and events.
+
+- Rename "messages" to "notifications".
+
+- Fix icon-only buttons.
+
+
 0.9.5 2017-01-05
 ----------------
 
