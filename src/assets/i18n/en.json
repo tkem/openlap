@@ -24,11 +24,13 @@
   "Brake": "Brake",
   "Fuel": "Fuel",
 
-  "Lap": "Lap",
-  "Start": "Start",
+  "Lap {{count}}": "Lap {{count}}",
+  "Lap {{count}}/{{total}}": "Lap {{count}}/{{total}}",
+
   "Restart race": "Restart race",
   "Cancel race": "Cancel race",
 
+  "Start": "Start",
   "Laps": "Laps",
   "Time": "Time",
   "Stop time when paused": "Stop time when paused",

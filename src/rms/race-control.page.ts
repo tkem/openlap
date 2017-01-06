@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavParams, PopoverController, ViewController } from 'ionic-angular';
 
@@ -32,16 +32,6 @@ const FIELDS = {
     ['position', 'number', 'name', 'time', 'bestlap', 'lastlap', 'laps', 'pits', 'fuel', 'status']
   ]
 };
-
-@Component({
-  selector: 'lap-counter',
-  template: '{{(total && total < count ? total : count) || 0}}<span *ngIf="total">/{{total}}</span>'
-})
-export class LapCounter {
-  @Input() count: number;
-
-  @Input() total: number;
-}
 
 @Component({
   // TODO: move to .html
@@ -89,7 +79,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
   fields: Observable<string[]>;
   sortorder: Observable<string>;
-  lapindex: Observable<number>;
+  lapcount: Observable<{count: number, current: number, total: number}>;
 
   start: Observable<number>;
   lights: Observable<number>;
@@ -122,7 +112,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
     });
 
     this.sortorder = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
-    this.lapindex = settings.getOptions().map(options => options.finishedlaps).map(option => option ? 1 : 0);
 
     this.start = start;
     this.lights = start.map(value => {
@@ -146,7 +135,33 @@ export class RaceControlPage implements OnDestroy, OnInit {
   onStart() {
     const session = this.session = new RaceSession(this.cu, this.options);
 
+    this.lapcount = session.lap.combineLatest(this.settings.getOptions()).map(([[current, finished], options]) => {
+      return { 
+        count: options.finishedlaps ? finished : current, 
+        current: current,
+        total: this.options.laps 
+      };
+    }).do(laps => {
+        this.logger.debug('New lap', laps);
+        this.cu.setLap(laps.count);
+    }).share().startWith({count: 0, current: 0, total: this.options.laps});
+
+    // sort in order of importance for speech
     const events = Observable.merge(
+      session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
+        return ['finished', null];
+      }),
+      this.lapcount.distinctUntilChanged((x, y) => x.current == y.current).filter(laps => {
+        return this.options.laps && laps.current === this.options.laps && !session.finished.value;
+      }).map(() => {
+        return ['finallap', null];
+      }),
+      this.start.distinctUntilChanged().filter(value => value == 9).map(() => {
+        return ['falsestart', null];
+      }),
+      session.bestlap.filter(car => car && car.laps >= 3).map(car => {
+        return ['bestlap', car.id];
+      }),
       session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
         const events = [];
@@ -162,25 +177,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
           }
         }
         return Observable.from(events);
-      }),
-      session.bestlap.filter(car => car && car.laps >= 3).map(car => {
-        return ['bestlap', car.id];
-      }),
-      session.lap.combineLatest(this.settings.getOptions()).map(([[current, finished], options]) => {
-        const lap = options.finishedlaps ? finished : current;
-        this.logger.debug('New lap', lap);
-        this.cu.setLap(lap);
-        return current;
-      }).distinctUntilChanged().filter(current => {
-        return this.options.laps && current === this.options.laps && !session.finished.value;
-      }).map(() => {
-        return ['finallap', null];
-      }),
-      session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
-        return ['finished', null];
-      }),
-      this.start.distinctUntilChanged().filter(value => value == 9).map(() => {
-        return ['falsestart', null];
       })
     ).withLatestFrom(this.settings.getDrivers()).map(([[event, id], drivers]) => {
       return <[string, any]>[event, id !== null ? drivers[id] : null];

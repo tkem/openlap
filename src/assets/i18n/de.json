@@ -24,11 +24,13 @@
   "Brake": "Bremsen",
   "Fuel": "Tank",
 
-  "Lap": "Runde",
-  "Start": "Start",
+  "Lap {{count}}": "Runde {{count}}",
+  "Lap {{count}}/{{total}}": "Runde {{count}}/{{total}}",
+
   "Restart race": "Neustart",
   "Cancel race": "Rennen abbrechen",
 
+  "Start": "Start",
   "Laps": "Runden",
   "Time": "Zeit",
   "Stop time when paused": "Zeit bei Unterbrechung stoppen",
