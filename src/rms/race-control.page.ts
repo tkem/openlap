@@ -148,20 +148,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
     // sort in order of importance for speech
     const events = Observable.merge(
-      session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
-        return ['finished', null];
-      }),
-      this.lapcount.distinctUntilChanged((x, y) => x.current == y.current).filter(laps => {
-        return this.options.laps && laps.current === this.options.laps && !session.finished.value;
-      }).map(() => {
-        return ['finallap', null];
-      }),
-      this.start.distinctUntilChanged().filter(value => value == 9).map(() => {
-        return ['falsestart', null];
-      }),
-      session.bestlap.filter(car => car && car.laps >= 3).map(car => {
-        return ['bestlap', car.id];
-      }),
       session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
         const events = [];
@@ -177,6 +163,20 @@ export class RaceControlPage implements OnDestroy, OnInit {
           }
         }
         return Observable.from(events);
+      }),
+      session.bestlap.filter(car => car && car.laps >= 3).map(car => {
+        return ['bestlap', car.id];
+      }),
+      this.start.distinctUntilChanged().filter(value => value == 9).map(() => {
+        return ['falsestart', null];
+      }),
+      this.lapcount.distinctUntilChanged((x, y) => x.current == y.current).filter(laps => {
+        return this.options.laps && laps.current === this.options.laps && !session.finished.value;
+      }).map(() => {
+        return ['finallap', null];
+      }),
+      session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
+        return ['finished', null];
       })
     ).withLatestFrom(this.settings.getDrivers()).map(([[event, id], drivers]) => {
       return <[string, any]>[event, id !== null ? drivers[id] : null];
