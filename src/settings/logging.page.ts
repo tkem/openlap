@@ -25,7 +25,7 @@ function stringify(obj) {
       <button ion-item (click)="share()">
         <span translate>Share</span>&hellip;
       </button>
-      <button ion-item (click)="logger.clear()">
+      <button ion-item (click)="clear()">
         <span translate>Clear</span>
       </button>
     </ion-item-group>
