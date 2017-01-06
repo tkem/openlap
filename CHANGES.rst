@@ -1,3 +1,13 @@
+0.9.7 2017-01-06
+----------------
+
+- Update texts and translations.
+
+- Close logging popover on "clear".
+
+- Reorder event priorities.
+
+
 0.9.6 2017-01-06
 ----------------
 
