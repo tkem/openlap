@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
 
 import { Backend } from './backend';
-import { Peripheral } from '../carrera';
+import { DataView, Peripheral } from '../carrera';
 import { Logger } from '../logging';
 
 const VERSION = '0815';
@@ -112,14 +112,14 @@ class DemoPeripheral implements Peripheral {
     maxLapTime: 12000
   };
 
-  private version: Uint8Array;
+  private version: ArrayBuffer;
 
   private subscriber: any;
 
   type = 'demo';
 
   constructor(public name: string, private mode: number, private logger: Logger) {
-    this.version = new Uint8Array(('0' + VERSION).split('').map(c => c.charCodeAt(0)));
+    this.version = DataView.from('0', ...VERSION.split('').map(c => c.charCodeAt(0))).buffer;
     for (let i = 0; i != this.config.numCars; ++i) {
       this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
     }
@@ -171,8 +171,9 @@ class DemoPeripheral implements Peripheral {
           if (this.subscriber) {
             // console.log('Demo connection response to ' + toString(value));
             if (toString(value) == '0') {
-              this.subscriber.next(this.version.buffer);
+              this.subscriber.next(this.version);
             } else {
+              // TODO: command response
               this.subscriber.next(this.laps.length ? this.laps.shift() : this.createStatus());
             }
           }
@@ -189,36 +190,41 @@ class DemoPeripheral implements Peripheral {
   }
 
   private createLap(id: string) {
-    let time = Date.now() - this.start;
-    let view = new Uint8Array(11);
-    view[0] = '?'.charCodeAt(0);
-    view[1] = id.charCodeAt(0);;
-    view[2] = ((time >> 24) & 0x0f) + 0x30;
-    view[3] = ((time >> 28) & 0x0f) + 0x30;
-    view[4] = ((time >> 16) & 0x0f) + 0x30;
-    view[5] = ((time >> 20) & 0x0f) + 0x30;
-    view[6] = ((time >> 8) & 0x0f) + 0x30;
-    view[7] = ((time >> 12) & 0x0f) + 0x30;
-    view[8] = ((time >> 0) & 0x0f) + 0x30;
-    view[9] = ((time >> 4) & 0x0f) + 0x30;
-    view[10] = '1'.charCodeAt(0);
-    return view.buffer;
+    // TODO: use DataView, add CRC
+    const time = Date.now() - this.start;
+    return DataView.from(
+      '?',
+      parseInt(id),
+      (time >> 24) & 0x0f,
+      (time >> 28) & 0x0f,
+      (time >> 16) & 0x0f,
+      (time >> 20) & 0x0f,
+      (time >> 8) & 0x0f,
+      (time >> 12) & 0x0f,
+      (time >> 0) & 0x0f,
+      (time >> 4) & 0x0f,
+      1  // sensor group
+    ).buffer;
   }
 
   private createStatus() {
-    let view = new Uint8Array(16);
-    view[0] = '?'.charCodeAt(0);
-    view[1] = ':'.charCodeAt(0);
-    for (let i = 0; i != 8; ++i) {
-      view[i + 2] = 0x30 + ((this.cars[i].fuel) >> 4 & 0xf);
-    }
-    view[10] = 0x30 + this.startSequence; // start
-    view[11] = 0x30 + this.mode;
-    view[12] = 0x30 + this.getPitMask(0, 4);
-    view[13] = 0x30 + this.getPitMask(4, 8);
-    view[14] = 0x36;  // display
-    view[15] = '1'.charCodeAt(0);
-    return view.buffer;
+    return DataView.from(
+      '?',
+      10,
+      (this.cars[0].fuel) >> 4 & 0xf,
+      (this.cars[1].fuel) >> 4 & 0xf,
+      (this.cars[2].fuel) >> 4 & 0xf,
+      (this.cars[3].fuel) >> 4 & 0xf,
+      (this.cars[4].fuel) >> 4 & 0xf,
+      (this.cars[5].fuel) >> 4 & 0xf,
+      (this.cars[6].fuel) >> 4 & 0xf,
+      (this.cars[7].fuel) >> 4 & 0xf,
+      this.startSequence,
+      this.mode,
+      this.getPitMask(0, 4),
+      this.getPitMask(4, 8),
+      8  // position tower display
+    ).buffer;
   }
 
   private getPitMask(begin, end) {

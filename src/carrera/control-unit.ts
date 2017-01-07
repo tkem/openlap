@@ -56,8 +56,9 @@ export class ControlUnit {
       return new DataView(data);
     }).publish();
     // like publishBehavior() with no initial value
-    this.status = this.data.filter((data) => {
-      return data.toString(0, 2) === '?:';
+    this.status = this.data.filter((view) => {
+      // TODO: check CRC
+      return view.byteLength >= 16 && view.toString(0, 2) === '?:';
     }).publishReplay(1).refCount();
   }
 
@@ -93,8 +94,9 @@ export class ControlUnit {
   }
 
   getTimer() {
-    return this.data.filter((view) => {
-      return view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
+    return this.data.filter((view: DataView) => {
+      // TODO: check CRC
+      return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
     }).map((view) => {
       // TODO: check with new checklane
       return [view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10) ];
@@ -107,7 +109,8 @@ export class ControlUnit {
   getVersion(): Observable<string> {
     // TODO: timeout, retry?
     const observable = this.data.filter((view) => {
-      return view.toString(0, 1) == '0';
+      // TODO: check CRC
+      return view.byteLength == 6 && view.toString(0, 1) == '0';
     }).map((view) => {
       return view.toString(1, 4);
     });
