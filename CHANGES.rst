@@ -1,3 +1,9 @@
+0.9.8 2017-01-07
+----------------
+
+- Validate length of incoming CU data packets.
+
+
 0.9.7 2017-01-06
 ----------------
 
