@@ -19,6 +19,6 @@ install:
 - ionic info
 
 script:
-- npm run ionic:build
+- npm run ionic:build --prod
 - ionic state restore
 - cordova build android
