@@ -8,13 +8,13 @@ import { Peripheral } from '../carrera';
 
 const DRIVERS = [
   { name: 'Driver #1', code: '#1', color: '#ff0000' },
-  { name: 'Driver #2', code: '#2', color: '#0000ff' },
-  { name: 'Driver #3', code: '#3', color: '#ffff00' },
-  { name: 'Driver #4', code: '#4', color: '#00ff00' },
-  { name: 'Driver #5', code: '#5', color: '#808080' },
-  { name: 'Driver #6', code: '#6', color: '#202020' },
-  { name: 'Autonomous Car', code: 'AUT', color: '#870275' },
-  { name: 'Pace Car', code: 'PAC', color: '#00fbff' }
+  { name: 'Driver #2', code: '#2', color: '#00ff00' },
+  { name: 'Driver #3', code: '#3', color: '#0000ff' },
+  { name: 'Driver #4', code: '#4', color: '#ffff00' },
+  { name: 'Driver #5', code: '#5', color: '#ff00ff' },
+  { name: 'Driver #6', code: '#6', color: '#00ffff' },
+  { name: 'Autonomous Car', code: 'AUT', color: '#ffffff' },
+  { name: 'Pace Car', code: 'PAC', color: '#cccccc' }
 ];
 
 const NOTIFICATIONS = {
