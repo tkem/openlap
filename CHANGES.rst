@@ -1,3 +1,13 @@
+1.0.0 2017-01-09
+----------------
+
+- Change default colors.
+
+- Refactor current/completed laps.
+
+- Improve overall app stability.
+
+
 0.9.8 2017-01-07
 ----------------
 
