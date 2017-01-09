@@ -55,7 +55,7 @@
   "Default": "Standard",
   "Enable fullscreen": "Vollbildmodus",
   "Enable speech": "Sprachausgabe",
-  "Count finished laps": "Zähle beendete Runden",
+  "Display current lap": "Anzeige der aktuellen Runde",
   "Sort by driver number": "Fahrer nach Nummern sortieren",
 
   "Clear": "Leeren",

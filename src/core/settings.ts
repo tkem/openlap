@@ -54,7 +54,7 @@ const NOTIFICATIONS = {
 
 export class Options {
   debug = false;
-  finishedlaps = true;
+  currentlap = false;
   fixedorder = false;
   fullscreen = false;
   language = '';

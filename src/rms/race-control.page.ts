@@ -135,9 +135,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
   onStart() {
     const session = this.session = new RaceSession(this.cu, this.options);
 
-    this.lapcount = session.lap.combineLatest(this.settings.getOptions()).map(([[current, finished], options]) => {
+    this.lapcount = session.lap.combineLatest(this.settings.getOptions()).map(([[current, completed], options]) => {
       return { 
-        count: options.finishedlaps ? finished : current, 
+        count: options.currentlap ? current : completed, 
         current: current,
         total: this.options.laps 
       };

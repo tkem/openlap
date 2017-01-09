@@ -116,17 +116,17 @@ export class RaceSession {
       return ranks;
     });
 
-    this.lap = this.grid.mergeAll().scan(([current, finished], event) => {
-      if (finished <= event.laps) {
-        finished = event.laps;
-        if (options.laps && finished >= options.laps) {
+    this.lap = this.grid.mergeAll().scan(([current, completed], event) => {
+      if (completed <= event.laps) {
+        completed = event.laps;
+        if (options.laps && completed >= options.laps) {
           this.finish();
         }
         if (!this.finished.value && event.laps >= current) {
           current = event.laps + 1;
         }
       }
-      return [current, finished];
+      return [current, completed];
     }, [0, 0]).share().startWith([0, 0]).distinctUntilChanged(([x1, x2], [y1, y2]) => {
       return x1 == y1 && x2 == y2;
     });
