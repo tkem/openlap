@@ -63,6 +63,8 @@ class SerialPeripheral implements Peripheral {
 
   name = 'Serial USB OTG';
 
+  private connected = false;
+
   constructor(private logger: Logger, private zone: NgZone) {}
 
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
@@ -79,6 +81,7 @@ class SerialPeripheral implements Peripheral {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to serial port');
       this.open({ baudRate: BAUD_RATE, sleepOnPause: false }).then(() => {
+        this.connected = true;
         this.logger.info('Connected to serial port');
         let buffer = new Uint8Array(0);
         Serial.registerReadCallback().subscribe({
@@ -129,16 +132,19 @@ class SerialPeripheral implements Peripheral {
   }
 
   private close(disconnected?: NextObserver<void>) {
-    this.logger.debug('Closing serial port');
-    Serial.close().then(() => {
-      this.logger.debug('Serial port closed');
-    }).catch(error => {
-      this.logger.error('Error closing serial port', error);
-    }).then(() => {
-      if (disconnected) {
-        this.zone.run(() => disconnected.next(undefined));
-      }
-    });
+    if (this.connected) {
+      this.logger.debug('Closing serial port');
+      Serial.close().then(() => {
+        this.logger.info('Serial port closed');
+      }).catch(error => {
+        this.logger.error('Error closing serial port', error);
+      }).then(() => {
+        if (disconnected) {
+          this.zone.run(() => disconnected.next(undefined));
+        }
+      });
+      this.connected = false;
+    }
   }
 }
 

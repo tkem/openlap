@@ -10,6 +10,7 @@ import { Logger } from '../logging';
 const VERSION = '0815';
 
 const TIMEOUT_RATE = 0.0001;
+const ERROR_RATE = 0.0001;
 
 function random(min: number, max: number) {
   return min + Math.random() * (max - min);
@@ -156,6 +157,13 @@ class DemoPeripheral implements Peripheral {
   private createObserver() {
     return {
       next: (value: ArrayBuffer) => {
+        if (Math.random() < ERROR_RATE) {
+          if (this.subscriber) {
+            console.log('Random Demo error');
+            this.subscriber.error(new Error('Demo Error'));
+          }
+          return;
+        }
         //console.log('Demo connection next:', toString(value));
         if (toString(value) != '?') {
           console.log('Demo CU received ' + toString(value));

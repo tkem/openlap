@@ -88,7 +88,7 @@ export class AppComponent implements OnInit {
           Observable.from(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
             return device.equals(connection);
           }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
-            const cu = new ControlUnit(device);
+            const cu = new ControlUnit(device, this.logger);
             this.cu.next(cu);
             cu.connect();
           }).then(() => {

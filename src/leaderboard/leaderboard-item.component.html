@@ -1,6 +1,6 @@
 <div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
     <template ngSwitchCase="position">
-        <slant [color]="item.driver.color">
+        <slant [color]="item.driver?.color">
             <div class="text">{{item.position + 1}}</div>
         </slant>
     </template>
@@ -8,10 +8,10 @@
         {{item.id + 1}}
     </template>
     <template ngSwitchCase="name">
-        {{item.driver.name}}
+        {{item.driver?.name}}
     </template>
     <template ngSwitchCase="code">
-        {{item.driver.code}}
+        {{item.driver?.code}}
     </template>
     <template ngSwitchCase="time">
         <span [ngSwitch]="item.position == 0 ? '' : (items[0].laps - item.laps).toString()">

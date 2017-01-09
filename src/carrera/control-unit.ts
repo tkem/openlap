@@ -14,6 +14,8 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/timeout';
 
+import { Logger } from '../logging';
+
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
 
@@ -37,7 +39,7 @@ export class ControlUnit {
 
   private state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
 
-  constructor(public peripheral: Peripheral) {
+  constructor(public peripheral: Peripheral, private logger: Logger) {
     this.connection = this.peripheral.connect({
       next: () => {
         this.connection.next(POLL_COMMAND.buffer);
@@ -175,7 +177,9 @@ export class ControlUnit {
 
   private reconnect(errors: Observable<any>) {
     const state = this.state;
-    return errors.scan((count, error) => {
+    return errors.do(error => {
+      this.logger.error('Device error:', error);
+    }).scan((count, error) => {
       return state.value === 'connected' ? 0 : count + 1;
     }, 0).do(() => {
       state.next('disconnected');

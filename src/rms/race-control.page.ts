@@ -141,9 +141,6 @@ export class RaceControlPage implements OnDestroy, OnInit {
         current: current,
         total: this.options.laps 
       };
-    }).do(laps => {
-        this.logger.debug('New lap', laps);
-        this.cu.setLap(laps.count);
     }).share().startWith({count: 0, current: 0, total: this.options.laps});
 
     // sort in order of importance for speech
@@ -207,6 +204,21 @@ export class RaceControlPage implements OnDestroy, OnInit {
         }
       }
     });
+
+    this.subscription.add(
+      this.lapcount.subscribe(
+        laps => {
+          this.logger.debug('New lap', laps);
+          this.cu.setLap(laps.count);
+        },
+        error => {
+          this.logger.error('Lap counter error:', error);
+        },
+        () => {
+          this.logger.warn('Lap counter finished');
+        }
+      )
+    );
 
     if (this.options.mode != 'practice') {
       const start = this.cu.getStart();
