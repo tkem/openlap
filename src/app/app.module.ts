@@ -3,6 +3,8 @@ import { Http } from '@angular/http';
 
 import { IonicApp, IonicModule } from 'ionic-angular';
 
+import { IonicStorageModule } from '@ionic/storage';
+
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
 
 import { BackendModule } from '../backend';
@@ -26,6 +28,7 @@ export function createTranslateLoader(http: Http) {
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
+    IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: createTranslateLoader,

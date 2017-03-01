@@ -164,7 +164,7 @@ export class BLEBackend extends Backend {
 
   scan(): Observable<Peripheral> {
     // TODO: use and adapt rssi?
-    return this.scanner.distinctKey('id').do(device => {
+    return this.scanner.distinct(device => device.id).do(device => {
       this.logger.debug('Found BLE device', device);
     }).filter(device => {
       return /Control.Unit/i.test(device.name || '');

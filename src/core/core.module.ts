@@ -17,7 +17,7 @@ export function provideStorage(platform: Platform) {
   if (platform.is('cordova')) {
     return new Storage();  // default options for backward compatibility
   } else {
-    return new Storage(['localstorage'], { name: 'at.co.kemmer.openlap', storeName: 'settings' });
+    return new Storage({ driver: 'localstorage', name: 'at.co.kemmer.openlap', storeName: 'settings' });
   }
 }
 

@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
 
-import { Cordova, Device, Plugin } from 'ionic-native';
+import { Device, Serial } from 'ionic-native';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
@@ -26,35 +26,6 @@ function concat(lhs: Uint8Array, rhs: Uint8Array) {
     res.set(rhs, lhs.byteLength);
     return res;
   }
-}
-
-@Plugin({
-  plugin: 'cordovarduino',
-  pluginName: 'serial',
-  pluginRef: 'serial',
-  repo: 'https://github.com/xseignard/cordovarduino',
-  platforms: ['Android']
-})
-class Serial {
-  @Cordova()
-  static requestPermission(): Promise<any> { return; }
-
-  @Cordova()
-  static open(options: any): Promise<any> { return; }
-
-  @Cordova()
-  static close(): Promise<any> { return; }
-
-  @Cordova({
-    observable: true
-  })
-  static registerReadCallback(): Observable<ArrayBuffer> { return; }
-
-  @Cordova()
-  static write(data: string): Promise<any> { return; }
-
-  @Cordova()
-  static writeHex(data: string): Promise<any> { return; }
 }
 
 class SerialPeripheral implements Peripheral {

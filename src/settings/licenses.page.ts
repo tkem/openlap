@@ -11,22 +11,22 @@ export class LicensesPage {
     homepage: 'https://cordova.apache.org/'
   }, {
     name: 'Angular',
-    copyright: 'Copyright (c) 2014-2016 Google, Inc.',
+    copyright: 'Copyright (c) 2014-2017 Google, Inc.',
     license: 'MIT',
     homepage: 'https://angular.io/'
   }, {
     name: 'Ionic 2',
-    copyright: 'Copyright (c) 2015-2016 Drifty Co.',
+    copyright: 'Copyright (c) 2015-present Drifty Co.',
     license: 'MIT',
     homepage: 'https://github.com/driftyco/ionic#readme',
   }, {
     name: 'Ionic Native',
-    copyright: 'Copyright 2015-present Drifty Co.',
+    copyright: 'Copyright (c) 2015-present Drifty Co.',
     license: 'MIT',
     homepage: 'https://github.com/driftyco/ionic-native',
   }, {
     name: 'Ionicons',
-    copyright: 'Copyright (c) 2015-present Ionic',
+    copyright: 'Copyright (c) 2016 Drifty',
     license: 'MIT',
     homepage: 'http://ionicons.com/',
   }, {
@@ -76,7 +76,7 @@ export class LicensesPage {
     homepage: 'https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin#readme'
   }, {
     name: 'cordovarduino',
-    copyright: 'Xavier Seignard <xavier.seignard@gmail.com>',
+    author: 'Xavier Seignard <xavier.seignard@gmail.com>',
     license: 'MIT',
     homepage: 'https://github.com/xseignard/cordovarduino#readme'
   }];
