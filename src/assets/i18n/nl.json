@@ -1,0 +1,77 @@
+{
+  "Welcome to Open Lap!":
+    "Welkom bij Open Lap!",
+  "Please select a Control Unit device from the menu.":
+    "Gelieve een Control Unit uit het menu te selecteren.",
+  "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.":
+    "Indien er geen apparaten zijn weergegeven; controleer dan of Bluetooth aan staat of dater een compatibel USB OTG kabel wordt gebruikt.",
+
+  "Connected to {{device}}": "Verbonden met {{device}}",
+  "Connecting to {{device}}": "Verbinden met {{device}}",
+  "Disconnected from {{device}}": "Verbinding verbroken met {{device}}",
+
+  "Free Practice": "Vrije Training",
+  "Qualifying": "Qualifying",
+  "Race": "Race",
+  "Drivers": "Rijders",
+  "Colors": "Kleuren",
+  "Tuning": "Tuning",
+  "Settings": "Instellingen",
+  "Exit": "Beeindigen",
+  "Reconnect": "Opnieuw verbinden",
+  
+  "Speed": "Snelheid",
+  "Brake": "Rem",
+  "Fuel": "Tank",
+
+  "Lap {{count}}": "Ronde {{count}}",
+  "Lap {{count}}/{{total}}": "Ronde {{count}}/{{total}}",
+
+  "Restart race": "Herstart",
+  "Cancel race": "Race afbreken",
+
+  "Start": "Start",
+  "Laps": "Ronden",
+  "Time": "Tijd",
+  "Stop time when paused": "Tijd bij onderbreking stoppen",
+  "Finish all laps": "Alle Ronden afmaken",
+  "Autonomous Car": "Autonomous Car",
+  "Pace Car": "Pace Car",
+
+  "OK": "OK",
+  "Cancel": "Afbreken",
+  "Done": "Klaar",
+  "None": "Geen",
+
+  "General": "Algemeen",
+  "Logging": "Loggen",
+  "Notifications": "Notificaties",
+  "Open source licenses": "Open source licensies",
+  "About Open Lap": "Over Open Lap",
+  "Reset settings": "Instellingen herstellen",
+  "Reset all user settings to default values?": "Alle Instellingen naar de standaardwaarde terugzetten?",
+
+  "Language": "Taal",
+  "Default": "Standard",
+  "Enable fullscreen": "Volledig scherm",
+  "Enable speech": "Spraakweergave",
+  "Display current lap": "Aangeven van actuele ronde",
+  "Sort by driver number": "Rijders sorteren op nummer",
+
+  "Clear": "leeg maken",
+  "Debug messages": "Foutmeldingen",
+  "Reset": "Herstellen",
+  "Share": "Delen",
+
+  "Race finished": "Race afgelopen",
+  "Final lap": "Laatste Ronde",
+  "False start": "Valse start",
+  "Fastest lap": "Snelste Ronde",
+  "Fuel < 20%": "Tank < 20%",
+  "Fuel < 10%": "Tank < 10%",
+  "No fuel": "Tank leeg",
+  "Car enters pit": "Auto in pit",
+
+  "License": "Licensie",
+  "Translations": "Vertaling"
+}
