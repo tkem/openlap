@@ -15,7 +15,8 @@ import { RMSModule } from '../rms';
 import { SettingsModule } from '../settings';
 import { SharedModule } from '../shared';
 
-import { AppComponent, RootPage } from './app.component';
+import { AppComponent } from './app.component';
+import { RootPage } from './root.page';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, './assets/i18n', '.json');

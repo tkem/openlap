@@ -8,6 +8,8 @@ import { TranslateService } from 'ng2-translate';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
+import { RootPage } from './root.page';
+
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_SUBJECT, Settings, Toast } from '../core';
@@ -34,11 +36,6 @@ class AndroidFullScreen {
   @Cordova()
   static immersiveMode(): Promise<void> { return; }
 }
-
-@Component({
-  templateUrl: 'root.html'
-})
-export class RootPage {}
 
 @Component({
   templateUrl: 'app.html'

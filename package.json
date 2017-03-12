@@ -11,10 +11,9 @@
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
-    "build-dev": "ionic-app-scripts build --sourceMapType eval",
-    "build-prod": "ionic-app-scripts build --prod",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "build-sourcemap-eval": "ionic-app-scripts build --sourceMapType eval"
   },
   "dependencies": {
     "@angular/common": "2.4.8",
