@@ -1,3 +1,15 @@
+1.0.1 UNRELEASED
+----------------
+
+- Update dependencies.
+
+- Add Dutch translation by Haarman.
+
+- Fix CSS "nowrap" spelling error.
+
+- Move root page to separate file (fixes Webpack source map issues).
+
+
 1.0.0 2017-01-09
 ----------------
 
