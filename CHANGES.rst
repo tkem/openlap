@@ -1,4 +1,4 @@
-1.0.1 UNRELEASED
+1.0.1 2017-03-20
 ----------------
 
 - Update dependencies.
