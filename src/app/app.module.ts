@@ -5,7 +5,8 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 
 import { IonicStorageModule } from '@ionic/storage';
 
-import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendModule } from '../backend';
 import { CoreModule } from '../core';
@@ -18,8 +19,9 @@ import { SharedModule } from '../shared';
 import { AppComponent } from './app.component';
 import { RootPage } from './root.page';
 
+// AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, './assets/i18n', '.json');
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -31,9 +33,11 @@ export function createTranslateLoader(http: Http) {
     IonicModule.forRoot(AppComponent),
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
-      provide: TranslateLoader,
-      useFactory: createTranslateLoader,
-      deps: [Http]
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [Http]
+      }
     }),
     BackendModule,
     CoreModule,

@@ -4,7 +4,7 @@ import { Nav, Platform } from 'ionic-angular';
 
 import { Cordova, Insomnia, Plugin, Splashscreen } from 'ionic-native';
 
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 

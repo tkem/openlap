@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { AlertController, PopoverController, ViewController } from 'ionic-angular';
 
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Settings } from '../core';
 import { Logger } from '../logging';
@@ -25,10 +25,10 @@ import { OptionsPage } from './options.page';
 })
 export class SettingsPopover {
 
-  constructor(private logger: Logger, 
-    private settings: Settings, 
-    private alert: AlertController, 
-    private view: ViewController, 
+  constructor(private logger: Logger,
+    private settings: Settings,
+    private alert: AlertController,
+    private view: ViewController,
     private translate: TranslateService)
   {}
 
@@ -72,7 +72,7 @@ export class SettingsPage {
   loggingPage = LoggingPage;
   notificationsPage = NotificationsPage;
   optionsPage = OptionsPage;
-  
+
   constructor(private popover: PopoverController) {}
 
     presentPopover(event) {

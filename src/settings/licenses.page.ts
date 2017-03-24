@@ -30,10 +30,10 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'http://ionicons.com/',
   }, {
-    name: 'ng2-translate',
+    name: 'ngx-translate',
     copyright: 'Copyright (c) 2016 Olivier Combe',
     license: 'MIT',
-    homepage: 'https://github.com/ocombe/ng2-translate'
+    homepage: 'http://www.ngx-translate.com/'
   }, {
     name: 'RxJS',
     copyright: 'Copyright (c) 2015-2016 Netflix, Inc., Microsoft Corp. and contributors',
