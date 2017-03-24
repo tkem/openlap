@@ -4,12 +4,11 @@ import { Nav, Platform } from 'ionic-angular';
 
 import { Insomnia } from '@ionic-native/insomnia';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-
-import { AndroidFullScreen } from './fullscreen';
 
 import { RootPage } from './root.page';
 
@@ -36,7 +35,7 @@ export class AppComponent implements OnInit {
               @Inject(Backend) private backends: Backend[],
               private logger: Logger, private settings: Settings,
               private platform: Platform,
-              private insomnia: Insomnia, private fullScreen: AndroidFullScreen,
+              private insomnia: Insomnia, private statusBar: StatusBar,
               private splashScreen: SplashScreen, private toast: Toast,
               private translate: TranslateService)
   {
@@ -51,15 +50,11 @@ export class AppComponent implements OnInit {
       }
       this.settings.getOptions().subscribe(options => {
         this.logger.setLevel(options.debug ? 'debug' : 'info');
-        this.fullScreen.isSupported().then(() => {
-          if (options.fullscreen) {
-            return this.fullScreen.immersiveMode();
-          } else {
-            return this.fullScreen.showSystemUI();
-          }
-        }).catch(error => {
-          this.logger.error('Fullscreen error: ', error);
-        });
+        if (options.fullscreen) {
+          this.statusBar.hide();
+        } else {
+          this.statusBar.show();
+        }
         this.translate.use(options.language || this.translate.getBrowserLang() || 'en');
       });
       this.settings.getConnection().subscribe(connection => {
