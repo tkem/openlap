@@ -1,3 +1,15 @@
+1.0.2 UNRELEASED
+----------------
+
+- Remove fullscreen plugin.
+
+- Add IonicErrorHandler.
+
+- Upgrade to ionic-native v3.
+
+- Upgrade to ngx-translate v6.
+
+
 1.0.1 2017-03-20
 ----------------
 
