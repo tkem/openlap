@@ -2,11 +2,14 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 
 import { Nav, Platform } from 'ionic-angular';
 
-import { Cordova, Insomnia, Plugin, Splashscreen } from 'ionic-native';
+import { Insomnia } from '@ionic-native/insomnia';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
+import { AndroidFullScreen } from './fullscreen';
 
 import { RootPage } from './root.page';
 
@@ -17,25 +20,6 @@ import { Logger } from '../logging';
 import { RaceControlPage } from '../rms';
 
 const CONNECTION_TIMEOUT = 3000;
-
-@Plugin({
-  plugin: 'cordova-plugin-fullscreen',
-  pluginName: 'AndroidFullScreen',
-  pluginRef: 'AndroidFullScreen',
-  repo: 'https://github.com/mesmotronic/cordova-plugin-fullscreen',
-  platforms: ['Android']
-})
-class AndroidFullScreen {
-
-  @Cordova()
-  static isSupported(): Promise<void> { return; }
-
-  @Cordova()
-  static showSystemUI(): Promise<void> { return; }
-
-  @Cordova()
-  static immersiveMode(): Promise<void> { return; }
-}
 
 @Component({
   templateUrl: 'app.html'
@@ -51,7 +35,9 @@ export class AppComponent implements OnInit {
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
               @Inject(Backend) private backends: Backend[],
               private logger: Logger, private settings: Settings,
-              private platform: Platform, private toast: Toast,
+              private platform: Platform,
+              private insomnia: Insomnia, private fullScreen: AndroidFullScreen,
+              private splashScreen: SplashScreen, private toast: Toast,
               private translate: TranslateService)
   {
     translate.setDefaultLang('en');
@@ -61,15 +47,15 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(readySource => {
       this.logger.info('Initializing ' + readySource + ' application');
       if (readySource === 'cordova') {
-        Insomnia.keepAwake();
+        this.insomnia.keepAwake();
       }
       this.settings.getOptions().subscribe(options => {
         this.logger.setLevel(options.debug ? 'debug' : 'info');
-        AndroidFullScreen.isSupported().then(() => {
+        this.fullScreen.isSupported().then(() => {
           if (options.fullscreen) {
-            return AndroidFullScreen.immersiveMode();
+            return this.fullScreen.immersiveMode();
           } else {
-            return AndroidFullScreen.showSystemUI();
+            return this.fullScreen.showSystemUI();
           }
         }).catch(error => {
           this.logger.error('Fullscreen error: ', error);
@@ -129,7 +115,7 @@ export class AppComponent implements OnInit {
       this.logger.error('Error setting root page', error);
     }).then(() => {
       this.logger.info('Hiding splash screen');
-      Splashscreen.hide();
+      this.splashScreen.hide();
     });
   }
 

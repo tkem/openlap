@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
 
-import { BLE } from 'ionic-native';
+import { BLE } from '@ionic-native/ble';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
@@ -38,7 +38,7 @@ class BLEPeripheral implements Peripheral {
 
   address: string;
 
-  constructor(device: any, private logger: Logger, private zone: NgZone) {
+  constructor(device: any, private ble: BLE, private logger: Logger, private zone: NgZone) {
     this.name = device.name;
     this.address = device.id;
   }
@@ -57,11 +57,11 @@ class BLEPeripheral implements Peripheral {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.debug('Connecting to BLE device ' + this.address);
       let isConnected = false;
-      BLE.connect(this.address).subscribe({
+      this.ble.connect(this.address).subscribe({
         next: peripheral => {
           this.logger.info('Connected to BLE device', peripheral);
           isConnected = true;
-          BLE.startNotification(this.address, SERVICE_UUID, NOTIFY_UUID).subscribe({
+          this.ble.startNotification(this.address, SERVICE_UUID, NOTIFY_UUID).subscribe({
             next: data => this.onNotify(data, subscriber),
             error: err => this.onError(err, subscriber)
           });
@@ -102,14 +102,14 @@ class BLEPeripheral implements Peripheral {
 
   private write(value: ArrayBuffer) {
     //this.logger.debug('BLE write', this.address, value);
-    BLE.writeWithoutResponse(this.address, SERVICE_UUID, OUTPUT_UUID, value).catch(error => {
+    this.ble.writeWithoutResponse(this.address, SERVICE_UUID, OUTPUT_UUID, value).catch(error => {
       this.logger.error('BLE write error', error);
     });
   }
 
   private disconnect(disconnected?: NextObserver<void>) {
     this.logger.debug('Closing BLE connection to ' + this.address);
-    BLE.disconnect(this.address).then(() => {
+    this.ble.disconnect(this.address).then(() => {
       this.logger.info('BLE disconnected from ' + this.address);
     }).catch(error => {
       this.logger.error('BLE disconnect error', error);
@@ -141,24 +141,24 @@ export class BLEBackend extends Backend {
 
   private scanner: Observable<any>;
 
-  constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
+  constructor(private ble: BLE, private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
 
     this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
       if (readySource == 'cordova') {
         // TODO: use BLE state listeners when available in ionic-native?
         return Observable.interval(1000).startWith(null).switchMap(() => {
-          return Observable.from(BLE.isEnabled().then(() => true, () => false));
+          return Observable.from(this.ble.isEnabled().then(() => true, () => false));
         });
       } else {
         return Observable.of(false);
       }
     }).distinctUntilChanged().switchMap(enabled => {
       if (enabled) {
-        return wrapNative(BLE.startScanWithOptions([], { reportDuplicates: true }), this.zone);
+        return wrapNative(this.ble.startScanWithOptions([], { reportDuplicates: true }), this.zone);
       } else {
         return Observable.empty();
-      } 
+      }
     }).share();
   }
 
@@ -170,7 +170,7 @@ export class BLEBackend extends Backend {
       return /Control.Unit/i.test(device.name || '');
     }).map(device => {
       this.logger.info('New BLE device', device);
-      return new BLEPeripheral(device, this.logger, this.zone);
+      return new BLEPeripheral(device, this.ble, this.logger, this.zone);
     });
   }
 }

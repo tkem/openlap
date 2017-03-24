@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TextToSpeech } from 'ionic-native';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
 
 import { Logger } from '../logging';
 
@@ -11,7 +11,7 @@ export class Speech {
 
   private pending = 0;
 
-  constructor(private logger: Logger) {}
+  constructor(private tts: TextToSpeech, private logger: Logger) {}
 
   speak(message: string) {
     // TODO: priorities?
@@ -20,7 +20,7 @@ export class Speech {
     this.promise = this.promise.then(() => {
       if (--this.pending === 0) {
         this.logger.debug('Speak ', message);
-        return TextToSpeech.speak(message);
+        return this.tts.speak(message);
       } else {
         this.logger.debug('Speech cancelled', message);
       }

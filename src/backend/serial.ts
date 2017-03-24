@@ -2,7 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
 
-import { Device, Serial } from 'ionic-native';
+import { Device } from '@ionic-native/device';
+import { Serial } from '@ionic-native/serial';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
@@ -36,7 +37,7 @@ class SerialPeripheral implements Peripheral {
 
   private connected = false;
 
-  constructor(private logger: Logger, private zone: NgZone) {}
+  constructor(private serial: Serial, private logger: Logger, private zone: NgZone) {}
 
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     const observable = this.createObservable(connected, disconnected);
@@ -55,7 +56,7 @@ class SerialPeripheral implements Peripheral {
         this.connected = true;
         this.logger.info('Connected to serial port');
         let buffer = new Uint8Array(0);
-        Serial.registerReadCallback().subscribe({
+        this.serial.registerReadCallback().subscribe({
           next: data => {
             buffer = concat(buffer, new Uint8Array(data));
             let index = -1;
@@ -92,12 +93,12 @@ class SerialPeripheral implements Peripheral {
   }
 
   private open(options: any) {
-    return Serial.open(options);
+    return this.serial.open(options);
   }
 
   private write(value: ArrayBuffer) {
     let str = String.fromCharCode.apply(null, new Uint8Array(value));
-    Serial.write('"' + str + '$').catch(error => {
+    this.serial.write('"' + str + '$').catch(error => {
       this.logger.error('Serial write error', error);
     });
   }
@@ -105,7 +106,7 @@ class SerialPeripheral implements Peripheral {
   private close(disconnected?: NextObserver<void>) {
     if (this.connected) {
       this.logger.debug('Closing serial port');
-      Serial.close().then(() => {
+      this.serial.close().then(() => {
         this.logger.info('Serial port closed');
       }).catch(error => {
         this.logger.error('Error closing serial port', error);
@@ -124,12 +125,14 @@ export class SerialBackend extends Backend {
 
   private scanner: Observable<any>;
 
-  constructor(private logger: Logger, private platform: Platform, private zone: NgZone) {
+  constructor(private device: Device, private serial: Serial,
+    private logger: Logger, private platform: Platform, private zone: NgZone)
+  {
     super();
 
     this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
-      if (readySource == 'cordova' && platform.is('android') && !Device.isVirtual) {
-        return Observable.from(Serial.requestPermission().then(() => true, () => false));
+      if (readySource == 'cordova' && platform.is('android') && !this.device.isVirtual) {
+        return Observable.from(this.serial.requestPermission().then(() => true, () => false));
       } else {
         return Observable.of(false);
       }
@@ -141,7 +144,7 @@ export class SerialBackend extends Backend {
   scan(): Observable<Peripheral> {
     return this.scanner.switchMap(enabled => {
       if (enabled) {
-        return Observable.of(new SerialPeripheral(this.logger, this.zone));
+        return Observable.of(new SerialPeripheral(this.serial, this.logger, this.zone));
       } else {
         return Observable.empty<SerialPeripheral>();
       }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Platform, ToastController } from 'ionic-angular';
 
-import { Toast as NativeToast } from 'ionic-native';
+import { Toast as NativeToast } from '@ionic-native/toast';
 
 interface ToastProvider {
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center'): Promise<void>;
@@ -10,10 +10,12 @@ interface ToastProvider {
 }
 
 class NativeToastProvider implements ToastProvider {
+  constructor(private toast: NativeToast) {}
+
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
-    return NativeToast.hide().then(() => {
+    return this.toast.hide().then(() => {
       return new Promise<void>((resolve, reject) => {
-        NativeToast.show(message, duration.toString(), position).subscribe(
+        this.toast.show(message, duration.toString(), position).subscribe(
           () => resolve(),
           error => reject(error)
         );
@@ -22,7 +24,7 @@ class NativeToastProvider implements ToastProvider {
   }
 
   hide() {
-    return NativeToast.hide();
+    return this.toast.hide();
   }
 }
 
@@ -34,9 +36,9 @@ class IonicToastProvider implements ToastProvider {
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
     return this.dismissCurrentToast().then(() => {
       const toast = this.controller.create({
-        message: message, 
+        message: message,
         duration: duration,
-        position: position === 'center' ? 'middle' : position, 
+        position: position === 'center' ? 'middle' : position,
         showCloseButton: true
       });
       toast.onDidDismiss(() => {
@@ -56,10 +58,10 @@ class IonicToastProvider implements ToastProvider {
 export class Toast {
   private toast: ToastProvider;
 
-  constructor(platform: Platform, controller: ToastController) {
-    this.toast = platform.is('cordova') ? new NativeToastProvider() : new IonicToastProvider(controller);
+  constructor(platform: Platform, controller: ToastController, nativeToast: NativeToast) {
+    this.toast = platform.is('cordova') ? new NativeToastProvider(nativeToast) : new IonicToastProvider(controller);
   }
- 
+
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
     return this.toast.hide().then(() => {
       return this.toast.show(message, duration, position);

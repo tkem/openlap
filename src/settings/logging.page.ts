@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 
 import { PopoverController, ViewController } from 'ionic-angular';
 
-import { AppVersion, Device, SocialSharing } from 'ionic-native';
+import { AppVersion } from '@ionic-native/app-version';
+import { Device } from '@ionic-native/device';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { Options, Settings } from '../core';
 import { Logger } from '../logging';
@@ -47,7 +49,8 @@ export class LoggingPopover {
     this.close();
   }
 
-  constructor(public logger: Logger, private settings: Settings, private view: ViewController) {}
+  constructor(private appVersion: AppVersion, private sharing: SocialSharing, private device: Device,
+    public logger: Logger, private settings: Settings, private view: ViewController) {}
 
   clear() {
     this.logger.clear();
@@ -59,12 +62,12 @@ export class LoggingPopover {
   }
 
   share() {
-    Promise.all([AppVersion.getAppName(), AppVersion.getVersionNumber()]).then(([name, version]) => {
+    Promise.all([this.appVersion.getAppName(), this.appVersion.getVersionNumber()]).then(([name, version]) => {
       const message = this.logger.records.map(record => {
         return [record.level, record.time, record.args.map(stringify).join(' ')].join('\t');
       }).join('\n');
-      const subject = name + ' ' + version + ' (' + [Device.model, Device.platform, Device.version].join(' ') + ')';
-      return SocialSharing.shareWithOptions({ message: message, subject: subject });
+      const subject = name + ' ' + version + ' (' + [this.device.model, this.device.platform, this.device.version].join(' ') + ')';
+      return this.sharing.shareWithOptions({ message: message, subject: subject });
     }).catch(error => {
       this.logger.error('Error sharing log:', error);
     }).then(() => {
@@ -98,8 +101,8 @@ export class LoggingPopover {
 export class LoggingPage {
 
   icons = [
-    {name: 'bug', style: {color: 'white'}}, 
-    {name: 'bug', style: {color: 'green'}}, 
+    {name: 'bug', style: {color: 'white'}},
+    {name: 'bug', style: {color: 'green'}},
     {name: 'information-circle', style: {color: 'blue'}},
     {name: 'warning', style: {color: 'yellow'}},
     {name: 'alert', style: {color: 'red'}}

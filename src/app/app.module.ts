@@ -3,6 +3,16 @@ import { Http } from '@angular/http';
 
 import { IonicApp, IonicModule } from 'ionic-angular';
 
+import { AppVersion } from '@ionic-native/app-version';
+import { BLE } from '@ionic-native/ble';
+import { Device } from '@ionic-native/device';
+import { Insomnia } from '@ionic-native/insomnia';
+import { Serial } from '@ionic-native/serial';
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { Toast } from '@ionic-native/toast';
+
 import { IonicStorageModule } from '@ionic/storage';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -17,6 +27,7 @@ import { SettingsModule } from '../settings';
 import { SharedModule } from '../shared';
 
 import { AppComponent } from './app.component';
+import { AndroidFullScreen } from './fullscreen';
 import { RootPage } from './root.page';
 
 // AoT requires an exported function for factories
@@ -46,6 +57,18 @@ export function createTranslateLoader(http: Http) {
     RMSModule,
     SettingsModule,
     SharedModule
+  ],
+  providers: [
+    AppVersion,
+    AndroidFullScreen,
+    BLE,
+    Device,
+    Insomnia,
+    Serial,
+    SocialSharing,
+    SplashScreen,
+    TextToSpeech,
+    Toast
   ],
   bootstrap: [IonicApp],
   entryComponents: [
