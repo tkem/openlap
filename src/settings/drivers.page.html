@@ -10,10 +10,12 @@
   <ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
     <ion-item *ngFor="let driver of drivers; let id = index">
       <ion-label>#{{id + 1}}</ion-label>
-      <ion-input placeholder="Driver #{{id + 1}}" [ngModel]="driver.name" (ngModelChange)="driver.code = getCode(driver.name = $event)">
+      <ion-input placeholder="Driver #{{id + 1}}" [ngModel]="driver.name"
+        (ngModelChange)="driver.code = getCode(driver.name = $event, id)"
+        clearInput>
       </ion-input>
       <ion-note item-right>{{driver.code || '#' + (id + 1)}}</ion-note>
-      <button ion-button clear icon-only item-right (click)="speak(id)">
+      <button ion-button clear [disabled]="!driver.name" icon-only item-right (click)="speak(driver.name)">
         <ion-icon name="volume-up"></ion-icon>
       </button>
     </ion-item>

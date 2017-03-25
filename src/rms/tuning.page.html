@@ -30,16 +30,16 @@
         </slant>
       </ion-col>
       <ion-col center class="name" showWhen="landscape">
-        <span>{{(drivers | async)[model.id]?.name}}</span>
+        <span>{{(drivers | async)[model.id]?.name || 'Driver #' + (model.id + 1)}}</span>
       </ion-col>
       <ion-col center class="code" showWhen="portrait">
-        {{(drivers | async)[model.id]?.code}}
+        {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
       </ion-col>
       <ion-col center class="range">
         <ion-range no-padding min="0" max="15" snaps="true"
           [ngClass]="{'pristine': model[type] == null}"
-          [disabled]="!(connected | async)" 
-          [ngModel]="model[type] || 0" 
+          [disabled]="!(connected | async)"
+          [ngModel]="model[type] || 0"
           (ionChange)="update(type, $event.value, link ? undefined : model.id)">
         </ion-range>
       </ion-col>

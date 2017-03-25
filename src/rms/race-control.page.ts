@@ -92,8 +92,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
   private subscription: Subscription;
 
-  constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech, 
-    params: NavParams, private popover: PopoverController) 
+  constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech,
+    params: NavParams, private popover: PopoverController)
   {
     this.options = params.data;
 
@@ -136,12 +136,22 @@ export class RaceControlPage implements OnDestroy, OnInit {
     const session = this.session = new RaceSession(this.cu, this.options);
 
     this.lapcount = session.lap.combineLatest(this.settings.getOptions()).map(([[current, completed], options]) => {
-      return { 
-        count: options.currentlap ? current : completed, 
+      return {
+        count: options.currentlap ? current : completed,
         current: current,
-        total: this.options.laps 
+        total: this.options.laps
       };
     }).share().startWith({count: 0, current: 0, total: this.options.laps});
+
+    const drivers = this.settings.getDrivers().map(drivers => {
+      return drivers.map((obj, index) => {
+        return {
+          name: obj.name || 'Driver #' + (index + 1),
+          code: obj.code || '#' + (index + 1),
+          color: obj.color
+        };
+      });
+    });
 
     // sort in order of importance for speech
     const events = Observable.merge(
@@ -175,13 +185,11 @@ export class RaceControlPage implements OnDestroy, OnInit {
       session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
         return ['finished', null];
       })
-    ).withLatestFrom(this.settings.getDrivers()).map(([[event, id], drivers]) => {
+    ).withLatestFrom(drivers).map(([[event, id], drivers]) => {
       return <[string, any]>[event, id !== null ? drivers[id] : null];
     });
 
-    this.ranking = session.ranking.combineLatest(
-      this.settings.getDrivers(),
-    ).map(([ranks, drivers]) => {
+    this.ranking = session.ranking.combineLatest(drivers).map(([ranks, drivers]) => {
       return ranks.map((item, index) => {
         return Object.assign({}, item, { position: index, driver: drivers[item.id] });
       });
@@ -192,7 +200,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
     }
 
     this.subscription = events.withLatestFrom(
-      this.settings.getOptions(), 
+      this.settings.getOptions(),
       this.settings.getNotifications()
     ).subscribe(([[event, driver], options, notifications]) => {
       this.logger.debug('New race event: ' + event, driver);

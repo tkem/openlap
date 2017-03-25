@@ -12,12 +12,20 @@ export class DriversPage implements OnDestroy, OnInit {
 
   constructor(private logger: Logger, private settings: Settings, private speech: Speech) {}
 
-  getCode(name: string) {
-    return name.split(' ').slice(-1)[0].substr(0, 3).toUpperCase();
+  getCode(name: string, id: number) {
+    let chars = name.replace(/\W/g, '').toUpperCase();  // TODO: proper Unicode support
+    let codes = this.drivers.filter((_, index) => index !== id).map(obj => obj.code);
+    for (let n = 2; n < chars.length; ++n) {
+      let s = chars.substr(0, 2) + chars.substr(n, 1);
+      if (codes.indexOf(s) === -1) {
+        return s;
+      }
+    }
+    return undefined;
   }
 
-  speak(index) {
-    this.speech.speak(this.drivers[index].name);
+  speak(text) {
+    this.speech.speak(text);
   }
 
   ngOnInit() {

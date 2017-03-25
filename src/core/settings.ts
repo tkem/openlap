@@ -6,15 +6,15 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 import { Peripheral } from '../carrera';
 
-const DRIVERS = [
-  { name: 'Driver #1', code: '#1', color: '#ff0000' },
-  { name: 'Driver #2', code: '#2', color: '#00ff00' },
-  { name: 'Driver #3', code: '#3', color: '#0000ff' },
-  { name: 'Driver #4', code: '#4', color: '#ffff00' },
-  { name: 'Driver #5', code: '#5', color: '#ff00ff' },
-  { name: 'Driver #6', code: '#6', color: '#00ffff' },
-  { name: 'Autonomous Car', code: 'AUT', color: '#ffffff' },
-  { name: 'Pace Car', code: 'PAC', color: '#cccccc' }
+const COLORS = [
+  '#ff0000',
+  '#00ff00',
+  '#0000ff',
+  '#ffff00',
+  '#ff00ff',
+  '#00ffff',
+  '#ffffff',
+  '#cccccc'
 ];
 
 const NOTIFICATIONS = {
@@ -69,12 +69,9 @@ export class Notification {
   text: string;
 }
 
-export class Driver {
-  constructor(id: number) {
-    Object.assign(this, DRIVERS[id]);
-  }
-  name: string;
-  code: string;
+export interface Driver {
+  name?: string;
+  code?: string;
   color: string;
 }
 
@@ -108,7 +105,7 @@ export class Settings {
 
   private subjects = new Map<string, ReplaySubject<any>>();
 
-  constructor(private storage: Storage) { 
+  constructor(private storage: Storage) {
     // TODO: setDriver('localStorageWrapper');
   }
 
@@ -123,10 +120,10 @@ export class Settings {
   }
 
   setConnection(value: Peripheral) {
-    return this.set('connection', { 
-      type: value.type, 
-      name: value.name, 
-      address: value.address 
+    return this.set('connection', {
+      type: value.type,
+      name: value.name,
+      address: value.address
     });
   }
 
@@ -134,7 +131,7 @@ export class Settings {
     return this.get('drivers').map(value => {
       const result = new Array<Driver>(8);
       for (let i = 0; i != result.length; ++i) {
-        result[i] = Object.assign(new Driver(i), value ? value[i] : null);
+        result[i] = Object.assign({color: COLORS[i]}, value ? value[i] : null);
       }
       return result;
     });
