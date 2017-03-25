@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { RootPage } from './root.page';
 
+import { AndroidFullScreen } from '../android-full-screen';
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_SUBJECT, Settings, Toast } from '../core';
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit {
               private logger: Logger, private settings: Settings,
               private platform: Platform,
               private insomnia: Insomnia, private statusBar: StatusBar,
+              private androidFullScreen: AndroidFullScreen,
               private splashScreen: SplashScreen, private toast: Toast,
               private translate: TranslateService)
   {
@@ -50,12 +52,8 @@ export class AppComponent implements OnInit {
       }
       this.settings.getOptions().subscribe(options => {
         this.logger.setLevel(options.debug ? 'debug' : 'info');
-        if (options.fullscreen) {
-          this.statusBar.hide();
-        } else {
-          this.statusBar.show();
-        }
         this.translate.use(options.language || this.translate.getBrowserLang() || 'en');
+        this.enableFullScreen(options.fullscreen);
       });
       this.settings.getConnection().subscribe(connection => {
         if (this.cu.value) {
@@ -103,6 +101,23 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  private enableFullScreen(value: boolean) {
+    this.androidFullScreen.isImmersiveModeSupported().then(() => {
+      if (value) {
+        return this.androidFullScreen.immersiveMode();
+      } else {
+        return this.androidFullScreen.showSystemUI();
+      }
+    }).catch(error => {
+      this.logger.error('Fullscreen error:', error);
+      if (value) {
+        this.statusBar.hide();
+      } else {
+        this.statusBar.show();
+      }
+    });
   }
 
   private setRoot(page: Component, params?: any) {

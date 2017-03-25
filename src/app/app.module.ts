@@ -19,6 +19,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { AndroidFullScreen } from '../android-full-screen';
 import { BackendModule } from '../backend';
 import { CoreModule } from '../core';
 import { LoggingModule } from '../logging';
@@ -59,6 +60,7 @@ export function createTranslateLoader(http: Http) {
     SharedModule
   ],
   providers: [
+    AndroidFullScreen,
     AppVersion,
     BLE,
     Device,
