@@ -17,7 +17,7 @@ In a nutshell, Open Lap lets you
 
 Open Lap is available as an Android app from the `Google Play Store
 <https://play.google.com/store/apps/details?id=at.co.kemmer.openlap>`_.
-You may also want to join the `Beta testing program 
+You may also want to join the `Beta testing program
 <https://play.google.com/apps/testing/at.co.kemmer.openlap>`_ to
 preview unreleased versions.
 
@@ -41,10 +41,23 @@ Please refer to the `Ionic CLI
 information on how to run the application on an actual device, or in a
 Web browser or emulator for testing.
 
-Due to lack of resources, Open Lap has *not* been tested on iOS, and is
-unlikely to run unchanged on that platform.  However, being a hybrid
-app, it shouldn't take too much effort to make it work, so please feel
-free to fork this and give it a try!
+Due to lack of resources, Open Lap has *not* been tested on iOS, and
+is unlikely to run unchanged on that platform.  However, being a
+hybrid app, it shouldn't take too much effort to make it work, so
+please feel free to fork and give it a try!
+
+
+Contributing Translations
+------------------------------------------------------------------------
+
+If you want to see Open Lap translated to your native language, start
+by having a look at the existing `translations <./src/assets/i18n>`_.
+Open Lap uses `ngx-translate <http://www.ngx-translate.com/>`_ for
+internationalization, which stores translations as simple `JSON
+<http://www.json.org/>`_ files.  Just take one of the existing files
+and replace all foreign language text as you see fit.  When you're
+done, please open a new issue - or even a full-fledged pull request,
+if you like - for submitting your translations.
 
 
 License
