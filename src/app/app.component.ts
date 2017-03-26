@@ -131,7 +131,9 @@ export class AppComponent implements OnInit {
 
   private showConnectionToast(message: string, device: string) {
     this.translate.get(message, { device: device }).toPromise().then(message => {
-      this.toast.showCenter(message, 3000);
-    })
+      return this.toast.showCenter(message, 3000);
+    }).catch(error => {
+      this.logger.error('Error showing toast', error);
+    });
   }
 }

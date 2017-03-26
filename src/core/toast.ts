@@ -63,7 +63,9 @@ export class Toast {
   }
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
-    return this.toast.hide().then(() => {
+    return this.toast.hide().catch(() => {
+      // FIXME: seems to generate an error with IonicToastProvider; check if toast active, first?
+    }).then(() => {
       return this.toast.show(message, duration, position);
     });
   }
