@@ -1,13 +1,21 @@
 1.0.2 UNRELEASED
 ----------------
 
-- Remove fullscreen plugin.
+- Improve handling of default driver names.
 
-- Add IonicErrorHandler.
+- Increase tuning page font size.
 
-- Upgrade to ionic-native v3.
+- Add translation instructions to README.
 
-- Upgrade to ngx-translate v6.
+- Add workaround for random toast errors.
+
+- Add ``IonicErrorHandler``.
+
+- Refactor fullscreen plugin.
+
+- Upgrade to ``ionic-native`` v3.
+
+- Upgrade to ``ngx-translate`` v6.
 
 
 1.0.1 2017-03-20
