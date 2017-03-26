@@ -85,6 +85,7 @@ ion-footer {
 }
 
 ion-grid.tuning {
+    font-size: 1.8rem;
     padding-top: 2px;
     ion-col {
         overflow: hidden;
@@ -120,7 +121,7 @@ ion-range.range-md.pristine {
     .range-knob {
         border: 2px solid $range-md-bar-background-color !important;
         background: $background-md-color !important;
-    }     
+    }
 }
 
 /* FIXME: is this really such a smart idea? */
