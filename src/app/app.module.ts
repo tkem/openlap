@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 
 import { IonicApp, IonicModule } from 'ionic-angular';
 
+import { AndroidFullScreen } from '@ionic-native/android-full-screen';
 import { AppVersion } from '@ionic-native/app-version';
 import { BLE } from '@ionic-native/ble';
 import { Device } from '@ionic-native/device';
@@ -19,7 +20,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { AndroidFullScreen } from '../android-full-screen';
 import { BackendModule } from '../backend';
 import { CoreModule } from '../core';
 import { LoggingModule } from '../logging';

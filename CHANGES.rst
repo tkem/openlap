@@ -5,13 +5,11 @@
 
 - Increase tuning page font size.
 
-- Add translation instructions to README.
+- Add ``IonicErrorHandler``.
 
 - Add workaround for random toast errors.
 
-- Add ``IonicErrorHandler``.
-
-- Refactor fullscreen plugin.
+- Add translation instructions to README.
 
 - Upgrade to ``ionic-native`` v3.
 

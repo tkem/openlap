@@ -50,6 +50,11 @@ export class LicensesPage {
     license: 'Apache-2.0',
     homepage: 'https://github.com/don/cordova-plugin-ble-central#readme'
   }, {
+    name: 'cordova-plugin-fullscreen',
+    author: 'Neil Rackett',
+    license: 'BSD',
+    homepage: 'https://github.com/mesmotronic/cordova-fullscreen-plugin#readme'
+  }, {
     name: 'cordova-plugin-insomnia',
     author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
     license: 'MIT',

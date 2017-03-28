@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 
 import { Nav, Platform } from 'ionic-angular';
 
+import { AndroidFullScreen } from '@ionic-native/android-full-screen';
 import { Insomnia } from '@ionic-native/insomnia';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -12,7 +13,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { RootPage } from './root.page';
 
-import { AndroidFullScreen } from '../android-full-screen';
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_SUBJECT, Settings, Toast } from '../core';
