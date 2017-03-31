@@ -1,5 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import { Notification, Settings, Speech } from '../core';
 
 @Component({
@@ -15,13 +17,10 @@ export class NotificationsPage implements OnDestroy {
     label: 'Final lap'
   }, {
     id: 'bestlap',
-    label: 'Fastest lap'
+    label: 'Fastest lap',
   }, {
     id: 'falsestart',
     label: 'False start'
-  }, {
-    id: 'pitenter',
-    label: 'Car enters pit'
   }, {
     id: 'fuel2',
     label: 'Fuel < 20%'
@@ -31,13 +30,19 @@ export class NotificationsPage implements OnDestroy {
   }, {
     id: 'fuel0',
     label: 'No fuel'
+  }, {
+    id: 'pitenter',
+    label: 'Car enters pit'
+  }, {
+    id: 'pitexit',
+    label: 'Car leaves pit'
   }];
 
   notifications: {[key: string]: Notification} = {};
 
   private subscription: any;
 
-  constructor(private settings: Settings, private speech: Speech) {}
+  constructor(private settings: Settings, private speech: Speech, private translate: TranslateService) {}
 
   ngOnInit() {
     this.subscription = this.settings.getNotifications().subscribe(notifications => {
@@ -50,7 +55,17 @@ export class NotificationsPage implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  speak(text) {
-    this.speech.speak(text);
+  speak(id: string) {
+    this.getMessage(id).then(message => {
+      this.speech.speak(message);
+    })
+  }
+
+  private getMessage(id) {
+    if (this.notifications[id] && this.notifications[id].message) {
+      return Promise.resolve(this.notifications[id].message);
+    } else {
+      return this.translate.get('notifications.' + id).toPromise();
+    }
   }
 }

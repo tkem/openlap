@@ -12,15 +12,9 @@
 </ion-header>
 <ion-content>
   <ion-segment [(ngModel)]="type">
-    <ion-segment-button translate value="speed">
-      Speed
-    </ion-segment-button>
-    <ion-segment-button translate value="brake">
-      Brake
-    </ion-segment-button>
-    <ion-segment-button translate value="fuel">
-      Fuel
-    </ion-segment-button>
+    <ion-segment-button translate value="speed">Speed</ion-segment-button>
+    <ion-segment-button translate value="brake">Brake</ion-segment-button>
+    <ion-segment-button translate value="fuel">Fuel</ion-segment-button>
   </ion-segment>
   <ion-grid class="tuning">
     <ion-row *ngFor="let model of models">
@@ -30,17 +24,18 @@
         </slant>
       </ion-col>
       <ion-col center class="name" showWhen="landscape">
-        <span>{{(drivers | async)[model.id]?.name || 'Driver #' + (model.id + 1)}}</span>
+        {{(drivers | async)[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}
       </ion-col>
       <ion-col center class="code" showWhen="portrait">
         {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
       </ion-col>
       <ion-col center class="range">
         <ion-range no-padding min="0" max="15" snaps="true"
-          [ngClass]="{'pristine': model[type] == null}"
           [disabled]="!(connected | async)"
+          (ionChange)="update(type, $event.value, link ? undefined : model.id)"
+          [ngClass]="{'pristine': model[type] == null}"
           [ngModel]="model[type] || 0"
-          (ionChange)="update(type, $event.value, link ? undefined : model.id)">
+        >
         </ion-range>
       </ion-col>
     </ion-row>

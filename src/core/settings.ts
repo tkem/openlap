@@ -18,38 +18,15 @@ const COLORS = [
 ];
 
 const NOTIFICATIONS = {
-  falsestart: {
-    enabled: true,
-    text: 'False start!'
-  },
-  finished: {
-    enabled: true,
-    text: 'Race finished!'
-  },
-  finallap: {
-    enabled: true,
-    text: 'Final lap!'
-  },
-  bestlap: {
-    enabled: true,
-    text: 'Fastest lap!'
-  },
-  fuel2: {
-    enabled: true,
-    text: 'Prepare to box!'
-  },
-  fuel1: {
-    enabled: true,
-    text: 'Box, please box!'
-  },
-  fuel0: {
-    enabled: true,
-    text: 'Box this lap!'
-  },
-  pitenter: {
-    enabled: false,
-    text: 'In pit!'
-  }
+  falsestart: true,
+  finished: true,
+  finallap: true,
+  bestlap: true,
+  fuel2: true,
+  fuel1: true,
+  fuel0: true,
+  pitenter: false,
+  pitexit: false
 };
 
 export class Options {
@@ -61,12 +38,9 @@ export class Options {
   speech = true;
 }
 
-export class Notification {
-  constructor(id: string) {
-    Object.assign(this, NOTIFICATIONS[id]);
-  }
+export interface Notification {
   enabled: boolean;
-  text: string;
+  message?: string;
 }
 
 export interface Driver {
@@ -145,7 +119,7 @@ export class Settings {
     return this.get('notifications').map(value => {
       const result = {};
       for (let key of Object.keys(NOTIFICATIONS)) {
-        result[key] = Object.assign(new Notification(key), value ? value[key] : null);
+        result[key] = Object.assign({enabled: NOTIFICATIONS[key]}, value ? value[key] : null);
       }
       return result;
     });

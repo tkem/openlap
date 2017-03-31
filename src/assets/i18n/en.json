@@ -24,6 +24,8 @@
   "Brake": "Brake",
   "Fuel": "Fuel",
 
+  "Driver {{number}}": "Driver {{number}}",
+
   "Lap {{count}}": "Lap {{count}}",
   "Lap {{count}}/{{total}}": "Lap {{count}}/{{total}}",
 
@@ -53,7 +55,7 @@
 
   "Language": "Language",
   "Default": "Default",
-  "Enable fullscreen": "Enable fullscreen",
+  "Fullscreen mode": "Fullscreen mode",
   "Display current lap": "Display current lap",
   "Sort by driver number": "Sort by driver number",
 
@@ -70,7 +72,21 @@
   "Fuel < 10%": "Fuel < 10%",
   "No fuel": "No fuel",
   "Car enters pit": "Car enters pit",
+  "Car leaves pit": "Car leaves pit",
 
   "License": "License",
-  "Translations": "Translations"
+  "Translations": "Translations",
+
+  "notifications": {
+    "locale": "en-us",
+    "bestlap": "Fastest lap!",
+    "falsestart": "False start!",
+    "finallap": "Final lap!",
+    "finished": "Race finished!",
+    "fuel0": "Box this lap!",
+    "fuel1": "Box, please box!",
+    "fuel2": "Prepare to box!",
+    "pitenter": "In pit!",
+    "pitexit": "Back on track!"
+  }
 }

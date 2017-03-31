@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavParams, PopoverController } from 'ionic-angular';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
 import { LeaderboardItem } from '../leaderboard';
@@ -59,7 +61,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   private subscription: Subscription;
 
   constructor(public cu: ControlUnit, private logger: Logger, private settings: Settings, private speech: Speech,
-    params: NavParams, private popover: PopoverController)
+    params: NavParams, private popover: PopoverController, private translate: TranslateService)
   {
     this.options = params.data;
 
@@ -110,14 +112,18 @@ export class RaceControlPage implements OnDestroy, OnInit {
       };
     }).share().startWith({count: 0, current: 0, total: this.options.laps});
 
-    const drivers = this.settings.getDrivers().map(drivers => {
-      return drivers.map((obj, index) => {
-        return {
-          name: obj.name || 'Driver #' + (index + 1),
-          code: obj.code || '#' + (index + 1),
-          color: obj.color
-        };
+    const drivers = this.settings.getDrivers().switchMap(drivers => {
+      const observables = drivers.map((obj, index) => {
+        const code = obj.code || '#' + (index + 1);
+        if (obj.name) {
+          return Observable.of({name: obj.name, code: code, color: obj.color});
+        } else {
+          return this.getTranslations('Driver {{number}}', {number: index + 1}).map(name => {
+            return {name: name, code: code, color: obj.color}
+          });
+        }
       });
+      return Observable.combineLatest(...observables);
     });
 
     // sort in order of importance for speech
@@ -130,7 +136,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
             events.push(['pitenter', curr.id]);
           }
           if (!curr.pit && prev.pit) {
-            events.push(['pitleave', curr.id]);
+            events.push(['pitexit', curr.id]);
           }
           if (curr.fuel < prev.fuel) {
             events.push(['fuel' + curr.fuel, curr.id]);
@@ -168,14 +174,16 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
     this.subscription = events.withLatestFrom(
       this.settings.getOptions(),
-      this.settings.getNotifications()
-    ).subscribe(([[event, driver], options, notifications]) => {
+      this.settings.getNotifications(),
+      this.getTranslations('notifications')
+    ).subscribe(([[event, driver], options, notifications, translations]) => {
       this.logger.debug('New race event: ' + event, driver);
       if (options.speech && notifications[event] && notifications[event].enabled) {
+        let message = notifications[event].message || translations[event];
         if (driver && driver.name) {
-          this.speech.speak(driver.name + ': ' + notifications[event].text);
+          this.speech.speak(driver.name + ': ' + message);
         } else {
-          this.speech.speak(notifications[event].text);
+          this.speech.speak(message);
         }
       }
     });
@@ -224,5 +232,12 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.settings.getOptions().take(1).subscribe(options => {
       this.settings.setOptions(Object.assign({}, options, {speech: !options.speech}));
     });
+  }
+
+  // see https://github.com/ngx-translate/core/issues/330
+  private getTranslations(key: string, params?: Object) {
+    return this.translate.get(key, params).concat(
+      this.translate.onLangChange.asObservable().map(() => this.translate.get(key, params)).concatAll()
+    );
   }
 }

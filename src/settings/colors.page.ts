@@ -10,8 +10,10 @@ export class ColorsPage implements OnDestroy, OnInit {
 
   drivers: Driver[];
 
+  readonly placeholder = 'Driver {{number}}';
+
   constructor(private logger: Logger, private settings: Settings) {}
-  
+
   ngOnInit() {
     this.settings.getDrivers().take(1).toPromise().then(drivers => {
       this.drivers = drivers;

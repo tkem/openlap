@@ -10,7 +10,10 @@
   <ion-list>
     <ion-item *ngFor="let driver of drivers; let id = index">
       <ion-label>#{{id + 1}}</ion-label>
-      <ion-input readonly placeholder="Driver #{{id + 1}}" [ngModel]="driver.name">
+      <ion-input readonly
+       [ngModel]="driver.name"
+       [placeholder]="placeholder | translate:{number: id + 1}"
+      >
       </ion-input>
       <input item-right [(ngModel)]="driver.color" type="color" [style.zIndex]="100">
     </ion-item>

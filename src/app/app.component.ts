@@ -15,7 +15,7 @@ import { RootPage } from './root.page';
 
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
-import { CONTROL_UNIT_SUBJECT, Settings, Toast } from '../core';
+import { CONTROL_UNIT_SUBJECT, Settings, Speech, Toast } from '../core';
 import { Logger } from '../logging';
 import { RaceControlPage } from '../rms';
 
@@ -33,13 +33,17 @@ export class AppComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
-              @Inject(Backend) private backends: Backend[],
-              private logger: Logger, private settings: Settings,
-              private platform: Platform,
-              private insomnia: Insomnia, private statusBar: StatusBar,
-              private androidFullScreen: AndroidFullScreen,
-              private splashScreen: SplashScreen, private toast: Toast,
-              private translate: TranslateService)
+    @Inject(Backend) private backends: Backend[],
+    private logger: Logger,
+    private settings: Settings,
+    private speech: Speech,
+    private platform: Platform,
+    private androidFullScreen: AndroidFullScreen,
+    private insomnia: Insomnia,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private toast: Toast,
+    private translate: TranslateService)
   {
     translate.setDefaultLang('en');
   }
@@ -52,8 +56,8 @@ export class AppComponent implements OnInit {
       }
       this.settings.getOptions().subscribe(options => {
         this.logger.setLevel(options.debug ? 'debug' : 'info');
-        this.translate.use(options.language || this.translate.getBrowserLang() || 'en');
         this.enableFullScreen(options.fullscreen);
+        this.setLanguage(options.language);
       });
       this.settings.getConnection().subscribe(connection => {
         if (this.cu.value) {
@@ -117,6 +121,14 @@ export class AppComponent implements OnInit {
       } else {
         this.statusBar.show();
       }
+    });
+  }
+
+  private setLanguage(language: string) {
+    this.translate.use(language || this.translate.getBrowserLang() || 'en').toPromise().then(obj => {
+      this.translate.get('notifications.locale').toPromise().then(locale => {
+        this.speech.setLocale(locale);
+      });
     });
   }
 

@@ -28,6 +28,8 @@ export class TuningPage {
 
   type = 'speed';
 
+  readonly placeholder = 'Driver {{number}}';
+
   connected: Observable<boolean> = this.cu.getState().map((state) => state == 'connected');
 
   private subject = new Subject<{type: string, id: number}>();
@@ -53,7 +55,7 @@ export class TuningPage {
       }
     });
   }
-  
+
   update(type: string, value: number, id?: number) {
     for (let model of (id !== undefined ? [this.models[id]] : this.models)) {
       model[type] = value;

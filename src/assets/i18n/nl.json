@@ -24,6 +24,8 @@
   "Brake": "Rem",
   "Fuel": "Tank",
 
+  "Driver {{number}}": "Rijder {{number}}",
+
   "Lap {{count}}": "Ronde {{count}}",
   "Lap {{count}}/{{total}}": "Ronde {{count}}/{{total}}",
 
@@ -53,7 +55,7 @@
 
   "Language": "Taal",
   "Default": "Standard",
-  "Enable fullscreen": "Volledig scherm",
+  "Fullscreen mode": "Volledig scherm",
   "Display current lap": "Aangeven van actuele ronde",
   "Sort by driver number": "Rijders sorteren op nummer",
 
@@ -70,7 +72,21 @@
   "Fuel < 10%": "Tank < 10%",
   "No fuel": "Tank leeg",
   "Car enters pit": "Auto in pit",
+  "Car leaves pit": "Auto verlaat pit",
 
   "License": "Licensie",
-  "Translations": "Vertaling"
+  "Translations": "Vertaling",
+
+  "notifications": {
+    "locale": "nl-nl",
+    "bestlap": "Snelste Ronde!",
+    "falsestart": "Valse start!",
+    "finallap": "Laatste Ronde!",
+    "finished": "Race afgelopen!",
+    "fuel0": "Box, onmiddellijk!",
+    "fuel1": "Box, alsjeblieft!",
+    "fuel2": "Box!",
+    "pitenter": "In pit!",
+    "pitexit": "Verlaat pit!"
+  }
 }

@@ -24,6 +24,8 @@
   "Brake": "Bremse",
   "Fuel": "Tank",
 
+  "Driver {{number}}": "Fahrer {{number}}",
+
   "Lap {{count}}": "Runde {{count}}",
   "Lap {{count}}/{{total}}": "Runde {{count}}/{{total}}",
 
@@ -53,7 +55,7 @@
 
   "Language": "Sprache",
   "Default": "Standard",
-  "Enable fullscreen": "Vollbildmodus",
+  "Fullscreen mode": "Vollbildmodus",
   "Display current lap": "Anzeige der aktuellen Runde",
   "Sort by driver number": "Fahrer nach Nummern sortieren",
 
@@ -69,8 +71,22 @@
   "Fuel < 20%": "Tank < 20%",
   "Fuel < 10%": "Tank < 10%",
   "No fuel": "Tank leer",
-  "Car enters pit": "Fahrzeug in Box",
+  "Car enters pit": "Fahrzeug fährt in die Box",
+  "Car leaves pit": "Fahrzeug verlässt die Box",
 
   "License": "Lizenz",
-  "Translations": "Übersetzungen"
+  "Translations": "Übersetzungen",
+
+  "notifications": {
+    "locale": "de-de",
+    "bestlap": "Schnellste Runde!",
+    "falsestart": "Fehlstart!",
+    "finallap": "Letzte Runde!",
+    "finished": "Rennen beendet!",
+    "fuel0": "Sofort in die Box!",
+    "fuel1": "In die Box!",
+    "fuel2": "Box ist bereit!",
+    "pitenter": "In der Box!",
+    "pitexit": "Verlässt die Box!"
+  }
 }
