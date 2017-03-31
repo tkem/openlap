@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { NavParams, PopoverController, ViewController } from 'ionic-angular';
+import { NavParams, PopoverController } from 'ionic-angular';
 
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
 import { LeaderboardItem } from '../leaderboard';
 import { Logger } from '../logging';
 
+import { RaceControlMenu } from './race-control.menu';
 import { RaceSession } from './race-session';
 
 import { Observable, Subscription } from 'rxjs';
@@ -34,42 +35,6 @@ const FIELDS = {
 };
 
 @Component({
-  // TODO: move to .html
-  template: `
-    <ion-item-group>
-      <button ion-item [disabled]="!options.restart" (click)="restart()">
-        <span translate>Restart race</span>
-      </button>
-      <button ion-item [disabled]="!options.cancel" (click)="cancel()">
-        <span translate>Cancel race</span>
-      </button>
-    </ion-item-group>
-  `
-})
-export class RaceControlPopover {
-
-  options: { restart: any , cancel: any };
-
-  constructor(private view: ViewController, private params: NavParams) {
-    this.options = params.data;
-  }
-
-  restart() {
-    this.options.restart();
-    this.close();
-  }
-
-  cancel() {
-    this.options.cancel();
-    this.close();
-  }
-
-  private close() {
-    this.view.dismiss();
-  }
-}
-
-@Component({
   providers: [CONTROL_UNIT_PROVIDER],
   templateUrl: 'race-control.page.html',
 })
@@ -78,6 +43,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   options: any;
 
   fields: Observable<string[]>;
+  speechEnabled: Observable<boolean>;
   sortorder: Observable<string>;
   lapcount: Observable<{count: number, current: number, total: number}>;
 
@@ -111,6 +77,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return FIELDS[this.options.mode][index];
     });
 
+    this.speechEnabled = settings.getOptions().map(options => options.speech);
     this.sortorder = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
 
     this.start = start;
@@ -246,10 +213,16 @@ export class RaceControlPage implements OnDestroy, OnInit {
   }
 
   presentPopover(event) {
-    let popover = this.popover.create(RaceControlPopover, {
+    let menu = this.popover.create(RaceControlMenu, {
       restart: () => this.onStart(),
       cancel: this.session && !this.session.finished.value && this.options.mode != 'practice' ? () => this.session.stop() : null
     });
-    popover.present({ev: event});
+    menu.present({ev: event});
+  }
+
+  toggleSpeech() {
+    this.settings.getOptions().take(1).subscribe(options => {
+      this.settings.setOptions(Object.assign({}, options, {speech: !options.speech}));
+    });
   }
 }

@@ -8,27 +8,28 @@ import { LeaderboardModule } from '../leaderboard';
 import { SharedModule } from '../shared';
 
 import { TuningPage } from './tuning.page';
-import { RaceControlPage, RaceControlPopover } from './race-control.page';
+import { RaceControlMenu } from './race-control.menu';
+import { RaceControlPage } from './race-control.page';
 import { RaceSettingsPage } from './race-settings.page';
 
 @NgModule({
   declarations: [
     TuningPage,
     RaceControlPage,
-    RaceControlPopover,
+    RaceControlMenu,
     RaceSettingsPage
   ],
   entryComponents: [
     TuningPage,
     RaceControlPage,
-    RaceControlPopover,
+    RaceControlMenu,
     RaceSettingsPage
   ],
   exports: [
     TuningPage,
     RaceControlPage,
     RaceSettingsPage
-  ], 
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

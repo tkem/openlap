@@ -1,7 +1,7 @@
 {
-  "Welcome to Open Lap!": 
+  "Welcome to Open Lap!":
     "Willkommen bei Open Lap!",
-  "Please select a Control Unit device from the menu.": 
+  "Please select a Control Unit device from the menu.":
     "Bitte wählen Sie eine Control Unit über das Menü.",
   "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.":
     "Falls keine Geräte aufscheinen, stellen Sie bitte sicher, dass Bluetooth aktiviert ist, oder verwenden Sie ein geeignetes USB OTG Kabel.",
@@ -54,7 +54,6 @@
   "Language": "Sprache",
   "Default": "Standard",
   "Enable fullscreen": "Vollbildmodus",
-  "Enable speech": "Sprachausgabe",
   "Display current lap": "Anzeige der aktuellen Runde",
   "Sort by driver number": "Fahrer nach Nummern sortieren",
 
