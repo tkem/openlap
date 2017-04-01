@@ -20,6 +20,10 @@
   "Exit": "Beenden",
   "Reconnect": "Erneut verbinden",
 
+  "Exit Open Lap?": "Open Lap beenden?",
+  "Restart race?": "Rennen neu starten?",
+  "Cancel race?": "Rennen abbrechen?",
+
   "Speed": "Tempo",
   "Brake": "Bremse",
   "Fuel": "Tank",

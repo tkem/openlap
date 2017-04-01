@@ -5,7 +5,7 @@ import { ModalController, Nav, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
-import { Settings } from '../core';
+import { I18nAlertController, Settings } from '../core';
 import { Logger } from '../logging';
 import { TuningPage, RaceSettingsPage, RaceControlPage } from '../rms';
 import { ColorsPage, DriversPage, SettingsPage } from '../settings';
@@ -29,10 +29,11 @@ export class MenuComponent implements OnChanges {
   settingsPage = SettingsPage;
   tuningPage = TuningPage;
 
-  constructor(private logger: Logger, 
-              private settings: Settings,
-              private modal: ModalController,
-              private platform: Platform)
+  constructor(private alert: I18nAlertController,
+    private logger: Logger,
+    private settings: Settings,
+    private modal: ModalController,
+    private platform: Platform)
   {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -97,10 +98,24 @@ export class MenuComponent implements OnChanges {
   }
 
   exitApp() {
+    const alert = this.alert.create({
+        message: 'Exit Open Lap?',
+        buttons: [{
+          text: 'Cancel',
+          role: 'cancel',
+        }, {
+          text: 'OK',
+          handler: () => this.exit()
+        }]
+      })
+      alert.present();
+  }
+
+  private exit() {
+    this.logger.info('Exiting application');
     if (this.cu) {
       this.cu.disconnect();
     }
-    this.logger.info('Exiting application');
     this.platform.exitApp();
     this.logger.info('Exited application');
   }

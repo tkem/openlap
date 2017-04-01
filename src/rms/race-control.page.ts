@@ -220,18 +220,19 @@ export class RaceControlPage implements OnDestroy, OnInit {
     }
   }
 
-  presentPopover(event) {
-    let menu = this.popover.create(RaceControlMenu, {
-      restart: () => this.onStart(),
-      cancel: this.session && !this.session.finished.value && this.options.mode != 'practice' ? () => this.session.stop() : null
-    });
-    menu.present({ev: event});
-  }
-
   toggleSpeech() {
     this.settings.getOptions().take(1).subscribe(options => {
       this.settings.setOptions(Object.assign({}, options, {speech: !options.speech}));
     });
+  }
+
+  showMenu(event) {
+    let menu = this.popover.create(RaceControlMenu, {
+      active: this.session && !this.session.finished.value && this.options.mode != 'practice',
+      restart: () => this.onStart(),
+      stop:  () => this.session.stop(),
+    });
+    menu.present({ev: event});
   }
 
   // see https://github.com/ngx-translate/core/issues/330

@@ -10,40 +10,42 @@ import { AboutPage } from './about.page';
 import { ColorsPage } from './colors.page';
 import { DriversPage } from './drivers.page';
 import { LicensesPage } from './licenses.page';
-import { LoggingPage, LoggingPopover } from './logging.page';
+import { LoggingMenu } from './logging.menu';
+import { LoggingPage } from './logging.page';
 import { NotificationsPage } from './notifications.page';
 import { OptionsPage } from './options.page';
-import { SettingsPage, SettingsPopover } from './settings.page';
+import { SettingsMenu } from './settings.menu';
+import { SettingsPage } from './settings.page';
 
 @NgModule({
   declarations: [
+    SettingsMenu,
     SettingsPage,
-    SettingsPopover,
     AboutPage,
     ColorsPage,
     DriversPage,
     LicensesPage,
+    LoggingMenu,
     LoggingPage,
-    LoggingPopover,
     NotificationsPage,
     OptionsPage
   ],
   entryComponents: [
+    SettingsMenu,
     SettingsPage,
-    SettingsPopover,
     AboutPage,
     ColorsPage,
     DriversPage,
     LicensesPage,
+    LoggingMenu,
     LoggingPage,
-    LoggingPopover,
     NotificationsPage,
     OptionsPage,
   ],
   exports: [
     DriversPage,
     SettingsPage
-  ], 
+  ],
   imports: [
     CommonModule,
     FormsModule,

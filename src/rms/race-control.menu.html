@@ -1,8 +1,8 @@
 <ion-item-group>
-  <button ion-item [disabled]="!params.restart" (click)="restart()">
-    <span translate>Restart race</span>
+  <button ion-item (click)="restart()">
+    <span translate>Restart race</span>&hellip;
   </button>
-  <button ion-item [disabled]="!params.cancel" (click)="cancel()">
-    <span translate>Cancel race</span>
+  <button ion-item [disabled]="!params.active" (click)="stop()">
+    <span translate>Cancel race</span>&hellip;
   </button>
 </ion-item-group>

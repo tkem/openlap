@@ -20,6 +20,10 @@
   "Exit": "Exit",
   "Reconnect": "Reconnect",
 
+  "Exit Open Lap?": "Exit Open Lap?",
+  "Restart race?": "Restart race?",
+  "Cancel race?": "Cancel race?",
+
   "Speed": "Speed",
   "Brake": "Brake",
   "Fuel": "Fuel",

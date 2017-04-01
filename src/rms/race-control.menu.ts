@@ -2,28 +2,52 @@ import { Component } from '@angular/core';
 
 import { NavParams, ViewController } from 'ionic-angular';
 
+import { I18nAlertController } from '../core';
+
 @Component({
   templateUrl: 'race-control.menu.html',
 })
 export class RaceControlMenu {
 
-  params: {cancel: any, restart: any};
+  params: {active: boolean, restart: any, stop: any};
 
-  constructor(private view: ViewController, params: NavParams) {
+  constructor(private alert: I18nAlertController, private view: ViewController, params: NavParams) {
     this.params = params.data;
   }
 
-  cancel() {
-    this.params.cancel();
-    this.close();
+  restart() {
+    this.close().then(() => {
+      const alert = this.alert.create({
+        message: 'Restart race?',
+        buttons: [{
+          text: 'Cancel',
+          role: 'cancel',
+        }, {
+          text: 'OK',
+          handler: () => this.params.restart()
+        }]
+      })
+      alert.present();
+    });
   }
 
-  restart() {
-    this.params.restart();
-    this.close();
+  stop() {
+    this.close().then(() => {
+      const alert = this.alert.create({
+        message: 'Cancel race?',
+        buttons: [{
+          text: 'Cancel',
+          role: 'cancel',
+        }, {
+          text: 'OK',
+          handler: () => this.params.stop()
+        }]
+      })
+      alert.present();
+    });
   }
 
   private close() {
-    this.view.dismiss();
+    return this.view.dismiss();
   }
 }

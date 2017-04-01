@@ -30,7 +30,7 @@
       <button ion-button icon-only (click)="toggleSpeech()">
         <ion-icon [name]="(speechEnabled | async) ? 'volume-up' : 'volume-off'"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="presentPopover($event)">
+      <button ion-button icon-only (click)="showMenu($event)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>

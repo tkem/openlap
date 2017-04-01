@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AlertController, PopoverController, ViewController } from 'ionic-angular';
-
-import { TranslateService } from '@ngx-translate/core';
-
-import { Settings } from '../core';
-import { Logger } from '../logging';
+import { PopoverController } from 'ionic-angular';
 
 import { AboutPage } from './about.page';
 import { ColorsPage } from './colors.page';
@@ -14,53 +9,7 @@ import { LoggingPage } from './logging.page';
 import { NotificationsPage } from './notifications.page';
 import { OptionsPage } from './options.page';
 
-@Component({
-  template: `
-    <ion-item-group>
-      <button ion-item (click)="reset()">
-        <span translate>Reset</span>&hellip;
-      </button>
-    </ion-item-group>
-  `
-})
-export class SettingsPopover {
-
-  constructor(private logger: Logger,
-    private settings: Settings,
-    private alert: AlertController,
-    private view: ViewController,
-    private translate: TranslateService)
-  {}
-
-  reset() {
-    this.close().then(() => {
-      return Promise.all([
-        this.translate.get('Reset settings').toPromise(),
-        this.translate.get('Reset all user settings to default values?').toPromise(),
-        this.translate.get('OK').toPromise(),
-        this.translate.get('Cancel').toPromise(),
-      ]);
-    }).then(([title, message, okText, cancelText]) => {
-      const alert = this.alert.create({
-        // TODO: translate
-        title: title,
-        message: message,
-        buttons: [{
-          text: cancelText,
-          role: 'cancel',
-        }, {
-          text: okText,
-          handler: () => this.settings.clear()
-        }]
-      })
-      alert.present();
-    });
-  }
-
-  close() {
-    return this.view.dismiss();
-  }
-}
+import { SettingsMenu } from './settings.menu';
 
 @Component({
   templateUrl: 'settings.page.html'
@@ -75,8 +24,8 @@ export class SettingsPage {
 
   constructor(private popover: PopoverController) {}
 
-    presentPopover(event) {
-      let popover = this.popover.create(SettingsPopover);
-      popover.present({ev: event});
-    }
+  showMenu(event) {
+    let popover = this.popover.create(SettingsMenu);
+    popover.present({ev: event});
+  }
 }

@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
 
+import { I18nAlertController } from './i18n-alert.controller';
 import { CONTROL_UNIT_SUBJECT } from './control-unit';
 import { Settings } from './settings';
 import { Speech } from './speech';
@@ -27,6 +28,7 @@ export function controlUnitSubject()  {
 
 @NgModule({
   providers: [
+    I18nAlertController,
     { provide: Storage, useFactory: provideStorage, deps: [Platform] },
     Settings,
     { provide: CONTROL_UNIT_SUBJECT, useFactory: controlUnitSubject },
