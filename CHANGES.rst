@@ -1,4 +1,4 @@
-1.0.2 UNRELEASED
+1.0.2 2017-04-01
 ----------------
 
 - Improve handling of default driver names.
