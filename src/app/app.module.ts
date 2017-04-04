@@ -43,7 +43,7 @@ export function createTranslateLoader(http: Http) {
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot(/* TODO: config */),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -37,7 +37,7 @@
     "@ionic-native/status-bar": "^3.4.2",
     "@ionic-native/text-to-speech": "^3.4.2",
     "@ionic-native/toast": "^3.4.2",
-    "@ionic/storage": "2.0.0",
+    "@ionic/storage": "2.0.1",
     "@ngx-translate/core": "^6.0.0",
     "@ngx-translate/http-loader": "^0.0.3",
     "ionic-angular": "2.2.0",

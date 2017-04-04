@@ -84,8 +84,10 @@ export class Settings {
   }
 
   clear(): Promise<void> {
-    return this.storage.clear().then(() => {
-      this.subjects.forEach(subject => subject.next(null));
+    return this.storage.ready().then(() => {
+      this.storage.clear().then(() => {
+        this.subjects.forEach(subject => subject.next(null));
+      });
     });
   }
 
@@ -163,21 +165,25 @@ export class Settings {
     let subject = this.subjects.get(key);
     if (!subject) {
       this.subjects.set(key, subject = new ReplaySubject<any>(1));
-      this.storage.get(key).then(value => {
-        subject.next(value);
-      }).catch(error => {
-        subject.error(error);
+      this.storage.ready().then(() => {
+        this.storage.get(key).then(value => {
+          subject.next(value);
+        }).catch(error => {
+          subject.error(error);
+        });
       });
     }
     return subject;
   }
 
   private set(key: string, value: any): Promise<void> {
-    return this.storage.set(key, value).then(() => {
-      const subject = this.subjects.get(key);
-      if (subject) {
-        subject.next(value);
-      }
+    return this.storage.ready().then(() => {
+      return this.storage.set(key, value).then(() => {
+        const subject = this.subjects.get(key);
+        if (subject) {
+          subject.next(value);
+        }
+      });
     });
   }
 }
