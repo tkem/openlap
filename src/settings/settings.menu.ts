@@ -22,7 +22,6 @@ export class SettingsMenu {
   reset() {
     this.close().then(() => {
       const alert = this.alert.create({
-        title: 'Reset settings',
         message: 'Reset all user settings to default values?',
         buttons: [{
           text: 'Cancel',
