@@ -1,3 +1,15 @@
+1.1.0 UNRELEASED
+----------------
+
+- Translate TTS notifications.
+
+- Add speech toggle button to main page.
+
+- Add confirm dialogs.
+
+- Upgrade ``ionic-storage``.
+
+
 1.0.2 2017-04-01
 ----------------
 
