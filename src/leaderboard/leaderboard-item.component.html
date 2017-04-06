@@ -1,59 +1,59 @@
 <div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
-    <template ngSwitchCase="position">
+    <ng-template ngSwitchCase="position">
         <slant [color]="item.driver?.color">
             <div class="text">{{item.position + 1}}</div>
         </slant>
-    </template>
-    <template ngSwitchCase="number">
+    </ng-template>
+    <ng-template ngSwitchCase="number">
         {{item.id + 1}}
-    </template>
-    <template ngSwitchCase="name">
+    </ng-template>
+    <ng-template ngSwitchCase="name">
         {{item.driver?.name}}
-    </template>
-    <template ngSwitchCase="code">
+    </ng-template>
+    <ng-template ngSwitchCase="code">
         {{item.driver?.code}}
-    </template>
-    <template ngSwitchCase="time">
+    </ng-template>
+    <ng-template ngSwitchCase="time">
         <span [ngSwitch]="item.position == 0 ? '' : (items[0].laps - item.laps).toString()">
-            <template ngSwitchCase="">
+            <ng-template ngSwitchCase="">
                 {{item.time | time:'m:ss.sss'}}
-            </template>
-            <template ngSwitchCase="0">
+            </ng-template>
+            <ng-template ngSwitchCase="0">
                 +{{(item.time - items[0].time) | time:'s.sss'}}
-            </template>
-            <template ngSwitchCase="1">
+            </ng-template>
+            <ng-template ngSwitchCase="1">
                 +1 Lap
-            </template>
-            <template ngSwitchDefault>
+            </ng-template>
+            <ng-template ngSwitchDefault>
                 +{{items[0].laps - item.laps}} Laps
-            </template>
+            </ng-template>
         </span>
-    </template>
-    <template ngSwitchCase="bestlap">
+    </ng-template>
+    <ng-template ngSwitchCase="bestlap">
         {{item.bestLap | time:'s.sss'}}
-    </template>
-    <template ngSwitchCase="gap">
+    </ng-template>
+    <ng-template ngSwitchCase="gap">
         {{(item.position && item.bestLap ? item.bestLap - items[0].bestLap : null) | time:'+s.sss'}}
-    </template>
-    <template ngSwitchCase="int">
+    </ng-template>
+    <ng-template ngSwitchCase="int">
         {{(item.position && item.bestLap ? item.bestLap - items[item.position - 1].bestLap : null) | time:'+s.sss'}}
-    </template>
-    <template ngSwitchCase="lastlap">
+    </ng-template>
+    <ng-template ngSwitchCase="lastlap">
         <span [ngClass]="{bestlap: item.lastLap == item.bestLap, allbest: item.lastLap == bestlap}">
             {{item.lastLap | time:'s.sss'}}
         </span>
-    </template>
-    <template ngSwitchCase="laps">
+    </ng-template>
+    <ng-template ngSwitchCase="laps">
         {{item.laps}}
-    </template>
-    <template ngSwitchCase="pits">
+    </ng-template>
+    <ng-template ngSwitchCase="pits">
         {{item.pits}}
-    </template>
-    <template ngSwitchCase="fuel">
+    </ng-template>
+    <ng-template ngSwitchCase="fuel">
         <gauge max="15" [value]="item.fuel">&nbsp;</gauge>
-    </template>
-    <template ngSwitchCase="status">
+    </ng-template>
+    <ng-template ngSwitchCase="status">
         <checkerboard cols="7" rows="5" *ngIf="item.finished"></checkerboard>
         <span *ngIf="!item.finished && item.pit" class="pit">PIT</span>
-    </template>
+    </ng-template>
 </div>

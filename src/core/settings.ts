@@ -184,6 +184,9 @@ export class Settings {
           subject.next(value);
         }
       });
+    }).then(() => {
+      // convert to void
+      return;
     });
   }
 }

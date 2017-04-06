@@ -69,7 +69,7 @@ export class RaceSession {
     this.grid = timer.groupBy(([id]) => id, ([_id, time]) => time).map(group => {
       type TimeInfo = [number, number, number, number, boolean];
       this.active |= (1 << group.key);
-      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time): TimeInfo => {
+      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time: number): TimeInfo => {
         if (time > prev) {
           ++laps;
           if (!fini && this.isFinished(laps)) {

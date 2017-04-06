@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { IonicApp, IonicModule } from 'ionic-angular';
 
@@ -42,6 +43,8 @@ export function createTranslateLoader(http: Http) {
     RootPage
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(AppComponent),
     IonicStorageModule.forRoot(/* TODO: config */),
     TranslateModule.forRoot({

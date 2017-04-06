@@ -1,6 +1,6 @@
-<template ngFor let-peripheral [ngForOf]="peripherals | async">
+<ng-template ngFor let-peripheral [ngForOf]="peripherals | async">
   <button ion-item menuClose (click)="onSelect(peripheral)" *ngIf="!peripheral.equals(selected)">
     <h2>{{peripheral.name}}</h2>
     <h4>{{peripheral.address}}</h4>
   </button>
-</template>
+</ng-template>

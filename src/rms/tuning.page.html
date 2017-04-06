@@ -24,10 +24,14 @@
         </slant>
       </ion-col>
       <ion-col center class="name" showWhen="landscape">
-        {{(drivers | async)[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}
+        <span class="centered">
+          {{(drivers | async)[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}
+        </span>
       </ion-col>
       <ion-col center class="code" showWhen="portrait">
-        {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
+        <span class="centered">
+          {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
+        </span>
       </ion-col>
       <ion-col center class="range">
         <ion-range no-padding min="0" max="15" snaps="true"
