@@ -7,7 +7,9 @@
 
 - Add confirm dialogs.
 
-- Upgrade ``ionic-storage``.
+- Ignore section times reported by Check Lane.
+
+- Upgrade to ``ionic`` v3.
 
 
 1.0.2 2017-04-01
