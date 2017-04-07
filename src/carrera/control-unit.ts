@@ -30,9 +30,9 @@ export class ControlUnit {
   private connection: Subject<ArrayBuffer>;
 
   private subscription: Subscription;
-  
+
   private requests = Array<DataView>();
-  
+
   private data: ConnectableObservable<DataView>;
 
   private status: Observable<DataView>;
@@ -45,7 +45,7 @@ export class ControlUnit {
         this.connection.next(POLL_COMMAND.buffer);
       }
     });
-    // TODO: different timeout for reconnect/polling 
+    // TODO: different timeout for reconnect/polling
     this.data = this.connection.timeout(CONNECTION_TIMEOUT).retryWhen(errors => {
       return this.reconnect(errors);
     }).do(() => {
@@ -100,7 +100,6 @@ export class ControlUnit {
       // TODO: check CRC
       return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
     }).map((view) => {
-      // TODO: check with new checklane
       return [view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10) ];
     }).distinctUntilChanged(
       // guard against repeated timings

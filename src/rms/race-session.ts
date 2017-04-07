@@ -48,7 +48,12 @@ export class RaceSession {
   constructor(private cu: ControlUnit, private options: RaceOptions) {
     let offset: number;
 
-    const timer = cu.getTimer().filter(([id]) => (this.mask & (1 << id)) == 0);
+    const timer = cu.getTimer().filter(([id]) => {
+      return (this.mask & (1 << id)) == 0
+    }).filter(([_id, _time, section]) => {
+      // TODO: support section times
+      return section === 1;
+    });
     const fuel = cu.getFuel();
     const pit = cu.getPit();
 
@@ -111,7 +116,7 @@ export class RaceSession {
       newgrid[event.id] = event;
       return newgrid;
     }, []).map((cars: Array<RaceItem>) => {
-      const ranks = cars.filter(car => !!car); 
+      const ranks = cars.filter(car => !!car);
       ranks.sort(compare);
       return ranks;
     });
