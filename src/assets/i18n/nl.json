@@ -74,9 +74,9 @@
     "falsestart": "Valse start!",
     "finallap": "Laatste Ronde!",
     "finished": "Race afgelopen!",
-    "fuel0": "Box onmiddellijk!",
-    "fuel1": "Box! Box! Box!",
-    "fuel2": "Box!",
+    "fuel0": "Tank leeg! Ga tanken!",
+    "fuel1": "Tijd om te tanken!",
+    "fuel2": "Bereid je voor om te tanken",
     "pitenter": "In pit!",
     "pitexit": "Verlaat pit!"
   }
