@@ -1,4 +1,4 @@
-1.1.0 UNRELEASED
+1.1.0 2017-04-11
 ----------------
 
 - Translate TTS notifications.
