@@ -17,12 +17,23 @@ export interface RaceItem {
   finished?: boolean
 }
 
+function numCompare(lhs: number, rhs: number) {
+  const r = lhs - rhs;
+  if (!isNaN(r)) {
+    return r;
+  } else if (isNaN(lhs)) {
+    return isNaN(rhs) ? 0 : 1;
+  } else {
+    return -1;
+  }
+}
+
 function timeCompare(lhs: RaceItem, rhs: RaceItem) {
   return (lhs.bestLap || Infinity) - (rhs.bestLap || Infinity);
 }
 
 function raceCompare(lhs: RaceItem, rhs: RaceItem) {
-  return (rhs.laps - lhs.laps) || (lhs.time - rhs.time);
+  return (rhs.laps - lhs.laps) || numCompare(lhs.time, rhs.time) || (lhs.id - rhs.id);
 }
 
 const COMPARE = {
@@ -46,8 +57,6 @@ export class RaceSession {
 
   // TODO: move settings handling/combine to race-control!
   constructor(private cu: ControlUnit, private options: RaceOptions) {
-    let offset: number;
-
     const timer = cu.getTimer().filter(([id]) => {
       return (this.mask & (1 << id)) == 0
     }).filter(([_id, _time, section]) => {
@@ -57,55 +66,23 @@ export class RaceSession {
     const fuel = cu.getFuel();
     const pit = cu.getPit();
 
+    this.mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
+
+    if (options.drivers) {
+      for (let i = options.drivers; i !== 6; ++i) {
+        this.mask |= (1 << i);
+      }
+      this.grid = this.createGrid(timer, fuel, pit, ~this.mask & 0xff);
+    } else {
+      this.grid = this.createGrid(timer, fuel, pit);
+    }
+
     const reset = Observable.merge(
       cu.getStart().distinctUntilChanged().filter(start => start != 0),
       cu.getState().distinctUntilChanged().filter(state => state == 'connected')
     ).map(value => {
       cu.setMask(this.mask);
     });
-
-    this.mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
-
-    this.grid = timer.groupBy(([id]) => id, ([_id, time]) => time).map(group => {
-      type TimeInfo = [number, number, number, number, boolean];
-      this.active |= (1 << group.key);
-      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time: number): TimeInfo => {
-        if (time > prev) {
-          ++laps;
-          if (!fini && this.isFinished(laps)) {
-            this.finish(group.key);
-            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, true];
-          } else {
-            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, fini];
-          }
-        } else {
-          return [time, NaN, bestlap, laps, fini];
-        }
-      }, [NaN, NaN, NaN, 0, false]);
-      // TODO: count when starting from pitlane, memoize lap for stats?
-      const pits = pit.map(mask => (mask & (1 << group.key)) != 0).distinctUntilChanged().scan(
-        ([count]: [number, boolean], pit: boolean) => {
-          return [pit ? count + 1 : count, pit]
-        }, [0, false]);
-      return times.combineLatest(
-        pits,
-        fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
-      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => ({
-        id: group.key,
-        time: time - (offset || (offset = time)),  // TODO: reconnect, CU timer reset...
-        lastLap: lastlap,
-        bestLap: bestlap,
-        laps: laps,
-        fuel: fuel,
-        pits: <number>pits,
-        pit: <boolean>pit,
-        finished: fini
-      })).do((car: RaceItem) => {
-        if (car.bestLap && (!this.bestlap.value || car.bestLap < this.bestlap.value.bestLap)) {
-          this.bestlap.next(car);
-        }
-      }).share();
-    }).share();
 
     const compare = COMPARE[options.mode];
 
@@ -151,6 +128,7 @@ export class RaceSession {
       }).share().startWith(options.time);
     }
 
+    this.cu.setMask(this.mask);
     this.cu.clearPosition();
     this.cu.reset();
   }
@@ -162,6 +140,65 @@ export class RaceSession {
   stop() {
     this.stopped = true;
     this.finish();
+  }
+
+  private createGrid(
+    timer: Observable<[number, number, number]>,
+    fuel: Observable<number[]>,
+    pits: Observable<number>,
+    mask = 0
+  ) {
+    const init = new Array<[number, number, number]>();
+    for (let i = 0; mask; ++i) {
+      if (mask & 1) {
+        init.push([i, NaN, undefined]);
+      }
+      mask >>>= 1;
+    }
+
+    let offset: number;
+    return timer.startWith(...init).groupBy(([id]) => id, ([_id, time]) => time).map(group => {
+      type TimeInfo = [number, number, number, number, boolean];
+      this.active |= (1 << group.key);
+      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time: number): TimeInfo => {
+        if (time > prev) {
+          ++laps;
+          if (!fini && this.isFinished(laps)) {
+            //console.log('car ', group.key, ' finished');
+            this.finish(group.key);
+            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, true];
+          } else {
+            //console.log('car ', group.key, ' not finished');
+            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, fini];
+          }
+        } else {
+          //console.log('car ', group.key, ' no time');
+          return [time, NaN, bestlap, laps, fini];
+        }
+      }, [NaN, NaN, NaN, 0, false]);
+      return times.combineLatest(
+        pits.map(mask => (mask & (1 << group.key)) != 0).distinctUntilChanged().scan(
+        ([count]: [number, boolean], inpit: boolean) => {
+          return [inpit ? count + 1 : count, inpit]
+        }, [0, false]),
+        fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
+      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => ({
+        id: group.key,
+        time: time - (offset || (offset = time)),  // TODO: reconnect, CU timer reset...
+        lastLap: lastlap,
+        bestLap: bestlap,
+        laps: laps,
+        fuel: fuel,
+        pits: <number>pits,
+        pit: <boolean>pit,
+        finished: fini
+      })).do((car: RaceItem) => {
+        //console.log('race item ', car.id, car);
+        if (car.bestLap && (!this.bestlap.value || car.bestLap < this.bestlap.value.bestLap)) {
+          this.bestlap.next(car);
+        }
+      }).publishReplay(1).refCount();
+    }).publishReplay().refCount();
   }
 
   private finish(id?: number) {

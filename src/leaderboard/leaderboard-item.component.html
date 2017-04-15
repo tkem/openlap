@@ -19,7 +19,7 @@
                 {{item.time | time:'m:ss.sss'}}
             </ng-template>
             <ng-template ngSwitchCase="0">
-                +{{(item.time - items[0].time) | time:'s.sss'}}
+                {{(item.time - items[0].time) | time:'+s.sss'}}
             </ng-template>
             <ng-template ngSwitchCase="1">
                 +1 Lap

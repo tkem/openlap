@@ -131,7 +131,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
         const events = [];
-        if (!curr.finished) {
+        if (!curr.finished && curr.time) {
           if (curr.pit && !prev.pit) {
             events.push(['pitenter', curr.id]);
           }

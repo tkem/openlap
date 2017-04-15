@@ -70,6 +70,7 @@ export class RaceOptions {
   time: number;
   pause: false;
   slotmode = false;
+  drivers?: number;
   auto = false;
   pace = false;
 }
