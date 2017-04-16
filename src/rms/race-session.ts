@@ -5,6 +5,15 @@ import { RaceOptions } from '../core';
 
 const TIMER_INTERVAL = 500;
 
+function createMask(first: number, last: number) {
+  let mask = 0;
+  while (first !== last) {
+    mask |= (1 << first);
+    ++first;
+  }
+  return mask;
+}
+
 export interface RaceItem {
   id: number
   time: number;
@@ -14,7 +23,11 @@ export interface RaceItem {
   fuel?: number;
   pits?: number;
   pit?: boolean;
-  finished?: boolean
+  finished?: boolean;
+  sector: number;
+  sector1?: number;
+  sector2?: number;
+  sector3?: number;
 }
 
 function numCompare(lhs: number, rhs: number) {
@@ -47,7 +60,6 @@ export class RaceSession {
   ranking: Observable<RaceItem[]>;
   lap: Observable<number[]>;                      // current/finished
   finished = new BehaviorSubject(false);          // TODO: event?
-  bestlap = new BehaviorSubject<RaceItem>(null);  // TODO: event?
   timer = Observable.of(0);                       // TODO: event?
   started = false;
   stopped = false;
@@ -57,25 +69,7 @@ export class RaceSession {
 
   // TODO: move settings handling/combine to race-control!
   constructor(private cu: ControlUnit, private options: RaceOptions) {
-    const timer = cu.getTimer().filter(([id]) => {
-      return (this.mask & (1 << id)) == 0
-    }).filter(([_id, _time, section]) => {
-      // TODO: support section times
-      return section === 1;
-    });
-    const fuel = cu.getFuel();
-    const pit = cu.getPit();
-
-    this.mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
-
-    if (options.drivers) {
-      for (let i = options.drivers; i !== 6; ++i) {
-        this.mask |= (1 << i);
-      }
-      this.grid = this.createGrid(timer, fuel, pit, ~this.mask & 0xff);
-    } else {
-      this.grid = this.createGrid(timer, fuel, pit);
-    }
+    const compare = COMPARE[options.mode];
 
     const reset = Observable.merge(
       cu.getStart().distinctUntilChanged().filter(start => start != 0),
@@ -83,8 +77,26 @@ export class RaceSession {
     ).map(value => {
       cu.setMask(this.mask);
     });
+    const timer = cu.getTimer().filter(([id]) => {
+      return !(this.mask & (1 << id));
+    }).scan(([_, [prev, offset, then]], [id, time, group]) => {
+      // TODO: combine with reset?
+      const now = Date.now();
+      if (time < prev) {
+        offset = ((now - then + prev) || 0) - time;
+      }
+      return [[id, time + offset, group], [time, offset, now]];
+    }, [[], [Infinity, 0, NaN]]).map(([t]) => t);
+    const fuel = cu.getFuel();
+    const pit = cu.getPit();
 
-    const compare = COMPARE[options.mode];
+    this.mask = (options.auto ? 0 : 1 << 6) | (options.pace ? 0 : 1 << 7);
+    if (options.drivers) {
+      this.mask |= createMask(options.drivers, 6);
+      this.grid = this.createGrid(timer, fuel, pit, ~this.mask & 0xff);
+    } else {
+      this.grid = this.createGrid(timer, fuel, pit);
+    }
 
     this.ranking = reset.startWith(null).combineLatest(this.grid).map(([_reset, grid]) => {
       return grid;  // for reset side effects only...
@@ -104,13 +116,13 @@ export class RaceSession {
         if (options.laps && completed >= options.laps) {
           this.finish();
         }
-        if (!this.finished.value && event.laps >= current) {
+        if (!this.finished.value && event.laps >= current && event.time) {
           current = event.laps + 1;
         }
       }
       return [current, completed];
-    }, [0, 0]).share().startWith([0, 0]).distinctUntilChanged(([x1, x2], [y1, y2]) => {
-      return x1 == y1 && x2 == y2;
+    }, [0, 0]).share().startWith([0, 0]).distinctUntilChanged((x, y) => {
+      return x[0] === y[0] && x[1] === y[1];
     });
 
     if (options.time) {
@@ -155,48 +167,50 @@ export class RaceSession {
       }
       mask >>>= 1;
     }
-
-    let offset: number;
-    return timer.startWith(...init).groupBy(([id]) => id, ([_id, time]) => time).map(group => {
-      type TimeInfo = [number, number, number, number, boolean];
+    return timer.startWith(...init).groupBy(([id]) => id).map(group => {
+      type TimeInfo = [number[][], number, boolean];
       this.active |= (1 << group.key);
-      const times = group.scan(([prev, _lastlap, bestlap, laps, fini]: TimeInfo, time: number): TimeInfo => {
-        if (time > prev) {
-          ++laps;
-          if (!fini && this.isFinished(laps)) {
-            //console.log('car ', group.key, ' finished');
-            this.finish(group.key);
-            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, true];
-          } else {
-            //console.log('car ', group.key, ' not finished');
-            return [time, time - prev, Math.min(time - prev, bestlap || Infinity), laps, fini];
+
+      const times = group.scan(([times, bestlap, finished]: TimeInfo, [id, time, sector]: [number, number, number]): TimeInfo => {
+        if (sector === 1) {
+          const prev = times.length ? times[times.length - 1][0] : NaN;
+          bestlap = Math.min(time - prev, bestlap || Infinity);
+          if (!finished && this.isFinished(times.length)) {
+            this.finish(id);
+            finished = true;
           }
-        } else {
-          //console.log('car ', group.key, ' no time');
-          return [time, NaN, bestlap, laps, fini];
+          times.push([time]);
+        } else if (times.length) {
+          times[times.length - 1][sector - 1] = time;
         }
-      }, [NaN, NaN, NaN, 0, false]);
+        return [times, bestlap, finished];
+      }, <TimeInfo>[[], NaN, false]);
+
       return times.combineLatest(
         pits.map(mask => (mask & (1 << group.key)) != 0).distinctUntilChanged().scan(
         ([count]: [number, boolean], inpit: boolean) => {
           return [inpit ? count + 1 : count, inpit]
         }, [0, false]),
         fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
-      ).map(([[time, lastlap, bestlap, laps, fini], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => ({
-        id: group.key,
-        time: time - (offset || (offset = time)),  // TODO: reconnect, CU timer reset...
-        lastLap: lastlap,
-        bestLap: bestlap,
-        laps: laps,
-        fuel: fuel,
-        pits: <number>pits,
-        pit: <boolean>pit,
-        finished: fini
-      })).do((car: RaceItem) => {
-        //console.log('race item ', car.id, car);
-        if (car.bestLap && (!this.bestlap.value || car.bestLap < this.bestlap.value.bestLap)) {
-          this.bestlap.next(car);
-        }
+      ).map(([[times, bestlap, fini], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => {
+        const laps = times.length ? times.length - 1 : 0;
+        const curr = times[times.length - 1] || [];
+        const prev = laps ? times[times.length - 2] : [NaN, NaN, NaN];
+        return {
+          id: group.key,
+          time: curr[0],
+          lastLap: curr[0] - prev[0],
+          bestLap: bestlap,
+          laps: laps,
+          fuel: fuel,
+          pits: <number>pits,
+          pit: <boolean>pit,
+          finished: fini,
+          sector: curr.length - 1 || 3,
+          sector1: curr[1] ? curr[1] - curr[0] : prev[1] - prev[0],
+          sector2: curr[2] ? curr[2] - curr[1] : prev[2] - prev[1],
+          sector3: curr[0] - prev[2]
+        };
       }).publishReplay(1).refCount();
     }).publishReplay().refCount();
   }

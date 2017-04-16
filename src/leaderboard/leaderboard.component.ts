@@ -21,7 +21,11 @@ export class LeaderboardItem {
   fuel?: number;
   pits?: number;
   pit?: boolean;
-  finished?: boolean
+  finished?: boolean;
+  sector: number;
+  sector1?: number;
+  sector2?: number;
+  sector3?: number;
 }
 
 @Component({
@@ -55,5 +59,9 @@ export class LeaderboardComponent {
 
   get items() {
     return this._items;
+  }
+
+  ngOnInit() {
+    console.log('Creating leaderboard');
   }
 }

@@ -110,6 +110,14 @@ ion-grid.tuning {
     }
 }
 
+.swiper-slide {
+    align-items: inherit !important;
+}
+
+.swiper-pagination-bullet {
+    background: lightgray;
+}
+
 .centered {
     display: flex;
     align-self: center;

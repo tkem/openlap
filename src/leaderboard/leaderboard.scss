@@ -1,7 +1,7 @@
 leaderboard {
     display: block;
     width: 100%;
-    
+
     .row {
         display: flex;
         flex-direction: row;
@@ -40,27 +40,19 @@ leaderboard {
         text-align: right;
         width: 6em;
     }
-    .bestlap {
+    .bestlap, .lastlap {
         text-align: right;
         width: 5em;
     }
-    .gap {
+    .sector1, .sector2, .sector3 {
+        text-align: right;
+        width: 4.5em;
+    }
+    .gap, .int {
         text-align: right;
         width: 5em;
     }
-    .int {
-        text-align: right;
-        width: 5em;
-    }
-    .lastlap {
-        text-align: right;
-        width: 5em;
-    }
-    .laps {
-        text-align: right;
-        width: 3em;
-    }
-    .pits {
+    .laps, .pits {
         text-align: right;
         width: 3em;
     }
@@ -79,6 +71,10 @@ leaderboard {
 
     span.bestlap {
         color: #0f0;
+    }
+
+    span.sector {
+        color: yellow !important;
     }
 
     span.allbest {

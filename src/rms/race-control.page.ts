@@ -15,26 +15,40 @@ import { RaceSession } from './race-session';
 import { Observable, Subscription } from 'rxjs';
 import 'rxjs/observable/fromEvent';
 
-const FIELDS = {
-  'practice': [
-    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
-    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status']
-  ],
-  'qualifying': [
-    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'status'],
-    ['position', 'code', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status'],
-    ['position', 'number', 'name', 'bestlap', 'gap', 'int', 'lastlap', 'laps', 'fuel', 'status']
-  ],
-  'race': [
-    ['position', 'code', 'time', 'bestlap', 'lastlap', 'laps', 'status'],
-    ['position', 'number', 'name', 'time', 'bestlap', 'lastlap', 'laps', 'status'],
-    ['position', 'code', 'time', 'bestlap', 'lastlap', 'laps', 'pits', 'fuel', 'status'],
-    ['position', 'number', 'name', 'time', 'bestlap', 'lastlap', 'laps', 'pits', 'fuel', 'status']
-  ]
+const ORIENTATION = {
+  portrait: 'position code',
+  landscape: 'position number name'
 };
+
+const FIELDS = [{
+  // no fuel/pit lane
+  practice: [
+    'bestlap gap int lastlap laps status',
+    'bestlap sector1 sector2 sector3 lastlap status'
+  ],
+  qualifying: [
+    'bestlap gap int lastlap laps status',
+    'bestlap sector1 sector2 sector3 lastlap status'
+  ],
+  race: [
+    'time bestlap lastlap laps status',
+    'time sector1 sector2 sector3 laps status',
+  ]
+}, {
+  // with fuel/pit lane
+  practice: [
+    'bestlap gap int lastlap laps fuel status',
+    'bestlap sector1 sector2 sector3 lastlap fuel status'
+  ],
+  qualifying: [
+    'bestlap gap int lastlap laps fuel status',
+    'bestlap sector1 sector2 sector3 lastlap fuel status'
+  ],
+  race: [
+    'time bestlap lastlap laps pits fuel status',
+    'time sector1 sector2 sector3 laps fuel status'
+  ]
+}];
 
 @Component({
   providers: [CONTROL_UNIT_PROVIDER],
@@ -44,7 +58,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
 
   options: any;
 
-  fields: Observable<string[]>;
+  slides: Observable<string[][]>;
   speechEnabled: Observable<boolean>;
   sortorder: Observable<string>;
   lapcount: Observable<{count: number, current: number, total: number}>;
@@ -74,9 +88,10 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return window.innerWidth < window.innerHeight ? 'portrait' : 'landscape';
     }).distinctUntilChanged();
 
-    this.fields = mode.startWith(0).combineLatest(orientation).map(([mode, orientation]) => {
-      const index = (orientation === 'portrait' ? 0 : 1) + (mode & 0x03 ? 2 : 0);
-      return FIELDS[this.options.mode][index];
+    this.slides = mode.startWith(0).combineLatest(orientation).map(([mode, orientation]) => {
+      return FIELDS[mode & 0x03 ? 1 : 0][this.options.mode].map(s => {
+        return (ORIENTATION[orientation] + ' ' + s).split(/\s+/)
+      });
     });
 
     this.speechEnabled = settings.getOptions().map(options => options.speech);
@@ -126,31 +141,35 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return Observable.combineLatest(...observables);
     });
 
-    // sort in order of importance for speech
+    let bestLap = Infinity;
     const events = Observable.merge(
       session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
         // TODO: driver finished, driver best lap, ...
         const events = [];
+        if (curr.bestLap < bestLap) {
+          bestLap = curr.bestLap;
+          // TODO: use lap count?
+          if (curr.laps >= 3) {
+            events.push(['bestlap', curr.id]);
+          }
+        }
         if (!curr.finished && curr.time) {
+          if (curr.fuel < prev.fuel) {
+            events.push(['fuel' + curr.fuel, curr.id]);
+          }
           if (curr.pit && !prev.pit) {
             events.push(['pitenter', curr.id]);
           }
           if (!curr.pit && prev.pit) {
             events.push(['pitexit', curr.id]);
           }
-          if (curr.fuel < prev.fuel) {
-            events.push(['fuel' + curr.fuel, curr.id]);
-          }
         }
         return Observable.from(events);
       }),
-      session.bestlap.filter(car => car && car.laps >= 3).map(car => {
-        return ['bestlap', car.id];
-      }),
-      this.start.distinctUntilChanged().filter(value => value == 9).map(() => {
+      this.start.distinctUntilChanged().filter(value => value === 9).map(() => {
         return ['falsestart', null];
       }),
-      this.lapcount.distinctUntilChanged((x, y) => x.current == y.current).filter(laps => {
+      this.lapcount.distinctUntilChanged((x, y) => x.current === y.current).filter(laps => {
         return this.options.laps && laps.current === this.options.laps && !session.finished.value;
       }).map(() => {
         return ['finallap', null];
@@ -166,7 +185,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return ranks.map((item, index) => {
         return Object.assign({}, item, { position: index, driver: drivers[item.id] });
       });
-    });
+    }).share();
 
     if (this.subscription) {
       this.subscription.unsubscribe();

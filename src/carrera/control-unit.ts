@@ -75,27 +75,27 @@ export class ControlUnit {
     }
   }
 
-  getState() {
+  getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
     return this.state.asObservable();
   }
 
-  getFuel() {
+  getFuel(): Observable<ArrayLike<number>> {
     return this.status.map((data: DataView) => data.getUint8Array(2, 8));
   }
 
-  getStart() {
+  getStart(): Observable<number> {
     return this.status.map((data: DataView) => data.getUint4(10));
   }
 
-  getMode() {
+  getMode(): Observable<number> {
     return this.status.map((data: DataView) => data.getUint4(11));
   }
 
-  getPit() {
+  getPit(): Observable<number> {
     return this.status.map((data: DataView) => data.getUint8(12));
   }
 
-  getTimer() {
+  getTimer(): Observable<[number, number, number]> {
     return this.data.filter((view: DataView) => {
       // TODO: check CRC
       return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';

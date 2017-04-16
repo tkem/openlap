@@ -27,12 +27,15 @@ class Car {
 
   fuel: number;
 
-  lap = new EventEmitter<Car>();
+  sector = 0;
 
   pit = false;
 
-  private minLapTime: number;
-  private maxLapTime: number;
+  events = new EventEmitter<Car>();
+
+  private minSectorTime: number;
+  private maxSectorTime: number;
+  private sectors: number;
   private timeout: any;
 
   constructor(id: string) {
@@ -40,9 +43,10 @@ class Car {
     this.fuel = this.id == '7' || this .id == '8' ? 0 : 0xff;
   }
 
-  start(minLapTime, maxLapTime, delay=0) {
-    this.minLapTime = minLapTime;
-    this.maxLapTime = maxLapTime;
+  start(minSectorTime, maxSectorTime, sectors=1, delay=0) {
+    this.minSectorTime = minSectorTime;
+    this.maxSectorTime = maxSectorTime;
+    this.sectors = sectors;
     this.timeout = setTimeout(() => this.onNext(), delay);
   }
 
@@ -53,37 +57,40 @@ class Car {
   private onRefuel() {
     this.fuel += 0x10;
     if (this.fuel >= random(0xc0, 0xf0)) {
-      this.timeout = setTimeout(() => this.onNext(), this.sectionTime());
+      this.timeout = setTimeout(() => this.onNext(), this.fuelTime());
     } else {
       this.timeout = setTimeout(() => this.onRefuel(), 500);
     }
   }
 
   private onNext() {
+    if (++this.sector > this.sectors) {
+      this.sector = 1;
+    }
     if (this.id == '7' || this .id == '8') {
-      this.lap.emit(this);
-      this.timeout = setTimeout(() => this.onNext(), random(this.minLapTime, this.maxLapTime));
+      this.events.emit(this);
+      this.timeout = setTimeout(() => this.onNext(), random(this.minSectorTime, this.maxSectorTime));
     } else {
-      if (this.fuel >= 0x10) {
-        this.lap.emit(this);
+      if (this.fuel >= 0x10 || this.sector !== 1) {
+        this.events.emit(this);
       }
-      if (this.fuel < random(0x10, 0x30)) {
+      if (this.fuel < random(0x10, 0x30) && this.sector === 1) {
         this.pit = true;
         this.timeout = setTimeout(() => this.onRefuel(), 500);
       } else {
-        this.timeout = setTimeout(() => this.onFuel(), this.sectionTime());
+        this.timeout = setTimeout(() => this.onFuel(), this.fuelTime());
       }
     }
   }
 
   private onFuel() {
     this.pit = false;
-    this.fuel = Math.max(0, this.fuel - random(0x08, 0x20));
-    this.timeout = setTimeout(() => this.onNext(), this.sectionTime());
+    this.fuel = Math.max(0, this.fuel - random(0x04, 0x10));
+    this.timeout = setTimeout(() => this.onNext(), this.fuelTime());
   }
 
-  private sectionTime() {
-    return random(this.minLapTime, this.maxLapTime) / 2;
+  private fuelTime() {
+    return random(this.minSectorTime, this.maxSectorTime) / 2;
   }
 }
 
@@ -108,9 +115,10 @@ class DemoPeripheral implements Peripheral {
 
   private config = {
     numCars: 8,
-    maxStartTime: 5000,
-    minLapTime: 10000,
-    maxLapTime: 12000
+    numSectors: 3,
+    maxStartTime: 1500,
+    minSectorTime: 3000,
+    maxSectorTime: 4000
   };
 
   private version: ArrayBuffer;
@@ -122,7 +130,7 @@ class DemoPeripheral implements Peripheral {
   constructor(public name: string, private mode: number, private logger: Logger) {
     this.version = DataView.from('0', ...VERSION.split('').map(c => c.charCodeAt(0))).buffer;
     for (let i = 0; i != this.config.numCars; ++i) {
-      this.cars[i].lap.subscribe(car => this.laps.push(this.createLap(car.id)));
+      this.cars[i].events.subscribe(car => this.laps.push(this.createLap(car.id, car.sector)));
     }
     this.startAll();
   }
@@ -197,7 +205,7 @@ class DemoPeripheral implements Peripheral {
     };
   }
 
-  private createLap(id: string) {
+  private createLap(id: string, group = 1) {
     // TODO: use DataView, add CRC
     const time = Date.now() - this.start;
     return DataView.from(
@@ -211,7 +219,7 @@ class DemoPeripheral implements Peripheral {
       (time >> 12) & 0x0f,
       (time >> 0) & 0x0f,
       (time >> 4) & 0x0f,
-      1  // sensor group
+      group
     ).buffer;
   }
 
@@ -260,7 +268,7 @@ class DemoPeripheral implements Peripheral {
 
   private startAll() {
     for (let i = 0; i != this.config.numCars; ++i) {
-      this.cars[i].start(this.config.minLapTime, this.config.maxLapTime, random(0, this.config.maxStartTime));
+      this.cars[i].start(this.config.minSectorTime, this.config.maxSectorTime, this.config.numSectors, random(0, this.config.maxStartTime));
     }
   }
 

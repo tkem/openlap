@@ -43,6 +43,21 @@
             {{item.lastLap | time:'s.sss'}}
         </span>
     </ng-template>
+    <ng-template ngSwitchCase="sector1">
+        <span [ngClass]="{sector: item.sector == 1}">
+            {{item.sector1 | time:'s.sss'}}
+        </span>
+    </ng-template>
+    <ng-template ngSwitchCase="sector2">
+        <span [ngClass]="{sector: item.sector == 2}">
+            {{item.sector2 | time:'s.sss'}}
+        </span>
+    </ng-template>
+    <ng-template ngSwitchCase="sector3">
+        <span [ngClass]="{sector: item.sector == 3}">
+            {{item.sector3 | time:'s.sss'}}
+        </span>
+    </ng-template>
     <ng-template ngSwitchCase="laps">
         {{item.laps}}
     </ng-template>
