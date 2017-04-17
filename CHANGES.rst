@@ -1,3 +1,11 @@
+1.2.0 UNRELEASED
+----------------
+
+- Add basic Check Lane support.
+
+- Optionally set number of drivers for race and qualifying.
+
+
 1.1.0 2017-04-11
 ----------------
 
