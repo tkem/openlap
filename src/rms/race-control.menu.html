@@ -1,8 +1,12 @@
 <ion-item-group>
-  <button ion-item (click)="restart()">
-    <span translate>Restart race</span>&hellip;
-  </button>
+  <ion-item>
+    <ion-label translate>Order by number</ion-label>
+    <ion-checkbox [(ngModel)]="options.fixedorder" (ionChange)="update()"></ion-checkbox>
+  </ion-item>
   <button ion-item [disabled]="!params.active" (click)="stop()">
     <span translate>Cancel race</span>&hellip;
+  </button>
+  <button ion-item (click)="restart()">
+    <span translate>Restart race</span>&hellip;
   </button>
 </ion-item-group>

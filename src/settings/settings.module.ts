@@ -13,14 +13,10 @@ import { LicensesPage } from './licenses.page';
 import { LoggingMenu } from './logging.menu';
 import { LoggingPage } from './logging.page';
 import { NotificationsPage } from './notifications.page';
-import { OptionsPage } from './options.page';
-import { SettingsMenu } from './settings.menu';
 import { SettingsPage } from './settings.page';
 
 @NgModule({
   declarations: [
-    SettingsMenu,
-    SettingsPage,
     AboutPage,
     ColorsPage,
     DriversPage,
@@ -28,11 +24,9 @@ import { SettingsPage } from './settings.page';
     LoggingMenu,
     LoggingPage,
     NotificationsPage,
-    OptionsPage
+    SettingsPage
   ],
   entryComponents: [
-    SettingsMenu,
-    SettingsPage,
     AboutPage,
     ColorsPage,
     DriversPage,
@@ -40,7 +34,7 @@ import { SettingsPage } from './settings.page';
     LoggingMenu,
     LoggingPage,
     NotificationsPage,
-    OptionsPage,
+    SettingsPage
   ],
   exports: [
     DriversPage,

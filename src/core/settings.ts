@@ -31,7 +31,6 @@ const NOTIFICATIONS = {
 
 export class Options {
   debug = false;
-  currentlap = false;
   fixedorder = false;
   fullscreen = false;
   language = '';

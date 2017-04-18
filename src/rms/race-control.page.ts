@@ -61,7 +61,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   slides: Observable<string[][]>;
   speechEnabled: Observable<boolean>;
   sortorder: Observable<string>;
-  lapcount: Observable<{count: number, current: number, total: number}>;
+  lapcount: Observable<{count: number, total: number}>;
 
   start: Observable<number>;
   lights: Observable<number>;
@@ -119,13 +119,12 @@ export class RaceControlPage implements OnDestroy, OnInit {
   onStart() {
     const session = this.session = new RaceSession(this.cu, this.options);
 
-    this.lapcount = session.lap.combineLatest(this.settings.getOptions()).map(([[current, completed], options]) => {
+    this.lapcount = session.currentLap.map(lap => {
       return {
-        count: options.currentlap ? current : completed,
-        current: current,
+        count: lap,
         total: this.options.laps
       };
-    }).share().startWith({count: 0, current: 0, total: this.options.laps});
+    });
 
     const drivers = this.settings.getDrivers().switchMap(drivers => {
       const observables = drivers.map((obj, index) => {
@@ -169,8 +168,8 @@ export class RaceControlPage implements OnDestroy, OnInit {
       this.start.distinctUntilChanged().filter(value => value === 9).map(() => {
         return ['falsestart', null];
       }),
-      this.lapcount.distinctUntilChanged((x, y) => x.current === y.current).filter(laps => {
-        return this.options.laps && laps.current === this.options.laps && !session.finished.value;
+      this.lapcount.filter(laps => {
+        return this.options.laps && laps.count === this.options.laps && !session.finished.value;
       }).map(() => {
         return ['finallap', null];
       }),

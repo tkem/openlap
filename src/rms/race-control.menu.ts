@@ -1,18 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavParams, ViewController } from 'ionic-angular';
 
-import { I18nAlertController } from '../core';
+import { I18nAlertController, Options, Settings } from '../core';
 
 @Component({
   templateUrl: 'race-control.menu.html',
 })
-export class RaceControlMenu {
+export class RaceControlMenu implements OnDestroy, OnInit  {
+
+  options = new Options();
 
   params: {active: boolean, restart: any, stop: any};
 
-  constructor(private alert: I18nAlertController, private view: ViewController, params: NavParams) {
+  private subscription: any;
+
+  constructor(
+    private alert: I18nAlertController, 
+    private settings: Settings,
+    private view: ViewController, 
+    params: NavParams
+  ) {
     this.params = params.data;
+  }
+
+  ngOnInit() {
+    this.subscription = this.settings.getOptions().subscribe(options => {
+      this.options = options;
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  update() {
+    this.settings.setOptions(this.options);
   }
 
   restart() {

@@ -6,19 +6,27 @@
     <ion-title>
       <checkerboard cols="9" rows="5" *ngIf="session.finished | async"></checkerboard>
       <span [ngSwitch]="options.mode">
-        <ng-template ngSwitchCase="practice" translate>
+        <ng-template ngSwitchCase="practice">
           <span translate>Free Practice</span>
         </ng-template>
-        <ng-template ngSwitchCase="qualifying" translate>
+        <ng-template ngSwitchCase="qualifying">
           <span translate>Qualifying</span>
         </ng-template>
         <ng-template ngSwitchCase="race">
-          <span *ngIf="!options.laps">
-            {{ 'Lap {' + '{count}' + '}' | translate:(lapcount | async)}}
+          <span *ngIf="lapcount | async as laps; else race">
+            <span *ngIf="laps.count; else race">
+              <span *ngIf="laps.total; then race1; else race2"></span>
+              <ng-template #race1>
+                {{ 'Lap {' + '{count}' + '}/{' + '{total}' + '}' | translate:laps}}
+              </ng-template>
+              <ng-template #race2>
+                {{ 'Lap {' + '{count}' + '}' | translate:laps}}
+              </ng-template>
+            </span>
           </span>
-          <span *ngIf="options.laps">
-            {{ 'Lap {' + '{count}' + '}/{' + '{total}' + '}' | translate:(lapcount | async)}}
-          </span>
+          <ng-template #race>
+            <span translate>Race</span>
+          </ng-template>
         </ng-template>
       </span>
       <checkerboard cols="9" rows="5" *ngIf="session.finished | async"></checkerboard>

@@ -39,7 +39,9 @@
       </ion-item>
       <ion-item>
         <ion-label color="light" translate>Number of drivers</ion-label>
-        <ion-select formControlName="drivers">
+        <ion-select formControlName="drivers" 
+                    cancelText="{{'Cancel' | translate}}" 
+                    okText="{{'OK' | translate}}">
           <ion-option translate value="">Automatic</ion-option>
           <ion-option value="1">1</ion-option>
           <ion-option value="2">2</ion-option>

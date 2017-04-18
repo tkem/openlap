@@ -58,7 +58,7 @@ const COMPARE = {
 export class RaceSession {
   grid: Observable<Observable<RaceItem>>;
   ranking: Observable<RaceItem[]>;
-  lap: Observable<number[]>;                      // current/finished
+  currentLap: Observable<number>;
   finished = new BehaviorSubject(false);          // TODO: event?
   timer = Observable.of(0);                       // TODO: event?
   started = false;
@@ -110,20 +110,15 @@ export class RaceSession {
       return ranks;
     });
 
-    this.lap = this.grid.mergeAll().scan(([current, completed], event) => {
-      if (completed <= event.laps) {
-        completed = event.laps;
-        if (options.laps && completed >= options.laps) {
-          this.finish();
-        }
-        if (!this.finished.value && event.laps >= current && event.time) {
-          current = event.laps + 1;
-        }
+    this.currentLap = this.grid.mergeAll().scan((current, event) => {
+      if (current > event.laps) {
+        return current;
+      } else if (this.finished.value || !event.time) {
+        return event.laps;
+      } else {
+        return event.laps + 1;
       }
-      return [current, completed];
-    }, [0, 0]).share().startWith([0, 0]).distinctUntilChanged((x, y) => {
-      return x[0] === y[0] && x[1] === y[1];
-    });
+    }, 0).startWith(0).publishReplay(1).refCount().distinctUntilChanged();
 
     if (options.time) {
       this.timer = Observable.interval(TIMER_INTERVAL).withLatestFrom(

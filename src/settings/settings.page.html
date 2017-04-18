@@ -6,30 +6,43 @@
     <ion-title>
       <span translate>Settings</span>
     </ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="showMenu($event)">
-        <ion-icon name="more"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <button ion-item [navPush]="optionsPage">
-      <span translate>General</span>
-    </button>
+  <ion-item-group>
+    <ion-item>
+      <ion-label color="light" translate>Language</ion-label>
+      <ion-select [(ngModel)]="options.language" (ionChange)="update()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+        <ion-option translate value="">Default</ion-option>
+        <ion-option value="de">Deutsch</ion-option>
+        <ion-option value="en">English</ion-option>
+        <ion-option value="nl">Nederlands</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label translate>Fullscreen mode</ion-label>
+      <ion-toggle [(ngModel)]="options.fullscreen" (ionChange)="update()"></ion-toggle>
+    </ion-item>
     <button ion-item [navPush]="notificationsPage">
       <span translate>Notifications</span>
     </button>
     <button ion-item [navPush]="loggingPage">
       <span translate>Logging</span>
     </button>
+    <button ion-item (click)="reset()">
+      <span translate>Reset settings</span>
+    </button>
+  </ion-item-group>
+  <ion-item-group>
+    <ion-list-header>
+      <span translate>About</span>
+    </ion-list-header>
     <button ion-item [navPush]="licensesPage">
       <span translate>Open source licenses</span>
     </button>
     <button ion-item [navPush]="aboutPage">
       <span translate>About Open Lap</span>
     </button>
-  </ion-list>
+  </ion-item-group>
 </ion-content>
