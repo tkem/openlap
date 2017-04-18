@@ -8,12 +8,14 @@ In a nutshell, Open Lap lets you
 
 - connect your mobile device via Bluetooth using Carrera AppConnect®,
   or a suitable serial to USB On-The-Go adapter cable.
-- take it easy during free practice, or compete in lap or time based
-  qualifying and race sessions.
-- adjust vehicle speed, brake force and fuel tank size for each car
-  individually, even during a race or qualifying session.
+- take it easy during free practice, go for fastest lap in qualifying,
+  or compete in lap or time based race sessions.
 - get informed about important events, such as fastest laps or low
   fuel conditions, by personalized voice messages.
+- adjust vehicle speed, brake force and fuel tank size for each car
+  individually.
+- measure up to three intermediate or sector times (S1, S2, S3) using
+  Carrera® Check Lane or compatible equipment.
 
 Open Lap is available as an Android app from the `Google Play Store
 <https://play.google.com/store/apps/details?id=at.co.kemmer.openlap>`_.
@@ -25,21 +27,19 @@ preview unreleased versions.
 Building from Source
 ------------------------------------------------------------------------
 
-Open Lap is built using `Ionic 2 <http://ionic.io/2>`_.  To build the
-app for Android, please follow Ionic's `installation guide
-<http://ionicframework.com/docs/v2/getting-started/installation/>`_ to
-make sure you have everything needed for Android development.  Then
-run::
+Open Lap is built with `Ionic <http://ionicframework.com/>`_.  To
+build the Android app, please follow Ionic's `installation guide
+<http://ionicframework.com/docs/intro/installation/>`_ and make sure
+you have everything needed for Android development.  Then run::
 
   npm install
   npm run ionic:build
   ionic state restore
   ionic build android
 
-Please refer to the `Ionic CLI
-<http://ionicframework.com/docs/v2/cli/>`_ documentation for further
-information on how to run the application on an actual device, or in a
-Web browser or emulator for testing.
+Please refer to the `Ionic CLI <http://ionicframework.com/docs/cli/>`_
+documentation for further information on how to run the application on
+an actual device, or in a Web browser or emulator for testing.
 
 Due to lack of resources, Open Lap has *not* been tested on iOS, and
 is unlikely to run unchanged on that platform.  However, being a
@@ -50,8 +50,8 @@ please feel free to fork and give it a try!
 Contributing Translations
 ------------------------------------------------------------------------
 
-If you want to see Open Lap translated to your native language, start
-by having a look at the existing `translations <./src/assets/i18n>`_.
+If you'd like to see Open Lap in *your* native language, start by
+having a look at the existing `translations <./src/assets/i18n>`_.
 Open Lap uses `ngx-translate <http://www.ngx-translate.com/>`_ for
 internationalization, which stores translations as simple `JSON
 <http://www.json.org/>`_ files.  Just take one of the existing files
@@ -67,8 +67,8 @@ Copyright (c) 2016, 2017 Thomas Kemmer.
 
 Licensed under the `Apache License, Version 2.0`_.
 
-Carrera and Carrera AppConnect are registered trademarks of Stadlbauer
-Marketing + Vertrieb GmbH.
+Carrera® and Carrera AppConnect® are registered trademarks of
+Stadlbauer Marketing + Vertrieb GmbH.
 
 Open Lap is not an official Carrera® product, and is not affiliated
 with or endorsed by Stadlbauer Marketing + Vertrieb GmbH.

@@ -113,7 +113,7 @@ export class RaceSession {
     this.currentLap = this.grid.mergeAll().scan((current, event) => {
       if (current > event.laps) {
         return current;
-      } else if (this.finished.value || !event.time) {
+      } else if (this.finished.value || isNaN(event.time)) {
         return event.laps;
       } else {
         return event.laps + 1;
