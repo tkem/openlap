@@ -14,20 +14,18 @@ function createMask(first: number, last: number) {
   return mask;
 }
 
+// TODO: merge with leaderboard item...
 export interface RaceItem {
   id: number
   time: number;
   laps: number;
-  lastLap: number;
-  bestLap: number;
+  last: number[];
+  best: number[];
   fuel?: number;
-  pits?: number;
   pit?: boolean;
-  finished?: boolean;
+  pits?: number;
   sector: number;
-  sector1?: number;
-  sector2?: number;
-  sector3?: number;
+  finished?: boolean;
 }
 
 function numCompare(lhs: number, rhs: number) {
@@ -42,7 +40,7 @@ function numCompare(lhs: number, rhs: number) {
 }
 
 function timeCompare(lhs: RaceItem, rhs: RaceItem) {
-  return (lhs.bestLap || Infinity) - (rhs.bestLap || Infinity);
+  return (lhs.best[0] || Infinity) - (rhs.best[0] || Infinity);
 }
 
 function raceCompare(lhs: RaceItem, rhs: RaceItem) {
@@ -163,23 +161,30 @@ export class RaceSession {
       mask >>>= 1;
     }
     return timer.startWith(...init).groupBy(([id]) => id).map(group => {
-      type TimeInfo = [number[][], number, boolean];
+      type TimeInfo = [number[][], number[], number[], boolean];
       this.active |= (1 << group.key);
 
-      const times = group.scan(([times, bestlap, finished]: TimeInfo, [id, time, sector]: [number, number, number]): TimeInfo => {
+      const times = group.scan(([times, last, best, finished]: TimeInfo, [id, time, sector]: [number, number, number]): TimeInfo => {
+        const head = times[times.length - 1] || [];
         if (sector === 1) {
-          const prev = times.length ? times[times.length - 1][0] : NaN;
-          bestlap = Math.min(time - prev, bestlap || Infinity);
           if (!finished && this.isFinished(times.length)) {
             this.finish(id);
             finished = true;
           }
+          last[0] = time - head[0];
+          best[0] = Math.min(last[0], best[0] || Infinity);
+          if (head.length > 1) {
+            last[head.length] = time - head[head.length - 1];
+            best[head.length] = Math.min(last[head.length], best[head.length] || Infinity);
+          }
           times.push([time]);
-        } else if (times.length) {
-          times[times.length - 1][sector - 1] = time;
+        } else {
+          head[sector - 1] = time;
+          last[sector - 1] = time - head[sector - 2];
+          best[sector - 1] = Math.min(last[sector - 1], best[sector - 1] || Infinity);
         }
-        return [times, bestlap, finished];
-      }, <TimeInfo>[[], NaN, false]);
+        return [times, last, best, finished];
+      }, <TimeInfo>[[], [], [], false]);
 
       return times.combineLatest(
         pits.map(mask => (mask & (1 << group.key)) != 0).distinctUntilChanged().scan(
@@ -187,24 +192,20 @@ export class RaceSession {
           return [inpit ? count + 1 : count, inpit]
         }, [0, false]),
         fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
-      ).map(([[times, bestlap, fini], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => {
+      ).map(([[times, last, best, finished], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => {
         const laps = times.length ? times.length - 1 : 0;
         const curr = times[times.length - 1] || [];
-        const prev = laps ? times[times.length - 2] : [NaN, NaN, NaN];
         return {
           id: group.key,
           time: curr[0],
-          lastLap: curr[0] - prev[0],
-          bestLap: bestlap,
           laps: laps,
+          last: last,
+          best: best,
           fuel: fuel,
-          pits: <number>pits,
-          pit: <boolean>pit,
-          finished: fini,
+          pit: pit,
+          pits: pits,
           sector: curr.length - 1 || 3,
-          sector1: curr[1] ? curr[1] - curr[0] : prev[1] - prev[0],
-          sector2: curr[2] ? curr[2] - curr[1] : prev[2] - prev[1],
-          sector3: curr[0] - prev[2]
+          finished: finished
         };
       }).publishReplay(1).refCount();
     }).publishReplay().refCount();

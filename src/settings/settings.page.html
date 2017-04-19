@@ -27,9 +27,6 @@
     <button ion-item [navPush]="notificationsPage">
       <span translate>Notifications</span>
     </button>
-    <button ion-item [navPush]="loggingPage">
-      <span translate>Logging</span>
-    </button>
     <button ion-item (click)="reset()">
       <span translate>Reset settings</span>
     </button>
@@ -38,6 +35,9 @@
     <ion-list-header>
       <span translate>About</span>
     </ion-list-header>
+    <button ion-item [navPush]="loggingPage">
+      <span translate>Logging</span>
+    </button>
     <button ion-item [navPush]="licensesPage">
       <span translate>Open source licenses</span>
     </button>

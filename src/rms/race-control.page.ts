@@ -32,7 +32,7 @@ const FIELDS = [{
   ],
   race: [
     'time bestlap lastlap laps status',
-    'time sector1 sector2 sector3 laps status',
+    'time sector1 sector2 sector3 lastlap status',
   ]
 }, {
   // with fuel/pit lane
@@ -46,7 +46,7 @@ const FIELDS = [{
   ],
   race: [
     'time bestlap lastlap laps pits fuel status',
-    'time sector1 sector2 sector3 laps fuel status'
+    'time sector1 sector2 sector3 lastlap fuel status'
   ]
 }];
 
@@ -140,18 +140,18 @@ export class RaceControlPage implements OnDestroy, OnInit {
       return Observable.combineLatest(...observables);
     });
 
-    let bestLap = Infinity;
+    let best = [Infinity, Infinity, Infinity, Infinity];
     const events = Observable.merge(
       session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
-        // TODO: driver finished, driver best lap, ...
         const events = [];
-        if (curr.bestLap < bestLap) {
-          bestLap = curr.bestLap;
-          // TODO: use lap count?
-          if (curr.laps >= 3) {
-            events.push(['bestlap', curr.id]);
+        curr.best.forEach((time, index) => {
+          if ((time || Infinity) < best[index]) {
+            best[index] = time;
+            if (curr.laps >= 3) {
+              events.push([index ? 'bests' + index : 'bestlap', curr.id]);
+            }
           }
-        }
+        });
         if (!curr.finished && curr.time) {
           if (curr.fuel < prev.fuel) {
             events.push(['fuel' + curr.fuel, curr.id]);

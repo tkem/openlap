@@ -11,5 +11,5 @@ export class LeaderboardItemComponent {
   @Input() fields: string[];
   @Input() item: LeaderboardItem;
   @Input() items: LeaderboardItem[];
-  @Input() bestlap: number;
+  @Input() best: number[];
 }

@@ -16,11 +16,20 @@ export class NotificationsPage implements OnDestroy {
     id: 'finallap',
     label: 'Final lap'
   }, {
+    id: 'falsestart',
+    label: 'False start'
+  }, {
     id: 'bestlap',
     label: 'Fastest lap',
   }, {
-    id: 'falsestart',
-    label: 'False start'
+    id: 'bests1',
+    label: 'Fastest sector 1',
+  }, {
+    id: 'bests2',
+    label: 'Fastest sector 2',
+  }, {
+    id: 'bests3',
+    label: 'Fastest sector 3',
   }, {
     id: 'fuel2',
     label: 'Fuel < 20%'

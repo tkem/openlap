@@ -16,16 +16,13 @@ export class LeaderboardItem {
   position: number;
   time: number;
   laps: number;
-  lastLap: number;
-  bestLap: number;
+  last: number[];
+  best: number[];
   fuel?: number;
-  pits?: number;
   pit?: boolean;
+  pits?: number;
+  sector?: number;
   finished?: boolean;
-  sector: number;
-  sector1?: number;
-  sector2?: number;
-  sector3?: number;
 }
 
 @Component({
@@ -39,7 +36,7 @@ export class LeaderboardComponent {
 
   public ordered: LeaderboardItem[];
 
-  public bestlap: number;
+  public best: number[];
 
   @Input() fields: string[];
 
@@ -50,11 +47,18 @@ export class LeaderboardComponent {
     if (items) {
       this.ordered = [...items];
       this.ordered.sort(compare[this.order] || compare['position']);
+      this.best = items.map(item => item.best).reduce((acc, times) => {
+        times.forEach((time, index) => {
+          if (time < (acc[index] || Infinity)) {
+            acc[index] = time;
+          }
+        });
+        return acc;
+      }, []);
     } else {
       this.ordered = items;
+      this.best = [];
     }
-    // TBD: NaN if *any* item has no bestLap set
-    this.bestlap = Math.min(...(items || []).map(item => item.bestLap));
   }
 
   get items() {
