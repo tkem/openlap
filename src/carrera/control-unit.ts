@@ -99,6 +99,14 @@ export class ControlUnit {
     return this.data.filter((view: DataView) => {
       // TODO: check CRC
       return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
+    }).filter(view => {
+      const id = view.toString(1, 1);
+      if (id < '1' || id > '8') {
+        this.logger.warn('Invalid timer data:', view.toString());
+        return false;
+      } else {
+        return true;
+      }
     }).map((view) => {
       return [view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10) ];
     }).distinctUntilChanged(
