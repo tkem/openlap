@@ -1,11 +1,13 @@
 1.2.0 UNRELEASED
 ----------------
 
-- Add basic Check Lane support.
+- Add Carrera® Check Lane support.
+
+- Refactor and clean up settings.
 
 - Optionally set number of drivers for race and qualifying.
 
-- Refactor and clean up settings.
+- Fix Dutch translation typo (courtesy of Haarman).
 
 
 1.1.0 2017-04-11
