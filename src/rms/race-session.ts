@@ -75,6 +75,7 @@ export class RaceSession {
     ).map(value => {
       cu.setMask(this.mask);
     });
+    // create monotonic timer
     const timer = cu.getTimer().filter(([id]) => {
       return !(this.mask & (1 << id));
     }).scan(([_, [prev, offset, then]], [id, time, group]) => {
@@ -156,7 +157,7 @@ export class RaceSession {
     const init = new Array<[number, number, number]>();
     for (let i = 0; mask; ++i) {
       if (mask & 1) {
-        init.push([i, NaN, undefined]);
+        init.push([i, NaN, 0]);
       }
       mask >>>= 1;
     }
@@ -164,24 +165,27 @@ export class RaceSession {
       type TimeInfo = [number[][], number[], number[], boolean];
       this.active |= (1 << group.key);
 
-      const times = group.scan(([times, last, best, finished]: TimeInfo, [id, time, sector]: [number, number, number]): TimeInfo => {
-        const head = times[times.length - 1] || [];
-        if (sector === 1) {
+      const times = group.scan(([times, last, best, finished], [id, time, sensor]): TimeInfo => {
+        const tail = times[times.length - 1] || [];
+        if (sensor === 1) {
           if (!finished && this.isFinished(times.length)) {
             this.finish(id);
             finished = true;
           }
-          last[0] = time - head[0];
-          best[0] = Math.min(last[0], best[0] || Infinity);
-          if (head.length > 1) {
-            last[head.length] = time - head[head.length - 1];
-            best[head.length] = Math.min(last[head.length], best[head.length] || Infinity);
+          if (time !== tail[0]) {
+            last[0] = time - tail[0];
+            best[0] = Math.min(last[0], best[0] || Infinity);
+            times.push([time]);
           }
-          times.push([time]);
-        } else {
-          head[sector - 1] = time;
-          last[sector - 1] = time - head[sector - 2];
-          best[sector - 1] = Math.min(last[sector - 1], best[sector - 1] || Infinity);
+          if (tail.length > 1) {
+            last[tail.length] = time - tail[tail.length - 1];
+            best[tail.length] = Math.min(last[tail.length], best[tail.length] || Infinity);
+          }
+        } else if (sensor) {
+          const index = sensor - 1;
+          tail[index] = time;
+          last[index] = time - tail[index - 1];
+          best[index] = Math.min(last[index], best[index] || Infinity);
         }
         return [times, last, best, finished];
       }, <TimeInfo>[[], [], [], false]);

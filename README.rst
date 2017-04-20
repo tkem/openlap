@@ -65,6 +65,8 @@ License
 
 Copyright (c) 2016, 2017 Thomas Kemmer.
 
+Translations: Haarman (Nederlands).
+
 Licensed under the `Apache License, Version 2.0`_.
 
 Carrera® and Carrera AppConnect® are registered trademarks of
