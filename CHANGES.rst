@@ -1,4 +1,4 @@
-1.2.0 UNRELEASED
+1.2.0 2017-04-21
 ----------------
 
 - Add Carrera® Check Lane support.
