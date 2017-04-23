@@ -154,6 +154,11 @@ ion-input[type=number] {
     }
 }
 
+/* FIXME: background-color defaults to buttonface? */
+.text-input-clear-icon {
+    background-color: inherit;
+}
+
 @media (orientation: portrait) {
     leaderboard {
         font-size: 3vw;
