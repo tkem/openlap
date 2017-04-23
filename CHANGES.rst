@@ -1,4 +1,4 @@
-1.2.1 UNRELEASED
+1.2.1 2017-04-23
 ----------------
 
 - Fix "clear" icon background color issue.
