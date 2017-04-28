@@ -8,7 +8,7 @@ import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
 
 import { Backend } from './backend';
-import { Peripheral } from '../carrera';
+import { DataView, Peripheral } from '../carrera';
 import { Logger } from '../logging';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -30,6 +30,12 @@ function wrapNative<T>(observable: Observable<T>, zone: NgZone) {
   });
 }
 
+function bufferToString(buffer: ArrayBuffer) {
+  // TODO: special DataView.convertToString() method?
+  const v = new DataView(buffer);
+  return v.toString();
+}
+
 class BLEPeripheral implements Peripheral {
 
   type = 'ble';
@@ -37,6 +43,9 @@ class BLEPeripheral implements Peripheral {
   name: string;
 
   address: string;
+
+  private lastReceived: string;
+  private lastWritten: string;
 
   constructor(device: any, private ble: BLE, private logger: Logger, private zone: NgZone) {
     this.name = device.name;
@@ -101,7 +110,13 @@ class BLEPeripheral implements Peripheral {
   }
 
   private write(value: ArrayBuffer) {
-    //this.logger.debug('BLE write', this.address, value);
+    if (this.logger.isDebugEnabled()) {
+      const s = bufferToString(value);
+      if (s !== this.lastWritten) {
+        this.logger.debug('BLE write ' + s);
+        this.lastWritten = s;
+      }
+    }
     this.ble.writeWithoutResponse(this.address, SERVICE_UUID, OUTPUT_UUID, value).catch(error => {
       this.logger.error('BLE write error', error);
     });
@@ -121,9 +136,16 @@ class BLEPeripheral implements Peripheral {
   }
 
   private onNotify(data, subscriber) {
+    if (this.logger.isDebugEnabled()) {
+      const s = bufferToString(data);
+      if (s !== this.lastReceived) {
+        this.logger.debug('BLE received ' + s);
+        this.lastReceived = s;
+      }
+    }
     // strip trailing '$' and prepend missing '0'/'?' for notifications
     // TODO: only handle version specially and drop '?'?
-    let view = new Uint8Array(data);
+    const view = new Uint8Array(data);
     if (view[view.length - 1] == DOLLAR) {
       view.copyWithin(1, 0);
       view[0] = view.length == 6 ? 0x30 : 0x3f;

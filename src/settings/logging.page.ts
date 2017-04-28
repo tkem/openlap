@@ -11,8 +11,8 @@ import { LoggingMenu } from './logging.menu';
 })
 export class LoggingPage {
 
+  // FIXME: numeric values of levels are implementation details
   icons = [
-    {name: 'bug', style: {color: 'white'}},
     {name: 'bug', style: {color: 'green'}},
     {name: 'information-circle', style: {color: 'blue'}},
     {name: 'warning', style: {color: 'yellow'}},

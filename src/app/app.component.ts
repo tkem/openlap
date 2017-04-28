@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
         this.insomnia.keepAwake();
       }
       this.settings.getOptions().subscribe(options => {
-        this.logger.setLevel(options.debug ? 'debug' : 'info');
+        this.logger.setDebugEnabled(options.debug);
         this.enableFullScreen(options.fullscreen);
         this.setLanguage(options.language);
       });

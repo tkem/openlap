@@ -37,6 +37,9 @@ class SerialPeripheral implements Peripheral {
 
   private connected = false;
 
+  private lastReceived: string;
+  private lastWritten: string;
+
   constructor(private serial: Serial, private logger: Logger, private zone: NgZone) {}
 
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
@@ -63,6 +66,13 @@ class SerialPeripheral implements Peripheral {
             while ((index = buffer.indexOf(DOLLAR)) != -1) {
               let array = new Uint8Array(buffer.subarray(0, index));
               buffer = buffer.subarray(index + 1);
+              if (this.logger.isDebugEnabled()) {
+                const str = String.fromCharCode.apply(null, array);
+                if (str !== this.lastReceived) {
+                  this.logger.debug('Serial received ' + str);
+                  this.lastReceived = str;
+                }
+              }
               this.zone.run(() => subscriber.next(array.buffer));
             }
           },
@@ -97,7 +107,13 @@ class SerialPeripheral implements Peripheral {
   }
 
   private write(value: ArrayBuffer) {
-    let str = String.fromCharCode.apply(null, new Uint8Array(value));
+    const str = String.fromCharCode.apply(null, new Uint8Array(value));
+    if (this.logger.isDebugEnabled()) {
+      if (str !== this.lastWritten) {
+        this.logger.debug('Serial write ' + str);
+        this.lastWritten = str;
+      }
+    }
     this.serial.write('"' + str + '$').catch(error => {
       this.logger.error('Serial write error', error);
     });

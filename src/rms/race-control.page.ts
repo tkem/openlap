@@ -195,7 +195,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
       this.settings.getNotifications(),
       this.getTranslations('notifications')
     ).subscribe(([[event, driver], options, notifications, translations]) => {
-      this.logger.debug('New race event: ' + event, driver);
+      this.logger.debug('Race event: ' + event, driver);
       if (options.speech && notifications[event] && notifications[event].enabled) {
         let message = notifications[event].message || translations[event];
         if (driver && driver.name) {
@@ -209,14 +209,13 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.subscription.add(
       this.lapcount.subscribe(
         laps => {
-          this.logger.debug('New lap', laps);
           this.cu.setLap(laps.count);
         },
         error => {
           this.logger.error('Lap counter error:', error);
         },
         () => {
-          this.logger.warn('Lap counter finished');
+          this.logger.info('Lap counter finished');
         }
       )
     );

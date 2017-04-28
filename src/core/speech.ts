@@ -18,7 +18,6 @@ export class Speech {
   constructor(private tts: TextToSpeech, private logger: Logger) {}
 
   setLocale(locale: string) {
-    this.logger.debug('Speech locale set to ', locale);
     this.locale = locale;
   }
 
@@ -32,10 +31,9 @@ export class Speech {
     this.pending++;
     this.promise = this.promise.then(() => {
       if (--this.pending === 0) {
-        this.logger.debug('Speak (', this.locale, '): ', message);
         return this.tts.speak({text: message, locale: this.locale || 'en-us', rate: this.rate || 1.0});
       } else {
-        this.logger.debug('Speech cancelled', message);
+        this.logger.warn('Speech cancelled', message);
       }
     }).catch((error) => {
       this.logger.error('Speech error', error);

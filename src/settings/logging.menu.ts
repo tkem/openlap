@@ -42,14 +42,13 @@ export class LoggingMenu implements OnDestroy, OnInit {
   ngOnInit() {
     this.subscription = this.settings.getOptions().subscribe({
       next: (options) => {
-        this.logger.info('Logging settings: ', options);
         this.options = options;
       },
       error: (error) => {
         this.logger.error('Logging settings: ', error);
       },
       complete: () => {
-        this.logger.info('Logging settings complete');
+        this.logger.debug('Logging settings complete');
       }
     });
   }
