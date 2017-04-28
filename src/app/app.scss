@@ -15,7 +15,7 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
-@keyframes blink-flag {
+@keyframes blink-checkered-flag {
     0%   { opacity: 0; }
     20%  { opacity: 1; }
     40%  { opacity: 0; }
@@ -24,12 +24,36 @@
     100% { opacity: 1; }
 }
 
+@keyframes blink-yellow-flag {
+   0%   { color: yellow; }
+   50%  { color: #444; }
+   100% { color: yellow; }
+}
+
+@media (orientation: portrait) {
+    leaderboard {
+        font-size: 3vw;
+    }
+    .race-control {
+        font-size: 9vw;
+    }
+}
+
+@media (orientation: landscape) {
+    leaderboard {
+        font-size: 2.4vw;
+    }
+    .race-control {
+        font-size: 6vw;
+    }
+}
+
 .item.selected {
     background: color($colors, primary);
 }
 
-button[icon-only].active {
-    color: color($colors, primary);
+button.active {
+    color: color($colors, primary) !important;
 }
 
 ion-menu {
@@ -67,7 +91,7 @@ ion-modal {
 
 ion-title {
     checkerboard {
-        animation-name: blink-flag;
+        animation-name: blink-checkered-flag;
         animation-duration: 3s;
         vertical-align: -0.2em;
     }
@@ -76,12 +100,29 @@ ion-title {
     }
 }
 
-ion-footer {
-  ion-toolbar {
+.race-control {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    width: 100%;
+
     button {
-      background-color: inherit;
+        background-color: inherit;
+        color: $button-md-text-color;
+        font-size: inherit;
+        svg {
+            padding: 6px;
+            border-radius: 8px;
+            background-color: inherit;
+            box-shadow: 0 0 2px #444, inset 0 0 2px #666;
+            fill: currentColor;
+            height: 1em;
+        }
+        svg.toggle-button:active {
+            background-color: $subdued-text-color;
+        }
     }
-  }
 }
 
 ion-grid.tuning {
@@ -125,6 +166,17 @@ ion-grid.tuning {
     height: 100%;
 }
 
+dot-matrix {
+    color: #444;
+}
+
+dot-matrix.yellow-flag {
+    color: yellow;
+    animation-name: blink-yellow-flag;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+}
+
 ion-range.range-md.pristine {
     .range-knob {
         border: 2px solid $range-md-bar-background-color !important;
@@ -157,22 +209,4 @@ ion-input[type=number] {
 /* FIXME: background-color defaults to buttonface? */
 .text-input-clear-icon {
     background-color: inherit;
-}
-
-@media (orientation: portrait) {
-    leaderboard {
-        font-size: 3vw;
-    }
-    ion-footer ion-toolbar button {
-        font-size: 9vw;
-    }
-}
-
-@media (orientation: landscape) {
-    leaderboard {
-        font-size: 2.4vw;
-    }
-    ion-footer ion-toolbar button {
-        font-size: 6vw;
-    }
 }

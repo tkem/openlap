@@ -70,8 +70,10 @@
   "Start": "Start",
   "Stop time when paused": "Tijd bij onderbreking stoppen",
   "Time": "Tijd",
+  "Track clear": "Circuit vrijgegeven",
   "Translations": "Vertaling",
   "Tuning": "Tuning",
+  "Yellow flag": "Gele vlag",
 
   "notifications": {
     "locale": "nl-nl",
@@ -86,6 +88,8 @@
     "fuel1": "Tijd om te tanken!",
     "fuel2": "Bereid je voor om te tanken",
     "pitenter": "In pit!",
-    "pitexit": "Verlaat pit!"
+    "pitexit": "Verlaat pit!",
+    "yellowflag": "Aandacht: Gele vlag!",
+    "greenflag": "Circuit vrijgegeven!"
   }
 }

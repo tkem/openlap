@@ -70,8 +70,10 @@
   "Start": "Start",
   "Stop time when paused": "Stop time when paused",
   "Time": "Time",
+  "Track clear": "Track clear",
   "Translations": "Translations",
   "Tuning": "Tuning",
+  "Yellow flag": "Yellow flag",
 
   "notifications": {
     "locale": "en-us",
@@ -86,6 +88,8 @@
     "fuel1": "Box, please box!",
     "fuel2": "Prepare to box!",
     "pitenter": "In pit!",
-    "pitexit": "Back on track!"
+    "pitexit": "Back on track!",
+    "yellowflag": "Attention: Yellow flag!",
+    "greenflag": "Track clear!"
   }
 }

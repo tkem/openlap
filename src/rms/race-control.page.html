@@ -55,7 +55,13 @@
 </ion-content>
 
 <ion-footer padding-bottom>
-  <ion-toolbar text-center color="transparent">
+  <div class="race-control">
+    <button [disabled]="!(pitlane | async) || (lights | async) != 0" (click)="toggleSC()">
+      <svg viewBox="0 0 9 5" class="toggle-button">
+        <text text-anchor="middle" x="50%" y="2" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">PACE</text>
+        <text text-anchor="middle" x="50%" y="4" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">CAR</text>
+      </svg>
+    </button>
     <button (click)="cu.toggleStart()">
       <startlight [active]="(lights | async) >= 1" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 2" [blink]="blink | async"></startlight>
@@ -63,5 +69,8 @@
       <startlight [active]="(lights | async) >= 4" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 5" [blink]="blink | async"></startlight>
     </button>
-  </ion-toolbar>
+    <button (click)="session.toggleYellowFlag()">
+      <dot-matrix [ngClass]="{'yellow-flag': session.yellowFlag | async}" cols="9" rows="5"></dot-matrix>
+    </button>
+  </div>
 </ion-footer>

@@ -16,6 +16,12 @@ export class NotificationsPage implements OnDestroy {
     id: 'finallap',
     label: 'Final lap'
   }, {
+    id: 'yellowflag',
+    label: 'Yellow flag'
+  }, {
+    id: 'greenflag',
+    label: 'Track clear'
+  }, {
     id: 'falsestart',
     label: 'False start'
   }, {

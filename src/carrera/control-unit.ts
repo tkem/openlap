@@ -25,6 +25,17 @@ const MAX_RECONNECT_DELAY = 5000;
 
 const POLL_COMMAND = DataView.fromString('?');
 
+export enum ControlUnitButton {
+  ESC = 1,
+  PACE_CAR = 1,
+  ENTER = 2,
+  START = 2,
+  SPEED = 5,
+  BRAKE = 6,
+  FUEL = 7,
+  CODE = 8
+}
+
 export class ControlUnit {
 
   private connection: Subject<ArrayBuffer>;
@@ -131,10 +142,6 @@ export class ControlUnit {
     this.requests.push(DataView.fromString('=10'));
   }
 
-  toggleStart() {
-    this.requests.push(DataView.fromString('T2'));
-  }
-
   setLap(value: number) {
     this.setLapHi(value >> 4);
     this.setLapLo(value & 0xf);
@@ -170,6 +177,14 @@ export class ControlUnit {
 
   setFuel(id: number, value: number) {
     this.set(2, id, value, 2);
+  }
+
+  toggleStart() {
+    this.trigger(ControlUnitButton.START);
+  }
+
+  trigger(button: ControlUnitButton) {
+    this.requests.push(DataView.fromString('T' + String.fromCharCode(0x30 | button)));
   }
 
   private set(address: number, id: number, value: number, repeat = 1) {

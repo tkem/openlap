@@ -70,8 +70,10 @@
   "Start": "Start",
   "Stop time when paused": "Zeit bei Unterbrechung stoppen",
   "Time": "Zeit",
+  "Track clear": "Strecke freigegeben",
   "Translations": "Übersetzungen",
   "Tuning": "Tuning",
+  "Yellow flag": "Gelbe Flagge",
 
   "notifications": {
     "locale": "de-de",
@@ -86,6 +88,8 @@
     "fuel1": "In die Box!",
     "fuel2": "Box ist bereit!",
     "pitenter": "In der Box!",
-    "pitexit": "Verlässt die Box!"
+    "pitexit": "Verlässt die Box!",
+    "yellowflag": "Achtung: Gelbe Flagge!",
+    "greenflag": "Freie Fahrt!"
   }
 }

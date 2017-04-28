@@ -4,7 +4,7 @@ import { NavParams, PopoverController } from 'ionic-angular';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { ControlUnit } from '../carrera';
+import { ControlUnit, ControlUnitButton } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
 import { LeaderboardItem } from '../leaderboard';
 import { Logger } from '../logging';
@@ -62,6 +62,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   speechEnabled: Observable<boolean>;
   sortorder: Observable<string>;
   lapcount: Observable<{count: number, total: number}>;
+  pitlane: Observable<boolean>;
 
   start: Observable<number>;
   lights: Observable<number>;
@@ -104,6 +105,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.blink = state.combineLatest(start, (state, value) => {
       return state !== 'connected' || value >= 8;
     });
+    this.pitlane = mode.map(value => (value & 0x04) != 0);
   }
 
   ngOnInit() {
@@ -173,6 +175,9 @@ export class RaceControlPage implements OnDestroy, OnInit {
       }).map(() => {
         return ['finallap', null];
       }),
+      session.yellowFlag.distinctUntilChanged().skipWhile(value => !value).map(value => {
+        return [value ? 'yellowflag' : 'greenflag', null];
+      }),
       session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
         return ['finished', null];
       })
@@ -241,6 +246,10 @@ export class RaceControlPage implements OnDestroy, OnInit {
     this.settings.getOptions().take(1).subscribe(options => {
       this.settings.setOptions(Object.assign({}, options, {speech: !options.speech}));
     });
+  }
+
+  toggleSC() {
+    this.cu.trigger(ControlUnitButton.PACE_CAR);
   }
 
   showMenu(event) {

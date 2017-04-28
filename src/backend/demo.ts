@@ -287,6 +287,6 @@ export class DemoBackend extends Backend {
   }
 
   scan(): Observable<Peripheral> {
-    return Observable.of(new DemoPeripheral('Demo', 0x2, this.logger));
+    return Observable.of(new DemoPeripheral('Demo', 0x6, this.logger));
   }
 };

@@ -57,13 +57,16 @@ export class RaceSession {
   grid: Observable<Observable<RaceItem>>;
   ranking: Observable<RaceItem[]>;
   currentLap: Observable<number>;
-  finished = new BehaviorSubject(false);          // TODO: event?
-  timer = Observable.of(0);                       // TODO: event?
+  finished = new BehaviorSubject(false);
+  yellowFlag = new BehaviorSubject(false);
+  timer = Observable.of(0);
   started = false;
   stopped = false;
 
   private mask: number;
   private active = 0;
+
+  private realMask: number = null;
 
   // TODO: move settings handling/combine to race-control!
   constructor(private cu: ControlUnit, private options: RaceOptions) {
@@ -146,6 +149,19 @@ export class RaceSession {
   stop() {
     this.stopped = true;
     this.finish();
+  }
+
+  toggleYellowFlag() {
+    const value = this.yellowFlag.value;
+    if (this.yellowFlag.value) {
+      this.mask = this.realMask;
+      this.realMask = null;
+    } else {
+      this.realMask = this.mask;
+      this.mask = 0xff;
+    }
+    this.cu.setMask(this.mask);
+    this.yellowFlag.next(!value);
   }
 
   private createGrid(

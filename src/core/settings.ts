@@ -29,7 +29,9 @@ const NOTIFICATIONS = {
   fuel1: true,
   fuel0: true,
   pitenter: false,
-  pitexit: false
+  pitexit: false,
+  yellowflag: true,
+  greenflag: true
 };
 
 export class Options {
