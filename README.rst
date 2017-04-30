@@ -1,8 +1,8 @@
 Open Lap
 ========================================================================
 
-Open Lap is a simple, no-nonsense hybrid_ slot car race management app
-for Carrera® DIGITAL 124/132 systems.
+Open Lap is a simple, no-nonsense slot car race management app for
+Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
 
@@ -45,7 +45,7 @@ an actual device, or in a Web browser or emulator for testing.
 
 Due to lack of resources, Open Lap has *not* been tested on iOS, and
 is unlikely to run unchanged on that platform.  However, being a
-hybrid app, it shouldn't take too much effort to make it work, so
+hybrid_ app, it shouldn't take too much effort to make it work, so
 please feel free to fork and give it a try!
 
 
