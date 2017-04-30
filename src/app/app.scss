@@ -48,6 +48,12 @@
     }
 }
 
+svg {
+    /* Android 4.4 */
+    max-height: 100%;
+    max-width: 100%;
+}
+
 .item.selected {
     background: color($colors, primary);
 }
@@ -94,9 +100,6 @@ ion-title {
         animation-name: blink-checkered-flag;
         animation-duration: 3s;
         vertical-align: -0.2em;
-    }
-    svg {
-        max-width: 2em;  // Android 4.4
     }
 }
 
