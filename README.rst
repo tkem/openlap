@@ -16,6 +16,8 @@ In a nutshell, Open Lap lets you
   individually.
 - measure up to three intermediate or sector times (S1, S2, S3) using
   Carrera® Check Lane or compatible equipment.
+- send out the pace car in case of emergency, or temporarily disable
+  lap counting during a "yellow flag" phase.
 
 Open Lap is available as an Android app from the `Google Play Store
 <https://play.google.com/store/apps/details?id=at.co.kemmer.openlap>`_.

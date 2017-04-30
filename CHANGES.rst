@@ -1,3 +1,15 @@
+1.3.0 UNRELEASED
+----------------
+
+- Add support for "yellow flag" phase.
+
+- Add pace car control button.
+
+- Improve CU protocol logging.
+
+- Fix Android 4.4 SVG scaling issues.
+
+
 1.2.1 2017-04-23
 ----------------
 
