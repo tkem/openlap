@@ -62,39 +62,6 @@ button.active {
     color: color($colors, primary) !important;
 }
 
-ion-menu {
-    ion-content {
-        background: color($colors, dark) !important;
-        ion-item-group + ion-item-group {
-            border-top: 1px solid $list-md-border-color;
-        }
-        .item {
-            border-width: 0 !important;
-        }
-        .item-inner {
-            border-width: 0 !important;
-        }
-    }
-}
-
-ion-popover {
-    ion-item-group + ion-item-group {
-        border-top: 1px solid $list-md-border-color;
-    }
-    .item {
-        border-width: 0 !important;
-    }
-    .item-inner {
-        border-width: 0 !important;
-    }
-}
-
-ion-modal {
-    ion-content {
-        background: color($colors, dark) !important;
-    }
-}
-
 ion-title {
     checkerboard {
         animation-name: blink-checkered-flag;
@@ -103,6 +70,7 @@ ion-title {
     }
 }
 
+/* TODO: proper component? */
 .race-control {
     display: flex;
     flex-direction: row;
@@ -154,21 +122,6 @@ ion-grid.tuning {
     }
 }
 
-.swiper-slide {
-    align-items: inherit !important;
-}
-
-.swiper-pagination-bullet {
-    background: lightgray;
-}
-
-.centered {
-    display: flex;
-    align-self: center;
-    align-items: center;
-    height: 100%;
-}
-
 dot-matrix {
     color: #444;
 }
@@ -178,13 +131,6 @@ dot-matrix.yellow-flag {
     animation-name: blink-yellow-flag;
     animation-iteration-count: infinite;
     animation-duration: 1s;
-}
-
-ion-range.range-md.pristine {
-    .range-knob {
-        border: 2px solid $range-md-bar-background-color !important;
-        background: $background-md-color !important;
-    }
 }
 
 /* FIXME: is this really such a smart idea? */
@@ -197,9 +143,60 @@ ion-input[type=number] {
     }
 }
 
-/* FIXME: $picker-md-option-text-color not working? */
-.picker-opt {
-    color: $text-color;
+/* FIXME: still used? */
+.centered {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* FIXME: theming? */
+ion-modal {
+    ion-content {
+        background: color($colors, dark) !important;
+    }
+}
+ion-menu {
+    ion-content {
+        background: color($colors, dark) !important;
+        ion-item-group + ion-item-group {
+            border-top: 1px solid $list-md-border-color;
+        }
+        .item {
+            border-width: 0 !important;
+        }
+        .item-inner {
+            border-width: 0 !important;
+        }
+    }
+}
+ion-popover {
+    ion-item-group + ion-item-group {
+        border-top: 1px solid $list-md-border-color;
+    }
+    .item {
+        border-width: 0 !important;
+    }
+    .item-inner {
+        border-width: 0 !important;
+    }
+}
+
+/* FIXME: theming support for "pristine" knob? */
+ion-range.range-md.pristine {
+    .range-knob {
+        border: 2px solid $range-md-bar-background-color !important;
+        background: $background-md-color !important;
+    }
+}
+
+/* FIXME: ion-slides theming support? */
+.swiper-slide {
+    align-items: inherit !important;
+}
+.swiper-pagination-bullet {
+    background: lightgray;
 }
 
 /* FIXME: Ionic bug on Android 4.4? */
@@ -207,9 +204,4 @@ ion-input[type=number] {
     .scroll-content {
         overflow: hidden;
     }
-}
-
-/* FIXME: background-color defaults to buttonface? */
-.text-input-clear-icon {
-    background-color: inherit;
 }

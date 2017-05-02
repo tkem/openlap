@@ -10,16 +10,16 @@
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
+$grid-padding-width: 0;
 $list-background-color: transparent;
 $list-md-header-margin-bottom: 0;
-$text-input-md-show-focus-highlight: false !default;
 $picker-md-background-color: #242424;
 $picker-md-option-text-color: #fff;
 $popover-md-background: #242424;
-$toggle-md-handle-background-color-off: #f4f4f4;
-$grid-padding-width: 0;
 $range-md-knob-min-background-color: #007aff;
 $range-md-knob-min-border: 0;
+$text-input-md-show-focus-highlight: false !default;
+$toggle-md-handle-background-color-off: #f4f4f4;
 
 // Named Color Variables
 // --------------------------------------------------

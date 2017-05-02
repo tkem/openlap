@@ -42,7 +42,7 @@ export class SettingsPage implements OnDestroy, OnInit {
         role: 'cancel',
       }, {
         text: 'OK',
-        handler: () => this.settings.clear()
+        handler: () => { this.settings.clear(); }
       }]
     })
     alert.present();
