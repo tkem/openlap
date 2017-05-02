@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage';
 
+import { Device } from '@ionic-native/device';
+
+import { Platform } from 'ionic-angular';
+
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { Peripheral } from '../carrera';
@@ -84,7 +88,7 @@ export class Settings {
 
   private subjects = new Map<string, ReplaySubject<any>>();
 
-  constructor(private storage: Storage) {
+  constructor(private device: Device, private platform: Platform, private storage: Storage) {
     // TODO: setDriver('localStorageWrapper');
   }
 
@@ -97,7 +101,9 @@ export class Settings {
   }
 
   getConnection(): Observable<any> {
-    return this.get('connection');
+    return this.get('connection').map(value => {
+      return value || (this.isDemo() ? {name: 'Demo', type: 'demo'} : value);
+    });
   }
 
   setConnection(value: Peripheral) {
@@ -164,6 +170,10 @@ export class Settings {
 
   setRaceSettings(value: any): Promise<void> {
     return this.set('race', value);
+  }
+
+  private isDemo(): boolean {
+    return !this.platform.is('cordova') || this.device.isVirtual;
   }
 
   private get(key: string): Observable<any> {

@@ -11,6 +11,8 @@
 
 - Improve CU protocol logging.
 
+- Default to demo mode when running in emulator or browser.
+
 
 1.2.1 2017-04-23
 ----------------
