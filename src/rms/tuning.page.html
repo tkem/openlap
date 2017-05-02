@@ -33,12 +33,26 @@
           {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
         </span>
       </ion-col>
-      <ion-col center class="range">
-        <ion-range no-padding min="0" max="15" snaps="true"
+      <ion-col center class="range" [ngSwitch]="type">
+        <ion-range *ngSwitchCase="'speed'" no-padding min="0" max="15" snaps="true"
           [disabled]="!(connected | async)"
-          (ionChange)="update(type, $event.value, link ? undefined : model.id)"
-          [ngClass]="{'pristine': model[type] == null}"
-          [ngModel]="model[type] || 0"
+          [ngClass]="{'pristine': model.speed == null}"
+          [ngModel]="model.speed || 0"
+          (ionChange)="update('speed', $event.value, link ? undefined : model.id)"
+        >
+        </ion-range>
+        <ion-range *ngSwitchCase="'brake'" no-padding min="0" max="15" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.brake == null}"
+          [ngModel]="model.brake || 0"
+          (ionChange)="update('brake', $event.value, link ? undefined : model.id)"
+        >
+        </ion-range>
+        <ion-range *ngSwitchCase="'fuel'" no-padding min="0" max="15" snaps="true"
+          [disabled]="!(connected | async)"
+          (ionChange)="update('fuel', $event.value, link ? undefined : model.id)"
+          [ngClass]="{'pristine': model.fuel == null}"
+          [ngModel]="model.fuel || 0"
         >
         </ion-range>
       </ion-col>

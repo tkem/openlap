@@ -5,9 +5,11 @@
 
 - Add pace car control button.
 
-- Improve CU protocol logging.
+- Fix display issues with unset speed/brake/fuel values.
 
 - Fix Android 4.4 SVG scaling issues.
+
+- Improve CU protocol logging.
 
 
 1.2.1 2017-04-23
