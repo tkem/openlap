@@ -9,6 +9,8 @@
 
 - Fix Android 4.4 SVG scaling issues.
 
+- Fix Android 4.4 issues with multiple header buttons.
+
 - Improve CU protocol logging.
 
 - Default to demo mode when running in emulator or browser.
