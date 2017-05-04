@@ -1,4 +1,4 @@
-1.3.0 UNRELEASED
+1.3.0 2017-05-03
 ----------------
 
 - Add support for "yellow flag" phase.
