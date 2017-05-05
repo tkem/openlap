@@ -4,6 +4,8 @@ import { Platform, ToastController } from 'ionic-angular';
 
 import { Toast as NativeToast } from '@ionic-native/toast';
 
+import { Logger } from '../logging';
+
 interface ToastProvider {
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center'): Promise<void>;
   hide(): Promise<void>;
@@ -31,7 +33,7 @@ class NativeToastProvider implements ToastProvider {
 class IonicToastProvider implements ToastProvider {
   private dismissCurrentToast = () => Promise.resolve();
 
-  constructor(private controller: ToastController) {}
+  constructor(private controller: ToastController, private logger: Logger) {}
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
     return this.dismissCurrentToast().then(() => {
@@ -44,7 +46,9 @@ class IonicToastProvider implements ToastProvider {
       toast.onDidDismiss(() => {
         this.dismissCurrentToast = () => Promise.resolve();
       });
-      this.dismissCurrentToast = () => toast.dismiss().then(() => { return });
+      this.dismissCurrentToast = () => toast.dismiss().catch(error => {
+        this.logger.error('Error dismissing toast', error);
+      });
       return toast.present();
     });
   }
@@ -58,13 +62,13 @@ class IonicToastProvider implements ToastProvider {
 export class Toast {
   private toast: ToastProvider;
 
-  constructor(platform: Platform, controller: ToastController, nativeToast: NativeToast) {
-    this.toast = platform.is('cordova') ? new NativeToastProvider(nativeToast) : new IonicToastProvider(controller);
+  constructor(platform: Platform, controller: ToastController, nativeToast: NativeToast, private logger: Logger) {
+    this.toast = platform.is('cordova') ? new NativeToastProvider(nativeToast) : new IonicToastProvider(controller, logger);
   }
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
-    return this.toast.hide().catch(() => {
-      // FIXME: seems to generate an error with IonicToastProvider; check if toast active, first?
+    return this.toast.hide().catch(error => {
+      this.logger.error('Error hiding toast', error);
     }).then(() => {
       return this.toast.show(message, duration, position);
     });
