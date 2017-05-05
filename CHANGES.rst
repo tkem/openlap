@@ -1,3 +1,17 @@
+1.3.1 UNRELEASED
+----------------
+
+- Hide scrollbars on Android 4.4.
+
+- Improve leaderboard position ("colored stripe") display on Android 4.4.
+
+- Improve handling of two-sector tracks.
+
+- Improve ``Toast`` error handling.
+
+- Upgrade to ``ionic`` v3.1.
+
+
 1.3.0 2017-05-03
 ----------------
 
