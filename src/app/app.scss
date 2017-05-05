@@ -189,9 +189,7 @@ ion-range.range-md.pristine {
     background: lightgray;
 }
 
-/* FIXME: Ionic bug on Android 4.4? */
-.noscroll {
-    .scroll-content {
-        overflow: hidden;
-    }
+/* FIXME: need to hide scrollbars on Android 4.4? */
+::-webkit-scrollbar {
+    display: none;
 }
