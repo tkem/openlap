@@ -1,5 +1,7 @@
+<div class="position cell">
+    <span class="title">POS</span>
+</div>
 <div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
-    <span class="title" *ngSwitchCase="'position'">POS</span>
     <span class="title" *ngSwitchCase="'number'">NO</span>
     <span class="title" *ngSwitchCase="'name'">NAME</span>
     <span class="title" *ngSwitchCase="'code'">NAME</span>

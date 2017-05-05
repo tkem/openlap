@@ -103,22 +103,20 @@ ion-grid.tuning {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        padding: 0.8em 0.5em;
     }
     ion-col.number {
         flex: 0 0 3em;
-        .centered {
-            padding-left: 0.5em;
-        }
     }
     ion-col.code {
         flex: 0 0 3em;
     }
     ion-col.name {
-        flex: 0 0 6em;
+        flex: 0 0 8em;
     }
     ion-col.range {
         flex: 1 1;
-        padding: 2px 1em;
+        padding: 0 1em;
     }
 }
 
@@ -141,14 +139,6 @@ ion-input[type=number] {
             text-align: left;
         }
     }
-}
-
-/* FIXME: still used? */
-.centered {
-    display: flex;
-    align-self: center;
-    align-items: center;
-    height: 100%;
 }
 
 /* FIXME: theming? */

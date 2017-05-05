@@ -1,22 +1,15 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'slant',
+  selector: '[stripe]',
   styles: [`
            :host {
-             display: block;
              position: relative;
              overflow: hidden;
-             width: 100%;
-             height: 100%;
            }
-           .slant-content {
-             width: 100%;
-             height: 100%;
-           }
-           .slant-stripe {
+           .stripe-inner {
              position: absolute;
-             min-height: 100%;
+             height: 100%;
              width: 100%;
              top: 0;
              left: 0;
@@ -29,8 +22,8 @@ import { Component, Input } from '@angular/core';
              z-index: -1
            }`
           ],
-  templateUrl: 'slant.component.html'
+  templateUrl: 'stripe.component.html'
 })
-export class SlantComponent {
-  @Input() color: string;
+export class StripeComponent {
+  @Input() stripe: string;
 }

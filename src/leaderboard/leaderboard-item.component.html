@@ -1,9 +1,7 @@
+<div class="position cell" [stripe]="item.driver?.color">
+    {{item.position + 1}}
+</div>
 <div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
-    <ng-template ngSwitchCase="position">
-        <slant [color]="item.driver?.color">
-            <div class="text">{{item.position + 1}}</div>
-        </slant>
-    </ng-template>
     <ng-template ngSwitchCase="number">
         {{item.id + 1}}
     </ng-template>

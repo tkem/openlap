@@ -6,8 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CheckerboardComponent } from './checkerboard.component';
 import { DotMatrixComponent } from './dot-matrix.component';
 import { GaugeComponent } from './gauge.component';
-import { SlantComponent } from './slant.component';
 import { StartlightComponent } from './startlight.component';
+import { StripeComponent } from './stripe.component';
 import { TargetDirective } from './target.directive';
 import { TimePipe } from './time.pipe';
 
@@ -16,8 +16,8 @@ import { TimePipe } from './time.pipe';
     CheckerboardComponent,
     DotMatrixComponent,
     GaugeComponent,
-    SlantComponent,
     StartlightComponent,
+    StripeComponent,
     TargetDirective,
     TimePipe
   ],
@@ -25,8 +25,8 @@ import { TimePipe } from './time.pipe';
     CheckerboardComponent,
     DotMatrixComponent,
     GaugeComponent,
-    SlantComponent,
     StartlightComponent,
+    StripeComponent,
     TargetDirective,
     TimePipe,
     TranslateModule

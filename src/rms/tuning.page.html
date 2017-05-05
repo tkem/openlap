@@ -18,22 +18,16 @@
   </ion-segment>
   <ion-grid class="tuning">
     <ion-row *ngFor="let model of models">
-      <ion-col stretch class="number">
-        <slant [color]="(drivers | async)[model.id]?.color">
-          <span class="centered">{{model.id + 1}}</span>
-        </slant>
+      <ion-col class="number" [stripe]="(drivers | async)[model.id]?.color">
+        {{model.id + 1}}
       </ion-col>
-      <ion-col center class="name" showWhen="landscape">
-        <span class="centered">
-          {{(drivers | async)[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}
-        </span>
+      <ion-col class="name" showWhen="landscape">
+        {{(drivers | async)[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}
       </ion-col>
-      <ion-col center class="code" showWhen="portrait">
-        <span class="centered">
-          {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
-        </span>
+      <ion-col class="code" showWhen="portrait">
+        {{(drivers | async)[model.id]?.code || '#' + (model.id + 1)}}
       </ion-col>
-      <ion-col center class="range" [ngSwitch]="type">
+      <ion-col self-align-center class="range" [ngSwitch]="type">
         <ion-range *ngSwitchCase="'speed'" no-padding min="0" max="15" snaps="true"
           [disabled]="!(connected | async)"
           [ngClass]="{'pristine': model.speed == null}"

@@ -16,8 +16,8 @@ import { Observable, Subscription } from 'rxjs';
 import 'rxjs/observable/fromEvent';
 
 const ORIENTATION = {
-  portrait: 'position code',
-  landscape: 'position number name'
+  portrait: 'code',
+  landscape: 'number name'
 };
 
 const FIELDS = [{
