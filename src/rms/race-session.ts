@@ -215,6 +215,7 @@ export class RaceSession {
       ).map(([[times, last, best, finished], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => {
         const laps = times.length ? times.length - 1 : 0;
         const curr = times[times.length - 1] || [];
+        const prev = times[times.length - 2] || [];
         return {
           id: group.key,
           time: curr[0],
@@ -224,7 +225,7 @@ export class RaceSession {
           fuel: fuel,
           pit: pit,
           pits: pits,
-          sector: curr.length - 1 || 3,
+          sector: curr.length - 1 || prev.length,
           finished: finished
         };
       }).publishReplay(1).refCount();
