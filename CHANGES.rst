@@ -1,4 +1,4 @@
-1.3.1 UNRELEASED
+1.3.1 2017-05-06
 ----------------
 
 - Hide scrollbars on Android 4.4.
