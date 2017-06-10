@@ -7,7 +7,7 @@ import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
 import { Logger } from '../logging';
 
-const VERSION = '0815';
+const VERSION = '5336';
 
 const TIMEOUT_RATE = 0.0001;
 const ERROR_RATE = 0.0001;

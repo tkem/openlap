@@ -131,8 +131,10 @@ export class ControlUnit {
     const observable = this.data.filter((view) => {
       // TODO: check CRC
       return view.byteLength == 6 && view.toString(0, 1) == '0';
-    }).map((view) => {
+    }).map(view => {
       return view.toString(1, 4);
+    }).map(s => {
+      return s.replace(/(\d)(\d+)/, '$1.$2')
     });
     this.requests.push(DataView.fromString('0'));
     return observable;
