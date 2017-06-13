@@ -54,23 +54,27 @@
   </ion-slides>
 </ion-content>
 
-<ion-footer padding-bottom>
-  <div class="race-control">
-    <button [disabled]="!(pitlane | async) || (lights | async) != 0" (click)="toggleSC()">
-      <svg viewBox="0 0 9 5" class="toggle-button">
-        <text text-anchor="middle" x="50%" y="2" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">PACE</text>
-        <text text-anchor="middle" x="50%" y="4" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">CAR</text>
-      </svg>
-    </button>
-    <button (click)="cu.toggleStart()">
+<ion-footer>
+  <ion-toolbar class="race-control" text-center>
+    <button [disabled]="!(keySupported | async)" (click)="triggerStart()">
       <startlight [active]="(lights | async) >= 1" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 2" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 3" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 4" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 5" [blink]="blink | async"></startlight>
     </button>
-    <button (click)="session.toggleYellowFlag()">
-      <dot-matrix [ngClass]="{'yellow-flag': session.yellowFlag | async}" cols="9" rows="5"></dot-matrix>
-    </button>
-  </div>
+    <ion-buttons left>
+      <button ion-button [disabled]="!(keySupported | async)" (click)="triggerPaceCar()">
+        <svg viewBox="0 0 9 5" [ngSwitch]="lights | async">
+          <text text-anchor="middle" x="50%" y="2" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">PACE CAR</text>
+          <text text-anchor="middle" x="50%" y="4" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">ESC</text>
+        </svg>
+      </button>
+    </ion-buttons>
+    <ion-buttons right>
+      <button ion-button (click)="session.toggleYellowFlag()">
+        <dot-matrix [ngClass]="{'yellow-flag': session.yellowFlag | async}" cols="9" rows="5"></dot-matrix>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-footer>

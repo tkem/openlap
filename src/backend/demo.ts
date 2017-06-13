@@ -176,6 +176,9 @@ class DemoPeripheral implements Peripheral {
         if (toString(value) != '?') {
           console.log('Demo CU received ' + toString(value));
         }
+        if (toString(value) == 'T1') {
+          this.onESC();
+        }
         if (toString(value) == 'T2') {
           this.onStart();
         }
@@ -263,6 +266,13 @@ class DemoPeripheral implements Peripheral {
     } else {
       this.startSequence++;
       setTimeout(() => this.onStart(), 1000);
+    }
+  }
+
+  private onESC() {
+    if (this.startSequence == 1) {
+      this.startAll();
+      this.startSequence = 0;
     }
   }
 

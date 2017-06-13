@@ -67,6 +67,7 @@ export class RmsPage implements OnDestroy, OnInit {
   lights: Observable<number>;
   blink: Observable<boolean>;
   timer: Observable<number>;
+  keySupported: Observable<boolean>;
 
   session: Session;
 
@@ -79,8 +80,8 @@ export class RmsPage implements OnDestroy, OnInit {
   {
     this.options = params.data;
 
-    const start = this.cu.getStart();  // TODO: distinctUntilChanged
-    const state = this.cu.getState();  // TODO: distinctUntilChanged
+    const start = this.cu.getStart().distinctUntilChanged();
+    const state = this.cu.getState().distinctUntilChanged();
     const mode = this.cu.getMode().distinctUntilChanged();
 
     // use "resize" event for easier testing on browsers
@@ -105,6 +106,8 @@ export class RmsPage implements OnDestroy, OnInit {
       return state !== 'connected' || value >= 8;
     });
     this.pitlane = mode.map(value => (value & 0x04) != 0);
+
+    this.keySupported = this.cu.getVersion().distinctUntilChanged().map(v => v >= '5.331');
   }
 
   ngOnInit() {
@@ -247,8 +250,12 @@ export class RmsPage implements OnDestroy, OnInit {
     });
   }
 
-  toggleSC() {
+  triggerPaceCar() {
     this.cu.trigger(ControlUnitButton.PACE_CAR);
+  }
+
+  triggerStart() {
+    this.cu.trigger(ControlUnitButton.START);
   }
 
   showMenu(event) {

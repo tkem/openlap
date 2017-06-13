@@ -63,17 +63,16 @@ ion-title {
 }
 
 /* TODO: proper component? */
-.race-control {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    width: 100%;
-
+ion-toolbar.race-control {
+    .toolbar-background-md {
+        background-color: inherit !important;
+    }
     button {
-        background-color: inherit;
+        background-color: inherit !important;
         color: $button-md-text-color;
         font-size: inherit;
+        height: auto !important;
+        vertical-align: inherit !important;
         svg {
             padding: 6px;
             border-radius: 8px;
@@ -81,9 +80,6 @@ ion-title {
             box-shadow: 0 0 2px #444, inset 0 0 2px #666;
             fill: currentColor;
             height: 1em;
-        }
-        svg.toggle-button:active {
-            background-color: $subdued-text-color;
         }
     }
 }
