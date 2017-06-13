@@ -14,7 +14,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/timeout';
 
-import { Logger } from '../logging';
+import { Logger } from '../core';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';

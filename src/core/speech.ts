@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 
-import { Logger } from '../logging';
+import { Logger } from './logger';
 
 @Injectable()
 export class Speech {

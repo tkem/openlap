@@ -5,9 +5,9 @@ import { NavParams, ViewController } from 'ionic-angular';
 import { I18nAlertController, Options, Settings } from '../core';
 
 @Component({
-  templateUrl: 'race-control.menu.html',
+  templateUrl: 'rms.menu.html',
 })
-export class RaceControlMenu implements OnDestroy, OnInit  {
+export class RmsMenu implements OnDestroy, OnInit  {
 
   options = new Options();
 

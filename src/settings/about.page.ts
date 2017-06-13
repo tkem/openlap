@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { AppVersion } from '@ionic-native/app-version';
 
-import { Logger } from '../logging';
+import { Logger } from '../core';
 
 @Component({
   templateUrl: 'about.page.html',

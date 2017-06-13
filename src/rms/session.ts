@@ -53,7 +53,7 @@ const COMPARE = {
   'race': raceCompare
 }
 
-export class RaceSession {
+export class Session {
   grid: Observable<Observable<RaceItem>>;
   ranking: Observable<RaceItem[]>;
   currentLap: Observable<number>;

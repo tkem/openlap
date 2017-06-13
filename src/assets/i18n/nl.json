@@ -10,6 +10,7 @@
 
   "About": "Over",
   "About Open Lap": "Over Open Lap",
+  "Apply all": "Alles toepassen",
   "Automatic": "Automatisch",
   "Autonomous Car": "Autonomous Car",
   "Brake": "Rem",
@@ -22,6 +23,7 @@
   "Colors": "Kleuren",
   "Connected to {{device}}": "Verbonden met {{device}}",
   "Connecting to {{device}}": "Verbinden met {{device}}",
+  "Control Unit mode": "Control Unit modus",
   "Debug messages": "Foutmeldingen",
   "Default": "Standard",
   "Disconnected from {{device}}": "Verbinding verbroken met {{device}}",

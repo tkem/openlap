@@ -15,9 +15,8 @@ import { RootPage } from './root.page';
 
 import { Backend } from '../backend';
 import { ControlUnit } from '../carrera';
-import { CONTROL_UNIT_SUBJECT, Settings, Speech, Toast } from '../core';
-import { Logger } from '../logging';
-import { RaceControlPage } from '../rms';
+import { CONTROL_UNIT_SUBJECT, Logger, Settings, Speech, Toast } from '../core';
+import { RmsPage } from '../rms';
 
 const CONNECTION_TIMEOUT = 3000;
 
@@ -72,7 +71,7 @@ export class AppComponent implements OnInit {
             this.cu.next(cu);
             cu.connect();
           }).then(() => {
-            this.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
+            this.setRoot(RmsPage, { mode: 'practice', auto: true, pace: true });
           }).catch(error => {
             this.logger.warn('Error connecting to ' + connection.name + ':', error);
             this.setRoot(this.rootPage);

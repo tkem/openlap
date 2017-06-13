@@ -4,30 +4,26 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from 'ionic-angular';
 
-import { LeaderboardModule } from '../leaderboard';
 import { SharedModule } from '../shared';
 
-import { TuningPage } from './tuning.page';
-import { RaceControlMenu } from './race-control.menu';
-import { RaceControlPage } from './race-control.page';
+import { LeaderboardModule } from './leaderboard';
+import { RmsMenu } from './rms.menu';
+import { RmsPage } from './rms.page';
 import { RaceSettingsPage } from './race-settings.page';
 
 @NgModule({
   declarations: [
-    TuningPage,
-    RaceControlPage,
-    RaceControlMenu,
+    RmsMenu,
+    RmsPage,
     RaceSettingsPage
   ],
   entryComponents: [
-    TuningPage,
-    RaceControlPage,
-    RaceControlMenu,
+    RmsMenu,
+    RmsPage,
     RaceSettingsPage
   ],
   exports: [
-    TuningPage,
-    RaceControlPage,
+    RmsPage,
     RaceSettingsPage
   ],
   imports: [
@@ -40,4 +36,4 @@ import { RaceSettingsPage } from './race-settings.page';
   providers: [
   ]
 })
-export class RMSModule {}
+export class RmsModule {}

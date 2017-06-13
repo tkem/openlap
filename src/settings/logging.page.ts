@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { PopoverController } from 'ionic-angular';
 
-import { Logger } from '../logging';
+import { Logger } from '../core';
 
 import { LoggingMenu } from './logging.menu';
 

@@ -2,8 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { Driver, Settings, Speech } from '../core';
-import { Logger } from '../logging';
+import { Driver, Logger, Settings, Speech } from '../core';
 
 @Component({
   templateUrl: 'drivers.page.html'

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Driver, Settings } from '../core';
-import { Logger } from '../logging';
+import { Driver, Logger, Settings } from '../core';
 
 @Component({
   templateUrl: 'colors.page.html'

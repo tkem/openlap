@@ -5,10 +5,10 @@ import { ModalController, Nav, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
-import { I18nAlertController, Settings } from '../core';
-import { Logger } from '../logging';
-import { TuningPage, RaceSettingsPage, RaceControlPage } from '../rms';
+import { I18nAlertController, Logger, Settings } from '../core';
+import { RaceSettingsPage, RmsPage } from '../rms';
 import { ColorsPage, DriversPage, SettingsPage } from '../settings';
+import { TuningPage } from '../tuning';
 
 @Component({
   selector: 'app-menu',
@@ -66,7 +66,7 @@ export class MenuComponent implements OnChanges {
   }
 
   startPractice() {
-    this.nav.setRoot(RaceControlPage, { mode: 'practice', auto: true, pace: true });
+    this.nav.setRoot(RmsPage, { mode: 'practice', auto: true, pace: true });
   }
 
   startQualifying() {
@@ -75,7 +75,7 @@ export class MenuComponent implements OnChanges {
       modal.onDidDismiss((options) => {
         if (options) {
           this.settings.setQualifyingSettings(options).then(() => {
-            this.nav.setRoot(RaceControlPage, options);
+            this.nav.setRoot(RmsPage, options);
           });
         }
       });
@@ -89,7 +89,7 @@ export class MenuComponent implements OnChanges {
       modal.onDidDismiss((options) => {
         if (options) {
           this.settings.setRaceSettings(options).then(() => {
-            this.nav.setRoot(RaceControlPage, options);
+            this.nav.setRoot(RmsPage, options);
           });
         }
       });

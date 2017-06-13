@@ -5,12 +5,11 @@ import { NavParams, PopoverController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { ControlUnit, ControlUnitButton } from '../carrera';
-import { CONTROL_UNIT_PROVIDER, Settings, Speech } from '../core';
-import { LeaderboardItem } from '../leaderboard';
-import { Logger } from '../logging';
+import { CONTROL_UNIT_PROVIDER, Logger, Settings, Speech } from '../core';
 
-import { RaceControlMenu } from './race-control.menu';
-import { RaceSession } from './race-session';
+import { LeaderboardItem } from './leaderboard';
+import { RmsMenu } from './rms.menu';
+import { Session } from './session';
 
 import { Observable, Subscription } from 'rxjs';
 import 'rxjs/observable/fromEvent';
@@ -52,9 +51,9 @@ const FIELDS = [{
 
 @Component({
   providers: [CONTROL_UNIT_PROVIDER],
-  templateUrl: 'race-control.page.html',
+  templateUrl: 'rms.page.html',
 })
-export class RaceControlPage implements OnDestroy, OnInit {
+export class RmsPage implements OnDestroy, OnInit {
 
   options: any;
 
@@ -69,7 +68,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   blink: Observable<boolean>;
   timer: Observable<number>;
 
-  session: RaceSession;
+  session: Session;
 
   ranking: Observable<LeaderboardItem[]>;
 
@@ -119,7 +118,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   }
 
   onStart() {
-    const session = this.session = new RaceSession(this.cu, this.options);
+    const session = this.session = new Session(this.cu, this.options);
 
     this.lapcount = session.currentLap.map(lap => {
       return {
@@ -253,7 +252,7 @@ export class RaceControlPage implements OnDestroy, OnInit {
   }
 
   showMenu(event) {
-    let menu = this.popover.create(RaceControlMenu, {
+    let menu = this.popover.create(RmsMenu, {
       active: this.session && !this.session.finished.value && this.options.mode != 'practice',
       restart: () => this.onStart(),
       stop:  () => this.session.stop(),

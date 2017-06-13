@@ -6,8 +6,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { Device } from '@ionic-native/device';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
-import { Options, Settings } from '../core';
-import { Logger } from '../logging';
+import { Logger, Options, Settings } from '../core';
 
 function stringify(obj) {
   try {

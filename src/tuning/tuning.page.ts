@@ -1,9 +1,13 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
+import { PopoverController } from 'ionic-angular';
+
 import { Observable, Subject } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
-import { CONTROL_UNIT_PROVIDER, Driver, Settings } from '../core';
+import { CONTROL_UNIT_PROVIDER, Driver, Options, Settings } from '../core';
+
+import { TuningMenu } from './tuning.menu';
 
 // TODO: store with CU or settings?
 const MODELS = [0, 1, 2, 3, 4, 5].map(id => ({
@@ -21,20 +25,40 @@ export class TuningPage implements OnDestroy, OnInit {
 
   drivers: Observable<Driver[]>;
 
+  options: Observable<Options>;
+
   models = MODELS;
 
-  link = false;
+  locked = false;
 
   type = 'speed';
 
   readonly placeholder = 'Driver {{number}}';
 
+  readonly fromCU = {
+    'speed': [1, 2, 3, 5, 6, 7, 9, 11, 13, 15],
+    'brake': [6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    'fuel':  [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  };
+
+  readonly toCU = {
+    'speed': [0, 0, 1, 2, 2, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9],
+    'brake': [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    'fuel':  [0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9]
+  }
+
   connected: Observable<boolean> = this.cu.getState().map((state) => state == 'connected');
 
   private subject = new Subject<{type: string, id: number}>();
 
-  constructor(private cu: ControlUnit, private ref: ChangeDetectorRef, settings: Settings) {
+  constructor(
+    private cu: ControlUnit,
+    private popover: PopoverController,
+    private ref: ChangeDetectorRef,
+    settings: Settings
+  ) {
     this.drivers = settings.getDrivers();
+    this.options = settings.getOptions();
   }
 
   ngOnInit() {
@@ -57,6 +81,27 @@ export class TuningPage implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.subject.complete();
+  }
+
+  applyAll() {
+    for (let model of this.models) {
+      if (model.speed !== null) {
+        this.cu.setSpeed(model.id, model.speed);
+      }
+      if (model.brake !== null) {
+        this.cu.setBrake(model.id, model.brake);
+      }
+      if (model.fuel !== null) {
+        this.cu.setFuel(model.id, model.fuel);
+      }
+    }
+  }
+
+  showMenu(event) {
+    let menu = this.popover.create(TuningMenu, {
+      apply: () => { this.applyAll(); }
+    });
+    menu.present({ev: event});
   }
 
   update(type: string, value: number, id?: number) {

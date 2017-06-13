@@ -23,11 +23,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendModule } from '../backend';
 import { CoreModule } from '../core';
-import { LoggingModule } from '../logging';
 import { MenuModule } from '../menu';
-import { RMSModule } from '../rms';
+import { RmsModule } from '../rms';
 import { SettingsModule } from '../settings';
 import { SharedModule } from '../shared';
+import { TuningModule } from '../tuning';
 
 import { AppComponent } from './app.component';
 import { RootPage } from './root.page';
@@ -56,11 +56,11 @@ export function createTranslateLoader(http: Http) {
     }),
     BackendModule,
     CoreModule,
-    LoggingModule,
     MenuModule,
-    RMSModule,
+    RmsModule,
     SettingsModule,
-    SharedModule
+    SharedModule,
+    TuningModule
   ],
   providers: [
     AndroidFullScreen,

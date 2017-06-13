@@ -54,14 +54,6 @@ svg {
     max-width: 100%;
 }
 
-.item.selected {
-    background: color($colors, primary);
-}
-
-button.active {
-    color: color($colors, primary) !important;
-}
-
 ion-title {
     checkerboard {
         animation-name: blink-checkered-flag;

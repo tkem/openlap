@@ -5,7 +5,7 @@ import { NextObserver } from 'rxjs/Observer';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
-import { Logger } from '../logging';
+import { Logger } from '../core';
 
 const VERSION = '5336';
 

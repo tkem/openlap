@@ -10,6 +10,7 @@
 
   "About": "Info",
   "About Open Lap": "Über Open Lap",
+  "Apply all": "Alle anwenden",
   "Automatic": "Automatisch",
   "Autonomous Car": "Autonomous Car",
   "Brake": "Bremse",
@@ -22,6 +23,7 @@
   "Colors": "Farben",
   "Connected to {{device}}": "Verbunden mit {{device}}",
   "Connecting to {{device}}": "Verbinden mit {{device}}",
+  "Control Unit mode": "Control Unit Modus",
   "Debug messages": "Diagnosemeldungen",
   "Default": "Standard",
   "Disconnected from {{device}}": "Getrennt von {{device}}",

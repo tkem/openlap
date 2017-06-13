@@ -10,7 +10,7 @@ import { NextObserver } from 'rxjs/Observer';
 
 import { Backend } from './backend';
 import { Peripheral } from '../carrera';
-import { Logger } from '../logging';
+import { Logger } from '../core';
 
 const BAUD_RATE = 19200;
 

@@ -9,7 +9,7 @@ import { NextObserver } from 'rxjs/Observer';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
-import { Logger } from '../logging';
+import { Logger } from '../core';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
 const OUTPUT_UUID = '39df8888-b1b4-b90b-57f1-7144ae4e4a6a';

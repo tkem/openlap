@@ -4,7 +4,7 @@ import { Platform, ToastController } from 'ionic-angular';
 
 import { Toast as NativeToast } from '@ionic-native/toast';
 
-import { Logger } from '../logging';
+import { Logger } from './logger';
 
 interface ToastProvider {
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center'): Promise<void>;
