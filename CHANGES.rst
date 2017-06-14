@@ -1,3 +1,19 @@
+1.4.0 UNRELEASED
+----------------
+
+- Add ESC key functionality.
+
+- Add "CU mode" for tuning settings.
+
+- Change tuning "link" icon to Ionicons "lock/unlock".
+
+- Change CU firmware version to include period.
+
+- Minor UI improvements.
+
+- Update dependencies.
+
+
 1.3.1 2017-05-06
 ----------------
 

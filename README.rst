@@ -19,6 +19,11 @@ In a nutshell, Open Lap lets you
 - send out the pace car in case of emergency, or temporarily disable
   lap counting during a "yellow flag" phase.
 
+Please note that some features, such as the start light or pace car
+buttons, require at least Control Unit firmware version 5.331.
+Carrera® Check Lane support generally requires at least firmware
+version 5.336.
+
 Open Lap is available as an Android app from the `Google Play Store
 <https://play.google.com/store/apps/details?id=at.co.kemmer.openlap>`_.
 You may also want to join the `Beta testing program
