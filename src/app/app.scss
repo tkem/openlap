@@ -41,7 +41,7 @@
 
 @media (orientation: landscape) {
     leaderboard {
-        font-size: 2.4vw;
+        font-size: 2.5vw;
     }
     .race-control {
         font-size: 6vw;
@@ -69,7 +69,6 @@ ion-toolbar.race-control {
     }
     button {
         background-color: inherit !important;
-        color: $button-md-text-color;
         font-size: inherit;
         height: auto !important;
         vertical-align: inherit !important;

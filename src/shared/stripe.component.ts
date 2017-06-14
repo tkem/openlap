@@ -4,8 +4,9 @@ import { Component, Input } from '@angular/core';
   selector: '[stripe]',
   styles: [`
            :host {
-             position: relative;
              overflow: hidden;
+             position: relative;
+             z-index: 0;
            }
            .stripe-inner {
              position: absolute;
@@ -19,7 +20,7 @@ import { Component, Input } from '@angular/core';
              transform-origin: top right;
              border-right: 0.3em solid;
              background: #999;
-             z-index: -1
+             z-index: -1;
            }`
           ],
   templateUrl: 'stripe.component.html'
