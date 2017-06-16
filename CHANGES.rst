@@ -1,4 +1,4 @@
-1.4.0 UNRELEASED
+1.4.0 2017-06-16
 ----------------
 
 - Add ESC key functionality.
