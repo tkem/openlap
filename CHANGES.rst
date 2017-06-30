@@ -1,3 +1,13 @@
+1.4.1 UNRELEASED
+----------------
+
+- Improve Bluetooth reconnect handling.
+
+- Show three-digit CU firmware version.
+
+- Upgrade ``ionic-angular`` to v1.5.0.
+
+
 1.4.0 2017-06-16
 ----------------
 
