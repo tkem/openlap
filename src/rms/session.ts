@@ -124,9 +124,10 @@ export class Session {
 
     if (options.time) {
       this.timer = Observable.interval(TIMER_INTERVAL).withLatestFrom(
-        cu.getStart()
-      ).filter(([_, start]) => {
-        return this.started && (!this.options.pause || start == 0);
+        cu.getStart(),
+        cu.getState()
+      ).filter(([_, start, state]) => {
+        return this.started && (!this.options.pause || (start == 0 && state == 'connected'));
       }).scan((time) => {
         return Math.max(0, time - TIMER_INTERVAL);
       }, options.time).do(time => {

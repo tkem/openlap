@@ -17,6 +17,8 @@ const NOTIFY_UUID = '39df9999-b1b4-b90b-57f1-7144ae4e4a6a';
 
 const DOLLAR = '$'.charCodeAt(0);
 
+const CONNECTED_DELAY = 150;
+
 function wrapNative<T>(observable: Observable<T>, zone: NgZone) {
   return new Observable<T>(subscriber => {
     const subscription = observable.subscribe({
@@ -64,7 +66,7 @@ class BLEPeripheral implements Peripheral {
 
   private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
-      this.logger.debug('Connecting to BLE device ' + this.address);
+      this.logger.info('Connecting to BLE device ' + this.address);
       let isConnected = false;
       this.ble.connect(this.address).subscribe({
         next: peripheral => {
@@ -75,7 +77,12 @@ class BLEPeripheral implements Peripheral {
             error: err => this.onError(err, subscriber)
           });
           if (connected) {
-            this.zone.run(() => connected.next(undefined));
+            setTimeout(() => {
+              if (isConnected) {
+                this.logger.info('BLE device ready');
+                this.zone.run(() => connected.next(undefined));
+              }
+            }, CONNECTED_DELAY);
           }
         },
         error: obj => {
@@ -89,10 +96,12 @@ class BLEPeripheral implements Peripheral {
             this.logger.info('BLE device disconnected', obj);
             this.zone.run(() => subscriber.complete());
           }
+          isConnected = false;
         },
         complete: () => {
           this.logger.info('BLE connection closed');
           this.zone.run(() => subscriber.complete());
+          isConnected = false;
         }
       });
       return () => {

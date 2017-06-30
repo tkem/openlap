@@ -54,7 +54,7 @@ class SerialPeripheral implements Peripheral {
 
   private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
-      this.logger.debug('Connecting to serial port');
+      this.logger.info('Connecting to serial port');
       this.open({ baudRate: BAUD_RATE, sleepOnPause: false }).then(() => {
         this.connected = true;
         this.logger.info('Connected to serial port');
@@ -121,7 +121,7 @@ class SerialPeripheral implements Peripheral {
 
   private close(disconnected?: NextObserver<void>) {
     if (this.connected) {
-      this.logger.debug('Closing serial port');
+      this.logger.info('Closing serial port');
       this.serial.close().then(() => {
         this.logger.info('Serial port closed');
       }).catch(error => {

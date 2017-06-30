@@ -20,7 +20,7 @@ import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
 
 const CONNECTION_TIMEOUT = 3000;
-const MIN_RECONNECT_DELAY = 500;
+const MIN_RECONNECT_DELAY = 1000;
 const MAX_RECONNECT_DELAY = 5000;
 
 const POLL_COMMAND = DataView.fromString('?');
@@ -52,9 +52,7 @@ export class ControlUnit {
 
   constructor(public peripheral: Peripheral, private logger: Logger) {
     this.connection = this.peripheral.connect({
-      next: () => {
-        this.connection.next(POLL_COMMAND.buffer);
-      }
+      next: () => this.connection.next(POLL_COMMAND.buffer)
     });
     // TODO: different timeout for reconnect/polling
     this.data = this.connection.timeout(CONNECTION_TIMEOUT).retryWhen(errors => {
@@ -205,8 +203,9 @@ export class ControlUnit {
       return state.value === 'connected' ? 0 : count + 1;
     }, 0).do(() => {
       state.next('disconnected');
-    }).concatMap(value => {
-      return Observable.timer(Math.min(MIN_RECONNECT_DELAY * (1 << value), MAX_RECONNECT_DELAY));
+    }).concatMap(count => {
+      const backoff = Math.pow(1.5, count);
+      return Observable.timer(Math.min(MIN_RECONNECT_DELAY * backoff, MAX_RECONNECT_DELAY));
     }).do(() => {
       state.next('connecting');
     });
