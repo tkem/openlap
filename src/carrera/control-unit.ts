@@ -133,8 +133,6 @@ export class ControlUnit {
       return view.byteLength == 6 && view.toString(0, 1) == '0';
     }).map(view => {
       return view.toString(1, 4);
-    }).map(s => {
-      return s.replace(/(\d)(\d+)/, '$1.$2')
     });
     this.requests.push(DataView.fromString('0'));
     return observable;

@@ -3,7 +3,7 @@
     <ion-item [color]="cu ? 'primary' : 'danger'" (click)="onMenuToggle()">
       <h1>{{cu ? cu.peripheral.name : 'No connection'}}</h1>
       <h2>{{cu?.peripheral.address}}</h2>
-      <h3>Version {{(version | async) || 'n/a'}}</h3>
+      <h3><span translate>Firmware version</span> {{version | async | cuversion}}</h3>
       <ion-icon item-right [name]="mode ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
     </ion-item>
     <div *ngIf="mode">

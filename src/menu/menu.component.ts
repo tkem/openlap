@@ -38,9 +38,8 @@ export class MenuComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if ('cu' in changes) {
-      // TODO: make version a property of ControlUnit?
       this.mode = !!this.cu;
-      this.version = this.cu ? this.cu.getVersion() : Observable.of('n/a');
+      this.version = this.cu ? this.cu.getVersion() : Observable.of(undefined);
     }
   }
 
@@ -55,7 +54,7 @@ export class MenuComponent implements OnChanges {
   reconnect() {
     if (this.cu) {
       this.logger.info('Disconnecting from', this.cu.peripheral);
-      this.version = Observable.of('n/a');
+      this.version = Observable.of(undefined);
       this.cu.disconnect();
       setTimeout(() => {
         this.logger.info('Reconnecting to', this.cu.peripheral);
