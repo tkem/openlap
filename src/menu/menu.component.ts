@@ -53,14 +53,10 @@ export class MenuComponent implements OnChanges {
 
   reconnect() {
     if (this.cu) {
-      this.logger.info('Disconnecting from', this.cu.peripheral);
-      this.version = Observable.of(undefined);
-      this.cu.disconnect();
-      setTimeout(() => {
-        this.logger.info('Reconnecting to', this.cu.peripheral);
-        this.cu.connect();
+      this.logger.info('Reconnecting to', this.cu.peripheral);
+      this.cu.reconnect().then(() => {
         this.version = this.cu.getVersion();
-      }, 3000);
+      });
     }
   }
 

@@ -21,8 +21,8 @@ import { Peripheral } from './peripheral';
 
 const CONNECTION_TIMEOUT = 5000;
 const REQUEST_TIMEOUT = 1000;
-const MIN_RECONNECT_DELAY = 500;
-const MAX_RECONNECT_DELAY = 3000;
+const MIN_RECONNECT_DELAY = 2000;
+const MAX_RECONNECT_DELAY = 10000;
 
 const POLL_COMMAND = DataView.fromString('?');
 const RESET_COMMAND = DataView.fromString('=10');
@@ -62,7 +62,7 @@ export class ControlUnit {
       connection.timeout(CONNECTION_TIMEOUT).take(1).do(() => this.state.next('connected')),
       connection.timeout(REQUEST_TIMEOUT)
     ).retryWhen(errors => {
-      return this.reconnect(errors);
+      return this.doReconnect(errors);
     }).do(() => {
       this.poll();
     }).map((data: ArrayBuffer) => {
@@ -76,12 +76,24 @@ export class ControlUnit {
   connect() {
     this.state.next('connecting');
     this.subscription = this.data.connect();
+    return Promise.resolve();
   }
 
   disconnect() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    return Promise.resolve();
+  }
+
+  reconnect() {
+    return new Promise(resolve => {
+      this.disconnect();
+      setTimeout(() => {
+        this.connect();
+        resolve();
+      }, MIN_RECONNECT_DELAY);
+    });
   }
 
   getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
@@ -194,7 +206,7 @@ export class ControlUnit {
     this.connection.next(request.buffer);
   }
 
-  private reconnect(errors: Observable<any>) {
+  private doReconnect(errors: Observable<any>) {
     const state = this.state;
     return errors.do(error => {
       this.logger.error('Device error:', error);
