@@ -17,8 +17,6 @@ const NOTIFY_UUID = '39df9999-b1b4-b90b-57f1-7144ae4e4a6a';
 
 const DOLLAR = '$'.charCodeAt(0);
 
-const CONNECTED_DELAY = 150;
-
 function wrapNative<T>(observable: Observable<T>, zone: NgZone) {
   return new Observable<T>(subscriber => {
     const subscription = observable.subscribe({
@@ -46,8 +44,7 @@ class BLEPeripheral implements Peripheral {
 
   address: string;
 
-  private lastReceived: string;
-  private lastWritten: string;
+  lastWritten: string;
 
   constructor(device: any, private ble: BLE, private logger: Logger, private zone: NgZone) {
     this.name = device.name;
@@ -68,21 +65,35 @@ class BLEPeripheral implements Peripheral {
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.info('Connecting to BLE device ' + this.address);
       let isConnected = false;
+      let lastReceived = null;
+      this.lastWritten = null;
       this.ble.connect(this.address).subscribe({
         next: peripheral => {
           this.logger.info('Connected to BLE device', peripheral);
           isConnected = true;
           this.ble.startNotification(this.address, SERVICE_UUID, NOTIFY_UUID).subscribe({
-            next: data => this.onNotify(data, subscriber),
+            next: data => {
+              if (this.logger.isDebugEnabled()) {
+                const s = bufferToString(data);
+                if (s !== lastReceived) {
+                  this.logger.debug('BLE received ' + s);
+                  lastReceived = s;
+                }
+              }
+              this.onNotify(data, subscriber);
+            },
             error: err => this.onError(err, subscriber)
           });
           if (connected) {
-            setTimeout(() => {
+            // this should resolve *after* this.ble.startNotification is installed
+            this.ble.isConnected(this.address).then(() => {
               if (isConnected) {
                 this.logger.info('BLE device ready');
                 this.zone.run(() => connected.next(undefined));
               }
-            }, CONNECTED_DELAY);
+            }).catch((err) => {
+              this.logger.error('BLE device not connected', err);
+            });
           }
         },
         error: obj => {
@@ -112,20 +123,22 @@ class BLEPeripheral implements Peripheral {
 
   private createObserver(disconnected?: NextObserver<void>) {
     return {
-      next: (value: ArrayBuffer) => this.write(value),
+      next: (value: ArrayBuffer) => {
+        if (this.logger.isDebugEnabled()) {
+          const s = bufferToString(value);
+          if (s !== this.lastWritten) {
+            this.logger.debug('BLE write ' + s);
+            this.lastWritten = s;
+          }
+        }
+        this.write(value);
+      },
       error: (err: any) => this.logger.error('BLE user error', err),
       complete: () => this.disconnect(disconnected)
     };
   }
 
   private write(value: ArrayBuffer) {
-    if (this.logger.isDebugEnabled()) {
-      const s = bufferToString(value);
-      if (s !== this.lastWritten) {
-        this.logger.debug('BLE write ' + s);
-        this.lastWritten = s;
-      }
-    }
     this.ble.writeWithoutResponse(this.address, SERVICE_UUID, OUTPUT_UUID, value).catch(error => {
       this.logger.error('BLE write error', error);
     });
@@ -145,13 +158,6 @@ class BLEPeripheral implements Peripheral {
   }
 
   private onNotify(data, subscriber) {
-    if (this.logger.isDebugEnabled()) {
-      const s = bufferToString(data);
-      if (s !== this.lastReceived) {
-        this.logger.debug('BLE received ' + s);
-        this.lastReceived = s;
-      }
-    }
     // strip trailing '$' and prepend missing '0'/'?' for notifications
     // TODO: only handle version specially and drop '?'?
     const view = new Uint8Array(data);

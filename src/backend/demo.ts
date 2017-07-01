@@ -9,8 +9,8 @@ import { Logger } from '../core';
 
 const VERSION = '5336';
 
-const TIMEOUT_RATE = 0.001;
-const ERROR_RATE = 0.001;
+const TIMEOUT_RATE = 0.0001;
+const ERROR_RATE = 0.0001;
 
 function random(min: number, max: number) {
   return min + Math.random() * (max - min);
