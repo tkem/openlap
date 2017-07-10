@@ -1,4 +1,4 @@
-1.4.1 UNRELEASED
+1.4.1 2017-07-10
 ----------------
 
 - Improve Bluetooth reconnect handling.
