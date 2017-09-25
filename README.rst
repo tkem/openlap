@@ -46,7 +46,7 @@ you have everything needed for Android or iOS development.  Then run::
 
   ionic cordova build android
 
-  or
+or
 
   ionic cordova build ios
 
