@@ -75,7 +75,10 @@ export class DataView {
   }
 
   static fromString(s: string) {
-    return new DataView(Uint8Array.from(s.split('').map(c => c.charCodeAt(0))).buffer);
+    // return new DataView(Uint8Array.from(s.split('').map(c => c.charCodeAt(0))).buffer);
+    // Uint8Array.from is not working in Safari at the moment
+    let array = new Uint8Array(s.split('').map(c => c.charCodeAt(0)));
+    return new DataView(array.buffer);
   }
 
   private subarray(byteOffset?: number, byteLength?: number) {
