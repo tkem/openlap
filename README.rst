@@ -45,8 +45,11 @@ you have everything needed for Android or iOS development.  Then run::
   ionic cordova plugin add cordovarduino
 
 Android::
+
   ionic cordova build android
+
 iOS::
+
   ionic cordova build ios
 
 Please refer to the `Ionic CLI <http://ionicframework.com/docs/cli/>`_
