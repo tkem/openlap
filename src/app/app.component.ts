@@ -53,6 +53,9 @@ export class AppComponent implements OnInit {
       if (readySource === 'cordova') {
         this.insomnia.keepAwake();
       }
+      if (this.platform.is('ios')) {
+        this.speech.setRate(1.5);
+      }
       this.settings.getOptions().subscribe(options => {
         this.logger.setDebugEnabled(options.debug);
         this.enableFullScreen(options.fullscreen);

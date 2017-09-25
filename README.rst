@@ -36,23 +36,25 @@ Building from Source
 
 Open Lap is built using `Ionic <http://ionicframework.com/>`_ and
 `Apache Cordova <https://cordova.apache.org/>`_.  To build the Android
-app, please follow Ionic's `installation guide
+or iOS app, please follow Ionic's `installation guide
 <http://ionicframework.com/docs/intro/installation/>`_ and make sure
-you have everything needed for Android development.  Then run::
+you have everything needed for Android or iOS development.  Then run::
 
   npm install
   npm run build
   ionic cordova plugin add cordovarduino
+
+Android::
+
   ionic cordova build android
+
+iOS::
+
+  ionic cordova build ios
 
 Please refer to the `Ionic CLI <http://ionicframework.com/docs/cli/>`_
 documentation for further information on how to run the application on
 an actual device, or in a Web browser or emulator for testing.
-
-Due to lack of resources, Open Lap has *not* been tested on iOS, and
-is unlikely to run unchanged on that platform.  However, being a
-hybrid_ app, it shouldn't take too much effort to make it work, so
-please feel free to fork and give it a try!
 
 
 Contributing Translations
