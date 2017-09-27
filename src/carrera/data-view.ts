@@ -75,7 +75,9 @@ export class DataView {
   }
 
   static fromString(s: string) {
-    return new DataView(Uint8Array.from(s.split('').map(c => c.charCodeAt(0))).buffer);
+    // Note: TypedArray.from() seems to be not supported on iOS
+    const array = new Uint8Array(s.split('').map(c => c.charCodeAt(0)));
+    return new DataView(array.buffer);
   }
 
   private subarray(byteOffset?: number, byteLength?: number) {
