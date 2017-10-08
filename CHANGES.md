@@ -1,3 +1,18 @@
+1.4.2 UNRELEASED
+----------------
+
+- Adjust `TTS` rate on iOS (courtesy of @elliot2extreme).
+
+- Remove `TypedArray.from()` for iOS compatibility (courtesy of
+  @elliot2extreme).
+
+- Add icon and splash screen resources for iOS.
+
+- Update icon and splash screen source images.
+
+- Update dependencies.
+
+
 1.4.1 2017-07-10
 ----------------
 
@@ -5,7 +20,7 @@
 
 - Show three-digit CU firmware version.
 
-- Upgrade ``ionic-angular`` to v3.5.0.
+- Upgrade `ionic-angular` to v3.5.0.
 
 
 1.4.0 2017-06-16
@@ -33,9 +48,9 @@
 
 - Improve handling of two-sector tracks.
 
-- Improve ``Toast`` error handling.
+- Improve `Toast` error handling.
 
-- Upgrade to ``ionic`` v3.1.
+- Upgrade to `ionic` v3.1.
 
 
 1.3.0 2017-05-03
@@ -73,7 +88,7 @@
 
 - Fix Dutch translation typo (courtesy of Haarman).
 
-- Upgrade to ``ionic-native`` v3.5.
+- Upgrade to `ionic-native` v3.5.
 
 
 1.1.0 2017-04-11
@@ -87,7 +102,7 @@
 
 - Ignore section times reported by Check Lane.
 
-- Upgrade to ``ionic`` v3.
+- Upgrade to `ionic` v3.
 
 
 1.0.2 2017-04-01
@@ -97,15 +112,15 @@
 
 - Increase tuning page font size.
 
-- Add ``IonicErrorHandler``.
+- Add `IonicErrorHandler`.
 
 - Add workaround for random toast errors.
 
 - Add translation instructions to README.
 
-- Upgrade to ``ionic-native`` v3.
+- Upgrade to `ionic-native` v3.
 
-- Upgrade to ``ngx-translate`` v6.
+- Upgrade to `ngx-translate` v6.
 
 
 1.0.1 2017-03-20
@@ -245,7 +260,7 @@
 
 - Filter Bluetooth devices.
 
-- Upgrade ``ionic-native``.
+- Upgrade `ionic-native`.
 
 - Make builds more reproducible.
 
@@ -257,7 +272,7 @@
 
 - Increase page load timeout.
 
-- Upgrade ``ionic-native``.
+- Upgrade `ionic-native`.
 
 
 0.8.3 2016-11-29
@@ -291,7 +306,7 @@
 
 - Upgrade to Ionic RC 3.
 
-- Switch to ``ionic-storage`` for storing user settings.
+- Switch to `ionic-storage` for storing user settings.
 
 - Add options to prematurely stop or restart a race.
 
@@ -375,7 +390,7 @@
 
 - Race settings usability improvements.
 
-- Upgrade ``ionic-native``.
+- Upgrade `ionic-native`.
 
 
 0.6.0 2016-09-08
@@ -391,7 +406,7 @@
 
 - Move controller color setup to settings menu.
 
-- Use native ``Toast`` plugin.
+- Use native `Toast` plugin.
 
 - Various refactorings and smaller improvements.
 
@@ -399,9 +414,9 @@
 0.5.1 2016-08-12
 ----------------
 
-- Add ``cordova-plugin-app-version`` required by ``ionic-native``.
+- Add `cordova-plugin-app-version` required by `ionic-native`.
 
-- Add ``android-versionCode`` to ``config.xml``.
+- Add `android-versionCode` to `config.xml`.
 
 
 0.5.0 2016-08-12
@@ -409,7 +424,7 @@
 
 - Upgrade to Ionic 2 Beta 11.
 
-- Use ``TTS`` plugin for speech notifications.
+- Use `TTS` plugin for speech notifications.
 
 - Improve CU reconnect handling.
 
@@ -447,7 +462,7 @@
 
 - Click log record for JSON view.
 
-- Use ``cordovarduino`` plugin for serial connection.
+- Use `cordovarduino` plugin for serial connection.
 
 - Various refactorings and improvements.
 
@@ -493,7 +508,7 @@
 
 - Setup race, qualifying, drivers and controller colors.
 
-- Add ``RaceControl`` provider.
+- Add `RaceControl` provider.
 
 - Add global exception handler.
 
