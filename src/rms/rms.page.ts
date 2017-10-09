@@ -107,7 +107,7 @@ export class RmsPage implements OnDestroy, OnInit {
     });
     this.pitlane = mode.map(value => (value & 0x04) != 0);
 
-    this.keySupported = this.cu.getVersion().distinctUntilChanged().map(v => v >= '5.331');
+    this.keySupported = this.cu.getVersion().distinctUntilChanged().map(v => v >= '5331');
   }
 
   ngOnInit() {
