@@ -8,7 +8,6 @@ import { Logger } from './logger';
 
 interface ToastProvider {
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center'): Promise<void>;
-  hide(): Promise<void>;
 }
 
 class NativeToastProvider implements ToastProvider {
@@ -24,42 +23,26 @@ class NativeToastProvider implements ToastProvider {
       });
     });
   }
-
-  hide() {
-    return this.toast.hide();
-  }
 }
 
 class IonicToastProvider implements ToastProvider {
-  private dismissCurrentToast = () => Promise.resolve();
 
   constructor(private controller: ToastController, private logger: Logger) {}
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
-    return this.dismissCurrentToast().then(() => {
-      const toast = this.controller.create({
-        message: message,
-        duration: duration,
-        position: position === 'center' ? 'middle' : position,
-        showCloseButton: true
-      });
-      toast.onDidDismiss(() => {
-        this.dismissCurrentToast = () => Promise.resolve();
-      });
-      this.dismissCurrentToast = () => toast.dismiss().catch(error => {
-        this.logger.error('Error dismissing toast', error);
-      });
-      return toast.present();
+    const toast = this.controller.create({
+      message: message,
+      duration: duration,
+      position: position === 'center' ? 'middle' : position,
+      showCloseButton: true
     });
-  }
-
-  hide() {
-    return this.dismissCurrentToast();
+    return toast.present();
   }
 }
 
 @Injectable()
 export class Toast {
+
   private toast: ToastProvider;
 
   constructor(platform: Platform, controller: ToastController, nativeToast: NativeToast, private logger: Logger) {
@@ -67,11 +50,7 @@ export class Toast {
   }
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
-    return this.toast.hide().catch(error => {
-      this.logger.error('Error hiding toast', error);
-    }).then(() => {
-      return this.toast.show(message, duration, position);
-    });
+    return this.toast.show(message, duration, position);
   }
 
   showTop(message: string, duration: number) {
@@ -84,9 +63,5 @@ export class Toast {
 
   showCenter(message: string, duration: number) {
     return this.show(message, duration, 'center');
-  }
-
-  hide() {
-    return this.toast.hide();
   }
 }
