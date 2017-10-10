@@ -1,10 +1,16 @@
-1.4.2 UNRELEASED
+1.4.2 2017-10-10
 ----------------
 
-- Adjust `TTS` rate on iOS (courtesy of @elliot2extreme).
+- Fix sporadic `IonicToastProvider` runtime errors.
+
+- Fix firmware version check for virtual CU button support.
+
+- Convert `README` and `CHANGES` to Markdown format.
+
+- Adjust `TTS` rate on iOS (courtesy of elliot2extreme).
 
 - Remove `TypedArray.from()` for iOS compatibility (courtesy of
-  @elliot2extreme).
+  elliot2extreme).
 
 - Add icon and splash screen resources for iOS.
 

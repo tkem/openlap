@@ -19,10 +19,10 @@ In a nutshell, Open Lap lets you
 - send out the pace car in case of emergency, or temporarily disable
   lap counting during a "yellow flag" phase.
 
-Please note that some features, such as the start light and pace car
-buttons, require Carrera® Control Unit firmware version 5.331 or
-higher.  Carrera® Check Lane support generally requires at least
-firmware version 5.336.
+Some features, such as the start light and pace car buttons, will
+require Carrera® Control Unit firmware version 3.31 or higher.
+Carrera® Check Lane support generally requires at least firmware
+version 3.36.
 
 Open Lap is available as an Android app from the [Google Play
 Store](https://play.google.com/store/apps/details?id=at.co.kemmer.openlap).
@@ -50,11 +50,11 @@ Please refer to the [Ionic CLI](http://ionicframework.com/docs/cli/)
 documentation for further information on how to run the application on
 an actual device, or in a Web browser or emulator for testing.
 
-Due to lack of resources, Open Lap has *not* been tested on iOS, and
-is unlikely to run unchanged on that platform.  However, being a
-[hybrid](http://en.wikipedia.org/wiki/HTML5_in_mobile_devices#Hybrid_Mobile_Apps)
-app, it shouldn't take too much effort to make it work, so please feel
-free to fork and give it a try!
+Please note that due to lack of resources, Open Lap is *not*
+officially supported on iOS.  However, there've been reports of
+successfully building and running an iOS version, so you still might
+want to [give it a
+try](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/)!
 
 
 Contributing Translations
@@ -76,6 +76,8 @@ License
 Copyright (c) 2016, 2017 Thomas Kemmer.
 
 Translations: Haarman (Nederlands).
+
+iOS tweaks: elliot2extreme.
 
 Licensed under the [Apache License, Version
 2.0](http://www.apache.org/licenses/LICENSE-2.0).
