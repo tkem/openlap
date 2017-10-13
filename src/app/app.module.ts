@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { IonicApp, IonicModule } from 'ionic-angular';
@@ -33,7 +33,7 @@ import { AppComponent } from './app.component';
 import { RootPage } from './root.page';
 
 // AoT requires an exported function for factories
-export function createTranslateLoader(http: Http) {
+export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -44,14 +44,14 @@ export function createTranslateLoader(http: Http) {
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(AppComponent),
     IonicStorageModule.forRoot(/* TODO: config */),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [Http]
+        deps: [HttpClient]
       }
     }),
     BackendModule,
