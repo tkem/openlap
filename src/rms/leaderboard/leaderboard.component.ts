@@ -23,6 +23,7 @@ export class LeaderboardItem {
   pits?: number;
   sector?: number;
   gridpos?: number;
+  refuel?: boolean;
   finished?: boolean;
 }
 

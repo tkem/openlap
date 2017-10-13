@@ -187,16 +187,22 @@ export class RmsPage implements OnDestroy, OnInit {
       return <[string, any]>[event, id !== null ? drivers[id] : null];
     });
 
+    // TODO: scan?
     const gridpos = [];
+    const pitfuel = [];
     this.ranking = session.ranking.combineLatest(drivers).map(([ranks, drivers]) => {
       return ranks.map((item, index) => {
         if (this.options.mode == 'race' && gridpos[item.id] === undefined && item.time !== undefined) {
           gridpos[item.id] = index;
         }
+        if (!item.pit || item.fuel < pitfuel[item.id]) {
+          pitfuel[item.id] = item.fuel;
+        }
         return Object.assign({}, item, {
           position: index,
           driver: drivers[item.id],
-          gridpos: gridpos[item.id]
+          gridpos: gridpos[item.id],
+          refuel: item.pit && item.fuel > pitfuel[item.id]
         });
       });
     }).share();

@@ -76,7 +76,7 @@ class Car {
       }
       if (this.fuel < random(0x10, 0x30) && this.sector === 1) {
         this.pit = true;
-        this.timeout = setTimeout(() => this.onRefuel(), 500);
+        this.timeout = setTimeout(() => this.onRefuel(), 1500);
       } else {
         this.timeout = setTimeout(() => this.onFuel(), this.fuelTime());
       }
