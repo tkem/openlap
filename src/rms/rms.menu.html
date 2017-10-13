@@ -1,7 +1,7 @@
 <ion-item-group>
   <ion-item>
     <ion-label translate>Order by number</ion-label>
-    <ion-checkbox [(ngModel)]="options.fixedorder" (ionChange)="update()"></ion-checkbox>
+    <ion-checkbox [(ngModel)]="fixedOrder"></ion-checkbox>
   </ion-item>
   <button ion-item [disabled]="!params.active" (click)="stop()">
     <span translate>Cancel race</span>&hellip;

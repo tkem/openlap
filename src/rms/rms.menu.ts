@@ -16,12 +16,22 @@ export class RmsMenu implements OnDestroy, OnInit  {
   private subscription: any;
 
   constructor(
-    private alert: I18nAlertController, 
+    private alert: I18nAlertController,
     private settings: Settings,
-    private view: ViewController, 
+    private view: ViewController,
     params: NavParams
   ) {
     this.params = params.data;
+  }
+
+  get fixedOrder() {
+    return this.options.fixedorder;
+  }
+
+  set fixedOrder(value) {
+    this.options.fixedorder = value;
+    this.settings.setOptions(this.options);
+    this.close();
   }
 
   ngOnInit() {
@@ -32,10 +42,6 @@ export class RmsMenu implements OnDestroy, OnInit  {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  update() {
-    this.settings.setOptions(this.options);
   }
 
   restart() {
