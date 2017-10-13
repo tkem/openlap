@@ -187,7 +187,7 @@ export class RmsPage implements OnDestroy, OnInit {
       return <[string, any]>[event, id !== null ? drivers[id] : null];
     });
 
-    // TODO: scan?
+    // TODO: convert to Observable.scan()?
     const gridpos = [];
     const pitfuel = [];
     this.ranking = session.ranking.combineLatest(drivers).map(([ranks, drivers]) => {
