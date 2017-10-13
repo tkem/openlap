@@ -93,6 +93,34 @@ leaderboard {
         vertical-align: middle;
     }
 
+    span.pos-up {
+        color: #0f0;
+        font-size: 75%;
+        &:before {
+            content: "▲";
+            display: inline-block;
+            width: 1em;
+        }
+    }
+    span.pos-dn {
+        color: orangered;
+        font-size: 75%;
+        &:before {
+            content: "▼";
+            display: inline-block;
+            width: 1em;
+        }
+    }
+    span.pos-eq {
+        color: white;
+        font-size: 75%;
+        &:before {
+            content: "◀";
+            display: inline-block;
+            width: 1em;
+        }
+    }
+
     gauge {
         span {
             background: linear-gradient(to right, red, #ee0 25%, green 50%, darkGreen);

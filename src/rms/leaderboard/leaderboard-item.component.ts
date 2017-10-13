@@ -12,4 +12,8 @@ export class LeaderboardItemComponent {
   @Input() item: LeaderboardItem;
   @Input() items: LeaderboardItem[];
   @Input() best: number[];
+
+  abs(n: number) {
+    return n < 0 ? -n : n;
+  }
 }

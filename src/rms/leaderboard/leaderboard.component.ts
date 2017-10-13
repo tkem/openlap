@@ -22,6 +22,7 @@ export class LeaderboardItem {
   pit?: boolean;
   pits?: number;
   sector?: number;
+  gridpos?: number;
   finished?: boolean;
 }
 
@@ -46,7 +47,8 @@ export class LeaderboardComponent {
     this._items = items;
     if (items) {
       this.ordered = [...items];
-      this.ordered.sort(compare[this.order] || compare['position']);
+      this.ordered.sort(compare[this.order || 'position']);
+      // TODO: move to rms?
       this.best = items.map(item => item.best).reduce((acc, times) => {
         times.forEach((time, index) => {
           if (time < (acc[index] || Infinity)) {

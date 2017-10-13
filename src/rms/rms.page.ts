@@ -144,7 +144,7 @@ export class RmsPage implements OnDestroy, OnInit {
       return Observable.combineLatest(...observables);
     });
 
-    let best = [Infinity, Infinity, Infinity, Infinity];
+    const best = [Infinity, Infinity, Infinity, Infinity];
     const events = Observable.merge(
       session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
         const events = [];
@@ -187,9 +187,17 @@ export class RmsPage implements OnDestroy, OnInit {
       return <[string, any]>[event, id !== null ? drivers[id] : null];
     });
 
+    const gridpos = [];
     this.ranking = session.ranking.combineLatest(drivers).map(([ranks, drivers]) => {
       return ranks.map((item, index) => {
-        return Object.assign({}, item, { position: index, driver: drivers[item.id] });
+        if (this.options.mode == 'race' && gridpos[item.id] === undefined && item.time !== undefined) {
+          gridpos[item.id] = index;
+        }
+        return Object.assign({}, item, {
+          position: index,
+          driver: drivers[item.id],
+          gridpos: gridpos[item.id]
+        });
       });
     }).share();
 
