@@ -1,3 +1,17 @@
+1.5.0 2017-10-23
+----------------
+
+- Add position up/down indicators.
+
+- Track if car has started refueling.
+
+- Close page menu when clicking checkbox items.
+
+- Upgrade `ngx-translate` to v8.0.0.
+
+- Update dependencies.
+
+
 1.4.2 2017-10-10
 ----------------
 
