@@ -2,7 +2,7 @@
   "rules": {
     "no-duplicate-variable": true,
     "no-unused-variable": [
-      false,
+      true,
       { "ignore-pattern": "^_" }
     ]
   },

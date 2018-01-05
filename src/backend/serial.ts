@@ -146,7 +146,7 @@ export class SerialBackend extends Backend {
   {
     super();
 
-    this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
+    this.scanner = Observable.from(this.platform.ready()).switchMap(readySource => {
       if (readySource == 'cordova' && platform.is('android') && !this.device.isVirtual) {
         return Observable.from(this.serial.requestPermission().then(() => true, () => false));
       } else {

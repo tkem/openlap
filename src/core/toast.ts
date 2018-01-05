@@ -4,8 +4,6 @@ import { Platform, ToastController } from 'ionic-angular';
 
 import { Toast as NativeToast } from '@ionic-native/toast';
 
-import { Logger } from './logger';
-
 interface ToastProvider {
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center'): Promise<void>;
 }
@@ -27,7 +25,7 @@ class NativeToastProvider implements ToastProvider {
 
 class IonicToastProvider implements ToastProvider {
 
-  constructor(private controller: ToastController, private logger: Logger) {}
+  constructor(private controller: ToastController) {}
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
     const toast = this.controller.create({
@@ -45,8 +43,8 @@ export class Toast {
 
   private toast: ToastProvider;
 
-  constructor(platform: Platform, controller: ToastController, nativeToast: NativeToast, private logger: Logger) {
-    this.toast = platform.is('cordova') ? new NativeToastProvider(nativeToast) : new IonicToastProvider(controller, logger);
+  constructor(platform: Platform, controller: ToastController, nativeToast: NativeToast) {
+    this.toast = platform.is('cordova') ? new NativeToastProvider(nativeToast) : new IonicToastProvider(controller);
   }
 
   show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {

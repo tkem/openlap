@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private setRoot(page: Component, params?: any) {
+  private setRoot(page: any, params?: any) {
     this.nav.setRoot(page, params).catch(error => {
       this.logger.error('Error setting root page', error);
     }).then(() => {

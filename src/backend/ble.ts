@@ -181,7 +181,7 @@ export class BLEBackend extends Backend {
   constructor(private ble: BLE, private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
 
-    this.scanner = Observable.from(platform.ready()).switchMap(readySource => {
+    this.scanner = Observable.from(this.platform.ready()).switchMap(readySource => {
       if (readySource == 'cordova') {
         // TODO: use BLE state listeners when available in ionic-native?
         return Observable.interval(1000).startWith(null).switchMap(() => {

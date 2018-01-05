@@ -88,7 +88,7 @@ export class Session {
         offset = ((now - then + prev) || 0) - time;
       }
       return [[id, time + offset, group], [time, offset, now]];
-    }, [[], [Infinity, 0, NaN]]).map(([t]) => t);
+    }, [[], [Infinity, 0, NaN]]).map(([t]: [number, number, number][]) => t);
     const fuel = cu.getFuel();
     const pit = cu.getPit();
 
@@ -167,7 +167,7 @@ export class Session {
 
   private createGrid(
     timer: Observable<[number, number, number]>,
-    fuel: Observable<number[]>,
+    fuel: Observable<ArrayLike<number>>,
     pits: Observable<number>,
     mask = 0
   ) {
@@ -182,7 +182,7 @@ export class Session {
       type TimeInfo = [number[][], number[], number[], boolean];
       this.active |= (1 << group.key);
 
-      const times = group.scan(([times, last, best, finished], [id, time, sensor]): TimeInfo => {
+      const times = group.scan(([times, last, best, finished]: TimeInfo, [id, time, sensor]: [number, number, number]) => {
         const tail = times[times.length - 1] || [];
         if (sensor === 1) {
           if (!finished && this.isFinished(times.length)) {
@@ -204,7 +204,7 @@ export class Session {
           last[index] = time - tail[index - 1];
           best[index] = Math.min(last[index], best[index] || Infinity);
         }
-        return [times, last, best, finished];
+        return <TimeInfo>[times, last, best, finished];
       }, <TimeInfo>[[], [], [], false]);
 
       return times.combineLatest(

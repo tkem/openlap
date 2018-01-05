@@ -117,7 +117,7 @@ export class ControlUnit {
   }
 
   getTimer(): Observable<[number, number, number]> {
-    return this.data.filter((view: DataView) => {
+    return this.data.filter(view => {
       // TODO: check CRC
       return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
     }).filter(view => {
@@ -128,8 +128,9 @@ export class ControlUnit {
       } else {
         return true;
       }
-    }).map((view) => {
-      return [view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10) ];
+    }).map(view => {
+      // tuples are never inferred
+      return <[number, number, number]>[view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10)];
     }).distinctUntilChanged(
       // guard against repeated timings
       (a, b) => a[0] === b[0] && a[1] === b[1]
