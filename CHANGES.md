@@ -1,3 +1,13 @@
+1.5.1 2018-01-12
+----------------
+
+- Add Italian translation by SdiF.
+
+- Only show firmware version if a Control Unit is selected.
+
+- Upgrade dependencies.
+
+
 1.5.0 2017-10-23
 ----------------
 
