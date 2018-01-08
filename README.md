@@ -73,9 +73,9 @@ request, if you like - for submitting your translations.
 License
 ------------------------------------------------------------------------
 
-Copyright (c) 2016, 2017 Thomas Kemmer.
+Copyright (c) 2016-2018 Thomas Kemmer.
 
-Translations: Haarman (Nederlands).
+Translations: Haarman (Nederlands), SdiF (Italiano).
 
 iOS tweaks: elliot2extreme.
 
