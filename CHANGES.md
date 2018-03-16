@@ -1,3 +1,9 @@
+1.5.2 2018-03-16
+----------------
+
+- Add Spanish translation (courtesy of Daphmi).
+
+
 1.5.1 2018-01-12
 ----------------
 
