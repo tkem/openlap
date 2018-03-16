@@ -75,7 +75,7 @@ License
 
 Copyright (c) 2016-2018 Thomas Kemmer.
 
-Translations: Haarman (Nederlands), SdiF (Italiano).
+Translations: Haarman (Nederlands), SdiF (Italiano), Daphmi (Español).
 
 iOS tweaks: elliot2extreme.
 
