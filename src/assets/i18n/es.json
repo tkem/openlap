@@ -7,6 +7,7 @@
     "Si su unidad de control no aparece, compruebe que tiene el Bluetooth activado o estas usando el cable USB OTG.",
   "Reset all user settings to default values?":
     "¿Quiere usar los valores establecidos por defecto?",
+
   "About": "Información",
   "About Open Lap": "Información sobre Open Lap",
   "Apply all": "Acceptar todo",
@@ -14,7 +15,7 @@
   "Autonomous Car": "Coche autónomo",
   "Brake": "Freno",
   "Cancel race?": "¿Cancelar carrera?",
-  "Cancel race": "Carrera cancelada",
+  "Cancel race": "Cancelar carrera",
   "Cancel": "Cancelar",
   "Car enters pit": "Coche entra en box",
   "Car leaves pit": "Coche vuelve a la pista",
@@ -86,12 +87,12 @@
     "falsestart": "¡Salida nula!",
     "finallap": "¡Última vuelta!",
     "finished": "¡Carrera finalizada!",
-    "fuel0": "Subito al box!",
-    "fuel1": "Vieni al box!",
-    "fuel2": "Pronti al rifornimento!",
-    "pitenter": "¡Ha entrado en boxes!",
-    "pitexit": "¡Ha abandonado boxes!",
-    "yellowflag": "¡Cuidado: Bandera amarilla!",
+    "fuel0": "¡Éntre en boxes!",
+    "fuel1": "¡Necesita entrar en boxes!",
+    "fuel2": "¡Se están preparando en boxes!",
+    "pitenter": "¡Está entrando en boxes!",
+    "pitexit": "¡Acaba de abandonar el pitlane!",
+    "yellowflag": "¡Cuidado, bandera amarilla!",
     "greenflag": "¡Bandera verde!"
   }
 }
