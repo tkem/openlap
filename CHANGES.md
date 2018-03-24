@@ -1,4 +1,4 @@
-1.5.2 UNRELEASED
+1.5.2 2018-03-24
 ----------------
 
 - Add Spanish translation (courtesy of Daphmi).
