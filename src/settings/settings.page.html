@@ -26,6 +26,9 @@
       <ion-label translate>Fullscreen mode</ion-label>
       <ion-toggle [(ngModel)]="options.fullscreen" (ionChange)="update()"></ion-toggle>
     </ion-item>
+    <button ion-item [navPush]="connectionPage">
+      <span translate>Connection</span>
+    </button>
     <button ion-item [navPush]="notificationsPage">
       <span translate>Notifications</span>
     </button>

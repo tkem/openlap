@@ -31,6 +31,12 @@ export class ConnectionsComponent {
   }
 
   onSelect(peripheral: Peripheral) {
-    this.settings.setConnection(peripheral);
+    this.settings.getConnection().take(1).subscribe((connection) => {
+      this.settings.setConnection(Object.assign({}, connection, {
+        type: peripheral.type,
+        name: peripheral.name,
+        address: peripheral.address
+      }));
+    });
   }
 }

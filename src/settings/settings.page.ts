@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { AboutPage } from './about.page';
-import { ColorsPage } from './colors.page';
+import { ConnectionPage } from './connection.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingPage } from './logging.page';
 import { NotificationsPage } from './notifications.page';
@@ -13,7 +13,7 @@ import { I18nAlertController, Options, Settings } from '../core';
 })
 export class SettingsPage implements OnDestroy, OnInit {
   aboutPage = AboutPage;
-  colorsPage = ColorsPage;
+  connectionPage = ConnectionPage;
   licensesPage = LicensesPage;
   loggingPage = LoggingPage;
   notificationsPage = NotificationsPage;

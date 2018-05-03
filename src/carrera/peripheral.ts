@@ -6,5 +6,5 @@ export interface Peripheral {
   name: string;
   address?: any;
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>): Subject<ArrayBuffer>;
-  equals(other: Peripheral);
+  equals(other: any);
 }

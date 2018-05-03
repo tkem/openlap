@@ -39,6 +39,13 @@ export enum ControlUnitButton {
   CODE = 8
 }
 
+export class Settings {
+  connectionTimeout = CONNECTION_TIMEOUT;
+  requestTimeout = REQUEST_TIMEOUT;
+  minReconnectDelay = MIN_RECONNECT_DELAY;
+  maxReconnectDelay = MAX_RECONNECT_DELAY;
+};
+
 export class ControlUnit {
 
   private connection: Subject<ArrayBuffer>;
@@ -53,14 +60,14 @@ export class ControlUnit {
 
   private state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
 
-  constructor(public peripheral: Peripheral, private logger: Logger) {
+  constructor(public peripheral: Peripheral, private settings: Settings, private logger: Logger) {
     this.connection = this.peripheral.connect({
       next: () => this.connection.next(POLL_COMMAND.buffer)
     });
     const connection = this.connection.share();  // FIXME: concat does not define order of (un)subscribe
     this.data = Observable.concat(
-      connection.timeout(CONNECTION_TIMEOUT).take(1).do(() => this.state.next('connected')),
-      connection.timeout(REQUEST_TIMEOUT)
+      connection.timeout(settings.connectionTimeout).take(1).do(() => this.state.next('connected')),
+      connection.timeout(settings.requestTimeout)
     ).retryWhen(errors => {
       return this.doReconnect(errors);
     }).do(() => {
@@ -92,7 +99,7 @@ export class ControlUnit {
       setTimeout(() => {
         this.connect();
         resolve();
-      }, MIN_RECONNECT_DELAY);
+      }, this.settings.minReconnectDelay);
     });
   }
 
@@ -216,8 +223,8 @@ export class ControlUnit {
     }, 0).do(() => {
       state.next('disconnected');
     }).concatMap(count => {
-      const backoff = Math.pow(1.5, count);
-      return Observable.timer(Math.min(MIN_RECONNECT_DELAY * backoff, MAX_RECONNECT_DELAY));
+      const backoff = this.settings.minReconnectDelay * Math.pow(1.5, count);
+      return Observable.timer(Math.min(backoff, this.settings.maxReconnectDelay));
     }).do(() => {
       state.next('connecting');
     });

@@ -8,8 +8,6 @@ import { Platform } from 'ionic-angular';
 
 import { Observable, ReplaySubject } from 'rxjs';
 
-import { Peripheral } from '../carrera';
-
 const COLORS = [
   '#ff0000',
   '#00ff00',
@@ -37,6 +35,16 @@ const NOTIFICATIONS = {
   yellowflag: true,
   greenflag: true
 };
+
+export class Connection {
+  type: string;
+  name: string;
+  address?: string;
+  connectionTimeout = 5000;
+  requestTimeout = 1000;
+  minReconnectDelay = 2000;
+  maxReconnectDelay = 10000;
+}
 
 export class Options {
   cumode = true;
@@ -101,18 +109,20 @@ export class Settings {
     });
   }
 
-  getConnection(): Observable<any> {
+  getConnection(): Observable<Connection> {
     return this.get('connection').map(value => {
-      return value || (this.isDemo() ? {name: 'Demo', type: 'demo'} : value);
+      if (value) {
+        return Object.assign(new Connection(), value);
+      } else if (this.isDemo()) {
+        return Object.assign(new Connection(), {name: 'Demo', type: 'demo'});
+      } else {
+        return null;
+      }
     });
   }
 
-  setConnection(value: Peripheral) {
-    return this.set('connection', {
-      type: value.type,
-      name: value.name,
-      address: value.address
-    });
+  setConnection(value: Connection): Promise<void> {
+    return this.set('connection', value);
   }
 
   getDrivers(): Observable<Array<Driver>> {

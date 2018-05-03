@@ -8,6 +8,7 @@ import { SharedModule } from '../shared';
 
 import { AboutPage } from './about.page';
 import { ColorsPage } from './colors.page';
+import { ConnectionPage } from './connection.page';
 import { DriversPage } from './drivers.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingMenu } from './logging.menu';
@@ -19,6 +20,7 @@ import { SettingsPage } from './settings.page';
   declarations: [
     AboutPage,
     ColorsPage,
+    ConnectionPage,
     DriversPage,
     LicensesPage,
     LoggingMenu,
@@ -29,6 +31,7 @@ import { SettingsPage } from './settings.page';
   entryComponents: [
     AboutPage,
     ColorsPage,
+    ConnectionPage,
     DriversPage,
     LicensesPage,
     LoggingMenu,
@@ -37,6 +40,7 @@ import { SettingsPage } from './settings.page';
     SettingsPage
   ],
   exports: [
+    ColorsPage,
     DriversPage,
     SettingsPage
   ],

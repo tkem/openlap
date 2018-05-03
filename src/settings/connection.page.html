@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <span translate>Connection</span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label stacked translate>Connection timeout</ion-label>
+      <ion-range [(ngModel)]="connection.connectionTimeout" min="1000" max="10000" step="500" snaps="true">
+        <ion-label range-left>1s</ion-label>
+        <ion-label range-right>10s</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked translate>Request timeout</ion-label>
+      <ion-range [(ngModel)]="connection.requestTimeout" min="1000" max="10000" step="500" snaps="true">
+        <ion-label range-left>1s</ion-label>
+        <ion-label range-right>10s</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked translate>Reconnect delay</ion-label>
+      <ion-range [(ngModel)]="reconnectDelay" dualKnobs="true" min="1000" max="10000" step="500" snaps="true">
+        <ion-label range-left>1s</ion-label>
+        <ion-label range-right>10s</ion-label>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -59,6 +59,7 @@ export class AppComponent implements OnInit {
         this.setLanguage(options.language);
       });
       this.settings.getConnection().subscribe(connection => {
+        this.logger.info('New connection', connection);
         if (this.cu.value) {
           this.cu.value.disconnect();
         }
@@ -67,7 +68,7 @@ export class AppComponent implements OnInit {
           Observable.from(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
             return device.equals(connection);
           }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
-            const cu = new ControlUnit(device, this.logger);
+            const cu = new ControlUnit(device, connection, this.logger);
             this.cu.next(cu);
             cu.connect();
           }).then(() => {
