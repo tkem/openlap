@@ -1,3 +1,11 @@
+1.6.0 UNRELEASED
+----------------
+
+- Make connection settings configurable.
+
+- Update dependencies.
+
+
 1.5.2 2018-03-24
 ----------------
 
