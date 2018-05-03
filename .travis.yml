@@ -6,8 +6,8 @@ android:
   - platform-tools
   - tools
   - extra
-  - build-tools-26.0.2
-  - android-26
+  - build-tools-27.0.1
+  - android-27
 
 jdk:
 - oraclejdk8
@@ -21,6 +21,5 @@ install:
 
 script:
 - npm run build --prod
-- cordova plugin add cordovarduino
 - cordova platform add android
 - cordova build android
