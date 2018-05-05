@@ -57,7 +57,6 @@
     "cordova-plugin-x-toast": "^2.6.2",
     "cordovarduino": "git+https://github.com/tkem/cordovarduino.git#cordova-android-7",
     "es6-promise-plugin": "^4.2.2",
-    "fr.drangies.cordova.serial": "https://github.com/tkem/cordovarduino#cordova-android-7",
     "ionic-angular": "3.9.2",
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
