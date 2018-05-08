@@ -40,10 +40,10 @@ export class Connection {
   type: string;
   name: string;
   address?: string;
-  connectionTimeout = 5000;
-  requestTimeout = 1000;
-  minReconnectDelay = 2000;
-  maxReconnectDelay = 10000;
+  connectionTimeout = 3000;
+  requestTimeout = 2000;
+  minReconnectDelay = 3000;
+  maxReconnectDelay = 8000;
 }
 
 export class Options {
