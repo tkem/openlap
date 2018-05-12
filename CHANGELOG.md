@@ -1,4 +1,4 @@
-1.6.0 UNRELEASED
+1.6.0 2018-05-12
 ----------------
 
 - Make connection settings configurable.
