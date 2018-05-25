@@ -42,7 +42,10 @@
         <ion-select formControlName="drivers" 
                     cancelText="{{'Cancel' | translate}}" 
                     okText="{{'OK' | translate}}">
-          <ion-option translate value="">Automatic</ion-option>
+          <!-- ion-option seems to require translate attribute value; see
+               https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689 
+            -->
+          <ion-option translate="Automatic" value="">Automatic</ion-option>
           <ion-option value="1">1</ion-option>
           <ion-option value="2">2</ion-option>
           <ion-option value="3">3</ion-option>

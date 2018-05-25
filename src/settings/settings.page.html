@@ -14,7 +14,10 @@
     <ion-item>
       <ion-label color="light" translate>Language</ion-label>
       <ion-select [(ngModel)]="options.language" (ionChange)="update()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
-        <ion-option translate value="">Default</ion-option>
+        <!-- ion-option seems to require translate attribute value; see
+             https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689 
+          -->
+        <ion-option translate="Default" value="">Default</ion-option>
         <ion-option value="de">Deutsch</ion-option>
         <ion-option value="en">English</ion-option>
         <ion-option value="es">Español</ion-option>
