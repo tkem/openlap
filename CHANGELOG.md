@@ -1,4 +1,4 @@
-1.6.1 UNRELEASED
+1.6.1 2018-05-28
 ----------------
 
 - Fix translations in ion-option elements.
