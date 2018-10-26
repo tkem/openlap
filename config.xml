@@ -11,6 +11,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="BackgroundColor" value="0xff000000" />
     <preference name="BackupWebStorage" value="none" />
+    <preference name="DefaultVolumeStream" value="media" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="LoadUrlTimeoutValue" value="60000" />
     <preference name="ShowSplashScreenSpinner" value="false" />
