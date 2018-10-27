@@ -72,11 +72,16 @@ leaderboard {
         width: 2em;
     }
 
-    span.title {
-        font-size: 75%;
-    }
-
-    span.bestlap {
+    span.best {
+        &.allbest {
+            color: magenta;
+        }
+        &.notime {
+            color: inherit;
+        }
+        &.allbest.notime {
+            color: inherit;
+        }
         color: #0f0;
     }
 
@@ -84,11 +89,10 @@ leaderboard {
         color: yellow !important;
     }
 
-    span.allbest {
-        color: magenta !important;
+    span.title {
+        font-size: 75%;
     }
 
-    // TODO: refactor status styles
     span.inpit {
         color: white;
         font-size: 75%;
@@ -110,6 +114,7 @@ leaderboard {
             width: 1em;
         }
     }
+
     span.pos-dn {
         color: orangered;
         font-size: 75%;
@@ -119,6 +124,7 @@ leaderboard {
             width: 1em;
         }
     }
+
     span.pos-eq {
         color: white;
         font-size: 75%;

@@ -28,7 +28,9 @@
         </span>
     </ng-template>
     <ng-template ngSwitchCase="bestlap">
-        {{item.best[0] | time:'s.sss'}}
+        <span [ngClass]="{notime: !item.best[0]}">
+            {{(item.best[0] | time:'s.sss') || 'NO&thinsp;TIME'}}
+        </span>
     </ng-template>
     <ng-template ngSwitchCase="gap">
         {{(item.position && item.best[0] ? item.best[0] - items[0].best[0] : null) | time:'+s.sss'}}
@@ -37,22 +39,22 @@
         {{(item.position && item.best[0] ? item.best[0] - items[item.position - 1].best[0] : null) | time:'+s.sss'}}
     </ng-template>
     <ng-template ngSwitchCase="lastlap">
-        <span [ngClass]="{bestlap: item.last[0] == item.best[0], allbest: item.last[0] == best[0]}">
-            {{item.last[0] | time:'s.sss'}}
+        <span [ngClass]="{best: item.last[0] == item.best[0], allbest: item.last[0] == best[0], notime: !item.last[0]}">
+            {{(item.last[0] | time:'s.sss') || 'NO&thinsp;TIME'}}
         </span>
     </ng-template>
     <ng-template ngSwitchCase="sector1">
-        <span [ngClass]="{sector: item.sector == 1, bestlap: item.last[1] == item.best[1], allbest: item.last[1] == best[1]}">
+        <span [ngClass]="{sector: item.sector == 1, best: item.last[1] == item.best[1], allbest: item.last[1] == best[1]}">
             {{item.last[1] | time:'s.sss'}}
         </span>
     </ng-template>
     <ng-template ngSwitchCase="sector2">
-        <span [ngClass]="{sector: item.sector == 2, bestlap: item.last[2] == item.best[2], allbest: item.last[2] == best[2]}">
+        <span [ngClass]="{sector: item.sector == 2, best: item.last[2] == item.best[2], allbest: item.last[2] == best[2]}">
             {{item.last[2] | time:'s.sss'}}
         </span>
     </ng-template>
     <ng-template ngSwitchCase="sector3">
-        <span [ngClass]="{sector: item.sector == 3, bestlap: item.last[3] == item.best[3], allbest: item.last[3] == best[3]}">
+        <span [ngClass]="{sector: item.sector == 3, best: item.last[3] == item.best[3], allbest: item.last[3] == best[3]}">
             {{item.last[3] | time:'s.sss'}}
         </span>
     </ng-template>
