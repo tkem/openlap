@@ -1,3 +1,17 @@
+1.6.2 UNRELEASED
+----------------
+
+- Ignore lap times less than 500 ms.
+
+- Automatically switch to full screen in landscape mode.
+
+- Improve display of empty lap times.
+
+- Volume buttons control media volume by default.
+
+- Update dependencies.
+
+
 1.6.1 2018-05-28
 ----------------
 
