@@ -184,7 +184,7 @@ export class Session {
 
       const times = group.scan(([times, last, best, finished]: TimeInfo, [id, time, sensor]: [number, number, number]) => {
         const tail = times[times.length - 1] || [];
-        if (sensor && time > (tail.length ? tail[sensor - 1] : -Infinity) + this.options.minLapTime) {
+        if (sensor && time > (tail.length >= sensor ? tail[sensor - 1] : -Infinity) + this.options.minLapTime) {
           if (sensor === 1) {
             times.push([time]);
             last[0] = time - tail[0];

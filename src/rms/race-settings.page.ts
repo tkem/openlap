@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { NavParams, ViewController } from 'ionic-angular';
+import { RaceOptions } from '../core';
 
 function formatTime(milliseconds: number) {
   const h = Math.floor(milliseconds / 3600000);
@@ -72,7 +73,7 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
 })
 export class RaceSettingsPage implements AfterViewInit {
 
-  mode: string;
+  mode: 'qualifying' | 'race';
 
   form: FormGroup;
 
@@ -122,8 +123,7 @@ export class RaceSettingsPage implements AfterViewInit {
   }
 
   onSubmit(options) {
-    this.view.dismiss({
-      mode: this.mode,
+    this.view.dismiss(Object.assign(new RaceOptions(this.mode), {
       laps: parseInt(options.laps || '0'),
       time: parseTime(options.time || ''),
       pause: options.pause,
@@ -131,7 +131,7 @@ export class RaceSettingsPage implements AfterViewInit {
       auto: options.auto,
       pace: options.pace,
       slotmode: options.slotmode
-    });
+    }));
   }
 
   onCancel() {

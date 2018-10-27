@@ -5,7 +5,7 @@ import { ModalController, Nav, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs';
 
 import { ControlUnit } from '../carrera';
-import { I18nAlertController, Logger, Settings } from '../core';
+import { I18nAlertController, Logger, RaceOptions, Settings } from '../core';
 import { RaceSettingsPage, RmsPage } from '../rms';
 import { ColorsPage, DriversPage, SettingsPage } from '../settings';
 import { TuningPage } from '../tuning';
@@ -61,7 +61,7 @@ export class MenuComponent implements OnChanges {
   }
 
   startPractice() {
-    this.nav.setRoot(RmsPage, { mode: 'practice', auto: true, pace: true });
+    this.nav.setRoot(RmsPage, new RaceOptions('practice'));
   }
 
   startQualifying() {

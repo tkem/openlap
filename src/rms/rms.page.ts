@@ -5,7 +5,7 @@ import { NavParams, PopoverController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { ControlUnit, ControlUnitButton } from '../carrera';
-import { CONTROL_UNIT_PROVIDER, Logger, Settings, Speech } from '../core';
+import { CONTROL_UNIT_PROVIDER, Logger, RaceOptions, Settings, Speech } from '../core';
 
 import { LeaderboardItem } from './leaderboard';
 import { RmsMenu } from './rms.menu';
@@ -55,7 +55,7 @@ const FIELDS = [{
 })
 export class RmsPage implements OnDestroy, OnInit {
 
-  options: any;
+  options: RaceOptions;
 
   slides: Observable<string[][]>;
   speechEnabled: Observable<boolean>;
