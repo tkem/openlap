@@ -50,7 +50,6 @@ export class Options {
   cumode = true;
   debug = false;
   fixedorder = false;
-  fullscreen = false;
   language = '';
   speech = true;
 }

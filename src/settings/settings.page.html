@@ -15,7 +15,7 @@
       <ion-label color="light" translate>Language</ion-label>
       <ion-select [(ngModel)]="options.language" (ionChange)="update()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
         <!-- ion-option seems to require translate attribute value; see
-             https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689 
+             https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689
           -->
         <ion-option translate="Default" value="">Default</ion-option>
         <ion-option value="de">Deutsch</ion-option>
@@ -24,10 +24,6 @@
         <ion-option value="it">Italiano</ion-option>
         <ion-option value="nl">Nederlands</ion-option>
       </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label translate>Fullscreen mode</ion-label>
-      <ion-toggle [(ngModel)]="options.fullscreen" (ionChange)="update()"></ion-toggle>
     </ion-item>
     <button ion-item [navPush]="connectionPage">
       <span translate>Connection</span>

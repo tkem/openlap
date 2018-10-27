@@ -5,7 +5,6 @@ import { Nav, Platform } from 'ionic-angular';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen';
 import { Insomnia } from '@ionic-native/insomnia';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -40,51 +39,52 @@ export class AppComponent implements OnInit {
     private androidFullScreen: AndroidFullScreen,
     private insomnia: Insomnia,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private toast: Toast,
     private translate: TranslateService)
   {
+    this.platform.ready().then(readySource => {
+      this.logger.info('Initializing ' + readySource + ' application');
+      if (readySource === 'cordova') {
+        this.platform.resize.subscribe(() => {
+          this.enableFullScreen(this.platform.isLandscape());
+        });
+        this.enableFullScreen(this.platform.isLandscape());
+        this.insomnia.keepAwake();
+      }
+    });
     translate.setDefaultLang('en');
   }
 
   ngOnInit() {
-    this.platform.ready().then(readySource => {
-      this.logger.info('Initializing ' + readySource + ' application');
-      if (readySource === 'cordova') {
-        this.insomnia.keepAwake();
-      }
-      this.settings.getOptions().subscribe(options => {
-        this.logger.setDebugEnabled(options.debug);
-        this.enableFullScreen(options.fullscreen);
-        this.setLanguage(options.language);
-      });
-      this.settings.getConnection().subscribe(connection => {
-        this.logger.info('New connection', connection);
-        if (this.cu.value) {
-          this.cu.value.disconnect();
-        }
-        if (connection) {
-          this.logger.info('Connecting to ' + connection.name);
-          Observable.from(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
-            return device.equals(connection);
-          }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
-            const cu = new ControlUnit(device, connection, this.logger);
-            this.cu.next(cu);
-            cu.connect();
-          }).then(() => {
-            this.setRoot(RmsPage, { mode: 'practice', auto: true, pace: true });
-          }).catch(error => {
-            this.logger.warn('Error connecting to ' + connection.name + ':', error);
-            this.setRoot(this.rootPage);
-          });
-        } else {
-          this.logger.info('No connection set');
-          this.cu.next(null);
-          this.setRoot(this.rootPage);
-        }
-      });
+    this.settings.getOptions().subscribe(options => {
+      this.logger.setDebugEnabled(options.debug);
+      this.setLanguage(options.language);
     });
-
+    this.settings.getConnection().subscribe(connection => {
+      this.logger.info('New connection', connection);
+      if (this.cu.value) {
+        this.cu.value.disconnect();
+      }
+      if (connection) {
+        this.logger.info('Connecting to ' + connection.name);
+        Observable.from(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
+          return device.equals(connection);
+        }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
+          const cu = new ControlUnit(device, connection, this.logger);
+          this.cu.next(cu);
+          cu.connect();
+        }).then(() => {
+          this.setRoot(RmsPage, { mode: 'practice', auto: true, pace: true });
+        }).catch(error => {
+          this.logger.warn('Error connecting to ' + connection.name + ':', error);
+          this.setRoot(this.rootPage);
+        });
+      } else {
+        this.logger.info('No connection set');
+        this.cu.next(null);
+        this.setRoot(this.rootPage);
+      }
+    });
     // TODO: move this to RaceControl?
     this.subscription = this.cu.filter((cu) => !!cu).switchMap((cu: ControlUnit) => {
       return cu.getState().debounceTime(200).distinctUntilChanged().map(state => [state, cu.peripheral.name]);
@@ -116,11 +116,6 @@ export class AppComponent implements OnInit {
       }
     }).catch(error => {
       this.logger.error('Fullscreen error:', error);
-      if (value) {
-        this.statusBar.hide();
-      } else {
-        this.statusBar.show();
-      }
     });
   }
 
