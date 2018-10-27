@@ -184,25 +184,25 @@ export class Session {
 
       const times = group.scan(([times, last, best, finished]: TimeInfo, [id, time, sensor]: [number, number, number]) => {
         const tail = times[times.length - 1] || [];
-        if (sensor === 1) {
-          if (!finished && this.isFinished(times.length)) {
-            this.finish(id);
-            finished = true;
-          }
-          if (time !== tail[0]) {
+        if (sensor && time > (tail.length ? tail[sensor - 1] : -Infinity) + this.options.minLapTime) {
+          if (sensor === 1) {
+            times.push([time]);
             last[0] = time - tail[0];
             best[0] = Math.min(last[0], best[0] || Infinity);
-            times.push([time]);
+            if (tail.length > 1) {
+              last[tail.length] = time - tail[tail.length - 1];
+              best[tail.length] = Math.min(last[tail.length], best[tail.length] || Infinity);
+            }
+            if (!finished && this.isFinished(times.length)) {
+              this.finish(id);
+              finished = true;
+            }
+          } else {
+            const index = sensor - 1;
+            tail[index] = time;
+            last[index] = time - tail[index - 1];
+            best[index] = Math.min(last[index], best[index] || Infinity);
           }
-          if (tail.length > 1) {
-            last[tail.length] = time - tail[tail.length - 1];
-            best[tail.length] = Math.min(last[tail.length], best[tail.length] || Infinity);
-          }
-        } else if (sensor) {
-          const index = sensor - 1;
-          tail[index] = time;
-          last[index] = time - tail[index - 1];
-          best[index] = Math.min(last[index], best[index] || Infinity);
         }
         return <TimeInfo>[times, last, best, finished];
       }, <TimeInfo>[[], [], [], false]);

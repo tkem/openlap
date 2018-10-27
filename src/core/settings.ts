@@ -71,6 +71,8 @@ export class RaceOptions {
     case 'practice':
       this.laps = 0;
       this.time = 0;
+      this.auto = true;
+      this.pace = true;
       break;
     case 'qualifying':
       this.laps = 0;
@@ -89,6 +91,7 @@ export class RaceOptions {
   drivers?: number;
   auto = false;
   pace = false;
+  minLapTime = 500;  // FIXME: Configurable?
 }
 
 @Injectable()
