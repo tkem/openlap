@@ -9,7 +9,6 @@ const compare = {
   }
 };
 
-// FIXME: @Input() with interface not working in Ionic 2 RC1?
 export class LeaderboardItem {
   id: number;
   driver: { name: string, code: string, color: string };
@@ -66,9 +65,5 @@ export class LeaderboardComponent {
 
   get items() {
     return this._items;
-  }
-
-  ngOnInit() {
-    console.log('Creating leaderboard');
   }
 }
