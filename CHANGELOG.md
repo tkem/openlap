@@ -9,6 +9,8 @@
 
 - Volume buttons control media volume by default.
 
+- Update translations (courtesy of Haarman and Maikeru).
+
 - Update dependencies.
 
 
