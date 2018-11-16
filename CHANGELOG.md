@@ -1,4 +1,4 @@
-1.6.2 UNRELEASED
+1.6.2 2018-11-16
 ----------------
 
 - Ignore lap times less than 500 ms.
