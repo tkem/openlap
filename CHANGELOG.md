@@ -1,3 +1,13 @@
+1.6.3 UNRELEASED
+----------------
+
+- Improve error handling when scanning for BLE devices.
+
+- Improve messages regarding Bluetooth and Location.
+
+- Update dependencies.
+
+
 1.6.2 2018-11-16
 ----------------
 
