@@ -53,9 +53,9 @@
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-tts": "^0.2.3",
     "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-x-socialsharing": "^5.4.1",
-    "cordova-plugin-x-toast": "^2.7.0",
-    "cordovarduino": "git+https://github.com/tkem/cordovarduino.git#cordova-android-7",
+    "cordova-plugin-x-socialsharing": "^5.4.3",
+    "cordova-plugin-x-toast": "^2.7.2",
+    "cordovarduino": "0.0.10",
     "es6-promise-plugin": "^4.2.2",
     "ionic-angular": "3.9.2",
     "ionic-plugin-keyboard": "^2.2.1",
@@ -84,10 +84,12 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-tts": {},
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-x-socialsharing": {},
+      "cordova-plugin-x-socialsharing": {
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+      },
       "cordova-plugin-x-toast": {},
       "ionic-plugin-keyboard": {},
-      "fr.drangies.cordova.serial": {}
+      "cordovarduino": {}
     }
   }
 }

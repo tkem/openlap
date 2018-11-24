@@ -88,7 +88,7 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
     <plugin name="cordova-plugin-x-toast" spec="^2.7.0" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="fr.drangies.cordova.serial" spec="https://github.com/tkem/cordovarduino#cordova-android-7" />
+    <plugin name="cordovarduino" spec="0.0.10" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="7.1.1" />
 </widget>
