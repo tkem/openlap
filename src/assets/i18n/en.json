@@ -3,8 +3,8 @@
     "Welcome to Open Lap!",
   "Please select a Control Unit device from the menu.":
     "Please select a Control Unit device from the menu.",
-  "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.":
-    "If no devices are listed, please make sure Bluetooth is enabled or you are using a suitable serial to USB OTG converter cable.",
+  "If no devices are listed, please make sure Bluetooth and Location are enabled or you are using a suitable serial to USB OTG converter cable.":
+    "If no devices are listed, please make sure Bluetooth and Location are enabled or you are using a suitable serial to USB OTG converter cable.",
   "Reset all user settings to default values?":
     "Reset all user settings to default values?",
 
@@ -52,6 +52,7 @@
   "Lap {{count}}": "Lap {{count}}",
   "Lap {{count}}/{{total}}": "Lap {{count}}/{{total}}",
   "License": "License",
+  "Location Services are disabled": "Location is turned off",
   "No fuel": "No fuel",
   "None": "None",
   "Notifications": "Notifications",
