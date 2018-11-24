@@ -192,8 +192,12 @@ export class BLEBackend extends Backend {
       }
     }).distinctUntilChanged().switchMap(enabled => {
       if (enabled) {
-        return wrapNative(this.ble.startScanWithOptions([], { reportDuplicates: true }), this.zone);
+        this.logger.debug('Start scanning for BLE devices');
+        return wrapNative(this.ble.startScanWithOptions([], { reportDuplicates: true }), this.zone).finally(() => {
+          this.logger.debug('Stop scanning for BLE devices');
+        });
       } else {
+        this.logger.debug('Not scanning for BLE devices');
         return Observable.empty();
       }
     }).share();
@@ -202,11 +206,11 @@ export class BLEBackend extends Backend {
   scan(): Observable<Peripheral> {
     // TODO: use and adapt rssi?
     return this.scanner.distinct(device => device.id).do(device => {
-      this.logger.debug('Found BLE device', device);
+      this.logger.debug('Discovered BLE device:', device);
     }).filter(device => {
       return /Control.Unit/i.test(device.name || '');
     }).map(device => {
-      this.logger.info('New BLE device', device);
+      this.logger.info('Discovered new BLE device:', device);
       return new BLEPeripheral(device, this.ble, this.logger, this.zone);
     });
   }
