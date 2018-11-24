@@ -1,7 +1,7 @@
 <ion-menu [content]="nav" (ionClose)="onMenuClose()">
   <ion-content>
     <ion-item [color]="cu ? 'primary' : 'danger'" (click)="onMenuToggle()">
-      <h1>{{cu ? cu.peripheral.name : 'No connection'}}</h1>
+      <h1>{{cu ? cu.peripheral.name : ('No connection' | translate)}}</h1>
       <h2>{{cu?.peripheral.address}}</h2>
       <h3 *ngIf="cu">
         <span translate>Firmware version</span>
