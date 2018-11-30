@@ -1,4 +1,4 @@
-1.6.3 UNRELEASED
+1.6.3 2018-11-30
 ----------------
 
 - Improve error handling when scanning for BLE devices.
