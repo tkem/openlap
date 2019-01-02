@@ -1,3 +1,15 @@
+1.7.0 UNRELEASED
+----------------
+
+- Add SQLite storage engine to avoid uncaught ``QuotaExceededError``
+  exceptions.  Note that this will effectively reset all user settings
+  to default values.
+
+- Add translations for "No Connection".
+
+- Improve startup message.
+
+
 1.6.3 2018-11-30
 ----------------
 
