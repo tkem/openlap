@@ -77,7 +77,7 @@
     "plugins": {
       "cordova-plugin-app-version": {},
       "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": " "
+        "BLUETOOTH_USAGE_DESCRIPTION": "Connect to Carrera-CU device."
       },
       "cordova-plugin-device": {},
       "cordova-plugin-fullscreen": {},
