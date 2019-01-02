@@ -99,9 +99,7 @@ export class Settings {
 
   private subjects = new Map<string, ReplaySubject<any>>();
 
-  constructor(private device: Device, private platform: Platform, private storage: Storage) {
-    // TODO: setDriver('localStorageWrapper');
-  }
+  constructor(private device: Device, private platform: Platform, private storage: Storage) {}
 
   clear(): Promise<void> {
     return this.storage.ready().then(() => {

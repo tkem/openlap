@@ -89,6 +89,7 @@
     <plugin name="cordova-plugin-x-toast" spec="^2.7.0" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordovarduino" spec="0.0.10" />
+    <plugin name="cordova-sqlite-storage" spec="^2.6.0" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="7.1.4" />
 </widget>
