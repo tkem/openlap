@@ -8,3 +8,8 @@ www/
 *.log
 *.tmp
 *.tmp.*
+# do not commit macOS specific files
+**/.DS_Store
+# do not commit generated images
+resources/**/icon/
+resources/**/splash/
