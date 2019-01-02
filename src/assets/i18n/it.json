@@ -3,8 +3,8 @@
     "Benvenuti a Open Lap!",
   "Please select a Control Unit device from the menu.":
     "Scegli tramite menù una Control Unit.",
-  "If no devices are listed, please make sure Bluetooth and Location are enabled or you are using a suitable serial to USB OTG converter cable.":
-    "Se non appare nessuna unità, controlla che Bluetooth sia attivato, o usa un cavetto adattatore USB OTG adeguato.",
+  "If no devices are listed, please make sure that Bluetooth and Location (for scanning Bluetooth devices) are enabled or you are using a suitable serial to USB OTG converter cable.":
+    "Se non appare nessuna unità, controlla che Bluetooth e Posizione (per scansione di dispositivi Bluetooth) sono attivato, o usa un cavetto adattatore USB OTG adeguato.",
   "Reset all user settings to default values?":
     "Resettare tutte le impostazioni su default?",
 
