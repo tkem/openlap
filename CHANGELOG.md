@@ -5,9 +5,15 @@
   exceptions.  Note that this will effectively reset all user settings
   to default values.
 
+- Improve iOS support (courtesy of softyde).
+
 - Add translations for "No Connection".
 
 - Improve startup message.
+
+- Update licenses page.
+
+- Update dependencies.
 
 
 1.6.3 2018-11-30
