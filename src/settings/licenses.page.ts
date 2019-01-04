@@ -11,11 +11,11 @@ export class LicensesPage {
     homepage: 'https://cordova.apache.org/'
   }, {
     name: 'Angular',
-    copyright: 'Copyright (c) 2014-2017 Google, Inc.',
+    copyright: 'Copyright (c) 2010-2018 Google, Inc.',
     license: 'MIT',
     homepage: 'https://angular.io/'
   }, {
-    name: 'Ionic 2',
+    name: 'Ionic',
     copyright: 'Copyright (c) 2015-present Drifty Co.',
     license: 'MIT',
     homepage: 'https://github.com/driftyco/ionic#readme',
@@ -36,7 +36,7 @@ export class LicensesPage {
     homepage: 'http://www.ngx-translate.com/'
   }, {
     name: 'RxJS',
-    copyright: 'Copyright (c) 2015-2016 Netflix, Inc., Microsoft Corp. and contributors',
+    copyright: 'Copyright (c) 2015-2018 Google, Inc., Netflix, Inc., Microsoft Corp. and contributors',
     license: 'Apache-2.0',
     homepage: 'https://github.com/ReactiveX/RxJS'
   }, {
@@ -50,20 +50,45 @@ export class LicensesPage {
     license: 'Apache-2.0',
     homepage: 'https://github.com/don/cordova-plugin-ble-central#readme'
   }, {
+    name: 'cordova-plugin-device',
+    author: 'Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/apache/cordova-plugin-device#readme'
+  }, {
     name: 'cordova-plugin-fullscreen',
     author: 'Neil Rackett',
     license: 'BSD',
     homepage: 'https://github.com/mesmotronic/cordova-fullscreen-plugin#readme'
+  }, {
+    name: 'cordova-plugin-inappbrowser',
+    author: 'Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/apache/cordova-plugin-inappbrowser#readme'
   }, {
     name: 'cordova-plugin-insomnia',
     author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme'
   }, {
+    name: 'cordova-plugin-splashscreen',
+    author: 'Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/apache/cordova-plugin-splashscreen#readme'
+  }, {
+    name: 'cordova-plugin-statusbar',
+    author: 'Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/apache/cordova-plugin-statusbar#readme'
+  }, {
     name: 'cordova-plugin-tts',
     author: 'VILIC VANE',
     license: 'MIT',
     homepage: 'https://github.com/vilic/cordova-plugin-tts#readme'
+  }, {
+    name: 'cordova-plugin-whitelist',
+    author: 'Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/apache/cordova-plugin-whitelist#readme'
   }, {
     name: 'cordova-plugin-x-socialsharing',
     author: 'Eddy Verbruggen - @EddyVerbruggen',
@@ -75,9 +100,19 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin#readme'
   }, {
+    name: 'cordova-sqlite-storage',
+    author: 'various',
+    license: 'MIT',
+    homepage: 'https://github.com/litehelpers/Cordova-sqlite-storage'
+  }, {
     name: 'cordovarduino',
     author: 'Xavier Seignard <xavier.seignard@gmail.com>',
     license: 'MIT',
     homepage: 'https://github.com/xseignard/cordovarduino#readme'
+  }, {
+    name: 'ionic-plugin-keyboard',
+    author: 'Ionic',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/driftyco/ionic-plugin-keyboard#readme'
   }];
 }
