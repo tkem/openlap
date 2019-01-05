@@ -193,7 +193,7 @@ export class Session {
               last[tail.length] = time - tail[tail.length - 1];
               best[tail.length] = Math.min(last[tail.length], best[tail.length] || Infinity);
             }
-            if (!finished && this.isFinished(times.length)) {
+            if (!finished && this.isFinished(times.length - 1)) {
               this.finish(id);
               finished = true;
             }
