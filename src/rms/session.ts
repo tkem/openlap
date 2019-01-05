@@ -208,7 +208,7 @@ export class Session {
       }, <TimeInfo>[[], [], [], false]);
 
       return times.combineLatest(
-        pits.map(mask => (mask & (1 << group.key)) != 0).distinctUntilChanged().scan(
+        pits.map(mask => ((mask & ~this.mask) & (1 << group.key)) != 0).distinctUntilChanged().scan(
         ([count]: [number, boolean], inpit: boolean) => {
           return [inpit ? count + 1 : count, inpit]
         }, [0, false]),
