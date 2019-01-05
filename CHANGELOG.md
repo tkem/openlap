@@ -7,6 +7,10 @@
 
 - Improve iOS support (courtesy of softyde).
 
+- Use correct number of laps for finishing lap-based races.
+
+- Do not count pit stops if race is finished.
+
 - Add translations for "No Connection".
 
 - Improve startup message.
