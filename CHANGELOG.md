@@ -1,4 +1,4 @@
-1.7.0 UNRELEASED
+1.7.0 2019-01-07
 ----------------
 
 - Add SQLite storage engine to avoid uncaught ``QuotaExceededError``
