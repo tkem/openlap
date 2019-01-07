@@ -83,6 +83,11 @@ ion-toolbar.race-control {
     }
 }
 
+/* TODO: make this an ion-button? */
+button.startlight {
+    white-space: nowrap;
+}
+
 ion-grid.tuning {
     font-size: 1.8rem;
     padding-top: 2px;

@@ -56,7 +56,7 @@
 
 <ion-footer>
   <ion-toolbar class="race-control" text-center>
-    <button [disabled]="!(keySupported | async)" (click)="triggerStart()">
+    <button class="startlight" [disabled]="!(keySupported | async)" (click)="triggerStart()">
       <startlight [active]="(lights | async) >= 1" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 2" [blink]="blink | async"></startlight>
       <startlight [active]="(lights | async) >= 3" [blink]="blink | async"></startlight>
