@@ -11,6 +11,8 @@
 
 - Do not count pit stops if race is finished.
 
+- Prevent startlight from wrapping at some screen sizes.
+
 - Add translations for "No Connection".
 
 - Improve startup message.
