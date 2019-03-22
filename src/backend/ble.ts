@@ -87,8 +87,8 @@ class BLEPeripheral implements Peripheral {
           if (connected) {
             // this should resolve *after* this.ble.startNotification is installed
             this.ble.isConnected(this.address).then(() => {
+              this.logger.info('BLE device ready');
               if (isConnected) {
-                this.logger.info('BLE device ready');
                 this.zone.run(() => connected.next(undefined));
               }
             }).catch((err) => {
