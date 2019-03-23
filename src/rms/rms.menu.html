@@ -3,10 +3,10 @@
     <ion-label translate>Order by number</ion-label>
     <ion-checkbox [(ngModel)]="fixedOrder"></ion-checkbox>
   </ion-item>
-  <button ion-item [disabled]="!params.active" (click)="stop()">
-    <span translate>Cancel race</span>&hellip;
+  <button ion-item [disabled]="!params.active" (click)="cancel()">
+    <span translate>Cancel</span>&hellip;
   </button>
   <button ion-item (click)="restart()">
-    <span translate>Restart race</span>&hellip;
+    <span translate>Restart</span><span *ngIf="params.active">&hellip;</span>
   </button>
 </ion-item-group>

@@ -11,7 +11,7 @@ export class RmsMenu implements OnDestroy, OnInit  {
 
   options = new Options();
 
-  params: {active: boolean, restart: any, stop: any};
+  params: {mode: string, active: boolean, restart: any, cancel: any};
 
   private subscription: any;
 
@@ -46,33 +46,41 @@ export class RmsMenu implements OnDestroy, OnInit  {
 
   restart() {
     this.close().then(() => {
-      const alert = this.alert.create({
-        message: 'Restart race?',
-        buttons: [{
-          text: 'Cancel',
-          role: 'cancel',
-        }, {
-          text: 'OK',
-          handler: () => this.params.restart()
-        }]
-      })
-      alert.present();
+      if (this.params.active) {
+        const alert = this.alert.create({
+          message: 'Restart ' + this.params.mode + '?',
+          buttons: [{
+            text: 'Cancel',
+            role: 'cancel',
+          }, {
+            text: 'OK',
+            handler: () => this.params.restart()
+          }]
+        })
+        alert.present();
+      } else {
+        this.params.restart();
+      }
     });
   }
 
-  stop() {
+  cancel() {
     this.close().then(() => {
-      const alert = this.alert.create({
-        message: 'Cancel race?',
-        buttons: [{
-          text: 'Cancel',
-          role: 'cancel',
-        }, {
-          text: 'OK',
-          handler: () => this.params.stop()
-        }]
-      })
-      alert.present();
+      if (this.params.active) {
+        const alert = this.alert.create({
+          message: 'Cancel ' + this.params.mode + '?',
+          buttons: [{
+            text: 'Cancel',
+            role: 'cancel',
+          }, {
+            text: 'OK',
+            handler: () => this.params.cancel()
+          }]
+        })
+        alert.present();
+      } else {
+        this.params.cancel();
+      }
     });
   }
 

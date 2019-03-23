@@ -274,9 +274,10 @@ export class RmsPage implements OnDestroy, OnInit {
 
   showMenu(event) {
     let menu = this.popover.create(RmsMenu, {
+      mode: this.options.mode,
       active: this.session && !this.session.finished.value && this.options.mode != 'practice',
       restart: () => this.onStart(),
-      stop:  () => this.session.stop(),
+      cancel:  () => this.session.stop(),
     });
     menu.present({ev: event});
   }
