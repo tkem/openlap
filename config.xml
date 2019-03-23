@@ -96,5 +96,5 @@
     <plugin name="cordovarduino" spec="^0.0.10" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <engine name="ios" spec="^5.0.0" />
-    <engine name="android" spec="^8.0.0" />
+    <engine name="android" spec="8.0.0" />
 </widget>

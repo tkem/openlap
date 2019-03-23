@@ -20,7 +20,7 @@ before_install:
 - nvm install 8
 
 install:
-- npm install -g cordova@8.0.0
+- npm install -g cordova@8.1.2
 - npm install
 
 script:
