@@ -1,3 +1,17 @@
+1.7.1 UNRELEASED
+----------------
+
+- Reduce use of "nagging" dialog boxes.
+
+- Reduce duplicated speech messages.
+
+- Add Web Bluetooth backend.
+
+- Update dependencies.
+
+- Update README.
+
+
 1.7.0 2019-01-07
 ----------------
 
