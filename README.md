@@ -21,56 +21,66 @@ In a nutshell, Open Lap lets you
 
 Some features, such as the start light and pace car buttons, will
 require Carrera® Control Unit firmware version 3.31 or higher.
-Carrera® Check Lane support generally requires at least firmware
-version 3.36.
+Carrera® Check Lane support requires at least firmware version 3.36.
 
-Open Lap is available as an Android app from the [Google Play
+Open Lap is available as an Android app on the [Google Play
 Store](https://play.google.com/store/apps/details?id=at.co.kemmer.openlap).
 You may also want to join the [Beta testing
 program](https://play.google.com/apps/testing/at.co.kemmer.openlap) to
 preview unreleased versions.
 
+An iOS version is maintained by [Philipp
+Anné](https://itunes.apple.com/us/developer/id965549566) and is
+available on the [App
+Store](https://itunes.apple.com/us/app/open-lap/id1448048406).
+
 
 Building from Source
 ------------------------------------------------------------------------
 
-Open Lap is built using [Ionic](http://ionicframework.com/) and
+Open Lap is built using [Ionic](https://ionicframework.com/) and
 [Apache Cordova](https://cordova.apache.org/).  To install the
 necessary dependencies, first run
+
 ```
 npm install
 ```
 
-To test and develop the app in your browser (in "Demo" mode only, of
-course), run
+To test and develop the app in your browser, please follow the Ionic
+CLI [installation
+guide](https://ionicframework.com/docs/installation/cli), then run
+
+
 ```
 ionic serve
 ```
 
-To build the Android app, please follow Ionic's [installation
-guide](http://ionicframework.com/docs/intro/installation/) and make
-sure you have everything needed for Android development.  Then run
+To actually build the app, please make sure you have everything needed
+for [Android](https://ionicframework.com/docs/installation/android) or
+[iOS](https://ionicframework.com/docs/installation/ios) development.
+Then simply run
+
 ```
 ionic cordova build android
 ```
 
-Please refer to the [Ionic CLI](http://ionicframework.com/docs/cli/)
+or
+
+```
+ionic cordova build ios
+```
+
+Please refer to the [Ionic CLI](https://ionicframework.com/docs/cli/)
 documentation for further information on how to run the application on
 an actual device, or in a Web browser or emulator for testing.
-
-Please note that due to lack of resources, Open Lap is *not*
-officially supported on iOS.  However, there've been reports of
-successfully building and running an iOS version, so you still might
-want to [give it a
-try](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/)!
 
 
 Contributing Translations
 ------------------------------------------------------------------------
 
-If you'd like to see Open Lap in *your* native language, start by
-having a look at the existing [translations](./src/assets/i18n).  Open
-Lap uses [ngx-translate](http://www.ngx-translate.com/) for
+If you'd like to see Open Lap in your native language, start by having
+a look at the existing [translations](./src/assets/i18n).  Open Lap
+uses [ngx-translate](http://www.ngx-translate.com/) for
 internationalization, which stores translations as simple
 [JSON](http://www.json.org/) files.  Just take one of the existing
 files and replace all foreign language text as you see fit.  When
