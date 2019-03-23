@@ -17,6 +17,8 @@ export class Speech {
 
   private rate: number;
 
+  private lastMessage: string;
+
   constructor(private tts: TextToSpeech, private logger: Logger, platform: Platform) {
     // See https://github.com/vilic/cordova-plugin-tts/issues/40
     this.rate = platform.is('ios') ? 1.5 : 1.0;
@@ -31,17 +33,25 @@ export class Speech {
   }
 
   speak(message: string) {
-    // TODO: priorities?
-    // TODO: returned promise vs. this.promise for chaining
-    this.pending++;
-    this.promise = this.promise.then(() => {
-      if (--this.pending === 0) {
-        return this.tts.speak({text: message, locale: this.locale || 'en-us', rate: this.rate});
-      } else {
-        this.logger.warn('Speech cancelled', message);
-      }
-    }).catch((error) => {
-      this.logger.error('Speech error', error);
-    });
+    // TODO: message priorities?
+    if (message != this.lastMessage) {
+      this.lastMessage = message;
+      this.pending++;
+      this.promise = this.promise.then(() => {
+        if (--this.pending === 0) {
+          return this.tts.speak({text: message, locale: this.locale || 'en-us', rate: this.rate}).then(() => {
+            if (this.pending === 0) {
+              this.lastMessage = null;
+            }
+          });
+        } else {
+          this.logger.warn('Speech cancelled: ' + message);
+        }
+      }).catch((error) => {
+        this.logger.error('Speech error', error);
+      });
+    } else {
+      this.logger.info('Speech duplicate dismissed: ' + message);
+    }
   }
 }
