@@ -93,7 +93,8 @@ License
 
 Copyright (c) 2016-2019 Thomas Kemmer.
 
-Translations: Haarman (Nederlands), SdiF (Italiano), Maikeru (Español).
+Translations: Haarman (Nederlands), SdiF (Italiano), Maikeru
+(Español), nico12 (Français).
 
 iOS support: softyde, elliot2extreme.
 

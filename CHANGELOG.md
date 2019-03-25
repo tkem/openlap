@@ -1,6 +1,8 @@
 1.7.1 UNRELEASED
 ----------------
 
+- Add French translation (courtesy of nico12).
+
 - Reduce use of "nagging" dialog boxes.
 
 - Reduce duplicated speech messages.
