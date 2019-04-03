@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage';
 
-import { Device } from '@ionic-native/device';
-
-import { Platform } from 'ionic-angular';
-
 import { Observable, ReplaySubject } from 'rxjs';
 
 const COLORS = [
@@ -99,7 +95,7 @@ export class Settings {
 
   private subjects = new Map<string, ReplaySubject<any>>();
 
-  constructor(private device: Device, private platform: Platform, private storage: Storage) {}
+  constructor(private storage: Storage) {}
 
   clear(): Promise<void> {
     return this.storage.ready().then(() => {
@@ -113,8 +109,6 @@ export class Settings {
     return this.get('connection').map(value => {
       if (value) {
         return Object.assign(new Connection(), value);
-      } else if (this.isDemo()) {
-        return Object.assign(new Connection(), {name: 'Demo', type: 'demo'});
       } else {
         return null;
       }
@@ -181,10 +175,6 @@ export class Settings {
 
   setRaceSettings(value: any): Promise<void> {
     return this.set('race', value);
-  }
-
-  private isDemo(): boolean {
-    return !this.platform.is('cordova') || this.device.isVirtual;
   }
 
   private get(key: string): Observable<any> {

@@ -9,6 +9,8 @@
 
 - Add Web Bluetooth backend.
 
+- Add basic `cordova-electron` support.
+
 - Update dependencies.
 
 - Update README.

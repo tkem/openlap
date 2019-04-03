@@ -50,7 +50,7 @@ class WebBluetoothPeripheral implements Peripheral {
 
   private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
-      this.logger.info('Connecting to BLE device ' + this.address);
+      this.logger.info('Connecting to Web Bluetooth device ' + this.address);
       const service = this.device.gatt.connect().then(server => {
         return server.getPrimaryService(SERVICE_UUID);
       });
@@ -60,7 +60,7 @@ class WebBluetoothPeripheral implements Peripheral {
         if (this.logger.isDebugEnabled()) {
           const s = bufferToString(data);
           if (s !== lastReceived) {
-            this.logger.debug('BLE received ' + s);
+            this.logger.debug('Web Bluetooth received ' + s);
             lastReceived = s;
           }
         }
@@ -73,7 +73,7 @@ class WebBluetoothPeripheral implements Peripheral {
         return characteristic.startNotifications().then(_ => characteristic);
       }).then(characteristic => {
         characteristic.addEventListener('characteristicvaluechanged', eventListener);
-        this.logger.info('BLE device ready');
+        this.logger.info('Web Bluetooth device ready');
         if (connected) {
           this.zone.run(() => connected.next(undefined));
         }
@@ -86,7 +86,7 @@ class WebBluetoothPeripheral implements Peripheral {
         }).then(characteristic => {
             characteristic.removeEventListener('characteristicvaluechanged', eventListener);
         }).catch(error => {
-            this.logger.error('Error stopping BLE notifications', error);
+            this.logger.error('Error stopping Web Bluetooth notifications', error);
         }).then(_ => {
           this.disconnect(disconnected);
         });
@@ -101,31 +101,31 @@ class WebBluetoothPeripheral implements Peripheral {
           if (this.logger.isDebugEnabled()) {
             const s = bufferToString(value);
             if (s !== this.lastWritten) {
-              this.logger.debug('BLE write ' + s);
+              this.logger.debug('Web Bluetooth write ' + s);
               this.lastWritten = s;
             }
           }
           this.output.then(characteristic => {
             return characteristic.writeValue(value);
           }).catch(error => {
-            this.logger.error('BLE write error', error);
+            this.logger.error('Web Bluetooth write error', error);
           });
         } else {
-          this.logger.error('BLE write while device disconnected');
+          this.logger.error('Web Bluetooth write while device disconnected');
         }
       },
-      error: (err: any) => this.logger.error('BLE user error', err),
+      error: (err: any) => this.logger.error('Web Bluetooth user error', err),
       complete: () => this.disconnect(disconnected)
     };
   }
 
   private disconnect(disconnected?: NextObserver<void>) {
     if (this.device.gatt.connected) {
-      this.logger.debug('Closing BLE connection to ' + this.address);
+      this.logger.debug('Closing Web Bluetooth connection to ' + this.address);
       try {
         this.device.gatt.disconnect();
       } catch (error) {
-        this.logger.debug('Error closing BLE connection', error);
+        this.logger.debug('Error closing Web Bluetooth connection', error);
       }
       this.output = null;
       if (disconnected) {
@@ -165,7 +165,7 @@ export class WebBluetoothBackend extends Backend {
     return Observable.from(this.platform.ready()).switchMap(readySource => {
       if (readySource != 'cordova' && this.navigator.bluetooth) {
         return Observable.from(this.requestDevice()).catch(err => {
-          this.logger.error('Error requesting BLE device', err);
+          this.logger.error('Error requesting Web Bluetooth device', err);
           return Observable.empty();
         });
       } else {

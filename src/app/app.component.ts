@@ -61,7 +61,6 @@ export class AppComponent implements OnInit {
       this.setLanguage(options.language);
     });
     this.settings.getConnection().subscribe(connection => {
-      this.logger.info('New connection', connection);
       if (this.cu.value) {
         this.cu.value.disconnect();
       }

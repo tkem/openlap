@@ -1,4 +1,4 @@
-<ion-menu [content]="nav" (ionClose)="onMenuClose()">
+<ion-menu [content]="nav" (ionClose)="onMenuClose()" (ionOpen)="onMenuOpen()">
   <ion-content>
     <ion-item [color]="cu ? 'primary' : 'danger'" (click)="onMenuToggle()">
       <h1>{{cu ? cu.peripheral.name : ('No connection' | translate)}}</h1>

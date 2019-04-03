@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 
 import { ModalController, Nav, Platform } from 'ionic-angular';
 
@@ -9,6 +9,8 @@ import { I18nAlertController, Logger, RaceOptions, Settings } from '../core';
 import { RaceSettingsPage, RmsPage } from '../rms';
 import { ColorsPage, DriversPage, SettingsPage } from '../settings';
 import { TuningPage } from '../tuning';
+
+import { ConnectionsComponent } from './connections.component';
 
 @Component({
   selector: 'app-menu',
@@ -29,6 +31,10 @@ export class MenuComponent implements OnChanges {
   settingsPage = SettingsPage;
   tuningPage = TuningPage;
 
+  initialized = false;
+
+  @ViewChild(ConnectionsComponent) connections : ConnectionsComponent;
+
   constructor(private alert: I18nAlertController,
     private logger: Logger,
     private settings: Settings,
@@ -40,6 +46,16 @@ export class MenuComponent implements OnChanges {
     if ('cu' in changes) {
       this.mode = !!this.cu;
       this.version = this.cu ? this.cu.getVersion() : Observable.of(undefined);
+    }
+  }
+
+  onMenuOpen() {
+    // Web Bluetooth workaround - needs user gesture for scanning
+    if (!this.initialized && this.connections) {
+      if ((<any>navigator).bluetooth) {
+        this.connections.ngOnInit();
+      }
+      this.initialized = true;
     }
   }
 

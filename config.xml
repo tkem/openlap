@@ -21,7 +21,6 @@
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
-    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -76,6 +75,10 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
+    <platform name="electron">
+        <icon src="resources/icon.png" />
+        <preference name="ElectronSettingsFilePath" value="resources/electron.json" />
+    </platform>
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-ble-central" spec="^1.2.2">
         <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Connect to Carrera-CU device." />
@@ -97,4 +100,5 @@
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <engine name="ios" spec="^5.0.0" />
     <engine name="android" spec="8.0.0" />
+    <engine name="cordova-electron" spec="1.0.2" />
 </widget>
