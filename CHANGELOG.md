@@ -1,4 +1,4 @@
-1.7.1 UNRELEASED
+1.7.1 2019-04-04
 ----------------
 
 - Add French translation (courtesy of nico12).
