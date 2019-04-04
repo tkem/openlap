@@ -23,16 +23,33 @@ Some features, such as the start light and pace car buttons, will
 require Carrera® Control Unit firmware version 3.31 or higher.
 Carrera® Check Lane support requires at least firmware version 3.36.
 
-Open Lap is available as an Android app on the [Google Play
-Store](https://play.google.com/store/apps/details?id=at.co.kemmer.openlap).
+Open Lap is available as an Android app on [Google
+Play](https://play.google.com/store/apps/details?id=at.co.kemmer.openlap).
 You may also want to join the [Beta testing
 program](https://play.google.com/apps/testing/at.co.kemmer.openlap) to
 preview unreleased versions.
 
-An iOS version is maintained by [Philipp
-Anné](https://itunes.apple.com/us/developer/id965549566) and is
-available on the [App
+An iOS version, maintained by [Philipp
+Anné](https://itunes.apple.com/us/developer/id965549566), is available
+on the [App
 Store](https://itunes.apple.com/us/app/open-lap/id1448048406).
+
+There is also a [Web
+Bluetooth](https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web)
+version available, hosted at
+[https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
+To use this with Carrera AppConnect®, you'll need a Bluetooth 4.0
+adapter and a recent version of Google Chrome (tested with Chrome
+73.0.3683.86 on Windows 10 and Chromium 73.0.3683.75 on Ubuntu 18.04).
+You may also have to go to
+
+```
+chrome://flags/#enable-experimental-web-platform-features
+```
+
+enable the highlighted flag, and restart Chrome/Chromium.  Please note
+that this is still in an _experimental_ stage, so synthesized speech
+output won't work yet, and there will be some other quirks.
 
 
 Building from Source
