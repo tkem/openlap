@@ -6,5 +6,6 @@ plugins/
 www/
 .*.json
 *.log
+*.map
 *.tmp
 *.tmp.*
