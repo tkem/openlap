@@ -39,17 +39,14 @@ Bluetooth](https://developers.google.com/web/updates/2015/07/interact-with-ble-d
 version available, hosted at
 [https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
 To use this with Carrera AppConnect®, you'll need a Bluetooth 4.0
-adapter and a recent version of Google Chrome (tested with Chrome
-73.0.3683.86 on Windows 10 and Chromium 73.0.3683.75 on Ubuntu 18.04).
-You may also have to go to
+adapter and a recent version of Google Chrome (tested with Chrome 73
+on Windows 10 and Ubuntu 18.04).  You may also have to go to
 
 ```
 chrome://flags/#enable-experimental-web-platform-features
 ```
 
-enable the highlighted flag, and restart Chrome/Chromium.  Please note
-that this is still in an _experimental_ stage, so synthesized speech
-output won't work yet, and there will be some other quirks.
+and enable the highlighted flag.
 
 
 Building from Source
