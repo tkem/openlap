@@ -34,13 +34,14 @@ Anné](https://itunes.apple.com/us/developer/id965549566), is available
 on the [App
 Store](https://itunes.apple.com/us/app/open-lap/id1448048406).
 
-There is also a [Web
-Bluetooth](https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web)
-version available, hosted at
+There is also a (still experimental) Web Bluetooth version available,
+hosted at
 [https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
 To use this with Carrera AppConnect®, you'll need a Bluetooth 4.0
-adapter and a recent version of Google Chrome (tested with Chrome 73
-on Windows 10 and Ubuntu 18.04).  You may also have to go to
+adapter and a recent version of [Google
+Chrome](https://www.google.com/chrome) (tested with Chrome 73 on
+Windows 10, Ubuntu 18.04, and macOS 10.13.6).  On Linux, at least,
+you'll also have to go to
 
 ```
 chrome://flags/#enable-experimental-web-platform-features
