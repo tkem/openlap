@@ -1,3 +1,17 @@
+1.7.2 UNRELEASED
+----------------
+
+- Add Android 8.0 adaptive icons.
+
+- Remove platform cordova-electron.
+
+- Use rxjs pipeable operators.
+
+- Update dependencies.
+
+- Update README.
+
+
 1.7.1 2019-04-04
 ----------------
 
