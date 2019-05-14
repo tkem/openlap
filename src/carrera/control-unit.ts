@@ -40,7 +40,7 @@ export class ControlUnit {
 
   private subscription: Subscription;
 
-  private requests = Array<DataView>();
+  private requests = new Array<DataView>();
 
   private data: ConnectableObservable<DataView>;
 
@@ -219,8 +219,8 @@ export class ControlUnit {
     const state = this.state;
     return errors.pipe(
       tap(error => this.logger.error('Device error:', error)),
-      scan((count, error) => { 
-        return state.value === 'connected' ? 0 : count + 1; 
+      scan((count, error) => {
+        return state.value === 'connected' ? 0 : count + 1;
       }, 0),
       tap(() => state.next('disconnected')),
       concatMap(count => {
