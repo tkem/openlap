@@ -1,4 +1,6 @@
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 
 import { Driver, Logger, Settings } from '../core';
 
@@ -14,7 +16,7 @@ export class ColorsPage implements OnDestroy, OnInit {
   constructor(private logger: Logger, private settings: Settings) {}
 
   ngOnInit() {
-    this.settings.getDrivers().take(1).toPromise().then(drivers => {
+    this.settings.getDrivers().pipe(take(1)).toPromise().then(drivers => {
       this.drivers = drivers;
     }).catch(error => {
       this.logger.error('Error getting colors', error);

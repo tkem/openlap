@@ -1,4 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, groupBy, map, /*mergeAll,*/ mergeMap, publishReplay, refCount, scan, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
 
 import { ControlUnit } from '../carrera';
 import { RaceOptions } from '../core';
@@ -73,22 +74,27 @@ export class Session {
     const compare = COMPARE[options.mode];
 
     const reset = Observable.merge(
-      cu.getStart().distinctUntilChanged().filter(start => start != 0),
-      cu.getState().distinctUntilChanged().filter(state => state == 'connected')
-    ).map(value => {
+      cu.getStart().pipe(distinctUntilChanged(),filter(start => start != 0),),
+      cu.getState().pipe(distinctUntilChanged(),filter(state => state == 'connected'),)
+    ).pipe(map(value => {
       cu.setMask(this.mask);
-    });
+    }));
     // create monotonic timer
-    const timer = cu.getTimer().filter(([id]) => {
-      return !(this.mask & (1 << id));
-    }).scan(([_, [prev, offset, then]], [id, time, group]) => {
-      // TODO: combine with reset?
-      const now = Date.now();
-      if (time < prev) {
-        offset = ((now - then + prev) || 0) - time;
-      }
-      return [[id, time + offset, group], [time, offset, now]];
-    }, [[], [Infinity, 0, NaN]]).map(([t]: [number, number, number][]) => t);
+    type TimerType = [number, number, number];
+    const timer = cu.getTimer().pipe(
+      filter(([id]) => {
+        return !(this.mask & (1 << id));
+      }),
+      scan(([_, [prev, offset, then]], [id, time, group]: TimerType) => {
+        // TODO: combine with reset?
+        const now = Date.now();
+        if (time < prev) {
+          offset = ((now - then + prev) || 0) - time;
+        }
+        return [[id, time + offset, group], [time, offset, now]];
+      }, [[], [Infinity, 0, NaN]]),
+      map(([t]: TimerType[]) => t)
+    );
     const fuel = cu.getFuel();
     const pit = cu.getPit();
 
@@ -100,42 +106,65 @@ export class Session {
       this.grid = this.createGrid(timer, fuel, pit);
     }
 
-    this.ranking = reset.startWith(null).combineLatest(this.grid).map(([_reset, grid]) => {
-      return grid;  // for reset side effects only...
-    }).mergeAll().scan((grid, event) => {
-      const newgrid = [...grid];
-      newgrid[event.id] = event;
-      return newgrid;
-    }, []).map((cars: Array<RaceItem>) => {
-      const ranks = cars.filter(car => !!car);
-      ranks.sort(compare);
-      return ranks;
-    });
+    this.ranking = reset.pipe(
+      startWith(null),
+      combineLatest(this.grid),
+      map(([_reset, grid]) => {
+        return grid;  // for reset side effects only...
+      }),
+      /*mergeAll(),*/
+      mergeMap(val => val),
+      scan<RaceItem>((grid, event) => {
+        const newgrid = [...grid];
+        newgrid[event.id] = event;
+        return newgrid;
+      }, []),
+      map((cars: Array<RaceItem>) => {
+        const ranks = cars.filter(car => !!car);
+        ranks.sort(compare);
+        return ranks;
+      })
+    );
 
-    this.currentLap = this.grid.mergeAll().scan((current, event) => {
-      if (current > event.laps) {
-        return current;
-      } else if (this.finished.value || isNaN(event.time)) {
-        return event.laps;
-      } else {
-        return event.laps + 1;
-      }
-    }, 0).startWith(0).publishReplay(1).refCount().distinctUntilChanged();
+    this.currentLap = this.grid.pipe(
+      /*mergeAll(),*/
+      mergeMap(val => val),
+      scan<RaceItem, number>((current, event) => {
+        if (current > event.laps) {
+          return current;
+        } else if (this.finished.value || isNaN(event.time)) {
+          return event.laps;
+        } else {
+          return event.laps + 1;
+        }
+      }, 0),
+      startWith(0),
+      publishReplay(1),
+      refCount(),
+      distinctUntilChanged()
+    );
 
     if (options.time) {
-      this.timer = Observable.interval(TIMER_INTERVAL).withLatestFrom(
-        cu.getStart(),
-        cu.getState()
-      ).filter(([_, start, state]) => {
-        return this.started && (!this.options.pause || (start == 0 && state == 'connected'));
-      }).scan((time) => {
-        return Math.max(0, time - TIMER_INTERVAL);
-      }, options.time).do(time => {
-        if (time == 0) {
-          this.stopped = true;
-          this.finish();
-        }
-      }).share().startWith(options.time);
+      this.timer = Observable.interval(TIMER_INTERVAL).pipe(
+        withLatestFrom(
+          cu.getStart(),
+          cu.getState()
+        ),
+        filter(([_, start, state]) => {
+          return this.started && (!this.options.pause || (start == 0 && state == 'connected'));
+        }),
+        scan<any, number>((time, _) => {
+          return Math.max(0, time - TIMER_INTERVAL);
+        }, options.time),
+        tap(time => {
+          if (time == 0) {
+            this.stopped = true;
+            this.finish();
+          }
+        }),
+        share(),
+        startWith(options.time)
+      );
     }
 
     this.cu.setMask(this.mask);
@@ -178,11 +207,11 @@ export class Session {
       }
       mask >>>= 1;
     }
-    return timer.startWith(...init).groupBy(([id]) => id).map(group => {
+    return timer.pipe(startWith(...init), groupBy(([id]) => id), map(group => {
       type TimeInfo = [number[][], number[], number[], boolean];
       this.active |= (1 << group.key);
 
-      const times = group.scan(([times, last, best, finished]: TimeInfo, [id, time, sensor]: [number, number, number]) => {
+      const times = group.pipe(scan(([times, last, best, finished]: TimeInfo, [id, time, sensor]: [number, number, number]) => {
         const tail = times[times.length - 1] || [];
         if (sensor && time > (tail.length >= sensor ? tail[sensor - 1] : -Infinity) + this.options.minLapTime) {
           if (sensor === 1) {
@@ -205,32 +234,46 @@ export class Session {
           }
         }
         return <TimeInfo>[times, last, best, finished];
-      }, <TimeInfo>[[], [], [], false]);
+      }, <TimeInfo>[[], [], [], false]));
 
-      return times.combineLatest(
-        pits.map(mask => ((mask & ~this.mask) & (1 << group.key)) != 0).distinctUntilChanged().scan(
-        ([count]: [number, boolean], inpit: boolean) => {
-          return [inpit ? count + 1 : count, inpit]
-        }, [0, false]),
-        fuel.map(fuel => fuel[group.key]).distinctUntilChanged()
-      ).map(([[times, last, best, finished], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => {
-        const laps = times.length ? times.length - 1 : 0;
-        const curr = times[times.length - 1] || [];
-        const prev = times[times.length - 2] || [];
-        return {
-          id: group.key,
-          time: curr[0],
-          laps: laps,
-          last: last,
-          best: best,
-          fuel: fuel,
-          pit: pit,
-          pits: pits,
-          sector: curr.length - 1 || prev.length,
-          finished: finished
-        };
-      }).publishReplay(1).refCount();
-    }).publishReplay().refCount();
+      return times.pipe(
+        combineLatest(
+          pits.pipe(
+            map(mask => ((mask & ~this.mask) & (1 << group.key)) != 0),
+            distinctUntilChanged(),
+            scan(([count]: [number, boolean], inpit: boolean) => {
+              return [inpit ? count + 1 : count, inpit]
+            }, [0, false])
+          ),
+          fuel.pipe(
+            map(fuel => fuel[group.key]),
+            distinctUntilChanged()
+          )
+        ),
+        map(([[times, last, best, finished], [pits, pit], fuel]: [TimeInfo, [number, boolean], number]) => {
+          const laps = times.length ? times.length - 1 : 0;
+          const curr = times[times.length - 1] || [];
+          const prev = times[times.length - 2] || [];
+          return {
+            id: group.key,
+            time: curr[0],
+            laps: laps,
+            last: last,
+            best: best,
+            fuel: fuel,
+            pit: pit,
+            pits: pits,
+            sector: curr.length - 1 || prev.length,
+            finished: finished
+          };
+        }),
+        publishReplay(1),
+        refCount()
+      );
+    }),
+    publishReplay(),
+    refCount()
+    );
   }
 
   private finish(id?: number) {

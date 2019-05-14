@@ -1,3 +1,4 @@
+
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 
 import { Nav, Platform } from 'ionic-angular';
@@ -9,6 +10,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TranslateService } from '@ngx-translate/core';
 
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { distinctUntilChanged, debounceTime, filter, first, map, /*mergeAll,*/ mergeMap, switchMap, timeout } from 'rxjs/operators';
 
 import { RootPage } from './root.page';
 
@@ -66,9 +68,13 @@ export class AppComponent implements OnInit {
       }
       if (connection) {
         this.logger.info('Connecting to ' + connection.name);
-        Observable.from(this.backends.map(backend => backend.scan())).mergeAll().filter(device => {
-          return device.equals(connection);
-        }).timeout(CONNECTION_TIMEOUT).first().toPromise().then(device => {
+        Observable.from(this.backends.map(backend => backend.scan())).pipe(
+          /*mergeAll(),*/
+          mergeMap(device => device),
+          filter(device => device.equals(connection)),
+          timeout(CONNECTION_TIMEOUT),
+          first()
+        ).toPromise().then(device => {
           const cu = new ControlUnit(device, connection, this.logger);
           this.cu.next(cu);
           cu.connect();
@@ -85,9 +91,16 @@ export class AppComponent implements OnInit {
       }
     });
     // TODO: move this to RaceControl?
-    this.subscription = this.cu.filter((cu) => !!cu).switchMap((cu: ControlUnit) => {
-      return cu.getState().debounceTime(200).distinctUntilChanged().map(state => [state, cu.peripheral.name]);
-    }).subscribe(([state, device]) => {
+    this.subscription = this.cu.pipe(
+      filter((cu) => !!cu),
+      switchMap((cu: ControlUnit) => {
+        return cu.getState().pipe(
+          debounceTime(200),
+          distinctUntilChanged(),
+          map(state => [state, cu.peripheral.name])
+        );
+      })
+    ).subscribe(([state, device]) => {
       switch (state) {
       case 'connected':
         this.showConnectionToast('Connected to {{device}}', device);

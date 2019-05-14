@@ -1,9 +1,11 @@
+
 import { Injectable, NgZone } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
+import { catchError, switchMap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
@@ -162,16 +164,18 @@ export class WebBluetoothBackend extends Backend {
   }
 
   scan(): Observable<Peripheral> {
-    return Observable.from(this.platform.ready()).switchMap(readySource => {
-      if (readySource != 'cordova' && this.navigator.bluetooth) {
-        return Observable.from(this.requestDevice()).catch(err => {
-          this.logger.error('Error requesting Web Bluetooth device', err);
+    return Observable.from(this.platform.ready()).pipe(
+      switchMap(readySource => {
+        if (readySource != 'cordova' && this.navigator.bluetooth) {
+          return Observable.from(this.requestDevice()).pipe(catchError(err => {
+            this.logger.error('Error requesting Web Bluetooth device', err);
+            return Observable.empty();
+          }));
+        } else {
           return Observable.empty();
-        });
-      } else {
-        return Observable.empty();
-      }
-    });
+        }
+      })
+    );
   }
 
   private requestDevice(): Promise<any> {

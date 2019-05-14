@@ -6,6 +6,7 @@ import { BLE } from '@ionic-native/ble';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
+import { distinct, distinctUntilChanged, filter, finalize, map, tap, share, startWith, switchMap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
@@ -181,37 +182,41 @@ export class BLEBackend extends Backend {
   constructor(private ble: BLE, private logger: Logger, private platform: Platform, private zone: NgZone) {
     super();
 
-    this.scanner = Observable.from(this.platform.ready()).switchMap(readySource => {
-      if (readySource == 'cordova') {
-        // TODO: use BLE state listeners when available in ionic-native?
-        return Observable.interval(1000).startWith(null).switchMap(() => {
-          return Observable.from(this.ble.isEnabled().then(() => true, () => false));
-        });
-      } else {
-        return Observable.of(false);
-      }
-    }).distinctUntilChanged().switchMap(enabled => {
-      if (enabled) {
-        this.logger.debug('Start scanning for BLE devices');
-        return wrapNative(this.ble.startScanWithOptions([], { reportDuplicates: true }), this.zone).finally(() => {
-          this.logger.debug('Stop scanning for BLE devices');
-        });
-      } else {
-        this.logger.debug('Not scanning for BLE devices');
-        return Observable.empty();
-      }
-    }).share();
+    this.scanner = Observable.from(this.platform.ready()).pipe(
+      switchMap(readySource => {
+        if (readySource == 'cordova') {
+          // TODO: use BLE state listeners when available in ionic-native?
+          return Observable.interval(1000).pipe(startWith(null),switchMap(() => {
+            return Observable.from(this.ble.isEnabled().then(() => true, () => false));
+          }),);
+        } else {
+          return Observable.of(false);
+        }
+      }),
+      distinctUntilChanged(),
+      switchMap(enabled => {
+        if (enabled) {
+          this.logger.debug('Start scanning for BLE devices');
+          return wrapNative(this.ble.startScanWithOptions([], { reportDuplicates: true }), this.zone).pipe(
+            finalize(() => this.logger.debug('Stop scanning for BLE devices'))
+          );
+        } else {
+          this.logger.debug('Not scanning for BLE devices');
+          return Observable.empty();
+        }
+      }),
+      share()
+    );
   }
 
   scan(): Observable<Peripheral> {
     // TODO: use and adapt rssi?
-    return this.scanner.distinct(device => device.id).do(device => {
-      this.logger.debug('Discovered BLE device:', device);
-    }).filter(device => {
-      return /Control.Unit/i.test(device.name || '');
-    }).map(device => {
-      this.logger.info('Discovered new BLE device:', device);
-      return new BLEPeripheral(device, this.ble, this.logger, this.zone);
-    });
+    return this.scanner.pipe(
+      distinct(device => device.id),
+      tap(device => this.logger.debug('Discovered BLE device:', device)),
+      filter(device => /Control.Unit/i.test(device.name || '')),
+      tap(device => this.logger.info('Discovered new BLE device:', device)),
+      map(device => new BLEPeripheral(device, this.ble, this.logger, this.zone))
+    );
   }
 }

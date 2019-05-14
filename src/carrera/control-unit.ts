@@ -1,18 +1,6 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject , ConnectableObservable , Observable, Subject , Subscription } from 'rxjs';
 
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/publish';
-import 'rxjs/add/operator/publishReplay';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/timeout';
+import { concatMap, distinctUntilChanged, filter, map, publish, publishReplay, refCount, retryWhen, scan, share, take, tap, timeout } from 'rxjs/operators';
 
 import { Logger } from '../core';
 
@@ -64,20 +52,32 @@ export class ControlUnit {
     this.connection = this.peripheral.connect({
       next: () => this.connection.next(POLL_COMMAND.buffer)
     });
-    const connection = this.connection.share();  // FIXME: concat does not define order of (un)subscribe
-    this.data = Observable.concat(
-      connection.timeout(settings.connectionTimeout).take(1).do(() => this.state.next('connected')),
-      connection.timeout(settings.requestTimeout)
-    ).retryWhen(errors => {
-      return this.doReconnect(errors);
-    }).do(() => {
-      this.poll();
-    }).map((data: ArrayBuffer) => {
-      return new DataView(data);
-    }).publish();
-    this.status = this.data.filter((view) => {
+    const sharedConnection = this.connection.pipe(share());  // FIXME: concat does not define order of (un)subscribe
+    const timedConnection = Observable.concat(
+      sharedConnection.pipe(
+        timeout(settings.connectionTimeout),
+        take(1),
+        tap(() => this.state.next('connected'))
+      ),
+      sharedConnection.pipe(
+        timeout(settings.requestTimeout)
+      )
+    );
+    this.data = timedConnection.pipe(
+      retryWhen(errors => {
+        return this.doReconnect(errors);
+      }),
+      tap(() => {
+        this.poll();
+      }),
+      map((data: ArrayBuffer) => {
+        return new DataView(data);
+      }),
+      publish()
+    ) as ConnectableObservable<DataView>;
+    this.status = this.data.pipe(filter((view) => {
       return view.byteLength >= 16 && view.toString(0, 2) === '?:';
-    }).publishReplay(1).refCount();
+    }),publishReplay(1),refCount(),);
   }
 
   connect() {
@@ -108,49 +108,50 @@ export class ControlUnit {
   }
 
   getFuel(): Observable<ArrayLike<number>> {
-    return this.status.map((data: DataView) => data.getUint8Array(2, 8));
+    return this.status.pipe(map((data: DataView) => data.getUint8Array(2, 8)));
   }
 
   getStart(): Observable<number> {
-    return this.status.map((data: DataView) => data.getUint4(10));
+    return this.status.pipe(map((data: DataView) => data.getUint4(10)));
   }
 
   getMode(): Observable<number> {
-    return this.status.map((data: DataView) => data.getUint4(11));
+    return this.status.pipe(map((data: DataView) => data.getUint4(11)));
   }
 
   getPit(): Observable<number> {
-    return this.status.map((data: DataView) => data.getUint8(12));
+    return this.status.pipe(map((data: DataView) => data.getUint8(12)));
   }
 
   getTimer(): Observable<[number, number, number]> {
-    return this.data.filter(view => {
-      // TODO: check CRC
-      return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
-    }).filter(view => {
-      const id = view.toString(1, 1);
-      if (id < '1' || id > '8') {
-        this.logger.warn('Invalid timer data:', view.toString());
-        return false;
-      } else {
-        return true;
-      }
-    }).map(view => {
-      // tuples are never inferred
-      return <[number, number, number]>[view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10)];
-    }).distinctUntilChanged(
-      // guard against repeated timings
-      (a, b) => a[0] === b[0] && a[1] === b[1]
+    return this.data.pipe(
+      filter(view => {
+        // TODO: check CRC
+        return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
+      }),
+      filter(view => {
+        const id = view.toString(1, 1);
+        if (id < '1' || id > '8') {
+          this.logger.warn('Invalid timer data:', view.toString());
+          return false;
+        } else {
+          return true;
+        }
+      }),
+      map(view => {
+        // tuples are never inferred
+        return <[number, number, number]>[view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10)];
+      }),
+      distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1])
     );
   }
 
   getVersion(): Observable<string> {
     // TODO: timeout, retry?
-    const observable = this.data.filter((view) => {
-      return view.byteLength == 6 && view.toString(0, 1) == '0';
-    }).map(view => {
-      return view.toString(1, 4);
-    });
+    const observable = this.data.pipe(
+      filter(view => view.byteLength == 6 && view.toString(0, 1) == '0'),
+      map(view => view.toString(1, 4))
+    );
     this.requests.push(VERSION_COMMAND);
     return observable;
   }
@@ -216,17 +217,17 @@ export class ControlUnit {
 
   private doReconnect(errors: Observable<any>) {
     const state = this.state;
-    return errors.do(error => {
-      this.logger.error('Device error:', error);
-    }).scan((count, error) => {
-      return state.value === 'connected' ? 0 : count + 1;
-    }, 0).do(() => {
-      state.next('disconnected');
-    }).concatMap(count => {
-      const backoff = this.settings.minReconnectDelay * Math.pow(1.5, count);
-      return Observable.timer(Math.min(backoff, this.settings.maxReconnectDelay));
-    }).do(() => {
-      state.next('connecting');
-    });
+    return errors.pipe(
+      tap(error => this.logger.error('Device error:', error)),
+      scan((count, error) => { 
+        return state.value === 'connected' ? 0 : count + 1; 
+      }, 0),
+      tap(() => state.next('disconnected')),
+      concatMap(count => {
+        const backoff = this.settings.minReconnectDelay * Math.pow(1.5, count);
+        return Observable.timer(Math.min(backoff, this.settings.maxReconnectDelay));
+      }),
+      tap(() => state.next('connecting'))
+    );
   }
 }

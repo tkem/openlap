@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
 import { Observable, ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 const COLORS = [
   '#ff0000',
@@ -106,13 +107,15 @@ export class Settings {
   }
 
   getConnection(): Observable<Connection> {
-    return this.get('connection').map(value => {
-      if (value) {
-        return Object.assign(new Connection(), value);
-      } else {
-        return null;
-      }
-    });
+    return this.get('connection').pipe(
+      map(value => {
+        if (value) {
+          return Object.assign(new Connection(), value);
+        } else {
+          return null;
+        }
+      })
+    );
   }
 
   setConnection(value: Connection): Promise<void> {
@@ -120,13 +123,15 @@ export class Settings {
   }
 
   getDrivers(): Observable<Array<Driver>> {
-    return this.get('drivers').map(value => {
-      const result = new Array<Driver>(8);
-      for (let i = 0; i != result.length; ++i) {
-        result[i] = Object.assign({color: COLORS[i]}, value ? value[i] : null);
-      }
-      return result;
-    });
+    return this.get('drivers').pipe(
+      map(value => {
+        const result = new Array<Driver>(8);
+        for (let i = 0; i != result.length; ++i) {
+          result[i] = Object.assign({color: COLORS[i]}, value ? value[i] : null);
+        }
+        return result;
+      })
+    );
   }
 
   setDrivers(value: Array<Driver>): Promise<void> {
@@ -134,13 +139,15 @@ export class Settings {
   }
 
   getNotifications(): Observable<{[key: string]: Notification}> {
-    return this.get('notifications').map(value => {
-      const result = {};
-      for (let key of Object.keys(NOTIFICATIONS)) {
-        result[key] = Object.assign({enabled: NOTIFICATIONS[key]}, value ? value[key] : null);
-      }
-      return result;
-    });
+    return this.get('notifications').pipe(
+      map(value => {
+        const result = {};
+        for (let key of Object.keys(NOTIFICATIONS)) {
+          result[key] = Object.assign({enabled: NOTIFICATIONS[key]}, value ? value[key] : null);
+        }
+        return result;
+      })
+    );
   }
 
   setNotifications(value: {[key: string]: Notification}): Promise<void> {
@@ -148,9 +155,9 @@ export class Settings {
   }
 
   getOptions(): Observable<Options> {
-    return this.get('options').map(value => {
-      return Object.assign(new Options(), value);
-    });
+    return this.get('options').pipe(
+      map(value => Object.assign(new Options(), value))
+    );
   }
 
   setOptions(value: Options): Promise<void> {
@@ -158,9 +165,9 @@ export class Settings {
   }
 
   getQualifyingSettings(): Observable<RaceOptions> {
-    return this.get('qualifying').map(value => {
-      return Object.assign(new RaceOptions('qualifying'), value);
-    });
+    return this.get('qualifying').pipe(
+      map(value => Object.assign(new RaceOptions('qualifying'), value))
+    );
   }
 
   setQualifyingSettings(value: any): Promise<void> {
@@ -168,9 +175,9 @@ export class Settings {
   }
 
   getRaceSettings(): Observable<RaceOptions> {
-    return this.get('race').map(value => {
-      return Object.assign(new RaceOptions('race'), value);
-    });
+    return this.get('race').pipe(
+      map(value => Object.assign(new RaceOptions('race'), value))
+    );
   }
 
   setRaceSettings(value: any): Promise<void> {

@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/
 import { ModalController, Nav, Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 import { ControlUnit } from '../carrera';
 import { I18nAlertController, Logger, RaceOptions, Settings } from '../core';
@@ -81,7 +82,7 @@ export class MenuComponent implements OnChanges {
   }
 
   startQualifying() {
-    this.settings.getQualifyingSettings().take(1).subscribe((options) => {
+    this.settings.getQualifyingSettings().pipe(take(1)).subscribe((options) => {
       let modal = this.modal.create(RaceSettingsPage, options);
       modal.onDidDismiss((options) => {
         if (options) {
@@ -95,7 +96,7 @@ export class MenuComponent implements OnChanges {
   }
 
   startRace() {
-    this.settings.getRaceSettings().take(1).subscribe((options) => {
+    this.settings.getRaceSettings().pipe(take(1)).subscribe((options) => {
       let modal = this.modal.create(RaceSettingsPage, options);
       modal.onDidDismiss((options) => {
         if (options) {

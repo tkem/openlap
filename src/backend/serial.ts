@@ -7,6 +7,7 @@ import { Serial } from '@ionic-native/serial';
 
 import { Observable, Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
+import { share, switchMap, tap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { Peripheral } from '../carrera';
@@ -146,24 +147,28 @@ export class SerialBackend extends Backend {
   {
     super();
 
-    this.scanner = Observable.from(this.platform.ready()).switchMap(readySource => {
-      if (readySource == 'cordova' && platform.is('android') && !this.device.isVirtual) {
-        return Observable.from(this.serial.requestPermission().then(() => true, () => false));
-      } else {
-        return Observable.of(false);
-      }
-    }).do(enabled => {
-      this.logger.debug('Serial device ' + (enabled ? '' : 'not') + ' enabled');
-    }).share();
+    this.scanner = Observable.from(this.platform.ready()).pipe(
+      switchMap(readySource => {
+        if (readySource == 'cordova' && platform.is('android') && !this.device.isVirtual) {
+          return Observable.from(this.serial.requestPermission().then(() => true, () => false));
+        } else {
+          return Observable.of(false);
+        }
+      }),
+      tap(enabled => this.logger.debug('Serial device ' + (enabled ? '' : 'not') + ' enabled')),
+      share()
+    );
   }
 
   scan(): Observable<Peripheral> {
-    return this.scanner.switchMap(enabled => {
-      if (enabled) {
-        return Observable.of(new SerialPeripheral(this.serial, this.logger, this.zone));
-      } else {
-        return Observable.empty<SerialPeripheral>();
-      }
-    })
+    return this.scanner.pipe(
+      switchMap(enabled => {
+        if (enabled) {
+          return Observable.of(new SerialPeripheral(this.serial, this.logger, this.zone));
+        } else {
+          return Observable.empty<SerialPeripheral>();
+        }
+      })
+    );
   }
 };

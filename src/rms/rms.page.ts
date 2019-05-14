@@ -4,14 +4,15 @@ import { NavParams, PopoverController } from 'ionic-angular';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { Observable, Subscription } from 'rxjs';
+import { combineLatest, concat, concatAll, distinctUntilChanged, filter, map, /*mergeAll,*/ mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
+
 import { ControlUnit, ControlUnitButton } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Logger, RaceOptions, Settings, Speech } from '../core';
 
 import { LeaderboardItem } from './leaderboard';
 import { RmsMenu } from './rms.menu';
 import { Session } from './session';
-
-import { Observable, Subscription } from 'rxjs';
 import 'rxjs/observable/fromEvent';
 
 const ORIENTATION = {
@@ -80,34 +81,47 @@ export class RmsPage implements OnDestroy, OnInit {
   {
     this.options = params.data;
 
-    const start = this.cu.getStart().distinctUntilChanged();
-    const state = this.cu.getState().distinctUntilChanged();
-    const mode = this.cu.getMode().distinctUntilChanged();
+    const start = this.cu.getStart().pipe(distinctUntilChanged());
+    const state = this.cu.getState().pipe(distinctUntilChanged());
+    const mode = this.cu.getMode().pipe(distinctUntilChanged());
 
     // use "resize" event for easier testing on browsers
-    const orientation = Observable.fromEvent(window, 'resize').startWith(undefined).map(() => {
-      return window.innerWidth < window.innerHeight ? 'portrait' : 'landscape';
-    }).distinctUntilChanged();
+    const orientation = Observable.fromEvent(window, 'resize').pipe(
+      startWith(undefined),
+      map(() => window.innerWidth < window.innerHeight ? 'portrait' : 'landscape'),
+      distinctUntilChanged()
+    );
 
-    this.slides = mode.startWith(0).combineLatest(orientation).map(([mode, orientation]) => {
-      return FIELDS[mode & 0x03 ? 1 : 0][this.options.mode].map(s => {
-        return (ORIENTATION[orientation] + ' ' + s).split(/\s+/)
-      });
-    });
+    this.slides = mode.pipe(
+      startWith(0),
+      combineLatest(orientation),
+      map(([mode, orientation]) => {
+        return FIELDS[mode & 0x03 ? 1 : 0][this.options.mode].map(s => {
+          return (ORIENTATION[orientation] + ' ' + s).split(/\s+/)
+        });
+      })
+    );
 
-    this.speechEnabled = settings.getOptions().map(options => options.speech);
-    this.sortorder = settings.getOptions().map(options => options.fixedorder ? 'number' : 'position');
+    this.speechEnabled = settings.getOptions().pipe(map(options => options.speech));
+    this.sortorder = settings.getOptions().pipe(map(options => options.fixedorder ? 'number' : 'position'));
 
     this.start = start;
-    this.lights = start.map(value => {
-      return value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0;
-    });
-    this.blink = state.combineLatest(start, (state, value) => {
-      return state !== 'connected' || value >= 8;
-    });
-    this.pitlane = mode.map(value => (value & 0x04) != 0);
+    this.lights = start.pipe(
+      map(value => value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0)
+    );
+    this.blink = state.pipe(
+      combineLatest(start, (state, value) => {
+        return state !== 'connected' || value >= 8;
+      })
+      );
+    this.pitlane = mode.pipe(
+      map(value => (value & 0x04) != 0)
+    );
 
-    this.keySupported = this.cu.getVersion().distinctUntilChanged().map(v => v >= '5331');
+    this.keySupported = this.cu.getVersion().pipe(
+      distinctUntilChanged(),
+      map(v => v >= '5331')
+    );
   }
 
   ngOnInit() {
@@ -123,99 +137,125 @@ export class RmsPage implements OnDestroy, OnInit {
   onStart() {
     const session = this.session = new Session(this.cu, this.options);
 
-    this.lapcount = session.currentLap.map(lap => {
+    this.lapcount = session.currentLap.pipe(map(lap => {
       return {
         count: lap,
         total: this.options.laps
       };
-    });
+    }));
 
-    const drivers = this.settings.getDrivers().switchMap(drivers => {
+    const drivers = this.settings.getDrivers().pipe(switchMap(drivers => {
       const observables = drivers.map((obj, index) => {
         const code = obj.code || '#' + (index + 1);
         if (obj.name) {
           return Observable.of({name: obj.name, code: code, color: obj.color});
         } else {
-          return this.getTranslations('Driver {{number}}', {number: index + 1}).map(name => {
+          return this.getTranslations('Driver {{number}}', {number: index + 1}).pipe(map(name => {
             return {name: name, code: code, color: obj.color}
-          });
+          }));
         }
       });
       return Observable.combineLatest(...observables);
-    });
+    }));
 
     const best = [Infinity, Infinity, Infinity, Infinity];
     const events = Observable.merge(
-      session.grid.map(obs => obs.pairwise()).mergeAll().mergeMap(([prev, curr]) => {
-        const events = [];
-        curr.best.forEach((time, index) => {
-          if ((time || Infinity) < best[index]) {
-            best[index] = time;
-            if (curr.laps >= 3) {
-              events.push([index ? 'bests' + index : 'bestlap', curr.id]);
+      session.grid.pipe(
+        map(obs => obs.pipe(pairwise())),
+        mergeMap(obs => obs),
+        mergeMap(([prev, curr]) => {
+          const events = [];
+          curr.best.forEach((time, index) => {
+            if ((time || Infinity) < best[index]) {
+              best[index] = time;
+              if (curr.laps >= 3) {
+                events.push([index ? 'bests' + index : 'bestlap', curr.id]);
+              }
+            }
+          });
+          if (!curr.finished && curr.time) {
+            if (curr.fuel < prev.fuel) {
+              events.push(['fuel' + curr.fuel, curr.id]);
+            }
+            if (curr.pit && !prev.pit) {
+              events.push(['pitenter', curr.id]);
+            }
+            if (!curr.pit && prev.pit) {
+              events.push(['pitexit', curr.id]);
             }
           }
-        });
-        if (!curr.finished && curr.time) {
-          if (curr.fuel < prev.fuel) {
-            events.push(['fuel' + curr.fuel, curr.id]);
-          }
-          if (curr.pit && !prev.pit) {
-            events.push(['pitenter', curr.id]);
-          }
-          if (!curr.pit && prev.pit) {
-            events.push(['pitexit', curr.id]);
-          }
-        }
-        return Observable.from(events);
-      }),
-      this.start.distinctUntilChanged().filter(value => value === 9).map(() => {
-        return ['falsestart', null];
-      }),
-      this.lapcount.filter(laps => {
-        return this.options.laps && laps.count === this.options.laps && !session.finished.value;
-      }).map(() => {
-        return ['finallap', null];
-      }),
-      session.yellowFlag.distinctUntilChanged().skipWhile(value => !value).map(value => {
-        return [value ? 'yellowflag' : 'greenflag', null];
-      }),
-      session.finished.distinctUntilChanged().filter(finished => finished).map(() => {
-        return ['finished', null];
+          return Observable.from(events);
+        }),
+      ),
+      this.start.pipe(
+        distinctUntilChanged(),
+        filter(value => value === 9),
+        map(() => {
+          return ['falsestart', null];
+        })
+      ),
+      this.lapcount.pipe(
+        filter(laps => {
+          return this.options.laps && laps.count === this.options.laps && !session.finished.value;
+        }),
+        map(() => {
+          return ['finallap', null];
+        })
+      ),
+      session.yellowFlag.pipe(
+        distinctUntilChanged(),
+        skipWhile(value => !value),
+        map(value => {
+          return [value ? 'yellowflag' : 'greenflag', null];
+        })
+      ),
+      session.finished.pipe(
+        distinctUntilChanged(),
+        filter(finished => finished),
+        map(() => {
+          return ['finished', null];
+        })
+      )
+    ).pipe(
+      withLatestFrom(drivers),
+      map(([[event, id], drivers]) => {
+        return <[string, any]>[event, id !== null ? drivers[id] : null];
       })
-    ).withLatestFrom(drivers).map(([[event, id], drivers]) => {
-      return <[string, any]>[event, id !== null ? drivers[id] : null];
-    });
+    );
 
     // TODO: convert to Observable.scan()?
     const gridpos = [];
     const pitfuel = [];
-    this.ranking = session.ranking.combineLatest(drivers).map(([ranks, drivers]) => {
-      return ranks.map((item, index) => {
-        if (this.options.mode == 'race' && gridpos[item.id] === undefined && item.time !== undefined) {
-          gridpos[item.id] = index;
-        }
-        if (!item.pit || item.fuel < pitfuel[item.id]) {
-          pitfuel[item.id] = item.fuel;
-        }
-        return Object.assign({}, item, {
-          position: index,
-          driver: drivers[item.id],
-          gridpos: gridpos[item.id],
-          refuel: item.pit && item.fuel > pitfuel[item.id]
+    this.ranking = session.ranking.pipe(
+      combineLatest(drivers),
+      map(([ranks, drivers]) => {
+        return ranks.map((item, index) => {
+          if (this.options.mode == 'race' && gridpos[item.id] === undefined && item.time !== undefined) {
+            gridpos[item.id] = index;
+          }
+          if (!item.pit || item.fuel < pitfuel[item.id]) {
+            pitfuel[item.id] = item.fuel;
+          }
+          return Object.assign({}, item, {
+            position: index,
+            driver: drivers[item.id],
+            gridpos: gridpos[item.id],
+            refuel: item.pit && item.fuel > pitfuel[item.id]
+          });
         });
-      });
-    }).share();
+      }),
+      share()
+    );
 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
 
-    this.subscription = events.withLatestFrom(
+    this.subscription = events.pipe(withLatestFrom(
       this.settings.getOptions(),
       this.settings.getNotifications(),
       this.getTranslations('notifications')
-    ).subscribe(([[event, driver], options, notifications, translations]) => {
+    )).subscribe(([[event, driver], options, notifications, translations]) => {
       this.logger.debug('Race event: ' + event, driver);
       if (options.speech && notifications[event] && notifications[event].enabled) {
         let message = notifications[event].message || translations[event];
@@ -243,14 +283,14 @@ export class RmsPage implements OnDestroy, OnInit {
 
     if (this.options.mode != 'practice') {
       const start = this.cu.getStart();
-      start.take(1).toPromise().then(value => {
+      start.pipe(take(1)).toPromise().then(value => {
         if (value === 0) {
           this.cu.toggleStart();
         }
         // wait until startlight goes off; TODO: subscribe/unsibscribe?
-        this.cu.getStart().pairwise().filter(([prev, curr]) => {
+        this.cu.getStart().pipe(pairwise(),filter(([prev, curr]) => {
           return prev != 0 && curr == 0;
-        }).take(1).toPromise().then(() => {
+        }),take(1),).toPromise().then(() => {
           this.logger.info('Start ' + this.options.mode + ' mode');
           session.start();
         });
@@ -259,7 +299,7 @@ export class RmsPage implements OnDestroy, OnInit {
   }
 
   toggleSpeech() {
-    this.settings.getOptions().take(1).subscribe(options => {
+    this.settings.getOptions().pipe(take(1)).subscribe(options => {
       this.settings.setOptions(Object.assign({}, options, {speech: !options.speech}));
     });
   }
@@ -284,8 +324,11 @@ export class RmsPage implements OnDestroy, OnInit {
 
   // see https://github.com/ngx-translate/core/issues/330
   private getTranslations(key: string, params?: Object) {
-    return this.translate.get(key, params).concat(
-      this.translate.onLangChange.asObservable().map(() => this.translate.get(key, params)).concatAll()
-    );
+    return this.translate.get(key, params).pipe(
+      concat(this.translate.onLangChange.asObservable().pipe(
+        map(() => this.translate.get(key, params)),
+        concatAll()
+      )
+    ));
   }
 }

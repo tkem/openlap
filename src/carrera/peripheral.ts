@@ -1,5 +1,5 @@
+import { Subject } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
-import { Subject } from 'rxjs/Subject';
 
 export interface Peripheral {
   type: string; // 'ble' | 'serial' | 'demo';

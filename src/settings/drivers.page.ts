@@ -1,4 +1,6 @@
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -16,7 +18,7 @@ export class DriversPage implements OnDestroy, OnInit {
   constructor(private logger: Logger, private settings: Settings, private speech: Speech, private translate: TranslateService) {}
 
   ngOnInit() {
-    this.settings.getDrivers().take(1).toPromise().then(drivers => {
+    this.settings.getDrivers().pipe(take(1)).toPromise().then(drivers => {
       this.drivers = drivers;
     }).catch(error => {
       this.logger.error('Error getting drivers', error);

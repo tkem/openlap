@@ -1,8 +1,10 @@
+
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { PopoverController } from 'ionic-angular';
 
 import { Observable, Subject } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 
 import { ControlUnit } from '../carrera';
 import { CONTROL_UNIT_PROVIDER, Driver, Options, Settings } from '../core';
@@ -47,7 +49,7 @@ export class TuningPage implements OnDestroy, OnInit {
     'fuel':  [0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9]
   }
 
-  connected: Observable<boolean> = this.cu.getState().map((state) => state == 'connected');
+  connected: Observable<boolean> = this.cu.getState().pipe(map((state) => state == 'connected'));
 
   private subject = new Subject<{type: string, id: number}>();
 
@@ -62,7 +64,7 @@ export class TuningPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subject.debounceTime(400).subscribe((event) => {
+    this.subject.pipe(debounceTime(400)).subscribe((event) => {
       for (let model of (event.id !== undefined ? [this.models[event.id]] : this.models)) {
         switch (event.type) {
         case 'speed':

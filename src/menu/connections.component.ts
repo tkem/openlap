@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs';
+import { /*mergeAll,*/ mergeMap, scan, take } from 'rxjs/operators';
 
 import { Backend } from '../backend';
 import { Peripheral } from '../carrera';
@@ -35,14 +36,18 @@ export class ConnectionsComponent {
         this.logger.error('Scan error:', e);
         this.showToast(e.toString());
         return <Observable<Peripheral>>Observable.empty();
-      }))).mergeAll().scan(
-        (result, value) => result.concat(value), []
+      }))).pipe(
+        /*mergeAll(),*/
+        mergeMap(val => val),
+        scan<Peripheral>((result, value) => { 
+          return result.concat(value);
+        }, [])
       );
     });
   }
 
   onSelect(peripheral: Peripheral) {
-    this.settings.getConnection().take(1).subscribe((connection) => {
+    this.settings.getConnection().pipe(take(1)).subscribe((connection) => {
       this.settings.setConnection(Object.assign({}, connection, {
         type: peripheral.type,
         name: peripheral.name,
