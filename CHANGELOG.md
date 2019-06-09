@@ -3,9 +3,9 @@
 
 - Add Android 8.0 adaptive icons.
 
-- Remove platform cordova-electron.
+- Remove platform `cordova-electron`.
 
-- Use rxjs pipeable operators.
+- Use `rxjs` pipeable operators.
 
 - Update dependencies.
 
