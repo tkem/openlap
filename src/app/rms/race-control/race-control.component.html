@@ -1,0 +1,24 @@
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button [disabled]="!(keys | async)" (click)="togglePaceCar()">
+      <div>
+        <svg viewBox="0 0 9 5">
+          <text text-anchor="middle" x="50%" y="2" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">PACE CAR</text>
+          <text text-anchor="middle" x="50%" y="4" dy="0.3" font-size="2" textLength="8" lengthAdjust="spacingAndGlyphs">ESC</text>
+        </svg>
+      </div>
+    </ion-button>
+  </ion-buttons>
+  <ion-button expand="full" fill="clear" [disabled]="!(keys | async)" (click)="toggleStart()">
+    <startlight [active]="(lights | async) >= 1" [blink]="blink | async"></startlight>
+    <startlight [active]="(lights | async) >= 2" [blink]="blink | async"></startlight>
+    <startlight [active]="(lights | async) >= 3" [blink]="blink | async"></startlight>
+    <startlight [active]="(lights | async) >= 4" [blink]="blink | async"></startlight>
+    <startlight [active]="(lights | async) >= 5" [blink]="blink | async"></startlight>
+  </ion-button>
+  <ion-buttons slot="end">
+    <ion-button [disabled]="!cu" (click)="onYellowFlag.emit($event)">
+      <yellow-flag [blink]="yellowFlag" cols="9" rows="5"></yellow-flag>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>

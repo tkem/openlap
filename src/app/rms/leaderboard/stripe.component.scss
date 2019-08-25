@@ -1,0 +1,18 @@
+:host {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ion-text-color);
+    color: var(--ion-background-color);
+    border-bottom-right-radius: 0.4em;
+    width: 1.65em !important;
+    margin-right: 1em;
+    position: relative;
+    overflow: visible !important;
+}
+.stripe {
+    border-right: 0.25em solid;
+    position: absolute;
+    right: -0.75em;
+    z-index: 1;
+}

@@ -1,59 +1,36 @@
-
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-
-import { Nav, Platform } from 'ionic-angular';
-
-import { AndroidFullScreen } from '@ionic-native/android-full-screen';
-import { Insomnia } from '@ionic-native/insomnia';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, debounceTime, filter, first, map, /*mergeAll,*/ mergeMap, switchMap, timeout } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { first, mergeMap, timeout } from 'rxjs/operators';
 
-import { RootPage } from './root.page';
-
-import { Backend } from '../backend';
-import { ControlUnit } from '../carrera';
-import { CONTROL_UNIT_SUBJECT, Logger, RaceOptions, Settings, Speech, Toast } from '../core';
-import { RmsPage } from '../rms';
+import { AppSettings } from './app-settings';
+import { Backend } from './backend';
+import { ControlUnit } from './carrera';
+import { AppService, ControlUnitService, LoggingService, SpeechService } from './services';
 
 const CONNECTION_TIMEOUT = 3000;
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
-  @ViewChild(Nav) nav: Nav;
-
-  rootPage = RootPage;  // FIXME: get rid of this!
-
-  private subscription: Subscription;
-
-  constructor(@Inject(CONTROL_UNIT_SUBJECT) public cu: BehaviorSubject<ControlUnit>,
+  constructor(
+    private app: AppService,
+    public cu: ControlUnitService,
     @Inject(Backend) private backends: Backend[],
-    private logger: Logger,
-    private settings: Settings,
-    private speech: Speech,
-    private platform: Platform,
-    private androidFullScreen: AndroidFullScreen,
-    private insomnia: Insomnia,
-    private splashScreen: SplashScreen,
-    private toast: Toast,
+    private logger: LoggingService,
+    private settings: AppSettings,
+    private speech: SpeechService,
     private translate: TranslateService)
   {
-    this.platform.ready().then(readySource => {
-      this.logger.info('Initializing ' + readySource + ' application');
-      if (readySource === 'cordova') {
-        this.platform.resize.subscribe(() => {
-          this.enableFullScreen(this.platform.isLandscape());
-        });
-        this.enableFullScreen(this.platform.isLandscape());
-        this.insomnia.keepAwake();
-      }
+    app.orientation.subscribe(orientation => {
+      app.enableFullScreen(orientation == AppService.LANDSCAPE);
     });
+    app.keepAwake(true);
     translate.setDefaultLang('en');
   }
 
@@ -63,72 +40,31 @@ export class AppComponent implements OnInit {
       this.setLanguage(options.language);
     });
     this.settings.getConnection().subscribe(connection => {
-      if (this.cu.value) {
-        this.cu.value.disconnect();
-      }
       if (connection) {
         this.logger.info('Connecting to ' + connection.name);
-        Observable.from(this.backends.map(backend => backend.scan())).pipe(
-          /*mergeAll(),*/
+        // TODO: scan only backend responsible for this connection? provide backend.get()?
+        from(this.backends.map(backend => backend.scan())).pipe(
           mergeMap(device => device),
-          filter(device => device.equals(connection)),
-          timeout(CONNECTION_TIMEOUT),
-          first()
+          first(device => device.equals(connection)),
+          timeout(CONNECTION_TIMEOUT)
         ).toPromise().then(device => {
-          const cu = new ControlUnit(device, connection, this.logger);
+          const cu = new ControlUnit(device, connection);
           this.cu.next(cu);
           cu.connect();
-        }).then(() => {
-          this.setRoot(RmsPage, new RaceOptions('practice'));
         }).catch(error => {
-          this.logger.warn('Error connecting to ' + connection.name + ':', error);
-          this.setRoot(this.rootPage);
+          this.logger.error('Error connecting to ' + connection.name + ':', error);
+        }).then(() => {
+          this.app.hideSplashScreen();
         });
       } else {
-        this.logger.info('No connection set');
+        this.app.hideSplashScreen();
         this.cu.next(null);
-        this.setRoot(this.rootPage);
-      }
-    });
-    // TODO: move this to RaceControl?
-    this.subscription = this.cu.pipe(
-      filter((cu) => !!cu),
-      switchMap((cu: ControlUnit) => {
-        return cu.getState().pipe(
-          debounceTime(200),
-          distinctUntilChanged(),
-          map(state => [state, cu.peripheral.name])
-        );
-      })
-    ).subscribe(([state, device]) => {
-      switch (state) {
-      case 'connected':
-        this.showConnectionToast('Connected to {{device}}', device);
-        break;
-      case 'connecting':
-        this.showConnectionToast('Connecting to {{device}}', device);
-        break;
-      case 'disconnected':
-        this.showConnectionToast('Disconnected from {{device}}', device);
-        break;
       }
     });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  private enableFullScreen(value: boolean) {
-    this.androidFullScreen.isImmersiveModeSupported().then(() => {
-      if (value) {
-        return this.androidFullScreen.immersiveMode();
-      } else {
-        return this.androidFullScreen.showSystemUI();
-      }
-    }).catch(error => {
-      this.logger.error('Fullscreen error:', error);
-    });
+    this.cu.next(null);
   }
 
   private setLanguage(language: string) {
@@ -136,23 +72,6 @@ export class AppComponent implements OnInit {
       this.translate.get('notifications.locale').toPromise().then(locale => {
         this.speech.setLocale(locale);
       });
-    });
-  }
-
-  private setRoot(page: any, params?: any) {
-    this.nav.setRoot(page, params).catch(error => {
-      this.logger.error('Error setting root page', error);
-    }).then(() => {
-      this.logger.info('Hiding splash screen');
-      this.splashScreen.hide();
-    });
-  }
-
-  private showConnectionToast(message: string, device: string) {
-    this.translate.get(message, { device: device }).toPromise().then(message => {
-      return this.toast.showCenter(message, 3000);
-    }).catch(error => {
-      this.logger.error('Error showing toast', error);
     });
   }
 }

@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <checkerboard cols="9" rows="5" *ngIf="session?.finished | async"></checkerboard>
+      <span [ngSwitch]="mode">
+        <ng-container *ngSwitchCase="'practice'">
+          <span translate>Free Practice</span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'qualifying'">
+          <span translate>Qualifying</span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'race'">
+          <span *ngIf="lapcount | async as laps; else race">
+            <span *ngIf="laps.count; else race">
+              <span *ngIf="laps.total; then race1; else race2"></span>
+              <ng-template #race1>
+                {{ 'Lap {' + '{count}' + '}/{' + '{total}' + '}' | translate:laps}}
+              </ng-template>
+              <ng-template #race2>
+                {{ 'Lap {' + '{count}' + '}' | translate:laps}}
+              </ng-template>
+            </span>
+          </span>
+          <ng-template #race>
+            <span translate>Race</span>
+          </ng-template>
+        </ng-container>
+      </span>
+      <checkerboard cols="9" rows="5" *ngIf="session?.finished | async"></checkerboard>
+      <span *ngIf="session?.timer && !(session?.finished | async)" style="float: right">
+        {{session.timer | async | time:'h:mm:ss'}}
+      </span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleSpeech()">
+        <ion-icon slot="icon-only" [name]="options?.speech ? 'volume-high' : 'volume-off'"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showMenu($event)">
+        <ion-icon slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true" *ngIf="cu | async; else nocu">
+    <ion-slide *ngFor="let fields of (slides | async)">
+      <leaderboard [fields]="fields" [items]="ranking | async" [order]="options?.fixedorder ? 'number' : 'position'">
+      </leaderboard>
+    </ion-slide>
+  </ion-slides>
+  <ng-template #nocu>
+    <div class="ion-padding">
+      <h1 translate>Welcome to Open Lap!</h1>
+      <p translate>
+        Please select a Control Unit device from the menu.
+      </p>
+      <p translate>
+        If no devices are listed, please make sure that Bluetooth and Location (for scanning Bluetooth devices) are enabled or you are using a suitable serial to USB OTG converter cable.
+      </p> 
+    </div>   
+  </ng-template>
+</ion-content>
+
+<ion-footer>
+  <race-control [cu]="cu | async" [yellowFlag]="session?.yellowFlag | async" (onYellowFlag)="toggleYellowFlag()"></race-control>
+</ion-footer>

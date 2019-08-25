@@ -1,0 +1,12 @@
+<ion-item-group>
+  <ion-item>
+    <ion-label translate>Order by number</ion-label>
+    <ion-checkbox [(ngModel)]="fixedOrder"></ion-checkbox>
+  </ion-item>
+  <ion-item button [disabled]="!params.active" (click)="onCancel()">
+    <ion-label><span translate>Cancel</span>&hellip;</ion-label>
+  </ion-item>
+  <ion-item button (click)="onRestart()">
+    <ion-label><span translate>Restart</span><span *ngIf="params.active">&hellip;</span></ion-label>
+  </ion-item>
+</ion-item-group>

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Settings</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="full">
+    <ion-item>
+      <ion-label translate>Language</ion-label>
+      <ion-select [(ngModel)]="options.language" (ionChange)="update()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+        <!-- ion-option seems to require translate attribute value; see
+             https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689
+          -->
+        <ion-select-option translate="Default" value="">Default</ion-select-option>
+        <ion-select-option value="de">Deutsch</ion-select-option>
+        <ion-select-option value="en">English</ion-select-option>
+        <ion-select-option value="es">Español</ion-select-option>
+        <ion-select-option value="fr">Français</ion-select-option>
+        <ion-select-option value="it">Italiano</ion-select-option>
+        <ion-select-option value="nl">Nederlands</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item routerLink="/connection">
+      <ion-label translate>Connection</ion-label>
+    </ion-item>
+    <ion-item routerLink="/notifications">
+      <ion-label translate>Notifications</ion-label>
+    </ion-item>
+    <ion-item button (click)="reset()">
+      <ion-label translate>Reset settings</ion-label>
+    </ion-item>
+    <ion-list-header>
+      <ion-label translate>About</ion-label>
+    </ion-list-header>
+    <ion-item routerLink="/logging">
+      <ion-label translate>Event log</ion-label>
+    </ion-item>
+    <ion-item routerLink="/licenses">
+      <ion-label translate>Open source licenses</ion-label>
+    </ion-item>
+    <ion-item routerLink="/about">
+      <ion-label translate>About Open Lap</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Drivers</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
+    <ion-item *ngFor="let driver of drivers; let id = index">
+      <number slot="start" [color]="driver.color">
+        {{id + 1}}
+      </number>
+      <ion-input clearInput
+        [ngModel]="driver.name"
+        (ngModelChange)="driver.code = getCode(driver.name = $event, id)"
+        [placeholder]="placeholder | translate:{number: id + 1}"
+      >
+      </ion-input>
+      <ion-buttons slot="end">
+        <ion-note>{{driver.code || '#' + (id + 1)}}</ion-note>
+        <ion-button fill="clear" (click)="speak(id)">
+          <ion-icon name="volume-high"></ion-icon>
+        </ion-button>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-buttons>
+    </ion-item>
+  </ion-reorder-group>
+</ion-content>

@@ -1,0 +1,22 @@
+/* yellow flag animation */
+@keyframes blink-yellow-flag {
+    0%   { color: yellow; }
+    50%  { color: #444; }
+    100% { color: yellow; }
+}
+ 
+svg { 
+    fill: currentColor; 
+    color: #444;
+    height: 1em; 
+    padding: 6px;
+    border-radius: 8px;
+    box-shadow: 0 0 2px #444, inset 0 0 2px #666;
+}
+
+.blink {
+    color: yellow;
+    animation-name: blink-yellow-flag;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+}

@@ -1,36 +1,44 @@
-import { NgModule } from '@angular/core';
+// FIXME: also import zone-patch-rxjs?
+import 'zone.js/dist/zone-patch-cordova';
+
+import { ErrorHandler, Injectable, NgModule } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicApp, IonicModule } from 'ionic-angular';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
-import { AndroidFullScreen } from '@ionic-native/android-full-screen';
-import { AppVersion } from '@ionic-native/app-version';
-import { BLE } from '@ionic-native/ble';
-import { Device } from '@ionic-native/device';
-import { Insomnia } from '@ionic-native/insomnia';
-import { Serial } from '@ionic-native/serial';
-import { SocialSharing } from '@ionic-native/social-sharing';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
-import { TextToSpeech } from '@ionic-native/text-to-speech';
-import { Toast } from '@ionic-native/toast';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Serial } from '@ionic-native/serial/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { Toast } from '@ionic-native/toast/ngx';
 
 import { IonicStorageModule } from '@ionic/storage';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { BackendModule } from '../backend';
-import { CoreModule } from '../core';
-import { MenuModule } from '../menu';
-import { RmsModule } from '../rms';
-import { SettingsModule } from '../settings';
-import { SharedModule } from '../shared';
-import { TuningModule } from '../tuning';
+import { BackendModule } from './backend';
+import { MenuModule } from './menu';
+import { RmsModule } from './rms';
+import { SettingsModule } from './settings';
+import { SharedModule } from './shared';
+import { TuningModule } from './tuning';
+
+import { LoggingService } from './services';
 
 import { AppComponent } from './app.component';
-import { RootPage } from './root.page';
+import { AppRoutingModule } from './app-routing.module';
+
+@Injectable()
+export class LoggingErrorHandler implements ErrorHandler {
+
+  constructor(private logger: LoggingService) {}
+
+  handleError(error: any) {
+    this.logger.error('Error:', error);
+  }
+}
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -39,13 +47,12 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    RootPage
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(AppComponent),
+    IonicModule.forRoot(),
     IonicStorageModule.forRoot(/* TODO: config */),
     TranslateModule.forRoot({
       loader: {
@@ -55,30 +62,21 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     BackendModule,
-    CoreModule,
     MenuModule,
     RmsModule,
     SettingsModule,
     SharedModule,
-    TuningModule
+    TuningModule,
+    AppRoutingModule
   ],
   providers: [
-    AndroidFullScreen,
-    AppVersion,
     BLE,
-    Device,
-    Insomnia,
     Serial,
-    SocialSharing,
-    SplashScreen,
-    StatusBar,
     TextToSpeech,
-    Toast
+    Toast,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: ErrorHandler, useClass: LoggingErrorHandler }
   ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    AppComponent,
-    RootPage
-  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

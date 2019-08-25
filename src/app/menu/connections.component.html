@@ -1,0 +1,8 @@
+<ng-template ngFor let-peripheral [ngForOf]="peripherals | async">
+  <ion-item button menuClose (click)="onSelect(peripheral)" *ngIf="!peripheral.equals(selected)">
+    <ion-label>
+      <h2>{{peripheral.name}}</h2>
+      <h4>{{peripheral.address}}</h4>
+    </ion-label>
+  </ion-item>
+</ng-template>

@@ -1,0 +1,22 @@
+:host {
+    white-space: nowrap;   
+}
+div.number {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ion-text-color);
+    color: var(--ion-background-color);
+    width: 2em;
+    height: 2em;
+    border-bottom-right-radius: 6px;
+}
+
+div.stripe {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 1em;
+    padding-right: 0.3em;
+    border-right: 0.3em solid;
+}

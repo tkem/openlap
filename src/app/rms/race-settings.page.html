@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title [ngSwitch]="mode" translate>
+      <span *ngSwitchCase="'practice'" translate>Free Practice</span>
+      <span *ngSwitchCase="'qualifying'" translate>Qualifying</span>
+      <span *ngSwitchDefault translate>Race</span>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="onCancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="onSubmit(form.value)" [disabled]="!form.valid" translate type="submit">
+        Start
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+    <ion-list>
+      <ion-item>
+        <ion-label translate>Time</ion-label>
+        <ion-datetime formControlName="time"
+                      displayFormat="H:mm:ss" pickerFormat="H mm ss"
+                      cancelText="{{'Cancel' | translate}}" doneText="{{'Done' | translate}}"
+                      (ionChange)="onChangeTime($event)">
+        </ion-datetime>
+      </ion-item>
+      <ion-item *ngIf="mode == 'race'">
+        <ion-label translate>Number of laps</ion-label>
+        <ion-input class="right-align" formControlName="laps" type="number" placeholder="{{'None' | translate}}"
+                   (ionChange)="onChangeLaps($event)">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label translate>Number of drivers</ion-label>
+        <ion-select formControlName="drivers" 
+                    cancelText="{{'Cancel' | translate}}" 
+                    okText="{{'OK' | translate}}">
+          <!-- ion-option seems to require translate attribute value; see
+               https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689 
+            -->
+          <ion-select-option translate="Automatic" value="">Automatic</ion-select-option>
+          <ion-select-option *ngFor="let i of [1, 2, 3, 4, 5, 6]" [value]="i">{{i}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label translate>Autonomous Car</ion-label>
+        <ion-toggle formControlName="auto"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label translate>Pace Car</ion-label>
+        <ion-toggle formControlName="pace"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label translate>Stop time when paused</ion-label>
+        <ion-toggle #pause formControlName="pause"></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="mode == 'race'">
+        <ion-label translate>Finish all laps</ion-label>
+        <ion-toggle #slotmode formControlName="slotmode"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </form>
+</ion-content>

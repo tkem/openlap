@@ -1,0 +1,74 @@
+<ion-menu contentId="menu-content" (ionDidClose)="onMenuClose()" (ionDidOpen)="onMenuOpen()">
+  <ion-content>
+    <ion-list lines="none">
+      <ion-item [color]="cu ? 'primary' : 'danger'" (click)="onMenuToggle()">
+        <ion-label>
+          <h1>{{cu ? cu.peripheral.name : ('No connection' | translate)}}</h1>
+          <h2>{{cu?.peripheral.address}}</h2>
+          <h3 *ngIf="cu">
+            <span translate>Firmware version</span>
+            {{version | async | cuversion}}
+          </h3>
+        </ion-label>
+        <ion-icon slot="end" [name]="mode ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
+      </ion-item>
+      <div *ngIf="mode">
+        <ion-item-group>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item button [disabled]="!cu" (click)="startPractice()">
+              <ion-icon name="speedometer" slot="start"></ion-icon>
+              <ion-label translate>Free Practice</ion-label>
+            </ion-item>
+            <ion-item button [disabled]="!cu" (click)="startQualifying()">
+              <ion-icon name="stopwatch" slot="start"></ion-icon>
+              <ion-label translate>Qualifying</ion-label>
+            </ion-item>
+            <ion-item button [disabled]="!cu" (click)="startRace()">
+              <ion-icon name="trophy" slot="start"></ion-icon>
+              <ion-label translate>Race</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item button routerLink="/drivers">
+              <ion-icon name="people" slot="start"></ion-icon>
+              <ion-label translate>Drivers</ion-label>
+            </ion-item>
+            <ion-item button routerLink="/colors">
+              <ion-icon name="color-palette" slot="start"></ion-icon>
+              <ion-label translate>Colors</ion-label>
+            </ion-item>
+            <ion-item button [disabled]="!cu" routerLink="/tuning">
+              <ion-icon name="build" slot="start"></ion-icon>
+              <ion-label translate>Tuning</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item button routerLink="/settings">
+              <ion-icon menuClose name="settings" slot="start"></ion-icon>
+              <ion-label translate>Settings</ion-label>
+            </ion-item>
+            <ion-item button (click)="exitApp()" *ngIf="exitApp">
+              <ion-icon name="exit" slot="start"></ion-icon>
+              <ion-label translate>Exit</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-item-group>
+      </div>
+      <div *ngIf="!mode">
+        <ion-item-group>
+          <connections [selected]="cu?.peripheral"></connections>
+        </ion-item-group>
+        <ion-item-group *ngIf="cu">
+          <ion-item button (click)="reconnect()">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label translate>Reconnect</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-menu>

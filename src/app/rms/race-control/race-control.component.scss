@@ -1,0 +1,28 @@
+@media (orientation: portrait) {
+    ion-toolbar {
+        font-size: 9vw;
+    }
+}
+
+@media (orientation: landscape) {
+    ion-toolbar {
+        font-size: 6vw;
+    }
+}
+
+ion-button {
+    font-size: inherit;
+    height: 100%;
+    text-align: center;
+    white-space: nowrap;
+    svg {
+        fill: currentColor;
+        height: 1em;
+        font-weight: bold;
+        letter-spacing: normal;
+        padding: 6px;
+        border-radius: 8px;
+        box-shadow: 0 0 2px #444, inset 0 0 2px #666;
+    }
+}
+

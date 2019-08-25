@@ -1,6 +1,0 @@
-<svg attr.viewBox="0 0 {{cols}} {{rows}}">
-  <g *ngFor="let cx of xoffsets">
-    <circle *ngFor="let cy of yoffsets" [attr.cx]="cx" [attr.cy]="cy" [attr.r]="radius"></circle>
-  </g>
-  <path [attr.d]="path" fill-rule="evenodd"/>
-</svg>

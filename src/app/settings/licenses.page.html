@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Open source licenses</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item [href]="item.homepage || item.url" target="_system" *ngFor="let item of items">
+      <ion-label>
+        <h1>{{item.name}}</h1>
+        <h2>{{item.copyright || item.author}}</h2>
+        <p><span translate>License</span>: {{item.license}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

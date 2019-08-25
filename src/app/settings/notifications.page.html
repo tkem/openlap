@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Notifications</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <ion-label position="stacked">{{item.label | translate}}</ion-label>
+      <ion-input clearInput [(ngModel)]="notifications[item.id].message"
+        [placeholder]="'notifications.' + item.id | translate"
+      ></ion-input>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="speak(item.id)">
+          <ion-icon name="volume-high"></ion-icon>
+        </ion-button>
+        <ion-toggle [(ngModel)]="notifications[item.id].enabled"></ion-toggle>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+</ion-content>

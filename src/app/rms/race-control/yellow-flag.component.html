@@ -1,0 +1,5 @@
+<svg attr.viewBox="0 0 {{cols}} {{rows}}" [ngClass]="{ blink: blink }">
+  <g *ngFor="let cx of xoffsets">
+    <circle *ngFor="let cy of yoffsets" [attr.cx]="cx" [attr.cy]="cy" [attr.r]="radius"></circle>
+  </g>
+</svg>

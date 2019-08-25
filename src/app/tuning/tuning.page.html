@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Tuning</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="locked = !locked">
+        <ion-icon [name]="locked ? 'lock' : 'unlock'"></ion-icon>
+      </ion-button>
+      <ion-button icon-only (click)="showMenu($event)">
+        <ion-icon name="more"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-segment [(ngModel)]="type">
+    <ion-segment-button value="speed">
+      <ion-label translate>Speed</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="brake">
+      <ion-label translate>Brake</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="fuel">
+      <ion-label translate>Fuel</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <ng-container *ngIf="drivers | async as d">
+    <ion-item *ngFor="let model of models">
+      <number slot="start" [color]="d[model.id]?.color">
+        {{model.id + 1}}
+      </number>
+      <ng-container [ngSwitch]="orientation | async">
+        <ion-label *ngSwitchCase="'landscape'">
+          {{d[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}
+        </ion-label>
+        <ion-label *ngSwitchCase="'portrait'">
+          {{d[model.id]?.code || '#' + (model.id + 1)}}
+        </ion-label>
+      </ng-container>
+      <ng-container *ngIf="!(options | async)?.cumode" [ngSwitch]="type">
+        <ion-range *ngSwitchCase="'speed'" min="0" max="15" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.speed == null}"
+          [value]="model.speed"
+          (ionChange)="update('speed', $event.detail.value, locked ? undefined : model.id)"
+          >
+        </ion-range>
+        <ion-range *ngSwitchCase="'brake'" min="0" max="15" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.brake == null}"
+          [value]="model.brake"
+          (ionChange)="update('brake', $event.detail.value, locked ? undefined : model.id)"
+          >
+        </ion-range>
+        <ion-range *ngSwitchCase="'fuel'" min="0" max="15" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.fuel == null}"
+          [value]="model.fuel"
+          (ionChange)="update('fuel', $event.detail.value, locked ? undefined : model.id)"
+          >
+        </ion-range>
+      </ng-container>
+      <ng-container *ngIf="(options | async)?.cumode" [ngSwitch]="type">
+        <ion-range *ngSwitchCase="'speed'" min="1" max="10" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.speed == null}"
+          [value]="toCU.speed[model.speed]"
+          (ionChange)="update('speed', fromCU.speed[$event.detail.value], locked ? undefined : model.id)"
+          >
+        </ion-range>
+        <ion-range *ngSwitchCase="'brake'" min="1" max="10" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.brake == null}"
+          [value]="toCU.brake[model.brake]"
+          (ionChange)="update('brake', fromCU.brake[$event.detail.value], locked ? undefined : model.id)"
+          >
+        </ion-range>
+        <ion-range *ngSwitchCase="'fuel'" min="1" max="10" snaps="true"
+          [disabled]="!(connected | async)"
+          [ngClass]="{'pristine': model.fuel == null}"
+          [value]="toCU.fuel[model.fuel]"
+          (ionChange)="update('fuel', fromCU.fuel[$event.detail.value], locked ? undefined : model.id)"
+          >
+        </ion-range>
+      </ng-container>
+    </ion-item>
+  </ng-container>
+</ion-content>

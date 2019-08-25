@@ -1,0 +1,7 @@
+span { 
+    display: inline-block; 
+    background: linear-gradient(to right, red, #ee0 25%, green 50%, darkGreen);
+    background-clip: content-box; 
+    min-height: 0.8em; 
+    width: 100%; 
+}
