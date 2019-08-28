@@ -75,7 +75,7 @@ export class Session {
 
     const reset = merge(
       cu.getStart().pipe(distinctUntilChanged(),filter(start => start != 0),),
-      cu.getState().pipe(distinctUntilChanged(),filter(state => state == 'connected'),)
+      cu.getState().pipe(filter(state => state == 'connected'),)
     ).pipe(map(value => {
       cu.setMask(this.mask);
     }));

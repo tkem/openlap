@@ -1,6 +1,6 @@
 import { BehaviorSubject , ConnectableObservable , Observable, Subject , Subscription, concat, timer } from 'rxjs';
 
-import { concatMap, distinctUntilChanged, filter, map, publish, publishReplay, refCount, retryWhen, scan, share, take, tap, timeout } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, publish, publishReplay, refCount, retryWhen, scan, share, shareReplay, take, tap, timeout } from 'rxjs/operators';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
@@ -46,6 +46,8 @@ export class ControlUnit {
 
   private state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
 
+  private version: Promise<string> = null;
+
   constructor(public peripheral: Peripheral, private settings: Settings) {
     this.connection = this.peripheral.connect({
       next: () => this.connection.next(POLL_COMMAND.buffer)
@@ -73,9 +75,13 @@ export class ControlUnit {
       }),
       publish()
     ) as ConnectableObservable<DataView>;
-    this.status = this.data.pipe(filter((view) => {
-      return view.byteLength >= 16 && view.toString(0, 2) === '?:';
-    }),publishReplay(1),refCount(),);
+    this.status = this.data.pipe(
+      filter((view) => {
+        return view.byteLength >= 16 && view.toString(0, 2) === '?:';
+      }),
+      publishReplay(1),
+      refCount()
+    );
   }
 
   connect() {
@@ -102,7 +108,10 @@ export class ControlUnit {
   }
 
   getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
-    return this.state.asObservable();
+    return this.state.asObservable().pipe(
+      distinctUntilChanged(),
+      shareReplay()
+    );
   }
 
   getFuel(): Observable<ArrayLike<number>> {
@@ -140,14 +149,15 @@ export class ControlUnit {
   }
 
   getVersion(): Promise<string> {
-    // TODO: timeout, retry?
-    const promise = this.data.pipe(
-      filter(view => view.byteLength == 6 && view.toString(0, 1) == '0'),
-      map(view => view.toString(1, 4)),
-      take(1)
-    ).toPromise()
-    this.requests.push(VERSION_COMMAND);
-    return promise;
+    if (!this.version) {
+      this.version = this.data.pipe(
+        filter(view => view.byteLength == 6 && view.toString(0, 1) == '0'),
+        map(view => view.toString(1, 4)),
+        take(1)
+      ).toPromise()
+      this.requests.push(VERSION_COMMAND);
+    }
+    return this.version;
   }
 
   reset() {
