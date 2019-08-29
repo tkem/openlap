@@ -10,6 +10,10 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+ion-badge.tuning {
+    width: 2em !important;
+}
+
 /* no highlighting, border ("lines") color? */
 ion-item {
     --highlight-height: 0;
