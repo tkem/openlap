@@ -1,3 +1,13 @@
+1.8.0 UNRELEASED
+----------------
+
+- Require Android 5.1 or greater for the Cordova app.
+
+- Upgrade to Ionic 4 and Angular 8, including dependencies.
+
+- Modernize UI somewhat.
+
+
 1.7.2 2019-06-02
 ----------------
 
