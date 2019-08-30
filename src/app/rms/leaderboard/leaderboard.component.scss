@@ -15,17 +15,17 @@
     font-weight: bold;
     width: 100%;
 }
+leaderboard-head {
+    margin: 0 2px;
+}
+leaderboard-item {
+    margin: 0 2px 4px 2px;
+}
 .row {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     width: 100%;
-}
-.row.head {
-    margin: 0 2px;
-}
-.row.item {
-    margin: 0 2px 4px 2px;
 }
 .row.odd {
     background-color: var(--ion-color-step-100);
@@ -36,19 +36,20 @@
 .cell {
     flex-grow: 0;
     flex-shrink: 1;
+    padding: 0.25em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 0.25em;
 }
 .position {
     text-align: left;
-    width: 2.5em;
-    padding-left: 0.05em !important;
+    width: 2.65em;  /* stripe: 1.65em + 1em */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 .number {
     text-align: left;
-    width: 2em;
+    width: 1.65em;
 }
 .name {
     flex-basis: 4em;
