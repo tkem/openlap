@@ -67,7 +67,7 @@
             </ion-range>
           </ng-container>
           <ion-badge slot="end" class="tuning" [color]="model[type] == undefined ? 'medium' : 'primary'">
-            {{model[type] == undefined ? 'n/a' : model[type]}}
+            {{model[type] == undefined ? '?' : model[type]}}
           </ion-badge>
         </ng-container>
         <ng-container *ngSwitchCase="true">
@@ -95,7 +95,7 @@
             </ion-range>
           </ng-container>
           <ion-badge slot="end" class="tuning" [color]="model[type] == undefined ? 'medium' : 'primary'">
-            {{model[type] == undefined ? 'n/a' : toCU[type][model[type]]}}
+            {{model[type] == undefined ? '?' : toCU[type][model[type]]}}
           </ion-badge>
         </ng-container>
       </ng-container>

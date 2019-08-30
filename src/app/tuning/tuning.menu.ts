@@ -50,7 +50,7 @@ export class TuningMenu implements OnDestroy, OnInit {
     this.subscription.unsubscribe();
   }
 
-  apply() {
+  applyAll() {
     this.params.apply();
     this.dismiss();
   }
