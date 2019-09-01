@@ -1,14 +1,16 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 
+import { SwUpdate } from '@angular/service-worker';
+
 import { TranslateService } from '@ngx-translate/core';
 
 import { Subscription, from } from 'rxjs';
-import { distinctUntilChanged, first, mergeMap, timeout } from 'rxjs/operators';
+import { first, mergeMap, timeout } from 'rxjs/operators';
 
 import { AppSettings } from './app-settings';
 import { Backend } from './backend';
 import { ControlUnit } from './carrera';
-import { AppService, ControlUnitService, I18nToastService, LoggingService, SpeechService } from './services';
+import { AppService, ControlUnitService, I18nAlertService, I18nToastService, LoggingService, SpeechService } from './services';
 
 const CONNECTION_TIMEOUT = 3000;
 
@@ -30,11 +32,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private app: AppService,
     public cu: ControlUnitService,
     @Inject(Backend) private backends: Backend[],
+    private alert: I18nAlertService,
     private logger: LoggingService,
     private settings: AppSettings,
     private speech: SpeechService,
     private toast: I18nToastService,
-    private translate: TranslateService)
+    private translate: TranslateService,
+    private updates: SwUpdate)
   {
     app.orientation.subscribe(orientation => {
       app.enableFullScreen(orientation == AppService.LANDSCAPE);
@@ -72,10 +76,33 @@ export class AppComponent implements OnInit, OnDestroy {
         this.cu.next(null);
       }
     });
+    // TODO: wait for app becoming stable
+    if (this.updates.isEnabled) {
+      this.logger.info("Service worker enabled");
+      this.updates.available.subscribe(() => {
+        this.logger.info("Update available");
+        this.update();
+      });
+    } else {
+      this.logger.info("Service worker not enabled");
+    }
   }
 
   ngOnDestroy() {
     this.cu.next(null);
+  }
+  
+  private update() {
+    this.alert.show({
+      message: 'A new version of Open Lap is available. Do you want to update now?',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+      }, {
+        text: 'OK',
+        handler: () => document.location.reload()
+      }]
+    });
   }
 
   private setLanguage(language: string) {

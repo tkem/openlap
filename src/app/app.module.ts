@@ -5,8 +5,9 @@ import { ErrorHandler, Injectable, NgModule } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-worker';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
 
 import { BLE } from '@ionic-native/ble/ngx';
 import { Serial } from '@ionic-native/serial/ngx';
@@ -30,6 +31,8 @@ import { LoggingService } from './services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { environment } from '../environments/environment';
+
 @Injectable()
 export class LoggingErrorHandler implements ErrorHandler {
 
@@ -43,6 +46,13 @@ export class LoggingErrorHandler implements ErrorHandler {
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+export function swRegistrationOptions(platform: Platform) {
+  return {
+    enabled: !platform.is('cordova') && environment.production,
+    registrationStrategy: 'registerImmediately'
+  }
 }
 
 @NgModule({
@@ -67,7 +77,8 @@ export function createTranslateLoader(http: HttpClient) {
     SettingsModule,
     SharedModule,
     TuningModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js')
   ],
   providers: [
     BLE,
@@ -75,7 +86,12 @@ export function createTranslateLoader(http: HttpClient) {
     TextToSpeech,
     Toast,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: ErrorHandler, useClass: LoggingErrorHandler }
+    { provide: ErrorHandler, useClass: LoggingErrorHandler },
+    {
+      provide: SwRegistrationOptions,
+      useFactory: swRegistrationOptions,
+      deps: [Platform]
+    },
   ],
   bootstrap: [AppComponent]
 })
