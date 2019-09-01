@@ -23,7 +23,7 @@ Some features, such as the start light and pace car buttons, will
 require Carrera® Control Unit firmware version 3.31 or higher.
 Carrera® Check Lane support requires at least firmware version 3.36.
 
-Open Lap is available as an Android app on [Google
+The Android version is available on [Google
 Play](https://play.google.com/store/apps/details?id=at.co.kemmer.openlap).
 You may also want to join the [Beta testing
 program](https://play.google.com/apps/testing/at.co.kemmer.openlap) to
@@ -34,7 +34,8 @@ Anné](https://itunes.apple.com/us/developer/id965549566), is available
 on the [App
 Store](https://itunes.apple.com/us/app/open-lap/id1448048406).
 
-There is also a (still experimental) Web Bluetooth version available,
+Open Lap is also available as a [Progressive Web
+App](https://en.wikipedia.org/wiki/Progressive_web_applications),
 hosted at
 [https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
 To use this with Carrera AppConnect®, you'll need a Bluetooth 4.0
