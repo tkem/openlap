@@ -1,11 +1,11 @@
 {
   "name": "Open Lap",
   "short_name": "Open Lap",
-  "theme_color": "#119831",
-  "background_color": "#000000",
+  "theme_color": "#383a3e",
+  "background_color": "#222428",
   "display": "fullscreen",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "/openlap/",
+  "start_url": "/openlap/index.html",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
