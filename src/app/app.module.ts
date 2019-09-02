@@ -20,6 +20,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendModule } from './backend';
+import { DriversModule } from './drivers';
 import { MenuModule } from './menu';
 import { RmsModule } from './rms';
 import { SettingsModule } from './settings';
@@ -72,6 +73,7 @@ export function swRegistrationOptions(platform: Platform) {
       }
     }),
     BackendModule,
+    DriversModule,
     MenuModule,
     RmsModule,
     SettingsModule,

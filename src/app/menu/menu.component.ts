@@ -8,7 +8,8 @@ import { AppSettings } from '../app-settings';
 import { ControlUnit } from '../carrera';
 import { RaceSettingsPage } from '../rms';
 import { AppService, I18nAlertService, LoggingService } from '../services';
-import { ColorsPage, DriversPage, SettingsPage } from '../settings';
+import { ColorsPage, DriversPage } from '../drivers';
+import { SettingsPage } from '../settings';
 import { TuningPage } from '../tuning';
 
 import { ConnectionsComponent } from './connections.component';

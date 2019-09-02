@@ -1,28 +1,51 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { SharedModule } from '../shared';
 
 import { AboutPage } from './about.page';
-import { ColorsPage } from './colors.page';
 import { ConnectionPage } from './connection.page';
-import { DriversPage } from './drivers.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingMenu } from './logging.menu';
 import { LoggingPage } from './logging.page';
 import { NotificationsPage } from './notifications.page';
 import { SettingsPage } from './settings.page';
 
+const routes: Routes = [
+  {
+    path: '',
+    component: SettingsPage
+  },
+  {
+    path: 'about',
+    component: AboutPage
+  },
+  {
+    path: 'logging',
+    component: LoggingPage
+  },
+  {
+    path: 'licenses',
+    component: LicensesPage
+  },
+  {
+    path: 'connection',
+    component: ConnectionPage
+  },
+  {
+    path: 'notifications',
+    component: NotificationsPage
+  }
+];
+
 @NgModule({
   declarations: [
     AboutPage,
-    ColorsPage,
     ConnectionPage,
-    DriversPage,
     LicensesPage,
     LoggingMenu,
     LoggingPage,
@@ -31,9 +54,7 @@ import { SettingsPage } from './settings.page';
   ],
   entryComponents: [
     AboutPage,
-    ColorsPage,
     ConnectionPage,
-    DriversPage,
     LicensesPage,
     LoggingMenu,
     LoggingPage,
@@ -42,19 +63,18 @@ import { SettingsPage } from './settings.page';
   ],
   exports: [
     AboutPage,
-    ColorsPage,
     ConnectionPage,
-    DriversPage,
     LicensesPage,
     LoggingPage,
     NotificationsPage,
+    RouterModule,
     SettingsPage
   ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule,
+    RouterModule.forChild(routes),
     SharedModule
   ],
   providers: [

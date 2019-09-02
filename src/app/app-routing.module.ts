@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { RmsPage } from './rms';
-import { SettingsPage, ColorsPage, DriversPage, AboutPage, LoggingPage , LicensesPage, ConnectionPage, NotificationsPage } from './settings';
+import { ColorsPage, DriversPage } from './drivers';
 import { TuningPage } from './tuning';
 
 const routes: Routes = [
@@ -16,10 +16,6 @@ const routes: Routes = [
     component: RmsPage
   },
   {
-    path: 'settings',
-    component: SettingsPage
-  },
-  {
     path: 'colors',
     component: ColorsPage
   },
@@ -28,28 +24,12 @@ const routes: Routes = [
     component: DriversPage
   },
   {
-    path: 'about',
-    component: AboutPage
-  },
-  {
-    path: 'logging',
-    component: LoggingPage
-  },
-  {
-    path: 'licenses',
-    component: LicensesPage
-  },
-  {
-    path: 'connection',
-    component: ConnectionPage
-  },
-  {
-    path: 'notifications',
-    component: NotificationsPage
-  },
-  {
     path: 'tuning',
     component: TuningPage
+  },
+  {
+    path: 'settings',
+    loadChildren: './settings/settings.module#SettingsModule'
   },
   { 
     path: '**', 
@@ -60,7 +40,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { 
-      preloadingStrategy: PreloadAllModules,
+      /*preloadingStrategy: PreloadAllModules,*/
       useHash: true
     })
   ],
