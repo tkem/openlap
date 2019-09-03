@@ -35,8 +35,6 @@ import { RaceSettingsPage } from './race-settings.page';
     LeaderboardModule,
     RaceControlModule,
     SharedModule
-  ],
-  providers: [
   ]
 })
 export class RmsModule {}

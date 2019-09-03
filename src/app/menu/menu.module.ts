@@ -16,8 +16,6 @@ import { AppRoutingModule } from '../app-routing.module';
     CuVersionPipe,
     MenuComponent
   ],
-  entryComponents: [
-  ],
   exports: [
     MenuComponent
   ], 
@@ -26,9 +24,6 @@ import { AppRoutingModule } from '../app-routing.module';
     SharedModule,
     IonicModule,
     AppRoutingModule
-  ],
-  providers: [
-    
   ]
 })
 export class MenuModule {}

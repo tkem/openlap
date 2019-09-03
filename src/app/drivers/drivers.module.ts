@@ -27,8 +27,6 @@ import { DriversPage } from './drivers.page';
     FormsModule,
     IonicModule,
     SharedModule
-  ],
-  providers: [
   ]
 })
 export class DriversModule {}

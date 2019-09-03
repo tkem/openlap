@@ -26,8 +26,6 @@ import { TuningPage } from './tuning.page';
     FormsModule,
     IonicModule,
     SharedModule
-  ],
-  providers: [
   ]
 })
 export class TuningModule {}

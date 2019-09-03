@@ -62,13 +62,7 @@ const routes: Routes = [
     SettingsPage
   ],
   exports: [
-    AboutPage,
-    ConnectionPage,
-    LicensesPage,
-    LoggingPage,
-    NotificationsPage,
-    RouterModule,
-    SettingsPage
+    RouterModule
   ],
   imports: [
     CommonModule,
@@ -76,8 +70,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     SharedModule
-  ],
-  providers: [
   ]
 })
 export class SettingsModule {}

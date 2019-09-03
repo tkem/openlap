@@ -23,7 +23,6 @@ import { BackendModule } from './backend';
 import { DriversModule } from './drivers';
 import { MenuModule } from './menu';
 import { RmsModule } from './rms';
-import { SettingsModule } from './settings';
 import { SharedModule } from './shared';
 import { TuningModule } from './tuning';
 
@@ -76,7 +75,6 @@ export function swRegistrationOptions(platform: Platform) {
     DriversModule,
     MenuModule,
     RmsModule,
-    SettingsModule,
     SharedModule,
     TuningModule,
     AppRoutingModule,
