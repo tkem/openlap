@@ -7,7 +7,7 @@
 
 - Add Angular service worker.
 
-- Modernize UI somewhat.
+- Modernize UI.
 
 
 1.7.2 2019-06-02
