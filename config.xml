@@ -26,12 +26,11 @@
     </feature>
     <icon src="resources/icon.png" />
     <platform name="android">
-        <resource-file src="resources/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
-        <icon background="@color/background" density="mdpi" foreground="resources/android/icon/mipmap-mdpi-icon-fg.png" src="resources/android/icon/drawable-mdpi-icon.png" />
-        <icon background="@color/background" density="hdpi" foreground="resources/android/icon/mipmap-hdpi-icon-fg.png" src="resources/android/icon/drawable-hdpi-icon.png" />
-        <icon background="@color/background" density="xhdpi" foreground="resources/android/icon/mipmap-xhdpi-icon-fg.png" src="resources/android/icon/drawable-xhdpi-icon.png" />
-        <icon background="@color/background" density="xxhdpi" foreground="resources/android/icon/mipmap-xxhdpi-icon-fg.png" src="resources/android/icon/drawable-xxhdpi-icon.png" />
-        <icon background="@color/background" density="xxxhdpi" foreground="resources/android/icon/mipmap-xxxhdpi-icon-fg.png" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+        <icon background="resources/android/icon/mipmap-mdpi-icon-bg.png" density="mdpi" foreground="resources/android/icon/mipmap-mdpi-icon-fg.png" src="resources/android/icon/drawable-mdpi-icon.png" />
+        <icon background="resources/android/icon/mipmap-hdpi-icon-bg.png" density="hdpi" foreground="resources/android/icon/mipmap-hdpi-icon-fg.png" src="resources/android/icon/drawable-hdpi-icon.png" />
+        <icon background="resources/android/icon/mipmap-xhdpi-icon-bg.png" density="xhdpi" foreground="resources/android/icon/mipmap-xhdpi-icon-fg.png" src="resources/android/icon/drawable-xhdpi-icon.png" />
+        <icon background="resources/android/icon/mipmap-xxhdpi-icon-bg.png" density="xxhdpi" foreground="resources/android/icon/mipmap-xxhdpi-icon-fg.png" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+        <icon background="resources/android/icon/mipmap-xxxhdpi-icon-bg.png" density="xxxhdpi" foreground="resources/android/icon/mipmap-xxxhdpi-icon-fg.png" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
         <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
         <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
         <splash density="land-hdpi" src="resources/android/splash/drawable-land-hdpi-screen.png" />
