@@ -1,7 +1,0 @@
-{
-  "browserWindow": {
-    "webPreferences": {
-      "experimentalFeatures": true
-    }
-  }
-}
