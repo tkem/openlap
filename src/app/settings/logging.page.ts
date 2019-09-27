@@ -31,11 +31,11 @@ export class LoggingPage {
   }
 
   stringify(obj: any) {
-    if (typeof obj === "string") {
+    if (typeof obj !== "object" || obj instanceof Error) {
       return obj;
     } else {
       try {
-        return JSON.stringify(obj);
+        return JSON.stringify(obj, null, ' ');
       } catch(error) {
         return '' + obj;
       }
