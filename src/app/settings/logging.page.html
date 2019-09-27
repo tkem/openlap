@@ -16,9 +16,9 @@
 
 <ion-content>
   <ion-list>
-    <ion-item button *ngFor="let record of logger.records" (click)="record.json = !record.json" text-wrap>
+    <ion-item button *ngFor="let record of logger.records" (click)="record.json = !record.json">
       <ion-icon slot="start" [name]="icons[record.level]?.name" [ngStyle]="icons[record.level]?.style"></ion-icon>
-      <ion-label text-wrap>
+      <ion-label class="ion-text-wrap">
         <span>{{record.time | date:'HH:mm:ss'}}.{{(record.time % 1000) | number:'3.0-0'}}</span>
         <span *ngFor="let arg of record.args"> {{record.json ? stringify(arg) : arg}}</span>
       </ion-label>
