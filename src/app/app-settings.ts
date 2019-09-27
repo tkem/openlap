@@ -103,13 +103,7 @@ export class AppSettings {
 
   getConnection() {
     return this.settings.observe('connection').pipe(
-      map(value => {
-        if (value) {
-          return Object.assign(new Connection(), value);
-        } else {
-          return null;
-        }
-      })
+      map(value => Object.assign(new Connection(), value))
     );
   }
 

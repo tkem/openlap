@@ -2,8 +2,10 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { take } from 'rxjs/operators';
+
 import { AppSettings, Notification } from '../app-settings';
-import { SpeechService } from '../services';
+import { LoggingService, SpeechService } from '../services';
 
 @Component({
   templateUrl: 'notifications.page.html'
@@ -56,19 +58,24 @@ export class NotificationsPage implements OnDestroy {
 
   notifications: {[key: string]: Notification} = {};
 
-  private subscription: any;
-
-  constructor(private settings: AppSettings, private speech: SpeechService, private translate: TranslateService) {}
+  constructor(private logger: LoggingService, private settings: AppSettings, private speech: SpeechService, private translate: TranslateService) {
+    for (let item of this.items) {
+      this.notifications[item.id] = { enabled: false, message: undefined };
+    }
+  }
 
   ngOnInit() {
-    this.subscription = this.settings.getNotifications().subscribe(notifications => {
+    this.settings.getNotifications().pipe(take(1)).toPromise().then(notifications => {
       this.notifications = notifications;
+    }).catch(error => {
+      this.logger.error('Error getting notifications', error);
     });
   }
 
   ngOnDestroy() {
-    this.settings.setNotifications(this.notifications);
-    this.subscription.unsubscribe();
+    this.settings.setNotifications(this.notifications).catch(error => {
+      this.logger.error('Error setting notifications', error);
+    });
   }
 
   speak(id: string) {

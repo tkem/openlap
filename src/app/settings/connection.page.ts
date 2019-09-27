@@ -1,6 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 
+import { take } from 'rxjs/operators';
+
 import { AppSettings, Connection } from '../app-settings';
+import { LoggingService } from '../services';
 
 function isObjectSubset(a, b) {
   for (let key in a) {
@@ -27,12 +30,10 @@ export class ConnectionPage implements OnDestroy {
     }
   };
 
-  private subscription: any;
-
-  constructor(private settings: AppSettings) {}
+  constructor(private logger: LoggingService, private settings: AppSettings) {}
 
   ngOnInit() {
-    this.subscription = this.settings.getConnection().subscribe(connection => {
+    this.settings.getConnection().pipe(take(1)).toPromise().then(connection => {
       this.connection = connection;
       this.ranges = {
         connection: connection.connectionTimeout,
@@ -42,6 +43,8 @@ export class ConnectionPage implements OnDestroy {
           upper: connection.maxReconnectDelay
         }
       };
+    }).catch(error => {
+      this.logger.error('Error getting connection parameters', error);
     });
   }
 
@@ -53,8 +56,9 @@ export class ConnectionPage implements OnDestroy {
       maxReconnectDelay: this.ranges.reconnect.upper
     };
     if (!isObjectSubset(connection, this.connection)) {
-      this.settings.setConnection(Object.assign({}, this.connection, connection));
+      this.settings.setConnection(Object.assign({}, this.connection, connection)).catch(error => {
+        this.logger.error('Error setting connection parameters', error);
+      });
     }
-    this.subscription.unsubscribe();
   }
 }
