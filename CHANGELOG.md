@@ -1,4 +1,4 @@
-1.8.0 UNRELEASED
+1.8.0 2019-11-14
 ----------------
 
 - Require Android 5.1 or greater.
