@@ -13,17 +13,17 @@ export class LoggingPage {
 
   // FIXME: numeric values of levels are implementation details
   icons = [
-    {name: 'bug', style: {color: 'green'}},
-    {name: 'information-circle', style: {color: 'blue'}},
-    {name: 'warning', style: {color: 'yellow'}},
-    {name: 'alert-circle', style: {color: 'red'}}
+    {name: 'bug-sharp', style: {color: 'green'}},
+    {name: 'information-circle-sharp', style: {color: 'blue'}},
+    {name: 'warning-sharp', style: {color: 'yellow'}},
+    {name: 'alert-circle-sharp', style: {color: 'red'}}
   ];
 
   constructor(public logger: LoggingService, private popover: PopoverController) {}
 
   showMenu(event) {
     return this.popover.create({
-      component: LoggingMenu, 
+      component: LoggingMenu,
       event: event
     }).then(menu => {
       menu.present();

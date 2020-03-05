@@ -10,21 +10,21 @@
             {{version | async | cuversion}}
           </h3>
         </ion-label>
-        <ion-icon slot="end" [name]="mode ? 'caret-down' : 'caret-up'"></ion-icon>
+        <ion-icon slot="end" [name]="mode ? 'caret-down-sharp' : 'caret-up-sharp'"></ion-icon>
       </ion-item>
       <div *ngIf="mode">
         <ion-item-group>
           <ion-menu-toggle auto-hide="false">
             <ion-item button [disabled]="!cu" (click)="startPractice()">
-              <ion-icon name="speedometer" slot="start"></ion-icon>
+              <ion-icon name="speedometer-sharp" slot="start"></ion-icon>
               <ion-label translate>Free Practice</ion-label>
             </ion-item>
             <ion-item button [disabled]="!cu" (click)="startQualifying()">
-              <ion-icon name="stopwatch" slot="start"></ion-icon>
+              <ion-icon name="stopwatch-sharp" slot="start"></ion-icon>
               <ion-label translate>Qualifying</ion-label>
             </ion-item>
             <ion-item button [disabled]="!cu" (click)="startRace()">
-              <ion-icon name="trophy" slot="start"></ion-icon>
+              <ion-icon name="trophy-sharp" slot="start"></ion-icon>
               <ion-label translate>Race</ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -32,15 +32,15 @@
         <ion-item-group>
           <ion-menu-toggle auto-hide="false">
             <ion-item button routerLink="/drivers">
-              <ion-icon name="people" slot="start"></ion-icon>
+              <ion-icon name="people-sharp" slot="start"></ion-icon>
               <ion-label translate>Drivers</ion-label>
             </ion-item>
             <ion-item button routerLink="/colors">
-              <ion-icon name="color-palette" slot="start"></ion-icon>
+              <ion-icon name="color-palette-sharp" slot="start"></ion-icon>
               <ion-label translate>Colors</ion-label>
             </ion-item>
             <ion-item button [disabled]="!cu" routerLink="/tuning">
-              <ion-icon name="build" slot="start"></ion-icon>
+              <ion-icon name="build-sharp" slot="start"></ion-icon>
               <ion-label translate>Tuning</ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -48,11 +48,11 @@
         <ion-item-group>
           <ion-menu-toggle auto-hide="false">
             <ion-item button routerLink="/settings">
-              <ion-icon menuClose name="settings" slot="start"></ion-icon>
+              <ion-icon menuClose name="settings-sharp" slot="start"></ion-icon>
               <ion-label translate>Settings</ion-label>
             </ion-item>
             <ion-item button (click)="exitApp()" *ngIf="exitApp">
-              <ion-icon name="exit" slot="start"></ion-icon>
+              <ion-icon name="exit-sharp" slot="start"></ion-icon>
               <ion-label translate>Exit</ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -64,7 +64,7 @@
         </ion-item-group>
         <ion-item-group *ngIf="cu">
           <ion-item button (click)="reconnect()">
-            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-icon name="refresh-sharp" slot="start"></ion-icon>
             <ion-label translate>Reconnect</ion-label>
           </ion-item>
         </ion-item-group>

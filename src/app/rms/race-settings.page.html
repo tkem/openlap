@@ -7,7 +7,7 @@
     </ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="onCancel()">
-        <ion-icon name="close"></ion-icon>
+        <ion-icon name="close-sharp"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
@@ -37,11 +37,11 @@
       </ion-item>
       <ion-item>
         <ion-label translate>Number of drivers</ion-label>
-        <ion-select formControlName="drivers" 
-                    cancelText="{{'Cancel' | translate}}" 
+        <ion-select formControlName="drivers"
+                    cancelText="{{'Cancel' | translate}}"
                     okText="{{'OK' | translate}}">
           <!-- ion-option seems to require translate attribute value; see
-               https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689 
+               https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689
             -->
           <ion-select-option translate value="">Automatic</ion-select-option>
           <ion-select-option *ngFor="let i of [1, 2, 3, 4, 5, 6]" [value]="i">{{i}}</ion-select-option>
