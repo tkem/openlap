@@ -24,5 +24,5 @@ before_install:
 - nvm install 10
 
 install:
-- npm install -g cordova ionic
+- npm install -g cordova @ionic/cli
 - npm install

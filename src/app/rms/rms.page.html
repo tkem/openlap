@@ -36,10 +36,10 @@
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="toggleSpeech()">
-        <ion-icon slot="icon-only" [name]="options?.speech ? 'volume-high' : 'volume-off'"></ion-icon>
+        <ion-icon slot="icon-only" [name]="options?.speech ? 'volume-high' : 'volume-mute'"></ion-icon>
       </ion-button>
       <ion-button (click)="showMenu($event)">
-        <ion-icon slot="icon-only" name="more"></ion-icon>
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

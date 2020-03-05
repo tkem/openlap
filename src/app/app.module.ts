@@ -12,7 +12,6 @@ import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Serial } from '@ionic-native/serial/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
-import { Toast } from '@ionic-native/toast/ngx';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -84,7 +83,6 @@ export function swRegistrationOptions(platform: Platform) {
     BLE,
     Serial,
     TextToSpeech,
-    Toast,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: ErrorHandler, useClass: LoggingErrorHandler },
     {

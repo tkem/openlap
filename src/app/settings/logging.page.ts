@@ -16,7 +16,7 @@ export class LoggingPage {
     {name: 'bug', style: {color: 'green'}},
     {name: 'information-circle', style: {color: 'blue'}},
     {name: 'warning', style: {color: 'yellow'}},
-    {name: 'alert', style: {color: 'red'}}
+    {name: 'alert-circle', style: {color: 'red'}}
   ];
 
   constructor(public logger: LoggingService, private popover: PopoverController) {}
