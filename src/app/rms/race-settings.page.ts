@@ -80,7 +80,7 @@ export class RaceSettingsPage implements AfterViewInit {
 
   @ViewChild('pause', { static: true }) pauseToggle;
 
-  @ViewChild('slotmode', { static: false }) slotmodeToggle;
+  @ViewChild('slotmode') slotmodeToggle;
 
   constructor(fb: FormBuilder, params: NavParams, private modal: ModalController) {
     this.mode = params.get('mode');

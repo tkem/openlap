@@ -35,7 +35,7 @@ export class MenuComponent implements OnChanges {
 
   initialized = false;
 
-  @ViewChild(ConnectionsComponent, { static: false }) connections : ConnectionsComponent;
+  @ViewChild(ConnectionsComponent) connections : ConnectionsComponent;
 
   constructor(
     private app: AppService,
