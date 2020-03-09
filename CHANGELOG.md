@@ -1,3 +1,13 @@
+1.8.1 UNRELEASED
+----------------
+
+- Upgrade to Ionic 5.
+
+- Upgrade to Angular 9.
+
+- Minor UI improvements.
+
+
 1.8.0 2019-11-14
 ----------------
 
