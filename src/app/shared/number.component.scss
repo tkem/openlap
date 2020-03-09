@@ -1,6 +1,11 @@
 :host {
     white-space: nowrap;   
 }
+
+:host[slot=start] {
+    margin-inline-end: 0.5em;
+}
+
 div.number {
     display: inline-flex;
     justify-content: center;
@@ -16,7 +21,7 @@ div.stripe {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    height: 1em;
-    padding-right: 0.3em;
+    height: 1.5em;
+    padding-right: 0.2em;
     border-right: 0.3em solid;
 }
