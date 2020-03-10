@@ -73,3 +73,8 @@ ion-title {
         margin-right: 4px;
     }
 }
+
+/* https://github.com/ionic-team/ionic/issues/18570 */
+ion-button {
+    --background-hover:transparent !important;
+}
