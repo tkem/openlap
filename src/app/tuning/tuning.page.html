@@ -7,11 +7,11 @@
       <span translate>Tuning</span>
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button icon-only (click)="locked = !locked">
-        <ion-icon [name]="locked ? 'lock-closed-sharp' : 'lock-open-sharp'"></ion-icon>
+      <ion-button (click)="locked = !locked">
+        <ion-icon slot="icon-only" [name]="locked ? 'lock-closed-sharp' : 'lock-open-sharp'"></ion-icon>
       </ion-button>
-      <ion-button icon-only (click)="showMenu($event)">
-        <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
+      <ion-button (click)="showMenu($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-sharp"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
