@@ -74,6 +74,11 @@ ion-title {
     }
 }
 
+/* prevent ripple effect with primary color (blue) for non-textual buttons */
+ion-button.icon-only {
+    --ripple-color: var(--ion-color-medium);
+}
+
 /* https://github.com/ionic-team/ionic/issues/18570 */
 ion-button {
     --background-hover:transparent !important;

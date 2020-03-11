@@ -9,7 +9,7 @@
       </div>
     </ion-button>
   </ion-buttons>
-  <ion-button expand="full" fill="clear" [disabled]="!(keys | async)" (click)="toggleStart()">
+  <ion-button class="icon-only" expand="full" fill="clear" [disabled]="!(keys | async)" (click)="toggleStart()">
     <startlight [active]="(lights | async) >= 1" [blink]="blink | async"></startlight>
     <startlight [active]="(lights | async) >= 2" [blink]="blink | async"></startlight>
     <startlight [active]="(lights | async) >= 3" [blink]="blink | async"></startlight>
