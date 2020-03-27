@@ -1,4 +1,4 @@
-1.8.1 UNRELEASED
+1.8.1 2020-03-27
 ----------------
 
 - Upgrade to Ionic 5.
