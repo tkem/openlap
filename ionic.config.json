@@ -1,8 +1,8 @@
 {
-  "id": "b496a218",
   "name": "Open Lap",
-  "type": "angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "angular",
+  "id": "6d4a7659"
 }

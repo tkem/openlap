@@ -25,7 +25,7 @@ export class I18nAlertService {
     const [header, subHeader, message, buttons] = await Promise.all([
       this.translateString(opts.header),
       this.translateString(opts.subHeader),
-      this.translateString(opts.message),
+      this.translateString(opts.message as string),
       Promise.all((opts.buttons || []).map(button => {
         if (typeof button === 'string') {
           return this.translateString(button);
