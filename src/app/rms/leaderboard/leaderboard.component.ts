@@ -36,13 +36,24 @@ export class LeaderboardComponent {
 
   private _items: LeaderboardItem[];
 
+  private _order: 'position' | 'number';
+
   public ordered: LeaderboardItem[];
 
   public best: number[];
 
   @Input() fields: string[];
 
-  @Input() order: 'position' | 'number';
+  @Input() set order(order: 'position' | 'number') {
+    this._order = order;
+    if (this.ordered) {
+      this.ordered.sort(compare[order || 'position']);
+    }
+  }
+
+  get order() {
+    return this._order;
+  }
 
   @Input() set items(items: LeaderboardItem[]) {
     this._items = items;
