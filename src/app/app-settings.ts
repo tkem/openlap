@@ -48,6 +48,7 @@ export class Options {
   fixedorder = false;
   language = '';
   speech = true;
+  sectors = false;
 }
 
 export interface Notification {

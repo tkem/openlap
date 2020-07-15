@@ -63,7 +63,9 @@ export class RmsPage implements OnDestroy, OnInit {
 
   options: Options;
   
-  slides: Observable<string[][]>;
+  fields: Observable<string[]>;
+  order: Observable<string>;
+
   lapcount: Observable<{count: number, total: number}>;
   pitlane: Observable<boolean>;
 
@@ -93,12 +95,15 @@ export class RmsPage implements OnDestroy, OnInit {
       distinctUntilChanged()
     );
 
-    this.slides = combineLatestCreate(cuMode, app.orientation).pipe(
-      map(([mode, orientation]) => {
-        return FIELDS[mode & 0x03 ? 1 : 0][this.mode].map(s => {
-          return (ORIENTATION[orientation] + ' ' + s).split(/\s+/)
-        });
+    this.fields = combineLatestCreate(cuMode, app.orientation, settings.getOptions()).pipe(
+      map(([mode, orientation, options]) => {
+        const f = FIELDS[mode & 0x03 ? 1 : 0][this.mode][options.sectors ? 1 : 0];
+        return (ORIENTATION[orientation] + ' ' + f).split(/\s+/);
       })
+    );
+
+    this.order = combineLatestCreate(settings.getOptions()).pipe(
+      map(([options]) => options.fixedorder ? 'number' : 'position')
     );
 
     this.pitlane = cuMode.pipe(

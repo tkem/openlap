@@ -46,12 +46,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-slides pager="true" *ngIf="cu | async; else nocu">
-    <ion-slide *ngFor="let fields of (slides | async)">
-      <leaderboard [fields]="fields" [items]="ranking | async" [order]="options?.fixedorder ? 'number' : 'position'">
-      </leaderboard>
-    </ion-slide>
-  </ion-slides>
+  <div *ngIf="cu | async; else nocu">
+    <leaderboard [fields]="fields | async" [items]="ranking | async" [order]="order | async">
+    </leaderboard>
+  </div>
   <ng-template #nocu>
     <div class="ion-padding">
       <h1 translate>Welcome to Open Lap!</h1>

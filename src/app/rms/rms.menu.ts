@@ -26,6 +26,16 @@ export class RmsMenu implements OnDestroy, OnInit  {
     this.params = <any>params.data;  // FIXME
   }
 
+  get sectors() {
+    return this.options.sectors;
+  }
+
+  set sectors(value) {
+    this.options.sectors = value;
+    this.settings.setOptions(this.options);
+    this.dismiss();
+  }
+
   get fixedOrder() {
     return this.options.fixedorder;
   }

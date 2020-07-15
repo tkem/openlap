@@ -3,6 +3,10 @@
     <ion-label translate>Order by number</ion-label>
     <ion-checkbox [(ngModel)]="fixedOrder"></ion-checkbox>
   </ion-item>
+  <ion-item>
+    <ion-label translate>Sector times</ion-label>
+    <ion-checkbox [(ngModel)]="sectors"></ion-checkbox>
+  </ion-item>
   <ion-item button [disabled]="!params.active" (click)="onCancel()">
     <ion-label><span translate>Cancel</span>&hellip;</ion-label>
   </ion-item>
