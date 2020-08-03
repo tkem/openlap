@@ -29,7 +29,8 @@ const NOTIFICATIONS = {
   pitenter: false,
   pitexit: false,
   yellowflag: true,
-  greenflag: true
+  greenflag: true,
+  endsession: true
 };
 
 export class Connection {
