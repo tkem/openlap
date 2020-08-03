@@ -31,6 +31,9 @@ export class NotificationsPage implements OnDestroy {
     id: 'falsestart',
     label: 'False start'
   }, {
+    id: 'newleader',
+    label: 'New race leader'
+  }, {
     id: 'bestlap',
     label: 'Fastest lap',
   }, {

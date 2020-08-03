@@ -183,6 +183,13 @@ export class RmsPage implements OnDestroy, OnInit {
           return from(events);
         }),
       ),
+      session.ranking.pipe(
+        filter(items => items.length != 0 && options.mode == 'race'),
+        map(items => items[0]),
+        pairwise(),
+        filter(([prev, curr]) => prev.id != curr.id),
+        map(([prev, curr]) => ['newleader', curr.id])
+      ),
       this.start.pipe(
         distinctUntilChanged(),
         filter(value => value === 9),

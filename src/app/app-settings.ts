@@ -30,7 +30,8 @@ const NOTIFICATIONS = {
   pitexit: false,
   yellowflag: true,
   greenflag: true,
-  endsession: true
+  endsession: true,
+  newleader: true
 };
 
 export class Connection {
