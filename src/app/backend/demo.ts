@@ -43,10 +43,16 @@ class Car {
   }
 
   start(minSectorTime, maxSectorTime, sectors=1, delay=0) {
-    this.minSectorTime = minSectorTime;
     this.maxSectorTime = maxSectorTime;
-    this.sectors = sectors;
+    if (this.id == '8') {
+      this.minSectorTime = minSectorTime + (maxSectorTime - minSectorTime) * 0.8;
+    } else if (this.id == '7') {
+      this.minSectorTime = minSectorTime + (maxSectorTime - minSectorTime) * 0.5;
+    } else {
+      this.minSectorTime = minSectorTime;
+    }
     this.timeout = setTimeout(() => this.onNext(), delay);
+    this.sectors = sectors;
   }
 
   stop() {
