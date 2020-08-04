@@ -1,3 +1,19 @@
+1.9.0 UNRELEASED
+----------------
+
+- Add notification for new race leader.
+
+- Add separate notification for qualifying session ended.
+
+- Use menu toggle for switching sector times on and off.
+
+- Send CU command "race finished" for use with positition tower.
+
+- Update leaderboard sort order while race is paused.
+
+- Update dependencies.
+
+
 1.8.1 2020-03-27
 ----------------
 
