@@ -201,6 +201,10 @@ export class ControlUnit {
     this.set(2, id, value, 2);
   }
 
+  setFinished(id: number) {
+    this.set(7, id, 1);
+  }
+
   toggleStart() {
     this.trigger(ControlUnitButton.START);
   }

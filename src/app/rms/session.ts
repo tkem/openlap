@@ -285,6 +285,9 @@ export class Session {
     if (mask != this.mask) {
       this.cu.setMask(this.mask);
     }
+    if (id !== undefined) {
+      this.cu.setFinished(id);
+    }
     this.finished.next(true);
   }
 
