@@ -65,6 +65,11 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme'
   }, {
+    name: 'cordova-plugin-screen-orientation',
+    author: 'Apache Software Foundation',
+    license: 'Apache-2.0',
+    homepage: 'https://github.com/apache/cordova-plugin-screen-orientation#readme'
+  }, {
     name: 'cordova-plugin-splashscreen',
     author: 'Apache Software Foundation',
     license: 'Apache-2.0',

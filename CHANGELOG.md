@@ -10,7 +10,10 @@
   session.  When using the Carrera® Position Tower, this should make
   the respective driver ID blink.
 
-- Update leaderboard sort order when race is paused.
+- Fix occasional screen flicker on some devices, especially when
+  on-screen keyboard is displayed.
+
+- Update leaderboard sort order also when race is paused.
 
 - Add separate notification for qualifying session ended.
 
