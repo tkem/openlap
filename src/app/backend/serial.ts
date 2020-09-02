@@ -150,7 +150,7 @@ export class SerialBackend extends Backend {
           return of(false);
         }
       }),
-      tap(enabled => this.logger.info('Serial device ' + (enabled ? '' : 'not') + ' enabled')),
+      tap(enabled => this.logger.debug('Serial device ' + (enabled ? '' : 'not') + ' enabled')),
       share()
     );
   }

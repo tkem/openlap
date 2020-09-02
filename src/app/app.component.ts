@@ -88,7 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.update();
       });
     } else {
-      this.logger.info("Service worker not enabled");
+      this.logger.debug("Service worker not enabled");
     }
   }
 
