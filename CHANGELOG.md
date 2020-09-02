@@ -1,14 +1,18 @@
 1.9.0 UNRELEASED
 ----------------
 
-- Use a menu toggle for switching sector times on and off.
-  Apparently, using slides for the alternative leaderboard views was
-  not intuitive to some users, and this turned out to be a performance
-  bottleneck especially with older devices.
+- Use a menu toggle for switching sector times on and off.  Using
+  slides for selecting the alternative leaderboard view was not
+  intuitive to some users, and this also turned out to be a
+  performance bottleneck, especially with older devices.
 
-- Send CU command "7" when a car finishes a race or qualifying
-  session.  When using the Carrera® Position Tower, this should make
-  the respective driver ID blink.
+- Send CU command #7 when a car finishes a race or qualifying session.
+  When using the Carrera® Position Tower, this will make the
+  respective driver ID blink.
+
+- Add notification for new race leader.
+
+- Add separate notification for qualifying session ended.
 
 - Fix occasional screen flicker on some devices, especially when
   on-screen keyboard is displayed.
@@ -16,10 +20,6 @@
 - Update leaderboard sort order also when race is paused.
 
 - Do not try to connect to ``undefined`` device after fresh install.
-
-- Add separate notification for qualifying session ended.
-
-- Add notification for new race leader.
 
 - Update dependencies.
 
