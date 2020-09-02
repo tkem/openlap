@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.settings.getConnection().subscribe(connection => {
       this.stateSubscription.unsubscribe();
-      if (connection) {
+      if (connection && connection.name) {
         this.logger.info('Connecting to ' + connection.name);
         // TODO: scan only backend responsible for this connection? provide backend.get()?
         from(this.backends.map(backend => backend.scan())).pipe(

@@ -15,6 +15,8 @@
 
 - Update leaderboard sort order also when race is paused.
 
+- Do not try to connect to ``undefined`` device after fresh install.
+
 - Add separate notification for qualifying session ended.
 
 - Add notification for new race leader.
