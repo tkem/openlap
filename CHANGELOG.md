@@ -1,4 +1,4 @@
-1.9.0 UNRELEASED
+1.9.0 2020-10-05
 ----------------
 
 - Use a menu toggle for switching sector times on and off.  Using
