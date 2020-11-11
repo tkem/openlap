@@ -5,7 +5,7 @@ import { Platform } from '@ionic/angular';
 import { BLE } from '@ionic-native/ble/ngx';
 
 import { NextObserver, Observable, Subject, empty, from, interval, of } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, finalize, map, tap, share, startWith, switchMap } from 'rxjs/operators';
+import { distinct, distinctUntilChanged, filter, finalize, map, tap, startWith, switchMap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
@@ -59,7 +59,7 @@ class BLEPeripheral implements Peripheral {
           this.logger.info('Connected to BLE device', peripheral);
           isConnected = true;
           this.ble.startNotification(this.address, SERVICE_UUID, NOTIFY_UUID).subscribe({
-            next: data => {
+            next: ([data, _]) => {
               if (this.logger.isDebugEnabled()) {
                 const s = bufferToString(data);
                 if (s !== lastReceived) {
@@ -193,8 +193,7 @@ export class BLEBackend extends Backend {
           this.logger.debug('Not scanning for BLE devices');
           return empty();
         }
-      }),
-      share()
+      })
     );
   }
 
