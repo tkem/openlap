@@ -5,7 +5,7 @@ import { Platform } from '@ionic/angular';
 import { BLE } from '@ionic-native/ble/ngx';
 
 import { NextObserver, Observable, Subject, empty, from, interval, of } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, finalize, map, tap, startWith, switchMap } from 'rxjs/operators';
+import { distinct, distinctUntilChanged, filter, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
@@ -165,6 +165,8 @@ export class BLEBackend extends Backend {
 
   private scanner: Observable<any>;
 
+  private devices = new Map<string, any>();
+
   constructor(private ble: BLE, private logger: LoggingService, private platform: Platform) {
     super();
 
@@ -185,12 +187,12 @@ export class BLEBackend extends Backend {
       distinctUntilChanged(),
       switchMap(enabled => {
         if (enabled) {
-          this.logger.debug('Start scanning for BLE devices');
+          this.logger.info('Start scanning for BLE devices');
           return this.ble.startScanWithOptions([], { reportDuplicates: true }).pipe(
-            finalize(() => this.logger.debug('Stop scanning for BLE devices'))
+            finalize(() => this.logger.info('Stop scanning for BLE devices'))
           );
         } else {
-          this.logger.debug('Not scanning for BLE devices');
+          this.logger.info('Not scanning for BLE devices');
           return empty();
         }
       })
@@ -199,10 +201,13 @@ export class BLEBackend extends Backend {
 
   scan(): Observable<Peripheral> {
     return this.scanner.pipe(
+      startWith(...this.devices.values()),
       distinct(device => device.id),
       tap(device => this.logger.debug('Discovered BLE device:', device)),
       filter(device => /Control.Unit/i.test(device.name || '')),
-      tap(device => this.logger.info('Discovered new BLE device:', device)),
+      tap(device => this.logger.info('Discovered Control Unit device:', device)),
+      tap(device => this.devices.set(device.id, device)),
+      tap(_ => this.logger.debug('Cached devices:', Array.from(this.devices.values()))),
       map(device => new BLEPeripheral(device, this.ble, this.logger))
     );
   }

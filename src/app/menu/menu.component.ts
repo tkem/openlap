@@ -24,6 +24,8 @@ export class MenuComponent implements OnChanges {
 
   mode: boolean;
 
+  open: boolean;
+
   version: Promise<string>;
 
   exitApp: () => void = null;
@@ -65,10 +67,12 @@ export class MenuComponent implements OnChanges {
       }
       this.initialized = true;
     }
+    this.open = true;
   }
 
   onMenuClose() {
     this.mode = !!this.cu;
+    this.open = false;
   }
 
   onMenuToggle() {

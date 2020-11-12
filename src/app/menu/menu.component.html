@@ -59,7 +59,7 @@
         </ion-item-group>
       </div>
       <div *ngIf="!mode">
-        <ion-item-group>
+        <ion-item-group *ngIf="open">
           <connections [selected]="cu?.peripheral"></connections>
         </ion-item-group>
         <ion-item-group *ngIf="cu">
