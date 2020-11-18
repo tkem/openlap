@@ -1,4 +1,4 @@
-1.9.1 UNRELEASED
+1.9.1 2020-11-18
 ----------------
 
 - Improve Bluetooth LE connection handling.
