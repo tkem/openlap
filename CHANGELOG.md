@@ -1,3 +1,13 @@
+1.9.2 UNRELEASED
+----------------
+
+- Add new configuration setting _Connections: Demo Control Unit_.  Too
+  many reviewers seem to mistake this app for some kind of motorsport
+  manager game, so the demo mode will now be hidden by default.
+
+- Update dependencies.
+
+
 1.9.1 2020-11-18
 ----------------
 
