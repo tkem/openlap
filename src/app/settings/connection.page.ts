@@ -30,6 +30,8 @@ export class ConnectionPage implements OnDestroy {
     }
   };
 
+  demo = false;
+  
   constructor(private logger: LoggingService, private settings: AppSettings) {}
 
   ngOnInit() {
@@ -43,6 +45,7 @@ export class ConnectionPage implements OnDestroy {
           upper: connection.maxReconnectDelay
         }
       };
+      this.demo = connection.demoControlUnit;
     }).catch(error => {
       this.logger.error('Error getting connection parameters', error);
     });
@@ -53,7 +56,8 @@ export class ConnectionPage implements OnDestroy {
       connectionTimeout: this.ranges.connection,
       requestTimeout: this.ranges.request,
       minReconnectDelay: this.ranges.reconnect.lower,
-      maxReconnectDelay: this.ranges.reconnect.upper
+      maxReconnectDelay: this.ranges.reconnect.upper,
+      demoControlUnit: this.demo
     };
     if (!isObjectSubset(connection, this.connection)) {
       this.settings.setConnection(Object.assign({}, this.connection, connection)).catch(error => {

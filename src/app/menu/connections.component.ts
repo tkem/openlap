@@ -2,8 +2,8 @@ import { Component, Inject, Input } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { Observable, empty, from } from 'rxjs';
-import { catchError, mergeMap, scan, take } from 'rxjs/operators';
+import { Observable, Subscription, empty, from } from 'rxjs';
+import { catchError, filter, mergeMap, scan, take } from 'rxjs/operators';
 
 import { AppSettings } from '../app-settings';
 import { Backend } from '../backend';
@@ -20,13 +20,16 @@ export class ConnectionsComponent {
 
   peripherals: Observable<Peripheral[]>;
 
+  private demoControlUnit: false;
+
+  private subscription = new Subscription();
+
   constructor(@Inject(Backend) private backends: Backend[],
     private logger: LoggingService,
     private platform: Platform,
     private settings: AppSettings,
     private toast: I18nToastService)
-  {
-  }
+  {}
 
   ngOnInit() {
     this.platform.ready().then(() => {
@@ -37,14 +40,23 @@ export class ConnectionsComponent {
           return empty();
         })
       ));
-
       this.peripherals = from(scans).pipe(
-        mergeMap(val => val),
-        scan((result, value) => { 
-          return result.concat(value);
+        mergeMap(value => value),
+        filter(device => {
+          return device.type != 'demo' || this.demoControlUnit;
+        }),
+        scan((result, device) => {
+          return result.concat(device);
         }, [])
       );
     });
+    this.subscription.add(this.settings.getConnection().subscribe(value => {
+      this.demoControlUnit = value.demoControlUnit;
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onSelect(peripheral: Peripheral) {

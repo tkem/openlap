@@ -42,6 +42,7 @@ export class Connection {
   requestTimeout = 2000;
   minReconnectDelay = 3000;
   maxReconnectDelay = 8000;
+  demoControlUnit = false;
 }
 
 export class Options {
