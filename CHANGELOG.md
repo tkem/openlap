@@ -1,4 +1,4 @@
-1.9.2 UNRELEASED
+1.9.2 2020-12-21
 ----------------
 
 - Add new configuration setting _Connections: Demo Control Unit_.  Too
