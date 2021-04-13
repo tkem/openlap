@@ -98,7 +98,7 @@ export class ControlUnit {
   }
 
   reconnect() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       this.disconnect();
       setTimeout(() => {
         this.connect();
