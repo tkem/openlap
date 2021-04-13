@@ -6,8 +6,8 @@ import { PopoverController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { Observable, Subscription, from, of, merge } from 'rxjs';
-import { combineLatest as combineLatestCreate } from 'rxjs';
-import { combineLatest, concat, concatAll, distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { concat, concatAll, distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import { AppSettings, Options, RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -16,41 +16,6 @@ import { AppService, ControlUnitService, LoggingService, SpeechService } from '.
 import { LeaderboardItem } from './leaderboard';
 import { RmsMenu } from './rms.menu';
 import { Session } from './session';
-
-const ORIENTATION = {
-  portrait: 'code',
-  landscape: 'number name'
-};
-
-const FIELDS = [{
-  // no fuel/pit lane
-  practice: [
-    'bestlap gap int lastlap laps status',
-    'bestlap sector1 sector2 sector3 lastlap status'
-  ],
-  qualifying: [
-    'bestlap gap int lastlap laps status',
-    'bestlap sector1 sector2 sector3 lastlap status'
-  ],
-  race: [
-    'time bestlap lastlap laps status',
-    'time sector1 sector2 sector3 lastlap status',
-  ]
-}, {
-  // with fuel/pit lane
-  practice: [
-    'bestlap gap int lastlap laps fuel status',
-    'bestlap sector1 sector2 sector3 lastlap fuel status'
-  ],
-  qualifying: [
-    'bestlap gap int lastlap laps fuel status',
-    'bestlap sector1 sector2 sector3 lastlap fuel status'
-  ],
-  race: [
-    'time bestlap lastlap laps pits fuel status',
-    'time sector1 sector2 sector3 lastlap fuel status'
-  ]
-}];
 
 @Component({
   templateUrl: 'rms.page.html',
@@ -63,11 +28,12 @@ export class RmsPage implements OnDestroy, OnInit {
 
   options: Options;
   
-  fields: Observable<string[]>;
+  compact: Observable<boolean>;
   order: Observable<string>;
+  pitlane: Observable<boolean>;
+  sectors: Observable<boolean>;
 
   lapcount: Observable<{count: number, total: number}>;
-  pitlane: Observable<boolean>;
 
   start: Observable<number>;
   timer: Observable<number>;
@@ -95,19 +61,21 @@ export class RmsPage implements OnDestroy, OnInit {
       distinctUntilChanged()
     );
 
-    this.fields = combineLatestCreate(cuMode, app.orientation, settings.getOptions()).pipe(
-      map(([mode, orientation, options]) => {
-        const f = FIELDS[mode & 0x03 ? 1 : 0][this.mode][options.sectors ? 1 : 0];
-        return (ORIENTATION[orientation] + ' ' + f).split(/\s+/);
-      })
+    this.compact = app.orientation.pipe(
+      map(orientation => orientation == 'portrait')
     );
 
-    this.order = combineLatestCreate(settings.getOptions()).pipe(
-      map(([options]) => options.fixedorder ? 'number' : 'position')
+    this.order = settings.getOptions().pipe(
+      map(options => options.fixedorder ? 'number' : 'position')
     );
 
+    // TODO: pitlane flag is actually (cuMode & 0x04), rename to fuelMode?
     this.pitlane = cuMode.pipe(
-      map(value => (value & 0x04) != 0)
+      map(value => (value & 0x03) != 0)
+    );
+
+    this.sectors = settings.getOptions().pipe(
+      map(options => options.sectors)
     );
 
     this.start = cu.pipe(
@@ -118,7 +86,7 @@ export class RmsPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subscription.add(combineLatestCreate(this.cu, this.getRaceOptions(this.mode)).subscribe(([cu, options]) => {
+    this.subscription.add(combineLatest([this.cu, this.getRaceOptions(this.mode)]).subscribe(([cu, options]) => {
       if (cu && options) {
         this.session = this.startSession(cu, options);
       } else {
@@ -151,7 +119,7 @@ export class RmsPage implements OnDestroy, OnInit {
           }));
         }
       });
-      return combineLatestCreate(...observables);
+      return combineLatest(observables);
     }));
 
     const best = [Infinity, Infinity, Infinity, Infinity];
@@ -229,8 +197,7 @@ export class RmsPage implements OnDestroy, OnInit {
     // TODO: convert to Observable.scan()?
     const gridpos = [];
     const pitfuel = [];
-    this.ranking = session.ranking.pipe(
-      combineLatest(drivers),
+    this.ranking = combineLatest([session.ranking, drivers]).pipe(
       map(([ranks, drivers]) => {
         return ranks.map((item, index) => {
           if (options.mode == 'race' && gridpos[item.id] === undefined && item.time !== undefined) {
@@ -383,11 +350,6 @@ export class RmsPage implements OnDestroy, OnInit {
 
   // see https://github.com/ngx-translate/core/issues/330
   private getTranslations(key: string, params?: Object) {
-    return this.translate.get(key, params).pipe(
-      concat(this.translate.onLangChange.asObservable().pipe(
-        map(() => this.translate.get(key, params)),
-        concatAll()
-      )
-    ));
+    return this.translate.stream(key, params);
   }
 }
