@@ -2,9 +2,11 @@
   "Welcome to Open Lap!":
     "Bienvenido a Open Lap!",
   "Please select a Control Unit device from the menu.":
-    "Seleccione el Control Unit a través del menu.",
+    "Seleccione el Carrera® Control Unit a través del menu.",
   "If no devices are listed, please make sure that Bluetooth and Location (for scanning Bluetooth devices) are enabled or you are using a suitable serial to USB OTG converter cable.":
     "Si su unidad de control no aparece, compruebe que tiene el Bluetooth activado o estas usando el cable USB OTG.",
+  "If no devices are listed, please make sure that Bluetooth is enabled.":
+    "Si su unidad de control no aparece, compruebe que tiene el Bluetooth activado.",
   "Reset all user settings to default values?":
     "¿Quiere usar los valores establecidos por defecto?",
 
@@ -28,6 +30,7 @@
   "Control Unit mode": "Modo Control Unit",
   "Debug messages": "Mensajes de diagnóstico",
   "Default": "Defecto",
+  "Demo Control Unit": "Demo Control Unit",
   "Disconnected from {{device}}": "Desconectado del {{device}}",
   "Done": "Hecho",
   "Driver {{number}}": "Piloto {{number}}",
