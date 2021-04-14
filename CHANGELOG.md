@@ -1,3 +1,14 @@
+1.9.3 UNRELEASED
+----------------
+
+- Remove references to Location settings and USB-OTG cables on platforms
+  other than Android.
+
+- Update iOS resources (thanks to Philipp Anné).
+
+- Update dependencies.
+
+
 1.9.2 2020-12-21
 ----------------
 
