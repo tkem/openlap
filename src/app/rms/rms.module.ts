@@ -18,11 +18,6 @@ import { RaceSettingsPage } from './race-settings.page';
     RmsPage,
     RaceSettingsPage
   ],
-  entryComponents: [
-    RmsMenu,
-    RmsPage,
-    RaceSettingsPage
-  ],
   exports: [
     RmsPage,
     RaceSettingsPage

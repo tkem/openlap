@@ -14,10 +14,6 @@ import { DriversPage } from './drivers.page';
     ColorsPage,
     DriversPage
   ],
-  entryComponents: [
-    ColorsPage,
-    DriversPage
-  ],
   exports: [
     ColorsPage,
     DriversPage

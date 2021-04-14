@@ -14,10 +14,6 @@ import { TuningPage } from './tuning.page';
     TuningMenu,
     TuningPage
   ],
-  entryComponents: [
-    TuningMenu,
-    TuningPage
-  ],
   exports: [
     TuningPage
   ],

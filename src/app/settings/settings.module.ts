@@ -52,15 +52,6 @@ const routes: Routes = [
     NotificationsPage,
     SettingsPage
   ],
-  entryComponents: [
-    AboutPage,
-    ConnectionPage,
-    LicensesPage,
-    LoggingMenu,
-    LoggingPage,
-    NotificationsPage,
-    SettingsPage
-  ],
   exports: [
     RouterModule
   ],
