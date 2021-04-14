@@ -5,6 +5,8 @@
     "Bitte wählen Sie eine Carrera® Control Unit über das Menü.",
   "If no devices are listed, please make sure that Bluetooth and Location (for scanning Bluetooth devices) are enabled or you are using a suitable serial to USB OTG converter cable.":
     "Falls keine Geräte aufscheinen, stellen Sie bitte sicher, dass Bluetooth und Standortermittlung (zum Scannen von Bluetooth-Geräten) aktiviert sind, oder verwenden Sie ein geeignetes USB OTG Kabel.",
+  "If no devices are listed, please make sure that Bluetooth is enabled.":
+    "Falls keine Geräte aufscheinen, stellen Sie bitte sicher, dass Bluetooth aktiviert ist.",
   "Reset all user settings to default values?":
     "Alle Einstellungen auf Standardwerte zurücksetzen?",
 

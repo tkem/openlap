@@ -56,10 +56,15 @@
       <p translate>
         Please select a Control Unit device from the menu.
       </p>
-      <p translate>
+      <p translate *ngIf="(platform | async) == 'Android'; else checkble">
         If no devices are listed, please make sure that Bluetooth and Location (for scanning Bluetooth devices) are enabled or you are using a suitable serial to USB OTG converter cable.
       </p>
     </div>
+    <ng-template #checkble>
+      <p translate>
+        If no devices are listed, please make sure that Bluetooth is enabled.
+      </p>
+    </ng-template>
   </ng-template>
 </ion-content>
 

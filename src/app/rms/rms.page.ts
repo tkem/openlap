@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Observable, Subscription, from, of, merge } from 'rxjs';
 import { combineLatest } from 'rxjs';
-import { concat, concatAll, distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import { AppSettings, Options, RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -39,6 +39,8 @@ export class RmsPage implements OnDestroy, OnInit {
   timer: Observable<number>;
 
   ranking: Observable<LeaderboardItem[]>;
+
+  platform: Promise<string>;
 
   private subscriptions: Subscription;
 
@@ -83,6 +85,8 @@ export class RmsPage implements OnDestroy, OnInit {
       mergeMap(cu => cu.getStart()),
       distinctUntilChanged()
     );
+
+    this.platform = app.getDeviceInfo().then(device => device.platform);
   }
 
   ngOnInit() {
