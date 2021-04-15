@@ -12,7 +12,8 @@ matrix:
     script:
     - ionic cordova build android --prod --release -- -- --packageType=bundle
   - language: objective-c
-    osx_image: xcode12.3
+    os: osx
+    osx_image: xcode12.2
     script:
     - ionic cordova build ios --prod
   - language: node_js
