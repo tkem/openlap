@@ -1,4 +1,4 @@
-1.9.3 UNRELEASED
+1.9.3 2021-04-25
 ----------------
 
 - Remove references to Location settings and USB-OTG cables on platforms
