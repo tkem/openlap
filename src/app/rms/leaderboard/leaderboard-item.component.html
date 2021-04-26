@@ -12,18 +12,18 @@
         {{item.driver?.code}}
     </ng-template>
     <ng-template ngSwitchCase="time">
-        <span [ngSwitch]="item.position == 0 ? '' : (items[0].laps - item.laps).toString()">
+        <span [ngSwitch]="item.position == 0 ? '' : (ranked[0].laps - item.laps).toString()">
             <ng-template ngSwitchCase="">
                 {{item.time | time:'m:ss.sss'}}
             </ng-template>
             <ng-template ngSwitchCase="0">
-                {{(item.time - items[0].time) | time:'+s.sss'}}
+                {{(item.time - ranked[0].time) | time:'+s.sss'}}
             </ng-template>
             <ng-template ngSwitchCase="1">
                 +1 Lap
             </ng-template>
             <ng-template ngSwitchDefault>
-                +{{items[0].laps - item.laps}} Laps
+                +{{ranked[0].laps - item.laps}} Laps
             </ng-template>
         </span>
     </ng-template>
@@ -33,10 +33,10 @@
         </span>
     </ng-template>
     <ng-template ngSwitchCase="gap">
-        {{(item.position && item.best[0] ? item.best[0] - items[0].best[0] : null) | time:'+s.sss'}}
+        {{(item.position && item.best[0] ? item.best[0] - ranked[0].best[0] : null) | time:'+s.sss'}}
     </ng-template>
     <ng-template ngSwitchCase="int">
-        {{(item.position && item.best[0] ? item.best[0] - items[item.position - 1].best[0] : null) | time:'+s.sss'}}
+        {{(item.position && item.best[0] ? item.best[0] - ranked[item.position - 1].best[0] : null) | time:'+s.sss'}}
     </ng-template>
     <ng-template ngSwitchCase="lastlap">
         <span [ngClass]="{best: item.last[0] == item.best[0], allbest: item.last[0] == best[0], notime: !item.last[0]}">
@@ -70,7 +70,7 @@
     <ng-template ngSwitchCase="status">
         <checkerboard cols="7" rows="5" *ngIf="item.finished"></checkerboard>
         <span *ngIf="!item.finished && item.pit" [ngClass]="item.refuel ? 'inpit' : 'pitenter'">PIT</span>
-        <span *ngIf="!item.finished && !item.pit && item.gridpos != null && item.laps && items.length > 2"
+        <span *ngIf="!item.finished && !item.pit && item.gridpos != null && item.laps && ranked.length > 2"
             [ngClass]="item.gridpos > item.position ? 'pos-up' : item.gridpos < item.position ? 'pos-dn' : 'pos-eq'">
             {{abs(item.gridpos - item.position)}}
         </span>

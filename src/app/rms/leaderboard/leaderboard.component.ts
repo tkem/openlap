@@ -34,15 +34,6 @@ const FIELDS = [{
   ]
 }];
 
-const compare = {
-  'position': (lhs: LeaderboardItem, rhs: LeaderboardItem) => {
-    return lhs.position - rhs.position;
-  },
-  'number':  (lhs: LeaderboardItem, rhs: LeaderboardItem) => {
-    return lhs.id - rhs.id;
-  }
-};
-
 export class LeaderboardItem {
   id: number;
   driver: { name: string, code: string, color: string };
@@ -68,41 +59,17 @@ export class LeaderboardItem {
 })
 export class LeaderboardComponent implements OnDestroy {
 
-  private _items: LeaderboardItem[];
-
-  private _order: 'position' | 'number';
-
-  public ordered: LeaderboardItem[];
-
-  public best: number[];
-
-  get fields() {
-    const f = FIELDS[this.pitlane ? 1 : 0][this.mode][this.sectors ? 1 : 0];
-    return ((this.platform.isPortrait() ? 'code' : 'number name') + ' ' + f).split(/\s+/);
-  }
-
   @Input() mode: 'practice' | 'qualifying' | 'race';
 
   @Input() sectors: boolean;
 
   @Input() pitlane: boolean;
 
-  @Input() set order(order: 'position' | 'number') {
-    this._order = order;
-    if (this.ordered) {
-      this.ordered.sort(compare[order || 'position']);
-    }
-  }
-
-  get order() {
-    return this._order;
-  }
-
   @Input() set items(items: LeaderboardItem[]) {
     this._items = items;
     if (items) {
-      this.ordered = [...items];
-      this.ordered.sort(compare[this.order || 'position']);
+      this.ranked = [...items];
+      this.ranked.sort((lhs, rhs) => lhs.position - rhs.position);
       // TODO: move to rms?
       this.best = items.map(item => item.best).reduce((acc, times) => {
         times.forEach((time, index) => {
@@ -113,7 +80,7 @@ export class LeaderboardComponent implements OnDestroy {
         return acc;
       }, []);
     } else {
-      this.ordered = items;
+      this.ranked = items;
       this.best = [];
     }
   }
@@ -121,6 +88,17 @@ export class LeaderboardComponent implements OnDestroy {
   get items() {
     return this._items;
   }
+
+  get fields() {
+    const f = FIELDS[this.pitlane ? 1 : 0][this.mode][this.sectors ? 1 : 0];
+    return ((this.platform.isPortrait() ? 'code' : 'number name') + ' ' + f).split(/\s+/);
+  }
+
+  public ranked: LeaderboardItem[];
+
+  public best: number[];
+
+  private _items: LeaderboardItem[];
 
   private subscription: Subscription;
 

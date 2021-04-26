@@ -11,7 +11,7 @@ import { LeaderboardItem } from './leaderboard.component';
 export class LeaderboardItemComponent {
   @Input() fields: string[];
   @Input() item: LeaderboardItem;
-  @Input() items: LeaderboardItem[];
+  @Input() ranked: LeaderboardItem[];
   @Input() best: number[];
 
   abs(n: number) {

@@ -47,7 +47,7 @@
 
 <ion-content>
   <div *ngIf="cu | async; else nocu">
-    <leaderboard [items]="ranking | async" [mode]="mode" [order]="order | async" [pitlane]="pitlane | async" [sectors]="sectors | async">
+    <leaderboard [mode]="mode" [items]="items | async" [pitlane]="pitlane | async" [sectors]="sectors | async">
     </leaderboard>
   </div>
   <ng-template #nocu>

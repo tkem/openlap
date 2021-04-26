@@ -17,6 +17,15 @@ import { LeaderboardItem } from './leaderboard';
 import { RmsMenu } from './rms.menu';
 import { Session } from './session';
 
+const compare = {
+  'position': (lhs: LeaderboardItem, rhs: LeaderboardItem) => {
+    return lhs.position - rhs.position;
+  },
+  'number':  (lhs: LeaderboardItem, rhs: LeaderboardItem) => {
+    return lhs.id - rhs.id;
+  }
+};
+
 @Component({
   templateUrl: 'rms.page.html',
 })
@@ -28,10 +37,9 @@ export class RmsPage implements OnDestroy, OnInit {
 
   options: Options;
   
-  order: Observable<string>;
   pitlane: Observable<boolean>;
   sectors: Observable<boolean>;
-  ranking: Observable<LeaderboardItem[]>;
+  items: Observable<LeaderboardItem[]>;
 
   lapcount: Observable<{count: number, total: number}>;
 
@@ -59,10 +67,6 @@ export class RmsPage implements OnDestroy, OnInit {
       mergeMap(cu => cu.getMode()), 
       startWith(0),
       distinctUntilChanged()
-    );
-
-    this.order = settings.getOptions().pipe(
-      map(options => options.fixedorder ? 'number' : 'position')
     );
 
     // TODO: pitlane flag is actually (cuMode & 0x04), rename to fuelMode?
@@ -192,12 +196,14 @@ export class RmsPage implements OnDestroy, OnInit {
       })
     );
 
-    // TODO: convert to Observable.scan()?
+    const order = this.settings.getOptions().pipe(
+      map(options => options.fixedorder ? 'number' : 'position')
+    );
     const gridpos = [];
     const pitfuel = [];
-    this.ranking = combineLatest([session.ranking, drivers]).pipe(
-      map(([ranks, drivers]) => {
-        return ranks.map((item, index) => {
+    this.items = combineLatest([session.ranking, drivers, order]).pipe(
+      map(([ranks, drivers, order]) => {
+        const items = ranks.map((item, index) => {
           if (options.mode == 'race' && gridpos[item.id] === undefined && item.time !== undefined) {
             gridpos[item.id] = index;
           }
@@ -211,6 +217,8 @@ export class RmsPage implements OnDestroy, OnInit {
             refuel: item.pit && item.fuel > pitfuel[item.id]
           });
         });
+        items.sort(compare[order || 'position']);
+        return items;
       }),
       share()
     );
