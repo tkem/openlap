@@ -1,3 +1,13 @@
+1.9.4 UNRELEASED
+----------------
+
+- Support serial USB-OTG connection on Amazon Fire OS.
+
+- Clean up leaderboard component.
+
+- Update dependencies.
+
+
 1.9.3 2021-04-25
 ----------------
 
