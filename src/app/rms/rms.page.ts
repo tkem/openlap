@@ -28,17 +28,15 @@ export class RmsPage implements OnDestroy, OnInit {
 
   options: Options;
   
-  compact: Observable<boolean>;
   order: Observable<string>;
   pitlane: Observable<boolean>;
   sectors: Observable<boolean>;
+  ranking: Observable<LeaderboardItem[]>;
 
   lapcount: Observable<{count: number, total: number}>;
 
   start: Observable<number>;
   timer: Observable<number>;
-
-  ranking: Observable<LeaderboardItem[]>;
 
   android: boolean;
 
@@ -61,10 +59,6 @@ export class RmsPage implements OnDestroy, OnInit {
       mergeMap(cu => cu.getMode()), 
       startWith(0),
       distinctUntilChanged()
-    );
-
-    this.compact = app.orientation.pipe(
-      map(orientation => orientation == 'portrait')
     );
 
     this.order = settings.getOptions().pipe(

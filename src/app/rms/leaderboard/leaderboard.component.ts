@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+
+import { Platform } from '@ionic/angular';
+
+import { Subscription } from 'rxjs';
 
 const FIELDS = [{
   // no fuel/pit lane
@@ -62,7 +66,7 @@ export class LeaderboardItem {
   styleUrls: ['leaderboard.component.scss'],
   templateUrl: 'leaderboard.component.html'
 })
-export class LeaderboardComponent {
+export class LeaderboardComponent implements OnDestroy {
 
   private _items: LeaderboardItem[];
 
@@ -74,10 +78,8 @@ export class LeaderboardComponent {
 
   get fields() {
     const f = FIELDS[this.pitlane ? 1 : 0][this.mode][this.sectors ? 1 : 0];
-    return ((this.compact ? 'code' : 'number name') + ' ' + f).split(/\s+/);
+    return ((this.platform.isPortrait() ? 'code' : 'number name') + ' ' + f).split(/\s+/);
   }
-
-  @Input() compact: boolean;
 
   @Input() mode: 'practice' | 'qualifying' | 'race';
 
@@ -118,5 +120,15 @@ export class LeaderboardComponent {
 
   get items() {
     return this._items;
+  }
+
+  private subscription: Subscription;
+
+  constructor(ref: ChangeDetectorRef, private platform: Platform) {
+    this.subscription = platform.resize.subscribe(() => ref.markForCheck());
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
