@@ -15,13 +15,13 @@ function createMask(first: number, last: number) {
   return mask;
 }
 
-// TODO: merge with leaderboard item...
-export interface RaceItem {
+export interface Entry {
   id: number
   time: number;
   laps: number;
   last: number[];
   best: number[];
+  times: number[][];
   fuel?: number;
   pit?: boolean;
   pits?: number;
@@ -40,11 +40,11 @@ function numCompare(lhs: number, rhs: number) {
   }
 }
 
-function timeCompare(lhs: RaceItem, rhs: RaceItem) {
+function timeCompare(lhs: Entry, rhs: Entry) {
   return (lhs.best[0] || Infinity) - (rhs.best[0] || Infinity);
 }
 
-function raceCompare(lhs: RaceItem, rhs: RaceItem) {
+function raceCompare(lhs: Entry, rhs: Entry) {
   return (rhs.laps - lhs.laps) || numCompare(lhs.time, rhs.time) || (lhs.id - rhs.id);
 }
 
@@ -55,8 +55,8 @@ const COMPARE = {
 }
 
 export class Session {
-  grid: Observable<Observable<RaceItem>>;
-  ranking: Observable<RaceItem[]>;
+  grid: Observable<Observable<Entry>>;
+  ranking: Observable<Entry[]>;
   currentLap: Observable<number>;
   finished = new BehaviorSubject(false);
   yellowFlag = new BehaviorSubject(false);
@@ -119,7 +119,7 @@ export class Session {
         newgrid[event.id] = event;
         return newgrid;
       }, []),
-      map((cars: Array<RaceItem>) => {
+      map((cars: Array<Entry>) => {
         const ranks = cars.filter(car => !!car);
         ranks.sort(compare);
         return ranks;
@@ -129,7 +129,7 @@ export class Session {
     this.currentLap = this.grid.pipe(
       /*mergeAll(),*/
       mergeMap(val => val),
-      scan<RaceItem, number>((current, event) => {
+      scan<Entry, number>((current, event) => {
         if (current > event.laps) {
           return current;
         } else if (this.finished.value || isNaN(event.time)) {
@@ -260,6 +260,7 @@ export class Session {
             laps: laps,
             last: last,
             best: best,
+            times: times,
             fuel: fuel,
             pit: pit,
             pits: pits,
