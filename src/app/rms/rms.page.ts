@@ -40,7 +40,7 @@ export class RmsPage implements OnDestroy, OnInit {
 
   ranking: Observable<LeaderboardItem[]>;
 
-  platform: Promise<string>;
+  android: boolean;
 
   private subscriptions: Subscription;
 
@@ -86,7 +86,7 @@ export class RmsPage implements OnDestroy, OnInit {
       distinctUntilChanged()
     );
 
-    this.platform = app.getDeviceInfo().then(device => device.platform);
+    this.android = app.isAndroid() && app.isCordova();
   }
 
   ngOnInit() {

@@ -138,13 +138,12 @@ export class SerialBackend extends Backend {
 
   private scanner: Observable<any>;
 
-  constructor(private app: AppService, private serial: Serial, private logger: LoggingService)
-  {
+  constructor(app: AppService, private serial: Serial, private logger: LoggingService) {
     super();
 
     this.scanner = from(app.getDeviceInfo()).pipe(
       switchMap(device => {
-        if (device.platform == "Android" && !device.isVirtual) {
+        if (app.isAndroid() && app.isCordova() && !device.isVirtual) {
           return from(this.serial.requestPermission().then(() => true, () => false));
         } else {
           return of(false);

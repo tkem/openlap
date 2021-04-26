@@ -127,6 +127,14 @@ export class AppService {
       }
     }
   }
+  
+  isAndroid() {
+    return this.platform.is('android');
+  }
+
+  isCordova() {
+    return this.platform.is('cordova');
+  }
 
   private async doShare(subject: string, message: string) {
     await this.platform.ready();
@@ -143,13 +151,5 @@ export class AppService {
     if (navigator['app'] && navigator['app'].exitApp) {
       navigator['app'].exitApp();
     }
-  }
-  
-  private isCordova() {
-    return this.platform.is('cordova');
-  }
-
-  private isAndroid() {
-    return this.platform.is('android');
   }
 }

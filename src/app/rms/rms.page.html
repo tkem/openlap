@@ -56,7 +56,7 @@
       <p translate>
         Please select a Control Unit device from the menu.
       </p>
-      <p translate *ngIf="(platform | async) == 'Android'; else checkble">
+      <p translate *ngIf="android; else checkble">
         If no devices are listed, please make sure that Bluetooth and Location (for scanning Bluetooth devices) are enabled or you are using a suitable serial to USB OTG converter cable.
       </p>
     </div>
