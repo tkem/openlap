@@ -39,9 +39,8 @@ App](https://en.wikipedia.org/wiki/Progressive_web_applications),
 hosted at
 [https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
 To use this with Carrera AppConnect®, you'll need a Bluetooth 4.0
-adapter and a recent version of [Google
-Chrome](https://www.google.com/chrome) (tested with Chrome 73 on
-Windows 10, Ubuntu 18.04, and macOS 10.13.6).  On Linux, at least,
+adapter and a recent version of
+[Google Chrome](https://www.google.com/chrome).  On Linux, at least,
 you'll also have to go to
 
 ```

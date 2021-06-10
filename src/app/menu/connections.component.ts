@@ -3,7 +3,7 @@ import { Component, Inject, Input } from '@angular/core';
 import { Platform } from '@ionic/angular';
 
 import { Observable, Subscription, empty, from } from 'rxjs';
-import { catchError, filter, mergeMap, scan, take } from 'rxjs/operators';
+import { catchError, filter, mergeMap, scan, take, tap } from 'rxjs/operators';
 
 import { AppSettings } from '../app-settings';
 import { Backend } from '../backend';
@@ -44,6 +44,12 @@ export class ConnectionsComponent {
         mergeMap(value => value),
         filter(device => {
           return device.type != 'demo' || this.demoControlUnit;
+        }),
+        tap(device => {
+          // automatically connect to first paired Web-Bluetooth device
+          if (!this.selected && device.type == 'web-bluetooth') {
+            this.onSelect(device);
+          }
         }),
         scan((result, device) => {
           return result.concat(device);

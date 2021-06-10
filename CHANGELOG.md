@@ -3,6 +3,8 @@
 
 - Support serial USB-OTG connection on Amazon Fire OS.
 
+- Improve handling of Web Bluetooth devices.
+
 - Clean up leaderboard component.
 
 - Update dependencies.

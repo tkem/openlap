@@ -27,15 +27,12 @@ class WebBluetoothPeripheral implements Peripheral {
 
   name: string;
 
-  address: string;
-
   output: Promise<any>;
 
   lastWritten: string;
 
   constructor(private device: any, private logger: LoggingService) {
     this.name = device.name;
-    this.address = device.id;
   }
 
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
@@ -45,12 +42,12 @@ class WebBluetoothPeripheral implements Peripheral {
   }
 
   equals(other: Peripheral) {
-    return other && other.type === this.type && other.address === this.address;
+    return other && other.type === this.type;
   }
 
   private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     return new Observable<ArrayBuffer>(subscriber => {
-      this.logger.info('Connecting to Web Bluetooth device ' + this.address);
+      this.logger.info('Connecting to Web Bluetooth device ' + this.device.id);
       const service = this.device.gatt.connect().then(server => {
         return server.getPrimaryService(SERVICE_UUID);
       });
@@ -121,7 +118,7 @@ class WebBluetoothPeripheral implements Peripheral {
 
   private disconnect(disconnected?: NextObserver<void>) {
     if (this.device.gatt.connected) {
-      this.logger.debug('Closing Web Bluetooth connection to ' + this.address);
+      this.logger.debug('Closing Web Bluetooth connection to ' + this.device.id);
       try {
         this.device.gatt.disconnect();
       } catch (error) {
@@ -167,7 +164,7 @@ export class WebBluetoothBackend extends Backend {
         if (readySource != 'cordova' && this.navigator.bluetooth) {
           return from(this.requestDevice()).pipe(
             catchError(err => {
-              this.logger.error('Error requesting Web Bluetooth device', err);
+              this.logger.error('Error requesting Web Bluetooth device:', err);
               return empty();
             })
           );
