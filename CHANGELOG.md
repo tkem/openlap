@@ -1,4 +1,4 @@
-1.9.4 UNRELEASED
+1.9.4 2021-07-05
 ----------------
 
 - Support serial USB-OTG connection on Amazon Fire OS.
