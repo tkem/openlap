@@ -1,5 +1,4 @@
-Open Lap
-========================================================================
+# Open Lap [![CI build status](https://img.shields.io/github/workflow/status/tkem/openlap/CI)](https://github.com/tkem/openlap/actions/workflows/ci.yml)
 
 Open Lap is a simple, no-nonsense slot car race management app for
 Carrera® DIGITAL 124/132 systems.

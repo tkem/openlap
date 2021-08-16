@@ -1,0 +1,47 @@
+name: CI
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g cordova @ionic/cli
+      - run: npm install
+      - run: ionic cordova build android --prod
+      - uses: actions/upload-artifact@v2
+        with:
+          name: android
+          path: platforms/android/**/*.apk
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g cordova @ionic/cli
+      - run: npm install
+      - run: ionic cordova build ios --prod
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ios
+          path: platforms/ios/build/**/*.app
+  pwa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g @ionic/cli
+      - run: npm install
+      - run: ionic build --prod -- --base-href=/openlap/ --service-worker
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pwa
+          path: www
