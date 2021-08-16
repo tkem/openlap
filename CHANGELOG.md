@@ -1,3 +1,11 @@
+1.9.5 UNRELEASED
+----------------
+
+- Tuning page: Use "link" icon for changing multiple settings at once.
+
+- Update dependencies.
+
+
 1.9.4 2021-07-05
 ----------------
 
