@@ -1,4 +1,4 @@
-1.9.5 UNRELEASED
+1.9.5 2021-08-29
 ----------------
 
 - Tuning page: Use "link" icon for changing multiple settings at once.
