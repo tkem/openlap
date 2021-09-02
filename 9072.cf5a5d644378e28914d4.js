@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkopenlap=self.webpackChunkopenlap||[]).push([[9072],{9072:(h,l,s)=>{s.r(l),s.d(l,{ion_text:()=>n});var o=s(3150),c=s(7585),a=s(1269);const n=class{constructor(t){(0,o.r)(this,t)}render(){const t=(0,c.b)(this);return(0,o.h)(o.H,{class:(0,a.c)(this.color,{[t]:!0})},(0,o.h)("slot",null))}};n.style=":host(.ion-color){color:var(--ion-color-base)}"}}]);
