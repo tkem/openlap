@@ -1,3 +1,14 @@
+1.9.6 UNRELEASED
+----------------
+
+- Disable native toasts on Android.  This fixes an issue with the
+`cordova-plugin-x-toast` plugin which causes the app to crash on
+devices running Android 11.  See also
+https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin/issues/136.
+
+- Update dependencies.
+
+
 1.9.5 2021-08-29
 ----------------
 
