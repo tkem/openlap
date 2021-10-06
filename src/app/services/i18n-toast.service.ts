@@ -44,8 +44,8 @@ export class I18nToastService {
 
   private toast: ToastProvider;
 
-  constructor(platform: Platform, controller: ToastController, private translate: TranslateService) { 
-    this.toast = platform.is('cordova') ? new NativeToastProvider(platform) : new IonicToastProvider(controller);
+  constructor(platform: Platform, controller: ToastController, private translate: TranslateService) {
+    this.toast = platform.is('cordova') && !platform.is('android') ? new NativeToastProvider(platform) : new IonicToastProvider(controller);
   }
 
   showShortTop(key: string, params?: Object) {
@@ -59,7 +59,7 @@ export class I18nToastService {
   showShortBottom(key: string, params?: Object) {
     return this.show('bottom', SHORT_DURATION, key, params);
   }
-  
+
   showLongTop(key: string, params?: Object) {
     return this.show('top', LONG_DURATION, key, params);
   }
