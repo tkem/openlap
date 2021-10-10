@@ -1,4 +1,4 @@
-1.9.6 UNRELEASED
+1.9.6 2021-10-10
 ----------------
 
 - Disable native toasts on Android.  This fixes an issue with the
