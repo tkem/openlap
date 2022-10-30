@@ -1,3 +1,4 @@
+.gradle/
 .sourcemaps/
 .vscode/
 node_modules/
