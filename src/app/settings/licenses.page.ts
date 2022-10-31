@@ -6,12 +6,12 @@ import { Component } from '@angular/core';
 export class LicensesPage {
   items = [{
     name: 'Angular',
-    copyright: 'Copyright (c) 2010-2019 Google, Inc.',
+    copyright: 'Super-powered by Google ©2010-2021',
     license: 'MIT',
     homepage: 'https://angular.io/'
   }, {
     name: 'Apache Cordova',
-    copyright: 'Copyright (c) 2012, 2013, 2015 The Apache Software Foundation',
+    copyright: 'Copyright © 2022 The Apache Software Foundation',
     license: 'Apache-2.0',
     homepage: 'https://cordova.apache.org/'
   }, {
@@ -25,23 +25,23 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'https://github.com/driftyco/ionic-native#readme',
   }, {
-    name: 'ngx-translate',
-    copyright: 'Copyright (c) 2016 Olivier Combe',
+    name: 'NGX-Translate',
+    copyright: '© NGX-Translate 2016-2017',
     license: 'MIT',
     homepage: 'http://www.ngx-translate.com/'
   }, {
     name: 'RxJS',
-    author: 'Ben Lesh <ben@benlesh.com>',
+    copyright: 'Copyright (c) 2015-2018 Google, Inc., Netflix, Inc., Microsoft Corp. and contributors',
     license: 'Apache-2.0',
     homepage: 'https://github.com/ReactiveX/RxJS#readme'
   }, {
     name: 'cordova-plugin-app-version',
-    author: 'whiteoctober',
+    copyright: 'Copyright (c) 2013 White October',
     license: 'MIT',
     homepage: 'https://github.com/whiteoctober/cordova-plugin-app-version#readme'
   }, {
     name: 'cordova-plugin-ble-central',
-    author: 'Don Coleman <don.coleman@gmail.com>',
+    copyright: 'Copyright 2014-2020 Don Coleman',
     license: 'Apache-2.0',
     homepage: 'https://github.com/don/cordova-plugin-ble-central#readme'
   }, {
@@ -51,7 +51,7 @@ export class LicensesPage {
     homepage: 'https://github.com/apache/cordova-plugin-device#readme'
   }, {
     name: 'cordova-plugin-fullscreen',
-    author: 'Neil Rackett',
+    copyright: 'Copyright (c) 2014, Mesmotronic Limited',
     license: 'BSD',
     homepage: 'https://github.com/mesmotronic/cordova-fullscreen-plugin#readme'
   }, {
@@ -106,7 +106,7 @@ export class LicensesPage {
     homepage: 'https://github.com/litehelpers/Cordova-sqlite-storage'
   }, {
     name: 'cordovarduino',
-    author: 'Xavier Seignard <xavier.seignard@gmail.com>',
+    copyright: 'Copyright (c) 2015 Xavier Seignard. http://drangies.fr',
     license: 'MIT',
     homepage: 'https://github.com/xseignard/cordovarduino#readme'
   }];
