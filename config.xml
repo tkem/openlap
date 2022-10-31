@@ -9,7 +9,7 @@
     <allow-intent href="https://*/*" />
     <preference name="AndroidXEnabled" value="true" />
     <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="BackgroundColor" value="0xff000000" />
+    <preference name="BackgroundColor" value="0xff222428" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="DefaultVolumeStream" value="media" />
     <preference name="DisallowOverscroll" value="true" />
@@ -26,13 +26,13 @@
     </feature>
     <icon src="res/icon.png" />
     <platform name="android">
-        <icon background="res/android/icon/mipmap-mdpi-icon-bg.png" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon-fg.png" src="res/android/icon/drawable-mdpi-icon.png" />
-        <icon background="res/android/icon/mipmap-hdpi-icon-bg.png" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon-fg.png" src="res/android/icon/drawable-hdpi-icon.png" />
-        <icon background="res/android/icon/mipmap-xhdpi-icon-bg.png" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon-fg.png" src="res/android/icon/drawable-xhdpi-icon.png" />
-        <icon background="res/android/icon/mipmap-xxhdpi-icon-bg.png" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon-fg.png" src="res/android/icon/drawable-xxhdpi-icon.png" />
-        <icon background="res/android/icon/mipmap-xxxhdpi-icon-bg.png" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon-fg.png" src="res/android/icon/drawable-xxxhdpi-icon.png" />
-        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon-fg.png" />
-        <preference name="AndroidWindowSplashScreenBackground" value="#222428" />
+        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
+        <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
     </platform>
     <platform name="ios">
         <icon height="144" src="res/ios/icon/icon-72@2x.png" width="144" />

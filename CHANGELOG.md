@@ -3,6 +3,8 @@
 
 - Use Android 12 SplashScreen asset.
 
+- Update Android icon.
+
 - Add link to privacy policy.
 
 - Update dependencies.
