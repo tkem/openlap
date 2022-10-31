@@ -1,3 +1,13 @@
+1.9.7 UNRELEASED
+----------------
+
+- Use Android 12 SplashScreen asset.
+
+- Add link to privacy policy.
+
+- Update dependencies.
+
+
 1.9.6 2021-10-10
 ----------------
 
