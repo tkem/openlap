@@ -184,7 +184,7 @@ export class RmsPage implements OnDestroy, OnInit {
       ),
       session.finished.pipe(
         distinctUntilChanged(),
-        filter(finished => new Boolean(finished[0]) == true) ,
+        filter(finished => finished[0] == true) ,
         map((finished) => {
           return [options.mode == 'race' ? 'finished' : 'endsession', finished[1]];
         })
