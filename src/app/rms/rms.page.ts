@@ -169,7 +169,7 @@ export class RmsPage implements OnDestroy, OnInit {
       ),
       this.lapcount.pipe(
         filter(laps => {
-          return options.laps && laps.count === options.laps && !session.finished.value;
+          return options.laps && laps.count === options.laps && !session.finished.value[0];
         }),
         map(() => {
           return ['finallap', null];
@@ -184,9 +184,9 @@ export class RmsPage implements OnDestroy, OnInit {
       ),
       session.finished.pipe(
         distinctUntilChanged(),
-        filter(finished => finished),
-        map(() => {
-          return [options.mode == 'race' ? 'finished' : 'endsession', null];
+        filter(finished => new Boolean(finished[0]) == true) ,
+        map((finished) => {
+          return [options.mode == 'race' ? 'finished' : 'endsession', finished[1]];
         })
       )
     ).pipe(
@@ -344,7 +344,7 @@ export class RmsPage implements OnDestroy, OnInit {
       component: RmsMenu,
       componentProps: {
         mode: this.mode,
-        active: this.session && !this.session.finished.value && this.mode != 'practice',
+        active: this.session && !this.session.finished.value[0] && this.mode != 'practice',
         restart: () => this.restartSession(),
         cancel:  () => this.cancelSession()
       }, 
