@@ -1,4 +1,4 @@
-1.9.7 UNRELEASED
+1.9.7 2022-11-22
 ----------------
 
 - Use Android 12 SplashScreen asset.
