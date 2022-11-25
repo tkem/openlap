@@ -1,8 +1,8 @@
-1.9.8 UNRELEASED
+1.9.8 2022-11-25
 ----------------
 
-- Update `cordova-plugin-ble-central` (fixes Bluetooth permission error
-on Android 12).
+- Update `cordova-plugin-ble-central` (fixes Bluetooth permission
+  error on Android 12).
 
 
 1.9.7 2022-11-22
@@ -21,9 +21,9 @@ on Android 12).
 ----------------
 
 - Disable native toasts on Android.  This fixes an issue with the
-`cordova-plugin-x-toast` plugin which causes the app to crash on
-devices running Android 11.  See also
-https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin/issues/136.
+  `cordova-plugin-x-toast` plugin which causes the app to crash on
+  devices running Android 11.  See also
+  https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin/issues/136.
 
 - Update dependencies.
 
