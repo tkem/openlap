@@ -1,3 +1,10 @@
+1.9.8 UNRELEASED
+----------------
+
+- Update `cordova-plugin-ble-central` (fixes Bluetooth permission error
+on Android 12).
+
+
 1.9.7 2022-11-22
 ----------------
 
