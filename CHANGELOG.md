@@ -1,4 +1,4 @@
-1.9.9 UNRELEASED
+1.9.9 2022-11-26
 ----------------
 
 - Use low-latency scan mode for BLE connections on Android.
