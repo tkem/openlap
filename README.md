@@ -115,11 +115,11 @@ iOS support: softyde, elliot2extreme.
 Licensed under the [Apache License, Version
 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-Carrera® and Carrera AppConnect® are registered trademarks of
-Stadlbauer Marketing + Vertrieb GmbH.
+Carrera® and Carrera AppConnect® are registered trademarks of Carrera
+Toys GmbH.
 
 Open Lap is not an official Carrera® product, and is not affiliated
-with or endorsed by Stadlbauer Marketing + Vertrieb GmbH.
+with or endorsed by Carrera Toys GmbH.
 
 Thanks to Stephan Heß (a.k.a. [slotbaer](http://www.slotbaer.de/)) for
 doing all the hard work.
