@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { BLE } from '@ionic-native/ble/ngx';
+import { BLE, BLEScanOptions } from '@ionic-native/ble/ngx';
 
 import { NextObserver, Observable, Subject, empty, from, interval, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
@@ -188,7 +188,10 @@ export class BLEBackend extends Backend {
       switchMap(enabled => {
         if (enabled) {
           this.logger.info('Start scanning for BLE devices');
-          return this.ble.startScanWithOptions([], { reportDuplicates: true }).pipe(
+          return this.ble.startScanWithOptions([], {
+            reportDuplicates: true,
+            scanMode: "lowLatency"
+          } as BLEScanOptions).pipe(
             finalize(() => this.logger.info('Stop scanning for BLE devices'))
           );
         } else {
