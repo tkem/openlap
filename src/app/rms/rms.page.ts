@@ -46,7 +46,7 @@ export class RmsPage implements OnDestroy, OnInit {
   start: Observable<number>;
   timer: Observable<number>;
 
-  android: boolean;
+  legacyAndroid: Promise<boolean>;
 
   private subscriptions: Subscription;
 
@@ -84,7 +84,10 @@ export class RmsPage implements OnDestroy, OnInit {
       distinctUntilChanged()
     );
 
-    this.android = app.isAndroid() && app.isCordova();
+    // flag for older Android versions that require Location services and support USB OTG connections
+    this.legacyAndroid = app.isAndroid() && app.isCordova() ?
+      app.getDeviceInfo().then(device => (device.version < '12')) :
+      Promise.resolve(false);
   }
 
   ngOnInit() {

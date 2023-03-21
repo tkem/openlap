@@ -5,8 +5,11 @@ Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
 
-- connect your mobile device via Bluetooth using Carrera AppConnect®,
-  or a suitable serial to USB On-The-Go adapter cable.
+- connect your mobile device or desktop browser via Bluetooth using
+  Carrera AppConnect®.
+- using the Android app, connect your device using a serial to USB
+  On-The-Go adapter cable (this is not supported on Android 12 and
+  higher).
 - take it easy during free practice, go for fastest lap in qualifying,
   or compete in lap or time based race sessions.
 - get informed about important events, such as fastest laps or low
