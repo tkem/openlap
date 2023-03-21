@@ -65,12 +65,12 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^12.2.18",
+    "@angular-devkit/build-angular": "^15.2.4",
     "@angular/cli": "^12.2.18",
     "@angular/compiler": "^12.2.16",
     "@angular/compiler-cli": "^12.2.16",
     "@angular/language-service": "^12.2.16",
-    "@ionic/angular-toolkit": "^5.0.0",
+    "@ionic/angular-toolkit": "^5.0.3",
     "es6-promise-plugin": "^4.2.2",
     "ts-node": "~10.2.1",
     "typescript": "~4.3.5"
