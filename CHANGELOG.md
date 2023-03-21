@@ -1,3 +1,13 @@
+1.9.10 UNRELEASED
+-----------------
+
+- Drop USB-OTG support for Android >= 12.
+
+- Update `shields` actions URL.
+
+- Update dependencies.
+
+
 1.9.9 2022-11-26
 ----------------
 
