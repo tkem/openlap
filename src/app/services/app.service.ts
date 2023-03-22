@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { AndroidFullScreen } from '@ionic-native/android-full-screen';
-import { AppVersion } from '@ionic-native/app-version';
-import { Device } from '@ionic-native/device';
-import { Insomnia } from '@ionic-native/insomnia';
-import { SocialSharing } from '@ionic-native/social-sharing';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen/ngx';
+import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
+import { Device } from '@awesome-cordova-plugins/device/ngx';
+import { Insomnia } from '@awesome-cordova-plugins/insomnia/ngx';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
@@ -34,13 +34,16 @@ export class AppService {
 
   share: (subject: string, message: string) => Promise<void> = undefined;
   
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private app: AppVersion, private device: Device, 
+    private fullscreen: AndroidFullScreen, private insomnia: Insomnia, private sharing: SocialSharing,
+    private splash: SplashScreen, status: StatusBar) 
+  {
     this.backButton = platform.backButton;
 
     // TODO: check if necessary...
     platform.ready().then(readySource => {
       if (readySource === 'cordova') {
-        StatusBar.styleDefault();
+        status.styleDefault();
       }
     });
 
@@ -62,7 +65,7 @@ export class AppService {
   async getName() {
     if (this.isCordova() && AppVersion) {
       await this.platform.ready();
-      return AppVersion.getAppName();
+      return this.app.getAppName();
     } else {
       return "App";  // FIXME - generic?
     }
@@ -71,7 +74,7 @@ export class AppService {
   async getVersion() {
     if (this.isCordova() && AppVersion) {
       await this.platform.ready();
-      return AppVersion.getVersionNumber();
+      return this.app.getVersionNumber();
     } else {
       return "Web";
     }
@@ -81,11 +84,11 @@ export class AppService {
     if (this.isCordova() && Device) {
       await this.platform.ready();
       return {
-        isVirtual: Device.isVirtual,
-        manufacturer: Device.manufacturer,
-        model: Device.model,
-        platform: Device.platform,
-        version: Device.version,
+        isVirtual: this.device.isVirtual,
+        manufacturer: this.device.manufacturer,
+        model: this.device.model,
+        platform: this.device.platform,
+        version: this.device.version,
       };
     } else {
       return {
@@ -103,17 +106,17 @@ export class AppService {
     if (this.isCordova() && this.isAndroid() && AndroidFullScreen) {
       await this.platform.ready();
       if (value) {
-        AndroidFullScreen.immersiveMode();
+        this.fullscreen.immersiveMode();
       } else {
-        AndroidFullScreen.showSystemUI();
+        this.fullscreen.showSystemUI();
       }
     }
   }
 
   async hideSplashScreen() {
-    if (this.isCordova() && SplashScreen) {
+    if (this.isCordova() && this.splash) {
       await this.platform.ready();
-      SplashScreen.hide();
+      this.splash.hide();
     }
   }
 
@@ -121,9 +124,9 @@ export class AppService {
     if (this.isCordova() && Insomnia) {
       await this.platform.ready();
       if (value) {
-        Insomnia.keepAwake();
+        this.insomnia.keepAwake();
       } else {
-        Insomnia.allowSleepAgain();
+        this.insomnia.allowSleepAgain();
       }
     }
   }
@@ -139,7 +142,7 @@ export class AppService {
   private async doShare(subject: string, message: string) {
     await this.platform.ready();
     if (SocialSharing) {
-      return SocialSharing.shareWithOptions({
+      return this.sharing.shareWithOptions({
         message: message,
         subject: subject
       });

@@ -15,15 +15,15 @@ export class LicensesPage {
     license: 'Apache-2.0',
     homepage: 'https://cordova.apache.org/'
   }, {
+    name: 'Awesome Cordova Plugins',
+    copyright: 'Copyright (c) 2015-present Drifty Co.',
+    license: 'MIT',
+    homepage: 'https://github.com/danielsogl/awesome-cordova-plugins',
+  }, {
     name: 'Ionic',
     copyright: 'Copyright (c) 2015-present Drifty Co.',
     license: 'MIT',
     homepage: 'https://github.com/driftyco/ionic#readme',
-  }, {
-    name: 'Ionic Native',
-    copyright: 'Copyright (c) 2015-present Drifty Co.',
-    license: 'MIT',
-    homepage: 'https://github.com/driftyco/ionic-native#readme',
   }, {
     name: 'NGX-Translate',
     copyright: '© NGX-Translate 2016-2017',
@@ -80,10 +80,10 @@ export class LicensesPage {
     license: 'Apache-2.0',
     homepage: 'https://github.com/apache/cordova-plugin-statusbar#readme'
   }, {
-    name: 'cordova-plugin-tts',
-    author: 'VILIC VANE',
+    name: 'cordova-plugin-tts-advanced',
+    author: 'Sebastiaan Pasma and VILIC VANE',
     license: 'MIT',
-    homepage: 'https://github.com/vilic/cordova-plugin-tts#readme'
+    homepage: 'https://github.com/spasma/cordova-plugin-tts-advanced#readme'
   }, {
     name: 'cordova-plugin-whitelist',
     author: 'Apache Software Foundation',

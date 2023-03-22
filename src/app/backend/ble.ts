@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { BLE, BLEScanOptions } from '@ionic-native/ble/ngx';
+import { BLE, BLEScanOptions } from '@awesome-cordova-plugins/ble/ngx';
 
 import { NextObserver, Observable, Subject, empty, from, interval, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Platform, ToastController } from '@ionic/angular';
 
-import { Toast as NativeToast } from '@ionic-native/toast';
+import { Toast as NativeToast } from '@awesome-cordova-plugins/toast/ngx';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,12 +11,12 @@ interface ToastProvider {
 }
 
 class NativeToastProvider implements ToastProvider {
-  constructor(private platform: Platform) {}
+  constructor(private platform: Platform, private toast: NativeToast) {}
 
   async show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
     await this.platform.ready();
-    await NativeToast.hide();
-    return NativeToast.show(message, duration.toString(), position).toPromise();
+    await this.toast.hide();
+    return this.toast.show(message, duration.toString(), position).toPromise();
   }
 }
 
@@ -44,8 +44,8 @@ export class I18nToastService {
 
   private toast: ToastProvider;
 
-  constructor(platform: Platform, controller: ToastController, private translate: TranslateService) {
-    this.toast = platform.is('cordova') && !platform.is('android') ? new NativeToastProvider(platform) : new IonicToastProvider(controller);
+  constructor(platform: Platform, toast: NativeToast, controller: ToastController, private translate: TranslateService) {
+    this.toast = platform.is('cordova') && !platform.is('android') ? new NativeToastProvider(platform, toast) : new IonicToastProvider(controller);
   }
 
   showShortTop(key: string, params?: Object) {

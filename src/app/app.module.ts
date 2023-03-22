@@ -9,9 +9,17 @@ import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-wor
 
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
 
-import { BLE } from '@ionic-native/ble/ngx';
-import { Serial } from '@ionic-native/serial/ngx';
-import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen/ngx';
+import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
+import { BLE } from '@awesome-cordova-plugins/ble/ngx';
+import { Device } from '@awesome-cordova-plugins/device/ngx';
+import { Insomnia } from '@awesome-cordova-plugins/insomnia/ngx';
+//import { Serial } from '@ionic-native/serial/ngx';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
+import { TextToSpeechAdvanced } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
+import { Toast } from '@awesome-cordova-plugins/toast/ngx';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -80,9 +88,17 @@ export function swRegistrationOptions(platform: Platform) {
     ServiceWorkerModule.register('ngsw-worker.js')
   ],
   providers: [
+    AndroidFullScreen,
+    AppVersion,
     BLE,
-    Serial,
-    TextToSpeech,
+    Device,
+    Insomnia,
+    //Serial,
+    SocialSharing,
+    SplashScreen,
+    StatusBar,
+    TextToSpeechAdvanced,
+    Toast,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: ErrorHandler, useClass: LoggingErrorHandler },
     {

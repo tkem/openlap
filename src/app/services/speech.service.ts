@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TextToSpeech, TTSOptions } from '@ionic-native/text-to-speech/ngx';
+import { TextToSpeechAdvanced, TTSOptions, TTSVoice } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
 
 import { Platform } from '@ionic/angular';
 
@@ -45,6 +45,10 @@ class WebSpeech {
       }
     });
   }
+
+  getVoices(): Promise<TTSVoice[]> {
+    return Promise.resolve([]);
+  }
 }
 
 class DummySpeech {
@@ -58,6 +62,10 @@ class DummySpeech {
 
   stop(): Promise<void> {
     return Promise.resolve();
+  }
+
+  getVoices(): Promise<TTSVoice[]> {
+    return Promise.resolve([]);
   }
 }
 
@@ -76,7 +84,7 @@ export class SpeechService {
 
   private lastMessage: string;
 
-  constructor(private tts: TextToSpeech, private logger: LoggingService, platform: Platform) {
+  constructor(private tts: TextToSpeechAdvanced, private logger: LoggingService, platform: Platform) {
     if (platform.is('cordova')) {
       // See https://github.com/vilic/cordova-plugin-tts/issues/40
       this.rate = platform.is('ios') ? 1.5 : 1.0;
@@ -102,7 +110,8 @@ export class SpeechService {
       this.pending++;
       this.promise = this.promise.then(() => {
         if (--this.pending === 0) {
-          return this.tts.speak({text: message, locale: this.locale || 'en-us', rate: this.rate}).then(() => {
+          // FIXME: identifier?
+          return this.tts.speak({text: message, locale: this.locale || 'en-us', rate: this.rate, identifier: ""}).then(() => {
             if (this.pending === 0) {
               this.lastMessage = null;
             }
