@@ -14,12 +14,13 @@ import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
 import { BLE } from '@awesome-cordova-plugins/ble/ngx';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { Insomnia } from '@awesome-cordova-plugins/insomnia/ngx';
-//import { Serial } from '@ionic-native/serial/ngx';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { TextToSpeechAdvanced } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
 import { Toast } from '@awesome-cordova-plugins/toast/ngx';
+
+import { Serial } from './backend/serial/ngx';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -93,7 +94,7 @@ export function swRegistrationOptions(platform: Platform) {
     BLE,
     Device,
     Insomnia,
-    //Serial,
+    Serial,
     SocialSharing,
     SplashScreen,
     StatusBar,

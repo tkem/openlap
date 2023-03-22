@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
-//import { Serial } from '@ionic-native/serial/ngx';
+import { Serial } from './ngx';
 
 import { NextObserver, Observable, Subject, empty, from, of } from 'rxjs';
 import { share, switchMap, tap } from 'rxjs/operators';
 
-import { Backend } from './backend';
-import { Peripheral } from '../carrera';
-import { AppService, LoggingService } from '../services';
+import { Backend } from '../backend';
+import { Peripheral } from '../../carrera';
+import { AppService, LoggingService } from '../../services';
 
 const BAUD_RATE = 19200;
 
@@ -37,7 +37,7 @@ class SerialPeripheral implements Peripheral {
   private lastReceived: string;
   private lastWritten: string;
 
-  constructor(/*private serial: Serial,*/ private logger: LoggingService) {}
+  constructor(private serial: Serial, private logger: LoggingService) {}
 
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     const observable = this.createObservable(connected, disconnected);
@@ -50,7 +50,6 @@ class SerialPeripheral implements Peripheral {
   }
 
   private createObservable(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
-    /*
     return new Observable<ArrayBuffer>(subscriber => {
       this.logger.info('Connecting to serial port');
       this.open({ baudRate: BAUD_RATE, sleepOnPause: false }).then(() => {
@@ -90,7 +89,6 @@ class SerialPeripheral implements Peripheral {
         this.close(disconnected);
       };
     });
-    */
   }
 
   private createObserver(disconnected?: NextObserver<void>) {
@@ -102,7 +100,7 @@ class SerialPeripheral implements Peripheral {
   }
 
   private open(options: any) {
-    //return this.serial.open(options);
+    return this.serial.open(options);
   }
 
   private write(value: ArrayBuffer) {
@@ -113,15 +111,12 @@ class SerialPeripheral implements Peripheral {
         this.lastWritten = str;
       }
     }
-    /*
     this.serial.write('"' + str + '$').catch(error => {
       this.logger.error('Serial write error', error);
     });
-    */
   }
 
   private close(disconnected?: NextObserver<void>) {
-    /*
     if (this.connected) {
       this.logger.info('Closing serial port');
       this.serial.close().then(() => {
@@ -135,7 +130,6 @@ class SerialPeripheral implements Peripheral {
       });
       this.connected = false;
     }
-    */
   }
 }
 
@@ -144,13 +138,13 @@ export class SerialBackend extends Backend {
 
   private scanner: Observable<any>;
 
-  constructor(app: AppService, /*private serial: Serial,*/ private logger: LoggingService) {
+  constructor(app: AppService, private serial: Serial, private logger: LoggingService) {
     super();
 
     this.scanner = from(app.getDeviceInfo()).pipe(
       switchMap(device => {
         if (app.isAndroid() && app.isCordova() && !device.isVirtual && device.version < '12') {
-          //return from(this.serial.requestPermission().then(() => true, () => false));
+          return from(this.serial.requestPermission().then(() => true, () => false));
         } else {
           return of(false);
         }
@@ -164,7 +158,7 @@ export class SerialBackend extends Backend {
     return this.scanner.pipe(
       switchMap(enabled => {
         if (enabled) {
-          //return of(new SerialPeripheral(this.serial, this.logger));
+          return of(new SerialPeripheral(this.serial, this.logger));
         } else {
           return empty();
         }
