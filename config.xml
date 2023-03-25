@@ -26,6 +26,7 @@
     </feature>
     <icon src="res/icon.png" />
     <platform name="android">
+        <hook src="hooks/android/windowLayoutInDisplayCutoutMode.js" type="after_platform_add" />
         <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
         <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" />
