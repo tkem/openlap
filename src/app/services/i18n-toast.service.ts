@@ -45,7 +45,7 @@ export class I18nToastService {
   private toast: ToastProvider;
 
   constructor(platform: Platform, toast: NativeToast, controller: ToastController, private translate: TranslateService) {
-    this.toast = platform.is('cordova') && !platform.is('android') ? new NativeToastProvider(platform, toast) : new IonicToastProvider(controller);
+    this.toast = platform.is('cordova') ? new NativeToastProvider(platform, toast) : new IonicToastProvider(controller);
   }
 
   showShortTop(key: string, params?: Object) {
