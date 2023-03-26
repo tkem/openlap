@@ -143,7 +143,7 @@ export class SerialBackend extends Backend {
 
     this.scanner = from(app.getDeviceInfo()).pipe(
       switchMap(device => {
-        if (app.isAndroid() && app.isCordova() && !device.isVirtual && device.version < '12') {
+        if (app.isAndroid() && app.isCordova() && !device.isVirtual && parseInt(device.version) < 12) {
           return from(this.serial.requestPermission().then(() => true, () => false));
         } else {
           return of(false);
