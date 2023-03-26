@@ -6,12 +6,12 @@ import { Component } from '@angular/core';
 export class LicensesPage {
   items = [{
     name: 'Angular',
-    copyright: 'Super-powered by Google ©2010-2021',
+    copyright: 'Super-powered by Google ©2010-2023',
     license: 'MIT',
     homepage: 'https://angular.io/'
   }, {
     name: 'Apache Cordova',
-    copyright: 'Copyright © 2022 The Apache Software Foundation',
+    copyright: 'Copyright © 2023 The Apache Software Foundation',
     license: 'Apache-2.0',
     homepage: 'https://cordova.apache.org/'
   }, {
@@ -61,7 +61,7 @@ export class LicensesPage {
     homepage: 'https://github.com/apache/cordova-plugin-inappbrowser#readme'
   }, {
     name: 'cordova-plugin-insomnia',
-    author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
+    author: 'Eddy Verbruggen',
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin#readme'
   }, {
@@ -91,12 +91,12 @@ export class LicensesPage {
     homepage: 'https://github.com/apache/cordova-plugin-whitelist#readme'
   }, {
     name: 'cordova-plugin-x-socialsharing',
-    author: 'Eddy Verbruggen - @EddyVerbruggen',
+    author: 'Eddy Verbruggen',
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin#readme'
   }, {
     name: 'cordova-plugin-x-toast',
-    author: 'Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)',
+    author: 'Eddy Verbruggen',
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin#readme'
   }, {
@@ -106,7 +106,7 @@ export class LicensesPage {
     homepage: 'https://github.com/litehelpers/Cordova-sqlite-storage'
   }, {
     name: 'cordovarduino',
-    copyright: 'Copyright (c) 2015 Xavier Seignard. http://drangies.fr',
+    copyright: 'Copyright (c) 2015 Xavier Seignard',
     license: 'MIT',
     homepage: 'https://github.com/xseignard/cordovarduino#readme'
   }];
