@@ -1,4 +1,4 @@
-1.9.10 UNRELEASED
+1.9.10 2023-03-26
 -----------------
 
 - Drop USB-OTG support for Android >= 12.
