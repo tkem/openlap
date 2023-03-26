@@ -1,3 +1,22 @@
+1.10.0 UNRELEASED
+-----------------
+
+- Switch to [Awesome Cordova
+  Plugins](https://github.com/danielsogl/awesome-cordova-plugins).
+
+- Switch to
+  [cordova-plugin-tts-advanced](https://github.com/spasma/cordova-plugin-tts-advanced).
+
+- Re-enable serial connections on Android < 10.
+
+- Re-enable native toasts on Android.
+
+- Prevent content from displaying in the cutout area ("notch") on
+  Android in fullscreen mode.
+
+- Update license page.
+
+
 1.9.10 2023-03-26
 -----------------
 
