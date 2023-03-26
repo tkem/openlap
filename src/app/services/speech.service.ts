@@ -84,7 +84,7 @@ export class SpeechService {
 
   private lastMessage: string;
 
-  constructor(private tts: TextToSpeechAdvanced, private logger: LoggingService, platform: Platform) {
+  constructor(private logger: LoggingService, private tts: TextToSpeechAdvanced, platform: Platform) {
     if (platform.is('cordova')) {
       // See https://github.com/vilic/cordova-plugin-tts/issues/40
       this.rate = platform.is('ios') ? 1.5 : 1.0;
@@ -110,8 +110,17 @@ export class SpeechService {
       this.pending++;
       this.promise = this.promise.then(() => {
         if (--this.pending === 0) {
-          // FIXME: identifier?
-          return this.tts.speak({text: message, locale: this.locale || 'en-us', rate: this.rate, identifier: ""}).then(() => {
+          return this.tts.speak({
+            text: message,
+            locale: this.locale || 'en-us',
+            rate: this.rate,
+            identifier: null
+          }).then(() => {
+            if (this.pending === 0) {
+              this.lastMessage = null;
+            }
+          }).catch((error) => {
+            this.logger.error('Speech error:', error);
             if (this.pending === 0) {
               this.lastMessage = null;
             }
@@ -120,7 +129,7 @@ export class SpeechService {
           this.logger.warn('Speech cancelled: ' + message);
         }
       }).catch((error) => {
-        this.logger.error('Speech error', error);
+        this.logger.error('Speech error:', error);
       });
     } else {
       this.logger.info('Speech duplicate dismissed: ' + message);

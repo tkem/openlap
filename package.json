@@ -34,7 +34,7 @@
     "@awesome-cordova-plugins/social-sharing": "^6.3.0",
     "@awesome-cordova-plugins/splash-screen": "^6.3.0",
     "@awesome-cordova-plugins/status-bar": "^6.3.0",
-    "@awesome-cordova-plugins/text-to-speech-advanced": "^6.3.0",
+    "@awesome-cordova-plugins/text-to-speech-advanced": "file:./local_modules/text-to-speech-advanced",
     "@awesome-cordova-plugins/toast": "^6.3.0",
     "@ionic/angular": "^5.9.4",
     "@ionic/storage": "^2.3.1",
