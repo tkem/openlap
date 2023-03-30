@@ -1,4 +1,4 @@
-1.10.0 UNRELEASED
+1.10.0 2023-03-30
 -----------------
 
 - Switch to [Awesome Cordova
