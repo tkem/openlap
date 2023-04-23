@@ -23,11 +23,14 @@
     <ion-list>
       <ion-item>
         <ion-label translate>Time</ion-label>
-        <ion-datetime formControlName="time"
-                      displayFormat="H:mm:ss" pickerFormat="H mm ss"
-                      cancelText="{{'Cancel' | translate}}" doneText="{{'Done' | translate}}"
-                      (ionChange)="onChangeTime($event)">
-        </ion-datetime>
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="datetime" formControlName="time" presentation="time" hourCycle="h23" 
+            [showDefaultButtons]="true" cancelText="{{'Cancel' | translate}}" doneText="{{'Done' | translate}}"
+            (ionChange)="onChangeTime($event)"></ion-datetime>
+          </ng-template>
+        </ion-modal>
       </ion-item>
       <ion-item *ngIf="mode == 'race'">
         <ion-label translate>Number of laps</ion-label>

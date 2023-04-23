@@ -1,4 +1,6 @@
-Chrome >= 73
 Android >= 56
-ios_saf >= 11
-safari >= 11
+Chrome >= 73
+Edge >=79
+Firefox >=63
+Safari >=13
+iOS >=13

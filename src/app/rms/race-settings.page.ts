@@ -9,12 +9,13 @@ import { RaceOptions } from '../app-settings';
 function formatTime(milliseconds: number) {
   const h = Math.floor(milliseconds / 3600000);
   const m = Math.floor(milliseconds / 60000 % 60);
-  const s = Math.floor(milliseconds / 1000 % 60);
-  return [h, m, s].map(v => ('0' + v).substr(-2)).join(':');
+  // padStart() is es2017 or later
+  return [h, m].map(v => ('0' + v).slice(-2)).join(':');
 }
 
 function parseTime(s: string) {
-  return s.split(':').reduce((sum, cur) => sum * 60 + parseInt(cur), 0) * 1000;
+  const [h, m] = s.split(':');
+  return (parseInt(h) * 3600 + parseInt(m) * 60) * 1000;
 }
 
 function timeRequired(control: AbstractControl): {[key: string]: any} {
@@ -37,8 +38,9 @@ function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
 }
 
 function createQualifyingForm(fb: FormBuilder, params: NavParams) {
+
   return fb.group({
-    time: new FormControl(formatTime(params.get('time') || 180000), timeRequired),
+    time: new FormControl(formatTime(params.get('time') || 300000), timeRequired),
     pause: new FormControl({
       value: params.get('pause') || false,
       disabled: !params.get('time')
@@ -126,7 +128,7 @@ export class RaceSettingsPage implements AfterViewInit {
   onSubmit(options) {
     this.modal.dismiss(Object.assign(new RaceOptions(this.mode), {
       laps: parseInt(options.laps || '0'),
-      time: parseTime(options.time || ''),
+      time: parseTime(options.time || '0:00'),
       pause: options.pause,
       drivers: options.drivers ? parseInt(options.drivers) : undefined,
       auto: options.auto,

@@ -18,25 +18,15 @@ ion-badge.tuning {
     width: 2em !important;
 }
 
-/* no highlighting, border ("lines") color? */
+/* highlighting */
 ion-item {
-    --highlight-height: 0;
-    /*--border-color: var(--ion-text-color);*/
+    --highlight-color-focused: var(--ion-text-color);
+    --highlight-color-valid: var(--ion-text-color);
 }
 
 /* make list headers stand apart */
 ion-list-header {
     --color: var(--ion-color-primary);
-}
-
-/* make slides fill available space */
-ion-slides {
-    --bullet-background: var(--ion-color-step-500) !important;
-    --bullet-background-active: var(--ion-color-step-700) !important;
-    height: 100%;
-    ion-slide {
-        align-items: flex-start !important;
-    }
 }
 
 /* make item groups stand apart in menus */
