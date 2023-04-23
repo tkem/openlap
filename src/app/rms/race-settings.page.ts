@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { NavParams, ModalController } from '@ionic/angular';
 
@@ -26,7 +26,7 @@ function timeRequired(control: AbstractControl): {[key: string]: any} {
   }
 }
 
-function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
+function lapsOrTimeRequired(group: UntypedFormGroup): {[key: string]: any} {
   const laps = parseInt(group.get('laps').value);
   if (laps && laps > 0) {
     return null;
@@ -37,35 +37,35 @@ function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
   return {'required': true};
 }
 
-function createQualifyingForm(fb: FormBuilder, params: NavParams) {
+function createQualifyingForm(fb: UntypedFormBuilder, params: NavParams) {
 
   return fb.group({
-    time: new FormControl(formatTime(params.get('time') || 300000), timeRequired),
-    pause: new FormControl({
+    time: new UntypedFormControl(formatTime(params.get('time') || 300000), timeRequired),
+    pause: new UntypedFormControl({
       value: params.get('pause') || false,
       disabled: !params.get('time')
     }),
-    drivers: new FormControl(params.get('drivers') || ''),
-    auto: new FormControl(params.get('auto') || false),
-    pace: new FormControl(params.get('pace') || false)
+    drivers: new UntypedFormControl(params.get('drivers') || ''),
+    auto: new UntypedFormControl(params.get('auto') || false),
+    pace: new UntypedFormControl(params.get('pace') || false)
   });
 }
 
-function createRaceForm(fb: FormBuilder, params: NavParams) {
+function createRaceForm(fb: UntypedFormBuilder, params: NavParams) {
   return fb.group({
-    laps: new FormControl(params.get('laps') || '', Validators.pattern('\\d*')),
-    time: new FormControl(formatTime(params.get('time') || 0)),
-    pause: new FormControl({
+    laps: new UntypedFormControl(params.get('laps') || '', Validators.pattern('\\d*')),
+    time: new UntypedFormControl(formatTime(params.get('time') || 0)),
+    pause: new UntypedFormControl({
       value: !!params.get('pause'),
       disabled: !params.get('time')
     }),
-    slotmode: new FormControl({
+    slotmode: new UntypedFormControl({
       value: !!params.get('slotmode'),
       disabled: !params.get('laps')
     }),
-    drivers: new FormControl(params.get('drivers') || ''),
-    auto: new FormControl(params.get('auto') || false),
-    pace: new FormControl(params.get('pace') || false)
+    drivers: new UntypedFormControl(params.get('drivers') || ''),
+    auto: new UntypedFormControl(params.get('auto') || false),
+    pace: new UntypedFormControl(params.get('pace') || false)
   }, {
     validator: lapsOrTimeRequired
   });
@@ -78,13 +78,13 @@ export class RaceSettingsPage implements AfterViewInit {
 
   mode: 'qualifying' | 'race';
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   @ViewChild('pause', { static: true }) pauseToggle;
 
   @ViewChild('slotmode') slotmodeToggle;
 
-  constructor(fb: FormBuilder, params: NavParams, private modal: ModalController) {
+  constructor(fb: UntypedFormBuilder, params: NavParams, private modal: ModalController) {
     this.mode = params.get('mode');
     if (this.mode == 'race') {
       this.form = createRaceForm(fb, params);
