@@ -25,11 +25,6 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'https://github.com/driftyco/ionic#readme',
   }, {
-    name: 'NGX-Translate',
-    copyright: '© NGX-Translate 2016-2017',
-    license: 'MIT',
-    homepage: 'http://www.ngx-translate.com/'
-  }, {
     name: 'RxJS',
     copyright: 'Copyright (c) 2015-2018 Google, Inc., Netflix, Inc., Microsoft Corp. and contributors',
     license: 'Apache-2.0',
@@ -109,5 +104,10 @@ export class LicensesPage {
     copyright: 'Copyright (c) 2015 Xavier Seignard',
     license: 'MIT',
     homepage: 'https://github.com/xseignard/cordovarduino#readme'
+  }, {
+    name: 'ngx-translate',
+    author: 'Olivier Combe',
+    license: 'MIT',
+    homepage: 'https://github.com/ngx-translate/core#readme'
   }];
 }
