@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
 
 import { AppSettings, Driver, Options } from '../app-settings';
-import { AppService, ControlUnitService } from '../services';
+import { AppService, ControlUnitService, LoggingService } from '../services';
 
 import { TuningMenu } from './tuning.menu';
 
@@ -53,7 +53,7 @@ export class TuningPage implements OnDestroy, OnInit {
 
   private subject = new Subject<{type: string, id: number}>();
 
-  constructor(private cu: ControlUnitService, private popover: PopoverController,
+  constructor(private logger: LoggingService, private cu: ControlUnitService, private popover: PopoverController,
     private ref: ChangeDetectorRef, app: AppService, settings: AppSettings
   ) {
     this.connected = cu.pipe(
@@ -114,7 +114,30 @@ export class TuningPage implements OnDestroy, OnInit {
     });
   }
 
-  update(type: string, value: number, id?: number) {
+  update(type: string, event: any, id?: number) {
+    const value = event.detail.value;
+    this.logger.debug('Set', type, 'to', value, 'for', id);
+    for (let model of (id !== undefined ? [this.models[id]] : this.models)) {
+      model[type] = value;
+    }
+    this.subject.next({id: id, type: type});
+    this.ref.detectChanges();
+  }
+
+  updateCU(type: string, event: any, id?: number) {
+    let value = event.detail.value;
+    switch (type) {
+    case 'speed':
+      value = this.fromCU.speed[event.detail.value];
+      break;
+    case 'brake':
+      value = this.fromCU.brake[event.detail.value];
+      break;
+    case 'fuel':
+      value = this.fromCU.fuel[event.detail.value];
+      break;
+    }
+    this.logger.debug('Set', type, 'to', value, 'for', id);
     for (let model of (id !== undefined ? [this.models[id]] : this.models)) {
       model[type] = value;
     }

@@ -65,10 +65,10 @@
         {{item.pits}}
     </ng-template>
     <ng-template ngSwitchCase="fuel">
-        <gauge max="15" [value]="item.fuel">&nbsp;</gauge>
+        <gauge [max]="15" [value]="item.fuel">&nbsp;</gauge>
     </ng-template>
     <ng-template ngSwitchCase="status">
-        <checkerboard cols="7" rows="5" *ngIf="item.finished"></checkerboard>
+        <checkerboard [cols]="7" [rows]="5" *ngIf="item.finished"></checkerboard>
         <span *ngIf="!item.finished && item.pit" [ngClass]="item.refuel ? 'inpit' : 'pitenter'">PIT</span>
         <span *ngIf="!item.finished && !item.pit && item.gridpos != null && item.laps && ranked.length > 2"
             [ngClass]="item.gridpos > item.position ? 'pos-up' : item.gridpos < item.position ? 'pos-dn' : 'pos-eq'">

@@ -127,6 +127,7 @@ export class SpeechService {
           });
         } else {
           this.logger.warn('Speech cancelled: ' + message);
+          return Promise.resolve();
         }
       }).catch((error) => {
         this.logger.error('Speech error:', error);

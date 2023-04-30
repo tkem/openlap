@@ -35,8 +35,8 @@ const NOTIFICATIONS = {
 };
 
 export class Connection {
-  type: string;
-  name: string;
+  type?: string;
+  name?: string;
   address?: string;
   connectionTimeout = 3000;
   requestTimeout = 2000;
@@ -86,7 +86,7 @@ export class RaceOptions {
   }
   laps: number;
   time: number;
-  pause: false;
+  pause = false;
   slotmode = false;
   drivers?: number;
   auto = false;

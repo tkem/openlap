@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      <checkerboard cols="9" rows="5" *ngIf="session?.finished | async"></checkerboard>
+      <checkerboard [cols]="9" [rows]="5" *ngIf="session?.finished | async"></checkerboard>
       <span [ngSwitch]="mode">
         <ng-container *ngSwitchCase="'practice'">
           <span translate>Free Practice</span>
@@ -29,7 +29,7 @@
           </ng-template>
         </ng-container>
       </span>
-      <checkerboard cols="9" rows="5" *ngIf="session?.finished | async"></checkerboard>
+      <checkerboard [cols]="9" [rows]="5" *ngIf="session?.finished | async"></checkerboard>
       <span *ngIf="session?.timer && !(session?.finished | async)" style="float: right">
         {{session.timer | async | time:'h:mm:ss'}}
       </span>

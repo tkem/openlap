@@ -1,3 +1,13 @@
+2.0.0 UNRELEASED
+----------------
+
+- Require Android 8.1 or greater.
+
+- Upgrade to Angular 15.
+
+- Upgrade to Ionic 7.
+
+
 1.10.0 2023-03-30
 -----------------
 

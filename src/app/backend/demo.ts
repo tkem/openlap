@@ -17,7 +17,7 @@ function random(min: number, max: number) {
 
 function toString(buffer: ArrayBuffer) {
   let array = new Uint8Array(buffer)
-  let string = String.fromCharCode.apply(null, array);
+  let string = String.fromCharCode.apply(null, [...array]);
   return string;
 }
 

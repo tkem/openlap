@@ -64,7 +64,7 @@ class SerialPeripheral implements Peripheral {
               let array = new Uint8Array(buffer.subarray(0, index));
               buffer = buffer.subarray(index + 1);
               if (this.logger.isDebugEnabled()) {
-                const str = String.fromCharCode.apply(null, array);
+                const str = String.fromCharCode.apply(null, [...array]);
                 if (str !== this.lastReceived) {
                   this.logger.debug('Serial received ' + str);
                   this.lastReceived = str;
@@ -104,7 +104,7 @@ class SerialPeripheral implements Peripheral {
   }
 
   private write(value: ArrayBuffer) {
-    const str = String.fromCharCode.apply(null, new Uint8Array(value));
+    const str = String.fromCharCode.apply(null, [...new Uint8Array(value)]);
     if (this.logger.isDebugEnabled()) {
       if (str !== this.lastWritten) {
         this.logger.debug('Serial write ' + str);

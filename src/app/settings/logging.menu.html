@@ -1,7 +1,6 @@
 <ion-item-group>
   <ion-item>
-    <ion-label translate>Debug messages</ion-label>
-    <ion-checkbox [(ngModel)]="debugEnabled"></ion-checkbox>
+    <ion-checkbox [(ngModel)]="debugEnabled" translate>Debug messages</ion-checkbox>
   </ion-item>
   <ion-item button (click)="share()" *ngIf="share">
     <ion-label><span translate>Share</span>&hellip;</ion-label>

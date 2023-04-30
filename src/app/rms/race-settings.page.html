@@ -33,14 +33,15 @@
         </ion-modal>
       </ion-item>
       <ion-item *ngIf="mode == 'race'">
-        <ion-label translate>Number of laps</ion-label>
-        <ion-input class="right-align" formControlName="laps" type="number" placeholder="{{'None' | translate}}"
+        <ion-input class="right-align" formControlName="laps"
+                   label="{{'Number of laps' | translate}}"
+                   type="number" placeholder="{{'None' | translate}}"
                    (ionChange)="onChangeLaps($event)">
         </ion-input>
       </ion-item>
       <ion-item>
-        <ion-label translate>Number of drivers</ion-label>
         <ion-select formControlName="drivers"
+                    label="{{'Number of drivers' | translate}}"
                     cancelText="{{'Cancel' | translate}}"
                     okText="{{'OK' | translate}}">
           <!-- ion-option seems to require translate attribute value; see
@@ -51,20 +52,16 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label translate>Autonomous Car</ion-label>
-        <ion-toggle formControlName="auto"></ion-toggle>
+        <ion-toggle formControlName="auto" translate>Autonomous Car</ion-toggle>
       </ion-item>
       <ion-item>
-        <ion-label translate>Pace Car</ion-label>
-        <ion-toggle formControlName="pace"></ion-toggle>
+        <ion-toggle formControlName="pace" translate>Pace Car</ion-toggle>
       </ion-item>
       <ion-item>
-        <ion-label translate>Stop time when paused</ion-label>
-        <ion-toggle #pause formControlName="pause"></ion-toggle>
+        <ion-toggle #pause formControlName="pause" translate>Stop time when paused</ion-toggle>
       </ion-item>
       <ion-item *ngIf="mode == 'race'">
-        <ion-label translate>Finish all laps</ion-label>
-        <ion-toggle #slotmode formControlName="slotmode"></ion-toggle>
+        <ion-toggle #slotmode formControlName="slotmode" translate>Finish all laps</ion-toggle>
       </ion-item>
     </ion-list>
   </form>

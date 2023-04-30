@@ -15,7 +15,7 @@ export class ControlUnitService extends BehaviorSubject<ControlUnit> {
     super(null);
   }
 
-  next(value: ControlUnit) {
+  override next(value: ControlUnit) {
     if (this.value) {
       this.value.disconnect().catch(error => {
         this.logger.error('Error disconnecting from', this.value, error);

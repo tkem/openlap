@@ -11,7 +11,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-item [href]="item.homepage || item.url" target="_system" *ngFor="let item of items">
+    <ion-item [href]="item.homepage" target="_system" *ngFor="let item of items">
       <ion-label>
         <h1>{{item.name}}</h1>
         <h2>{{item.copyright || item.author}}</h2>

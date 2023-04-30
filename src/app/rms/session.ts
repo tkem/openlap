@@ -85,14 +85,14 @@ export class Session {
       filter(([id]) => {
         return !(this.mask & (1 << id));
       }),
-      scan(([_, [prev, offset, then]], [id, time, group]: TimerType) => {
+      scan<TimerType, TimerType[]>(([_, [prev, offset, then]], [id, time, group]) => {
         // TODO: combine with reset?
         const now = Date.now();
         if (time < prev) {
           offset = ((now - then + prev) || 0) - time;
         }
         return [[id, time + offset, group], [time, offset, now]];
-      }, [[], [Infinity, 0, NaN]]),
+      }, [[Infinity, 0, NaN], [Infinity, 0, NaN]]),
       map(([t]: TimerType[]) => t)
     );
     const fuel = cu.getFuel();
@@ -236,13 +236,14 @@ export class Session {
         return <TimeInfo>[times, last, best, finished];
       }, <TimeInfo>[[], [], [], false]));
 
+      type PitInfo = [number, boolean];
       return times.pipe(
         combineLatest(
           pits.pipe(
             map(mask => ((mask & ~this.mask) & (1 << group.key)) != 0),
             distinctUntilChanged(),
-            scan(([count]: [number, boolean], inpit: boolean) => {
-              return [inpit ? count + 1 : count, inpit]
+            scan<boolean, PitInfo>(([count], inpit) => {
+              return [inpit ? count + 1 : count, inpit];
             }, [0, false])
           ),
           fuel.pipe(

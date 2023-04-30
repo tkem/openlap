@@ -63,7 +63,7 @@ export class DataView {
   }
 
   toString(byteOffset?: number, byteLength?: number) {
-    return String.fromCharCode.apply(null, this.subarray(byteOffset, byteLength));
+    return String.fromCharCode.apply(null, [...this.subarray(byteOffset, byteLength)]);
   }
 
   // FIXME: should use values, only

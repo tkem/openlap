@@ -12,15 +12,14 @@
 <ion-content>
   <ion-list>
     <ion-item *ngFor="let item of items">
-      <ion-label position="stacked">{{item.label | translate}}</ion-label>
-      <ion-input clearInput [(ngModel)]="notifications[item.id].message"
+      <ion-input clearInput label="{{item.label | translate}}" labelPlacement="stacked" [(ngModel)]="notifications[item.id].message"
         [placeholder]="'notifications.' + item.id | translate"
       ></ion-input>
       <ion-buttons slot="end">
         <ion-button fill="clear" (click)="speak(item.id)">
           <ion-icon name="volume-high-sharp"></ion-icon>
         </ion-button>
-        <ion-toggle [(ngModel)]="notifications[item.id].enabled"></ion-toggle>
+        <ion-toggle aria-label="" [(ngModel)]="notifications[item.id].enabled"></ion-toggle>
       </ion-buttons>
     </ion-item>
   </ion-list>

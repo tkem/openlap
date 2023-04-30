@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="11000" id="at.co.kemmer.openlap" version="1.10.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="20000" id="at.co.kemmer.openlap" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>OpenLap</name>
     <description>Open Source Slotcar Race App for Carrera(R) Digital 124/132</description>
     <author email="tkemmer@computer.org">Thomas Kemmer</author>
@@ -27,13 +27,14 @@
     <icon src="res/icon.png" />
     <platform name="android">
         <hook src="hooks/android/windowLayoutInDisplayCutoutMode.js" type="after_platform_add" />
-        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
-        <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
+        <preference name="android-minSdkVersion" value="27" />
+        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
     </platform>
     <platform name="ios">
         <icon height="144" src="res/ios/icon/icon-72@2x.png" width="144" />

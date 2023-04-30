@@ -31,7 +31,7 @@ const compare = {
 })
 export class RmsPage implements OnDestroy, OnInit {
 
-  mode: string;
+  mode: 'practice' | 'qualifying' | 'race';
 
   session: Session;
 
@@ -60,7 +60,16 @@ export class RmsPage implements OnDestroy, OnInit {
     private logger: LoggingService, private settings: AppSettings, private speech: SpeechService,
     private popover: PopoverController, private translate: TranslateService, route: ActivatedRoute)
   {
-    this.mode = route.snapshot.paramMap.get('mode') || 'practice';  // assume constant for page
+    const mode = route.snapshot.paramMap.get('mode');
+    switch (mode) {
+    case 'practice':
+    case 'qualifying':
+    case 'race':
+      this.mode = mode;
+      break;
+    default:
+      this.mode = 'practice';
+    }
         
     const cuMode = cu.pipe(
       filter(cu => !!cu),
