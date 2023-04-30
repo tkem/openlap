@@ -58,7 +58,7 @@ export class Session {
   grid: Observable<Observable<Entry>>;
   ranking: Observable<Entry[]>;
   currentLap: Observable<number>;
-  finished = new BehaviorSubject(false);
+  finished = new BehaviorSubject<Object[]>([false, null]);
   yellowFlag = new BehaviorSubject(false);
   timer = null;
   started = false;
@@ -132,7 +132,7 @@ export class Session {
       scan<Entry, number>((current, event) => {
         if (current > event.laps) {
           return current;
-        } else if (this.finished.value || isNaN(event.time)) {
+        } else if (this.finished.value[0] || isNaN(event.time)) {
           return event.laps;
         } else {
           return event.laps + 1;
@@ -289,7 +289,7 @@ export class Session {
     if (id !== undefined) {
       this.cu.setFinished(id);
     }
-    this.finished.next(true);
+    this.finished.next([true, id]);
   }
 
   private isFinished(laps: number) {
@@ -297,7 +297,7 @@ export class Session {
       return true;
     } else if (this.options.laps && laps >= this.options.laps) {
       return true;
-    } else if (!this.options.slotmode && this.finished.value) {
+    } else if (!this.options.slotmode && this.finished.value[0]) {
       return true;
     } else {
       return false;
