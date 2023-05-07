@@ -38,7 +38,6 @@ function lapsOrTimeRequired(group: UntypedFormGroup): {[key: string]: any} {
 }
 
 function createQualifyingForm(fb: UntypedFormBuilder, params: NavParams) {
-
   return fb.group({
     time: new UntypedFormControl(formatTime(params.get('time') || 300000), timeRequired),
     pause: new UntypedFormControl({

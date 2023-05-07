@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, OnDestroy } from '@angular/core';
 
 import { SwUpdate } from '@angular/service-worker';
 
@@ -24,7 +24,7 @@ const STATE_MESSAGES = {
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private stateSubscription = new Subscription();
 
@@ -59,31 +59,13 @@ export class AppComponent implements OnInit, OnDestroy {
       this.logger.setDebugEnabled(options.debug);
       this.setLanguage(options.language);
     });
-    this.settings.getConnection().subscribe(connection => {
-      this.stateSubscription.unsubscribe();
-      if (connection && connection.name) {
-        this.logger.info('Connecting to ' + connection.name);
-        // TODO: scan only backend responsible for this connection? provide backend.get()?
-        from(this.backends.map(backend => backend.scan())).pipe(
-          mergeMap(device => device),
-          first(device => device.equals(connection)),
-          timeout(CONNECTION_TIMEOUT)
-        ).toPromise().then(device => {
-          const cu = new ControlUnit(device, connection);
-          this.stateSubscription = cu.getState().subscribe(state => this.showConnectionToast(state, cu.peripheral.name));
-          this.cu.next(cu);
-          cu.connect();
-        }).catch(error => {
-          this.logger.error('Error connecting to ' + connection.name + ':', error);
-        }).then(() => {
-          this.app.hideSplashScreen();
-        });
-      } else {
-        this.app.hideSplashScreen();
-        this.cu.next(null);
-      }
-    });
-    // TODO: wait for app becoming stable
+  }
+
+  ngOnDestroy() {
+    this.cu.next(null);
+  }
+
+  ngAfterViewInit() {
     if (this.updates.isEnabled) {
       this.logger.info("Service worker enabled");
       this.updates.available.subscribe(() => {
@@ -93,12 +75,12 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.logger.debug("Service worker not enabled");
     }
+    // FIXME: ion-toast ignores position if called from ngOnInit, ngAfterViewInit...
+    (new Promise(resolve => setTimeout(resolve, 100))).then(() => {
+      this.connect();
+    });
   }
 
-  ngOnDestroy() {
-    this.cu.next(null);
-  }
-  
   private update() {
     this.alert.show({
       message: 'A new version of Open Lap is available. Do you want to update now?',
@@ -127,4 +109,30 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  private connect() {
+    this.settings.getConnection().subscribe(connection => {
+      this.stateSubscription.unsubscribe();
+      if (connection && connection.name) {
+        this.logger.info('Connecting to ' + connection.name);
+        // TODO: scan only backend responsible for this connection? provide backend.get()?
+        from(this.backends.map(backend => backend.scan())).pipe(
+          mergeMap(device => device),
+          first(device => device.equals(connection)),
+          timeout(CONNECTION_TIMEOUT)
+        ).toPromise().then(device => {
+          const cu = new ControlUnit(device, connection);
+          this.stateSubscription = cu.getState().subscribe(state => this.showConnectionToast(state, cu.peripheral.name));
+          this.cu.next(cu);
+          cu.connect();
+        }).catch(error => {
+          this.logger.error('Error connecting to ' + connection.name + ':', error);
+        }).then(() => {
+          this.app.hideSplashScreen();
+        });
+      } else {
+        this.app.hideSplashScreen();
+        this.cu.next(null);
+      }
+    });
+  }
 }
