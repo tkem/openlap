@@ -1,6 +1,6 @@
 import { BehaviorSubject , ConnectableObservable , Observable, Subject , Subscription, concat, timer } from 'rxjs';
 
-import { concatMap, distinctUntilChanged, filter, map, publish, publishReplay, refCount, retryWhen, scan, share, shareReplay, take, tap, timeout } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, publish, publishReplay, refCount, retryWhen, scan, shareReplay, take, tap, timeout } from 'rxjs/operators';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
@@ -52,16 +52,17 @@ export class ControlUnit {
     this.connection = this.peripheral.connect({
       next: () => this.connection.next(POLL_COMMAND.buffer)
     });
-    const sharedConnection = this.connection.pipe(share());  // FIXME: concat does not define order of (un)subscribe
-    const timedConnection = concat(
-      sharedConnection.pipe(
-        timeout(settings.connectionTimeout),
-        take(1),
-        tap(() => this.state.next('connected'))
-      ),
-      sharedConnection.pipe(
-        timeout(settings.requestTimeout)
-      )
+    const timedConnection = this.connection.pipe(
+      timeout({
+        first: settings.connectionTimeout,
+        each: settings.requestTimeout
+      }),
+      map((value, index) => {
+        if (index == 0) {
+          this.state.next('connected');
+        }
+        return value;
+      })
     );
     this.data = timedConnection.pipe(
       retryWhen(errors => {
