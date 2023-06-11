@@ -40,7 +40,7 @@
     "@ionic/storage": "^2.3.1",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
-    "cordova-android": "^11.0.0",
+    "cordova-android": "^12.0.0",
     "cordova-ios": "^6.2.0",
     "cordova-plugin-app-version": "^0.1.12",
     "cordova-plugin-ble-central": "^1.6.3",

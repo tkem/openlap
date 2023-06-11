@@ -5,6 +5,8 @@
 
 - Upgrade to Angular 15.
 
+- Upgrade to Cordova 12.
+
 - Upgrade to Ionic 7.
 
 
