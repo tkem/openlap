@@ -2,20 +2,23 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 import { AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
-import { NavParams, ModalController } from '@ionic/angular';
+import { IonInput, IonToggle, NavParams, ModalController } from '@ionic/angular';
 
 import { RaceOptions } from '../app-settings';
 
 function formatTime(milliseconds: number) {
   const h = Math.floor(milliseconds / 3600000);
   const m = Math.floor(milliseconds / 60000 % 60);
-  // padStart() is es2017 or later
-  return [h, m].map(v => ('0' + v).slice(-2)).join(':');
+  const s = ("" + h).padStart(1, '0') + ':' + ("" + m).padStart(2, '0');
+  //console.log(milliseconds, " => ", s);
+  return s;
 }
 
 function parseTime(s: string) {
   const [h, m] = s.split(':');
-  return (parseInt(h) * 3600 + parseInt(m) * 60) * 1000;
+  const time = (parseInt(h) * 3600 + parseInt(m) * 60) * 1000;
+  //console.log(s, " => ", time);
+  return time;
 }
 
 function timeRequired(control: AbstractControl): {[key: string]: any} {
@@ -52,7 +55,7 @@ function createQualifyingForm(fb: UntypedFormBuilder, params: NavParams) {
 
 function createRaceForm(fb: UntypedFormBuilder, params: NavParams) {
   return fb.group({
-    laps: new UntypedFormControl(params.get('laps') || '', Validators.pattern('\\d*')),
+    laps: new UntypedFormControl(params.get('laps') || '0'),
     time: new UntypedFormControl(formatTime(params.get('time') || 0)),
     pause: new UntypedFormControl({
       value: !!params.get('pause'),
@@ -79,11 +82,15 @@ export class RaceSettingsPage implements AfterViewInit {
 
   form: UntypedFormGroup;
 
-  @ViewChild('pause', { static: true }) pauseToggle;
+  @ViewChild('time') timeInput: IonInput;
 
-  @ViewChild('slotmode') slotmodeToggle;
+  @ViewChild('laps') lapsInput: IonInput;
 
-  constructor(fb: UntypedFormBuilder, params: NavParams, private modal: ModalController) {
+  @ViewChild('pause', { static: true }) pauseToggle: IonToggle;
+
+  @ViewChild('slotmode') slotmodeToggle: IonToggle;
+  
+  constructor(fb: UntypedFormBuilder, params: NavParams, private mod: ModalController) {
     this.mode = params.get('mode');
     if (this.mode == 'race') {
       this.form = createRaceForm(fb, params);
@@ -102,6 +109,43 @@ export class RaceSettingsPage implements AfterViewInit {
     }
   }
 
+  onTimeInput(event) {
+    const value = event.target!.value;
+    // Remove non alphanumeric characters
+    const filteredValue: string = value
+    .replace(/[^0-9]+/g, '')
+    .replace(/^0+/, '');
+    const minutes = filteredValue
+      .substring(filteredValue.length - 2)
+      .padStart(2, '0');
+    const hours = filteredValue
+      .substring(0, filteredValue.length - 2)
+      .padStart(1, '0');
+    const finalValue = hours + ':' + minutes;
+    this.timeInput.value = finalValue;
+    this.form.get("time").setValue(finalValue);
+  }
+
+  onChangeTime(event) {
+    const time = parseTime(event.detail.value);
+    this.timeInput.value = formatTime(time);
+    if (time != 0) {
+      this.form.get('pause').enable();
+    } else {
+      this.form.get('pause').disable();
+    }
+    if (this.pauseToggle) {
+      this.pauseToggle.disabled = this.form.get('pause').disabled;
+    }
+  }
+
+  onLapsInput(event) {
+    const value = event.target!.value;
+    const filteredValue = value.replace(/[^0-9]+/g, '').replace(/^0+/, '') || "0";
+    this.lapsInput.value = filteredValue;
+    this.form.get("laps").setValue(filteredValue);
+  }
+
   onChangeLaps(event) {
     if (parseInt(event.detail.value || '0') > 0) {
       this.form.get('slotmode').enable();
@@ -113,19 +157,8 @@ export class RaceSettingsPage implements AfterViewInit {
     }
   }
 
-  onChangeTime(event) {
-    if (parseTime(event.detail.value) != 0) {
-      this.form.get('pause').enable();
-    } else {
-      this.form.get('pause').disable();
-    }
-    if (this.pauseToggle) {
-      this.pauseToggle.disabled = this.form.get('pause').disabled;
-    }
-  }
-
   onSubmit(options) {
-    this.modal.dismiss(Object.assign(new RaceOptions(this.mode), {
+    this.mod.dismiss(Object.assign(new RaceOptions(this.mode), {
       laps: parseInt(options.laps || '0'),
       time: parseTime(options.time || '0:00'),
       pause: options.pause,
@@ -137,6 +170,6 @@ export class RaceSettingsPage implements AfterViewInit {
   }
 
   onCancel() {
-    this.modal.dismiss();
+    this.mod.dismiss();
   }
 }

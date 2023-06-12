@@ -44,7 +44,7 @@ export class MenuComponent implements OnChanges {
     private logger: LoggingService,
     private settings: AppSettings,
     private alert: I18nAlertService,
-    private modal: ModalController,
+    private mod: ModalController,
     private nav: NavController)
   {
     if (app.exit) {
@@ -94,7 +94,7 @@ export class MenuComponent implements OnChanges {
 
   startQualifying() {
     this.settings.getQualifyingSettings().pipe(take(1)).subscribe((options) => {
-      return this.modal.create({
+      return this.mod.create({
         component: RaceSettingsPage, 
         componentProps: options
       }).then(modal => {
@@ -112,7 +112,7 @@ export class MenuComponent implements OnChanges {
 
   startRace() {
     this.settings.getRaceSettings().pipe(take(1)).subscribe((options) => {
-      return this.modal.create({
+      return this.mod.create({
         component: RaceSettingsPage,
         componentProps: options
       }).then(modal => {

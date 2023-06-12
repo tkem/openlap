@@ -22,13 +22,24 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
     <ion-list>
       <ion-item>
-        <ion-label translate>Time</ion-label>
-        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        <ion-input #time formControlName="time" class="right-align"
+                   label="{{'Time' | translate}}"
+                   placeholder="0:00"
+                   inputmode="decimal"
+                   [clearInput]="true"
+                   [maxlength]="5"
+                   (ionInput)="onTimeInput($event)"
+                   (ionChange)="onChangeTime($event)">
+        </ion-input>
       </ion-item>
       <ion-item *ngIf="mode == 'race'">
-        <ion-input class="right-align" formControlName="laps"
+        <ion-input #laps formControlName="laps" class="right-align"
                    label="{{'Number of laps' | translate}}"
-                   type="number" placeholder="{{'None' | translate}}"
+                   placeholder="0"
+                   inputmode="decimal"
+                   [clearInput]="true"
+                   [maxlength]="5"
+                   (ionInput)="onLapsInput($event)"
                    (ionChange)="onChangeLaps($event)">
         </ion-input>
       </ion-item>
@@ -57,12 +68,5 @@
         <ion-toggle #slotmode formControlName="slotmode" translate>Finish all laps</ion-toggle>
       </ion-item>
     </ion-list>
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime id="datetime" formControlName="time" presentation="time" hourCycle="h23" 
-        [showDefaultButtons]="true" cancelText="{{'Cancel' | translate}}" doneText="{{'Done' | translate}}"
-        (ionChange)="onChangeTime($event)"></ion-datetime>
-      </ng-template>
-    </ion-modal>
   </form>
 </ion-content>

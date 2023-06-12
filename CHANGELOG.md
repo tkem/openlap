@@ -3,6 +3,8 @@
 
 - Require Android 8.1 or greater.
 
+- Simplify setting time/laps for qualifying and races.
+
 - Upgrade to Angular 15.
 
 - Upgrade to Cordova 12.
