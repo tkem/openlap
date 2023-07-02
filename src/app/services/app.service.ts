@@ -80,6 +80,16 @@ export class AppService {
     }
   }
 
+  async getVersionCode() {
+    if (this.isCordova() && AppVersion) {
+      await this.platform.ready();
+      const code = await this.app.getVersionCode();
+      return code.toString();
+    } else {
+      return undefined;  // TODO: date or build number?
+    }
+  }
+
   async getDeviceInfo() {
     if (this.isCordova() && Device) {
       await this.platform.ready();

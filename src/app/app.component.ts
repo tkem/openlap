@@ -53,7 +53,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.app.getVersion().then(version => {
-      this.logger.info("Open Lap", version, "running on", window?.navigator?.userAgent);
+      this.app.getVersionCode().then(versionCode => {
+        if (versionCode) {
+          version += " (" + versionCode + ")";
+        }
+        this.logger.info("Open Lap", version, "running on", window?.navigator?.userAgent);
+      });
     });
     this.settings.getOptions().subscribe(options => {
       this.logger.setDebugEnabled(options.debug);
