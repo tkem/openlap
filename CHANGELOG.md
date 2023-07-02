@@ -3,6 +3,9 @@
 
 - Require Android 8.1 or greater.
 
+- Officially drop support for serial (USB-OTG) connections.  This may
+  still work on older Android devices, but will be no longer maintained.
+
 - Drop Dutch language support due to decreased demand.
 
 - Simplify setting time/laps for qualifying and races.
