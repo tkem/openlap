@@ -5,6 +5,9 @@
   <ion-item>
     <ion-checkbox [(ngModel)]="sectors" translate>Sector times</ion-checkbox>
   </ion-item>
+  <ion-item>
+    <ion-checkbox [(ngModel)]="speech" translate>Notifications</ion-checkbox>
+  </ion-item>
   <ion-item button [disabled]="!params.active" (click)="onCancel()">
     <ion-label><span translate>Cancel</span>&hellip;</ion-label>
   </ion-item>

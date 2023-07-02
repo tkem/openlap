@@ -46,6 +46,8 @@ export class RmsPage implements OnDestroy, OnInit {
   start: Observable<number>;
   timer: Observable<number>;
 
+  orientation: Observable<string>;
+
   legacyAndroid: Promise<boolean>;
 
   private subscriptions: Subscription;
@@ -93,11 +95,13 @@ export class RmsPage implements OnDestroy, OnInit {
       distinctUntilChanged()
     );
 
+    this.orientation = app.orientation;  // for showing/hiding additional icons
+
     // flag for older Android versions that require Location services and support USB OTG connections
     this.legacyAndroid = app.isAndroid() && app.isCordova() ?
       app.getDeviceInfo().then(device => (device.version < '12')) :
       Promise.resolve(false);
-  }
+    }
 
   ngOnInit() {
     this.subscription.add(combineLatest([this.cu, this.getRaceOptions(this.mode)]).subscribe(([cu, options]) => {

@@ -46,6 +46,16 @@ export class RmsMenu implements OnDestroy, OnInit  {
     this.dismiss();
   }
 
+  get speech() {
+    return this.options.speech;
+  }
+
+  set speech(value) {
+    this.options.speech = value;
+    this.settings.setOptions(this.options);
+    this.dismiss();
+  }
+
   ngOnInit() {
     this.subscription = this.settings.getOptions().subscribe(options => {
       this.options = options;

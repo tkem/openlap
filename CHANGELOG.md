@@ -5,6 +5,8 @@
 
 - Simplify setting time/laps for qualifying and races.
 
+- Hide "speech" icon in portrait mode (use menu entry).
+
 - Upgrade to Angular 15.
 
 - Upgrade to Cordova 12.
