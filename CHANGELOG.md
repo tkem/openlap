@@ -3,6 +3,8 @@
 
 - Require Android 8.1 or greater.
 
+- Drop Dutch language support due to decreased demand.
+
 - Simplify setting time/laps for qualifying and races.
 
 - Hide "speech" icon in portrait mode (use menu entry).
