@@ -20,7 +20,7 @@ export class RmsMenu implements OnDestroy, OnInit  {
   constructor(
     private alert: I18nAlertService,
     private settings: AppSettings,
-    private popover: PopoverController,
+    private controller: PopoverController,
     params: NavParams
   ) {
     this.params = <any>params.data;  // FIXME
@@ -105,6 +105,6 @@ export class RmsMenu implements OnDestroy, OnInit  {
   }
 
   private dismiss() {
-    return this.popover.dismiss({});
+    return this.controller.dismiss({});
   }
 }

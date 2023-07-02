@@ -26,8 +26,11 @@ export class TuningMenu implements OnDestroy, OnInit {
     this.dismiss();
   }
 
-  constructor(private logger: LoggingService, private settings: AppSettings, private popover: PopoverController,
-              params: NavParams) 
+  constructor(
+    private logger: LoggingService, 
+    private settings: AppSettings, 
+    private controller: PopoverController,
+    params: NavParams) 
   {
     this.params = params.data;
   }
@@ -56,6 +59,6 @@ export class TuningMenu implements OnDestroy, OnInit {
   }
 
   private dismiss() {
-    return this.popover.dismiss();
+    return this.controller.dismiss();
   }
 }

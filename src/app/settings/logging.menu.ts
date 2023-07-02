@@ -38,7 +38,7 @@ export class LoggingMenu implements OnDestroy, OnInit {
     private app: AppService,
     public logger: LoggingService, 
     private settings: AppSettings, 
-    private popover: PopoverController) 
+    private controller: PopoverController) 
   {
     if (app.share) {
       this.share = () => this.doShare();
@@ -69,7 +69,7 @@ export class LoggingMenu implements OnDestroy, OnInit {
   }
 
   dismiss() {
-    return this.popover.dismiss();
+    return this.controller.dismiss();
   }
 
   private doShare() {
