@@ -16,22 +16,27 @@ const COLORS = [
 ];
 
 const NOTIFICATIONS = {
-  falsestart: true,
-  finished: true,
-  finallap: true,
   bestlap: true,
   bests1: false,
   bests2: false,
   bests3: false,
-  fuel2: true,
-  fuel1: true,
+  falsestart: true,
+  finallap: true,
+  finished: true,
+  finished1st: true,
+  finished2nd: true,
+  finished3rd: true,
+  fivelaps: true,
   fuel0: true,
+  fuel1: true,
+  fuel2: true,
+  greenflag: true,
+  newleader: true,
+  oneminute: true,
   pitenter: false,
   pitexit: false,
-  yellowflag: true,
-  greenflag: true,
-  endsession: true,
-  newleader: true
+  timeout: true,
+  yellowflag: true
 };
 
 export class Connection {

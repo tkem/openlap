@@ -16,8 +16,23 @@ export class NotificationsPage implements OnDestroy {
     id: 'finished',
     label: 'Race finished'
   }, {
-    id: 'endsession',
-    label: 'Qualifying completed'
+    id: 'finished1st',
+    label: 'Finished first'
+  }, {
+    id: 'finished2nd',
+    label: 'Finished second'
+  }, {
+    id: 'finished3rd',
+    label: 'Finished third'
+  }, {
+    id: 'timeout',
+    label: 'Timeout'
+  }, {
+    id: 'oneminute',
+    label: 'One minute to go'
+  }, {
+    id: 'fivelaps',
+    label: 'Five laps to go'
   }, {
     id: 'finallap',
     label: 'Final lap'

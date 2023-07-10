@@ -44,7 +44,6 @@ export class RmsPage implements OnDestroy, OnInit {
   lapcount: Observable<{count: number, total: number}>;
 
   start: Observable<number>;
-  timer: Observable<number>;
 
   orientation: Observable<string>;
 
@@ -170,40 +169,75 @@ export class RmsPage implements OnDestroy, OnInit {
         }),
       ),
       session.ranking.pipe(
+        filter(items => items.length > 0 && options.mode == 'race'),
+        map(items => items.map(e => {return {id: e.id, finished: e.finished}})),
+        pairwise(),
+        filter(([_, curr]) => curr[0].finished),
+        mergeMap(([prev, curr]) => {
+          const events = [];
+          if (!prev[0].finished && curr[0].finished) {
+            if (curr.length > 1) {
+              events.push(['finished1st', curr[0].id]);
+            } else {
+              events.push(['finished', null]);
+            }
+          }
+          if (curr.length >= 2 && !prev[1]?.finished && curr[1].finished) {
+            events.push(['finished2nd', curr[1].id]);
+          }
+          if (curr.length >= 3 && !prev[2]?.finished && curr[2].finished) {
+            events.push(['finished3rd', curr[2].id]);
+          }
+          return from(events);
+        }),
+      ),
+      session.ranking.pipe(
         filter(items => items.length != 0 && options.mode == 'race'),
         map(items => items[0]),
         pairwise(),
         filter(([prev, curr]) => prev.id != curr.id),
-        map(([prev, curr]) => ['newleader', curr.id])
+        map(([_, curr]) => ['newleader', curr.id])
       ),
-      this.start.pipe(
+      session.timer.pipe(
+        filter(time => {
+          return options.time >= 120_000 && time <= 60_000 && !session.finished.value;
+        }),
+        take(1),
+        map(() => ['oneminute', null])
+      ),
+      session.timer.pipe(
+        map(time => [time, session.finished.value]),
+        pairwise(),
+        map(([prev, curr]) => [curr[0], prev[1]]),
+        filter(([time, fin]) => {
+          return time == 0 && !fin;
+        }),
+        take(1),
+        map(() => ['timeout', null])
+      ),
+      session.yellowFlag.pipe(
         distinctUntilChanged(),
-        filter(value => value === 9),
-        map(() => {
-          return ['falsestart', null];
-        })
+        skipWhile(value => !value),
+        map(value => [value ? 'yellowflag' : 'greenflag', null])
+      ),
+      this.lapcount.pipe(
+        filter(laps => {
+          return options.laps >= 10 && laps.count === options.laps - 4 && !session.finished.value;
+        }),
+        take(1),
+        map(() => ['fivelaps', null])
       ),
       this.lapcount.pipe(
         filter(laps => {
           return options.laps && laps.count === options.laps && !session.finished.value;
         }),
-        map(() => {
-          return ['finallap', null];
-        })
+        take(1),
+        map(() => ['finallap', null])
       ),
-      session.yellowFlag.pipe(
+      this.start.pipe(
         distinctUntilChanged(),
-        skipWhile(value => !value),
-        map(value => {
-          return [value ? 'yellowflag' : 'greenflag', null];
-        })
-      ),
-      session.finished.pipe(
-        distinctUntilChanged(),
-        filter(finished => finished),
-        map(() => {
-          return [options.mode == 'race' ? 'finished' : 'endsession', null];
-        })
+        filter(value => value === 9),
+        map(() => ['falsestart', null])
       )
     ).pipe(
       withLatestFrom(drivers),

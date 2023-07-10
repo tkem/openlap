@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable, interval, merge, of } from 'rxjs';
-import { combineLatest, distinctUntilChanged, filter, groupBy, map, /*mergeAll,*/ mergeMap, publishReplay, refCount, scan, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { EMPTY, BehaviorSubject, Observable, interval, merge } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, groupBy, map, mergeMap, publishReplay, refCount, scan, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
 
 import { RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -60,7 +60,7 @@ export class Session {
   currentLap: Observable<number>;
   finished = new BehaviorSubject(false);
   yellowFlag = new BehaviorSubject(false);
-  timer = null;
+  timer: Observable<number>;
   started = false;
   stopped = false;
 
@@ -165,6 +165,8 @@ export class Session {
         share(),
         startWith(options.time)
       );
+    } else {
+      this.timer = EMPTY;
     }
 
     this.cu.setMask(this.mask);

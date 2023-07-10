@@ -12,6 +12,8 @@
 
 - Hide "speech" icon in portrait mode (use menu entry).
 
+- Add more notifications.
+
 - Upgrade to Angular 15.
 
 - Upgrade to Cordova 12.
