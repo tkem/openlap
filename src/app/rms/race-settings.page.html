@@ -19,13 +19,14 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+  <form [formGroup]="form">
     <ion-list>
       <ion-item>
         <ion-input #time formControlName="time" class="right-align"
                    label="{{'Time' | translate}}"
                    placeholder="0:00"
                    inputmode="decimal"
+                   enterkeyhint="done"
                    [clearInput]="true"
                    [maxlength]="5"
                    (ionInput)="onTimeInput($event)"
@@ -37,6 +38,7 @@
                    label="{{'Number of laps' | translate}}"
                    placeholder="0"
                    inputmode="decimal"
+                   enterkeyhint="done"
                    [clearInput]="true"
                    [maxlength]="5"
                    (ionInput)="onLapsInput($event)"

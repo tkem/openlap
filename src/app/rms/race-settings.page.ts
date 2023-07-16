@@ -135,6 +135,7 @@ export class RaceSettingsPage implements AfterViewInit {
     if (this.pauseToggle) {
       this.pauseToggle.disabled = this.form.get('pause').disabled;
     }
+    this.timeInput.getInputElement().then(e => e.blur());
   }
 
   onLapsInput(event) {
@@ -153,6 +154,7 @@ export class RaceSettingsPage implements AfterViewInit {
     if (this.slotmodeToggle) {
       this.slotmodeToggle.disabled = this.form.get('slotmode').disabled;
     }
+    this.lapsInput.getInputElement().then(e => e.blur());
   }
 
   onSubmit(options) {
