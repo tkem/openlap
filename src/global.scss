@@ -92,3 +92,14 @@ ion-button.icon-only {
 ion-button {
     --background-hover:transparent !important;
 }
+
+/* prevent modal from extending to right in full screen mode, overlapping Android soft buttons */
+@media only screen and (min-width: 768px) and (max-height: 600px) {
+    ion-modal {
+        --width: 600px;
+        --ion-safe-area-right: 0px;
+        --ion-safe-area-left: 0px;
+        --border-radius: 2px;
+        --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+    }
+}
