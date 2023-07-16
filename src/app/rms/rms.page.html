@@ -14,7 +14,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'race'">
           <span *ngIf="lapcount | async as laps; else race">
-            <span *ngIf="laps.count; else race">
+            <span *ngIf="laps.count; else race0">
               <span *ngIf="laps.total; then race1; else race2"></span>
               <ng-template #race1>
                 {{ 'Lap {' + '{count}' + '}/{' + '{total}' + '}' | translate:laps}}
@@ -23,7 +23,12 @@
                 {{ 'Lap {' + '{count}' + '}' | translate:laps}}
               </ng-template>
             </span>
-          </span>
+            <ng-template #race0>
+              <span *ngIf="laps.total; else race">
+                {{ '{' + '{total}' + '} Laps' | translate:laps}}
+              </span>
+            </ng-template>
+        </span>
           <ng-template #race>
             <span translate>Race</span>
           </ng-template>

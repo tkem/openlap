@@ -56,6 +56,7 @@
   "Language": "Idioma",
   "Lap {{count}}": "Vuelta {{count}}",
   "Lap {{count}}/{{total}}": "Vuelta {{count}}/{{total}}",
+  "{{total}} Laps": "{{total}} Vueltas",
   "License": "Licencia",
   "Location Services are disabled": "La ubicación está desactivada",
   "New race leader": "Nuevo líder de carrera",

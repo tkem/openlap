@@ -118,12 +118,18 @@ export class RmsPage implements OnDestroy, OnInit {
   startSession(cu: ControlUnit, options: RaceOptions) {
     const session = new Session(cu, options);
 
-    this.lapcount = session.currentLap.pipe(map(lap => {
-      return {
-        count: lap,
-        total: options.laps
-      };
-    }));
+    this.lapcount = session.currentLap.pipe(
+      map(lap => {
+        return {
+          count: lap,
+          total: options.laps
+        };
+      }),
+      startWith({
+          count: 0,
+          total: options.laps
+      })
+    );
 
     const drivers = this.settings.getDrivers().pipe(switchMap(drivers => {
       const observables = drivers.map((obj, index) => {

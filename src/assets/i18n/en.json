@@ -56,6 +56,7 @@
   "Language": "Language",
   "Lap {{count}}": "Lap {{count}}",
   "Lap {{count}}/{{total}}": "Lap {{count}}/{{total}}",
+  "{{total}} Laps": "{{total}} Laps",
   "License": "License",
   "Location Services are disabled": "Location is turned off",
   "New race leader": "New race leader",
