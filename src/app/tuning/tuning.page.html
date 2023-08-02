@@ -51,6 +51,9 @@
               [value]="model.speed"
               (ionChange)="update('speed', $event, locked ? undefined : model.id)"
               >
+              <ion-badge slot="end" class="tuning" [color]="model.speed == undefined ? 'medium' : 'primary'">
+                {{model.speed == undefined ? '?' : model.speed}}
+              </ion-badge>
             </ion-range>
             <ion-range *ngSwitchCase="'brake'" min="0" max="15" snaps="true"
               aria-label=""
@@ -59,6 +62,9 @@
               [value]="model.brake"
               (ionChange)="update('brake', $event, locked ? undefined : model.id)"
               >
+              <ion-badge slot="end" class="tuning" [color]="model.brake == undefined ? 'medium' : 'primary'">
+                {{model.brake == undefined ? '?' : model.brake}}
+              </ion-badge>
             </ion-range>
             <ion-range *ngSwitchCase="'fuel'" min="0" max="15" snaps="true"
               aria-label=""
@@ -67,11 +73,11 @@
               [value]="model.fuel"
               (ionChange)="update('fuel', $event, locked ? undefined : model.id)"
               >
+              <ion-badge slot="end" class="tuning" [color]="model.fuel == undefined ? 'medium' : 'primary'">
+                {{model.fuel == undefined ? '?' : model.fuel}}
+              </ion-badge>
             </ion-range>
           </ng-container>
-          <ion-badge slot="end" class="tuning" [color]="model[type] == undefined ? 'medium' : 'primary'">
-            {{model[type] == undefined ? '?' : model[type]}}
-          </ion-badge>
         </ng-container>
         <ng-container *ngSwitchCase="true">
           <ng-container [ngSwitch]="type">
@@ -82,6 +88,9 @@
               [value]="toCU.speed[model.speed]"
               (ionChange)="updateCU('speed', $event, locked ? undefined : model.id)"
               >
+              <ion-badge slot="end" class="tuning" [color]="model.speed == undefined ? 'medium' : 'primary'">
+                {{model.speed == undefined ? '?' : toCU['speed'][model.speed]}}
+              </ion-badge>
             </ion-range>
             <ion-range *ngSwitchCase="'brake'" min="1" max="10" snaps="true"
               aria-label=""
@@ -90,6 +99,9 @@
               [value]="toCU.brake[model.brake]"
               (ionChange)="updateCU('brake', $event, locked ? undefined : model.id)"
               >
+              <ion-badge slot="end" class="tuning" [color]="model.brake == undefined ? 'medium' : 'primary'">
+                {{model.brake == undefined ? '?' : toCU['brake'][model.brake]}}
+              </ion-badge>
             </ion-range>
             <ion-range *ngSwitchCase="'fuel'" min="1" max="10" snaps="true"
               aria-label=""
@@ -98,11 +110,11 @@
               [value]="toCU.fuel[model.fuel]"
               (ionChange)="updateCU('fuel', $event, locked ? undefined : model.id)"
               >
+              <ion-badge slot="end" class="tuning" [color]="model.fuel == undefined ? 'medium' : 'primary'">
+                {{model.fuel == undefined ? '?' : toCU['fuel'][model.fuel]}}
+              </ion-badge>
             </ion-range>
           </ng-container>
-          <ion-badge slot="end" class="tuning" [color]="model[type] == undefined ? 'medium' : 'primary'">
-            {{model[type] == undefined ? '?' : toCU[type][model[type]]}}
-          </ion-badge>
         </ng-container>
       </ng-container>
     </ion-item>

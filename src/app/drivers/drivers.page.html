@@ -12,9 +12,11 @@
 <ion-content>
   <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
     <ion-item *ngFor="let driver of drivers; let id = index">
-      <number slot="start" [color]="driver.color">
-        {{id + 1}}
-      </number>
+      <ion-button size="default" (click)="chooseColor(id)" fill="clear">
+        <number slot="start" [color]="driver.color">
+          {{id + 1}}
+        </number>
+      </ion-button>
       <ion-input clearInput
         [ngModel]="driver.name"
         (ngModelChange)="driver.code = getCode(driver.name = $event, id)"

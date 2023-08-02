@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-title>
+      <number [color]="color">
+        {{id + 1}}
+      </number>
+      {{driver.name || (placeholder | translate:{number: id + 1})}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-range min="0" max="255" [value]="r" (ionChange)="update('r', $event)">
+      <ion-label slot="label">R</ion-label>
+      <ion-badge slot="end">{{r}}</ion-badge>
+    </ion-range>
+  </ion-item>
+  <ion-item>
+    <ion-range min="0" max="255" [value]="g" (ionChange)="update('g', $event)">
+      <ion-label slot="label">G</ion-label>
+      <ion-badge slot="end">{{g}}</ion-badge>
+      </ion-range>
+  </ion-item>
+  <ion-item>
+    <ion-range min="0" max="255" [value]="b" (ionChange)="update('b', $event)">
+      <ion-label slot="label">B</ion-label>
+      <ion-badge slot="end">{{b}}</ion-badge>
+      </ion-range>
+  </ion-item>
+  <ion-item>
+    <ion-grid>
+      <ion-row *ngFor="let row of colors">
+        <ion-col *ngFor="let color of row">
+          <ion-button expand="block" [style.--background]="color" (click)="setColor(color)">
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()" translate>
+        Cancel
+      </ion-button>
+      <ion-button (click)="onSubmit(color)" translate>
+        OK
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

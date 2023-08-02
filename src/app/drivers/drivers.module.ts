@@ -6,16 +6,16 @@ import { IonicModule } from '@ionic/angular';
 
 import { SharedModule } from '../shared';
 
-import { ColorsPage } from './colors.page';
+import { ColorComponent } from './color.component';
 import { DriversPage } from './drivers.page';
 
 @NgModule({
   declarations: [
-    ColorsPage,
+    ColorComponent,
     DriversPage
   ],
   exports: [
-    ColorsPage,
+    ColorComponent,
     DriversPage
   ],
   imports: [

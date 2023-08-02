@@ -1,10 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
+import { ModalController } from '@ionic/angular';
+
 import { take } from 'rxjs/operators';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { AppSettings, Driver } from '../app-settings';
 import { LoggingService, SpeechService } from '../services';
+import { ColorComponent } from './color.component';
 
 @Component({
   templateUrl: 'drivers.page.html'
@@ -15,7 +19,14 @@ export class DriversPage implements OnDestroy, OnInit {
 
   readonly placeholder = 'Driver {{number}}';
 
-  constructor(private logger: LoggingService, private settings: AppSettings, private speech: SpeechService, private translate: TranslateService) {}
+  constructor(
+    private logger: LoggingService,
+    private settings: AppSettings,
+    private mc: ModalController,
+    private speech: SpeechService,
+    private translate: TranslateService) 
+  {
+  }
 
   ngOnInit() {
     this.settings.getDrivers().pipe(take(1)).toPromise().then(drivers => {
@@ -54,6 +65,20 @@ export class DriversPage implements OnDestroy, OnInit {
     event.detail.complete();
   }
 
+  chooseColor(id: number) {
+    return this.mc.create({
+      component: ColorComponent, 
+      componentProps: {id: id, driver: this.drivers[id]}
+    }).then(modal => {
+      modal.onDidDismiss().then(detail => {
+        if (detail.data) {
+          this.drivers[id].color = detail.data;
+        }
+      });
+      modal.present();
+    });
+  }
+
   speak(id: number) {
     this.getDriverName(id).then(name => {
       this.speech.speak(name);
@@ -67,5 +92,4 @@ export class DriversPage implements OnDestroy, OnInit {
       return this.translate.get(this.placeholder, {number: id + 1}).toPromise();
     }
   }
-
 }

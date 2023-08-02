@@ -8,7 +8,7 @@ import { AppSettings } from '../app-settings';
 import { ControlUnit } from '../carrera';
 import { RaceSettingsPage } from '../rms';
 import { AppService, I18nAlertService, LoggingService } from '../services';
-import { ColorsPage, DriversPage } from '../drivers';
+import { DriversPage } from '../drivers';
 import { SettingsPage } from '../settings';
 import { TuningPage } from '../tuning';
 
@@ -30,10 +30,9 @@ export class MenuComponent implements OnChanges {
 
   exitApp: () => void = null;
 
-  colorsPage = ColorsPage;
   driversPage = DriversPage;
-  settingsPage = SettingsPage;
   tuningPage = TuningPage;
+  settingsPage = SettingsPage;
 
   initialized = false;
 
