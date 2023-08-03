@@ -8,6 +8,10 @@
 
 - Drop Dutch language support due to decreased demand.
 
+- Add custom color chooser to "Drivers" menu.
+
+- Remove "Colors" menu item.
+
 - Simplify setting time/laps for qualifying and races.
 
 - Hide "speech" icon in portrait mode (use menu entry).
