@@ -21,6 +21,8 @@
         [ngModel]="driver.name"
         (ngModelChange)="driver.code = getCode(driver.name = $event, id)"
         [placeholder]="placeholder | translate:{number: id + 1}"
+        (ionChange)="onChangeName($event)"
+        enterkeyhint="done"
       >
       </ion-input>
       <ion-buttons slot="end">

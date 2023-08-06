@@ -85,6 +85,10 @@ export class DriversPage implements OnDestroy, OnInit {
     })
   }
 
+  onChangeName(event) {
+    event?.target?.getInputElement().then(e => e.blur());
+  }
+
   private getDriverName(id) {
     if (this.drivers[id] && this.drivers[id].name) {
       return Promise.resolve(this.drivers[id].name);
