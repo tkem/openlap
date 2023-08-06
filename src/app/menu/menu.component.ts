@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators';
 
 import { AppSettings } from '../app-settings';
 import { ControlUnit } from '../carrera';
-import { RaceSettingsPage } from '../rms';
+import { RaceSettingsComponent } from '../rms';
 import { AppService, I18nAlertService, LoggingService } from '../services';
 import { DriversPage } from '../drivers';
 import { SettingsPage } from '../settings';
@@ -94,7 +94,7 @@ export class MenuComponent implements OnChanges {
   startQualifying() {
     this.settings.getQualifyingSettings().pipe(take(1)).subscribe((options) => {
       return this.mod.create({
-        component: RaceSettingsPage, 
+        component: RaceSettingsComponent, 
         componentProps: options
       }).then(modal => {
         modal.onDidDismiss().then(detail => {
@@ -112,7 +112,7 @@ export class MenuComponent implements OnChanges {
   startRace() {
     this.settings.getRaceSettings().pipe(take(1)).subscribe((options) => {
       return this.mod.create({
-        component: RaceSettingsPage,
+        component: RaceSettingsComponent,
         componentProps: options
       }).then(modal => {
         modal.onDidDismiss().then(detail => {

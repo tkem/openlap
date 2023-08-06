@@ -72,9 +72,9 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
 }
 
 @Component({
-  templateUrl: 'race-settings.page.html'
+  templateUrl: 'race-settings.component.html'
 })
-export class RaceSettingsPage implements AfterViewInit {
+export class RaceSettingsComponent implements AfterViewInit {
 
   mode: 'qualifying' | 'race';
 

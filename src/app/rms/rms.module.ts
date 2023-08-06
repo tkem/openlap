@@ -10,17 +10,20 @@ import { LeaderboardModule } from './leaderboard';
 import { RaceControlModule } from './race-control';
 import { RmsMenu } from './rms.menu';
 import { RmsPage } from './rms.page';
-import { RaceSettingsPage } from './race-settings.page';
+import { RaceSettingsComponent } from './race-settings.component';
+import { RaceTitleComponent } from './race-title.component';
 
 @NgModule({
   declarations: [
     RmsMenu,
     RmsPage,
-    RaceSettingsPage
+    RaceSettingsComponent,
+    RaceTitleComponent,
   ],
   exports: [
     RmsPage,
-    RaceSettingsPage
+    RaceSettingsComponent,
+    RaceTitleComponent
   ],
   imports: [
     CommonModule,
