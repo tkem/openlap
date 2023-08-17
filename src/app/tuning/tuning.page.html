@@ -30,9 +30,9 @@
   </ion-segment>
   <ng-container *ngIf="drivers | async as d">
     <ion-item *ngFor="let model of models">
-      <number slot="start" [color]="d[model.id]?.color">
+      <outline slot="start" [color]="d[model.id]?.color">
         {{model.id + 1}}
-      </number>
+      </outline>
       <ng-container [ngSwitch]="orientation | async">
         <ion-label *ngSwitchCase="'landscape'">
           {{d[model.id]?.name || (placeholder | translate:{number: model.id + 1})}}

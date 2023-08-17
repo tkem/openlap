@@ -5,8 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { CheckerboardComponent } from './checkerboard.component';
 import { GaugeComponent } from './gauge.component';
-import { NumberComponent } from './number.component';
-import { StripeComponent } from './stripe.component';
+import { OutlineComponent } from './outline.component';
 import { TargetDirective } from './target.directive';
 import { TimePipe } from './time.pipe';
 
@@ -14,16 +13,14 @@ import { TimePipe } from './time.pipe';
   declarations: [
     CheckerboardComponent,
     GaugeComponent,
-    NumberComponent,
-    StripeComponent,
+    OutlineComponent,
     TargetDirective,
     TimePipe
   ],
   exports: [
     CheckerboardComponent,
     GaugeComponent,
-    NumberComponent,
-    StripeComponent,
+    OutlineComponent,
     TargetDirective,
     TimePipe,
     TranslateModule

@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar mode="md">
     <ion-title>
-      <number [color]="color">
+      <outline [color]="color">
         {{id + 1}}
-      </number>
+      </outline>
       {{driver.name || (placeholder | translate:{number: id + 1})}}
     </ion-title>
   </ion-toolbar>

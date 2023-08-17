@@ -1,0 +1,22 @@
+:host {
+    white-space: nowrap;
+    padding: 0 !important;
+}
+
+:host[slot=start] {
+    white-space: nowrap;
+    margin-inline-end: 0.5em;
+    padding: 0 !important;
+}
+
+div.outline {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--ion-background-color);
+    border-bottom-right-radius: 0.4em;
+    width: 1.65em !important;
+    min-height: 1.65em;
+    padding: 0 !important;
+    height: 100%;
+}
