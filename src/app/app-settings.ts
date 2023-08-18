@@ -4,16 +4,29 @@ import { SettingsService } from './services/settings.service';
 
 import { map } from 'rxjs/operators';
 
-const COLORS = [
-  '#ff0000',
-  '#00ff00',
-  '#0000ff',
-  '#ffff00',
-  '#ff00ff',
-  '#00ffff',
-  '#ffffff',
-  '#cccccc'
+const DRIVERS = [
+  {color: '#ff0000'},
+  {color: '#00ff00'},
+  {color: '#0000ff'},
+  {color: '#ffff00'},
+  {color: '#ff00ff'},
+  {color: '#00ffff'},
+  {color: '#ffffff'},
+  {color: '#cccccc'}
 ];
+
+/* uncomment for testing only
+const DRIVERS = [
+  {name: 'Max', code: 'MAX', color: '#3670c6'},
+  {name: 'Fernando', code: 'FER', color: '#358c75'},
+  {name: 'Lewis', code: 'LEW', color: '#6cd3bf'},
+  {name: 'Charles', code: 'CHA', color: '#f91537'},
+  {name: 'Lando', code: 'LAN', color: '#f58020'},
+  {name: 'Nico', code: 'NIC', color: '#b6babd'},
+  {name: 'Ghost', code: 'GHO', color: '#ffffff'},
+  {name: 'Pace Car', code: 'PAC', color: '#d4af37'}
+];
+*/
 
 const NOTIFICATIONS = {
   bestlap: true,
@@ -125,7 +138,7 @@ export class AppSettings {
       map(value => {
         const result = new Array<Driver>(8);
         for (let i = 0; i != result.length; ++i) {
-          result[i] = Object.assign({color: COLORS[i]}, value ? value[i] : null);
+          result[i] = Object.assign(DRIVERS[i], value ? value[i] : null);
         }
         return result;
       })
