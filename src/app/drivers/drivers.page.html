@@ -11,7 +11,7 @@
 
 <ion-content>
   <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
-    <ion-item *ngFor="let driver of drivers; let id = index">
+    <ion-item *ngFor="let driver of drivers; index as id">
       <ion-button slot="start" size="large" (click)="chooseColor(id)" fill="clear" class="ion-no-padding">
         <outline [color]="driver.color">
           {{id + 1}}
