@@ -12,7 +12,6 @@
 
 :host {
     display: block;
-    /*font-weight: bold;*/
     width: 100%;
 }
 leaderboard-head {
@@ -43,7 +42,7 @@ leaderboard-item {
 }
 .position {
     text-align: left;
-    width: 1.9em;
+    width: 1.9em;  /* 1.65em + padding to fit title */
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -86,8 +85,48 @@ leaderboard-item {
     width: 4.5em;
 }
 .status {
+    span {
+        &.inpit {
+            color: white;
+        }
+        &.pitenter {
+            color: orangered;
+        }
+        &.pos-up {
+            color: #0f0;
+            &:before {
+                content: "▲";
+                display: inline-block;
+                width: 1em;
+            }
+        }
+        &.pos-dn {
+            color: orangered;
+            &:before {
+                content: "▼";
+                display: inline-block;
+                width: 1em;
+            }
+        }
+        &.pos-eq {
+            color: white;
+            &:before {
+                /* avoid "◀", since it is also used for navigation and looks quite different with some fonts */
+                content: "▲";
+                transform: rotate(-90deg);
+                display: inline-block;
+                width: 1em;
+            }
+        }
+        font-size: 75%;
+    }
+    padding-right: 0 !important;
     text-align: left;
     width: 2em;
+}
+
+span.title {
+    font-size: 75%;
 }
 
 span.best {
@@ -105,52 +144,6 @@ span.best {
 
 span.sector {
     color: yellow !important;
-}
-
-span.title {
-    font-size: 75%;
-}
-
-span.inpit {
-    color: white;
-    font-size: 75%;
-    vertical-align: middle;
-}
-
-span.pitenter {
-    color: orangered;
-    font-size: 75%;
-    vertical-align: middle;
-}
-
-span.pos-up {
-    color: #0f0;
-    font-size: 75%;
-    &:before {
-        content: "▲";
-        display: inline-block;
-        width: 1em;
-    }
-}
-
-span.pos-dn {
-    color: orangered;
-    font-size: 75%;
-    &:before {
-        content: "▼";
-        display: inline-block;
-        width: 1em;
-    }
-}
-
-span.pos-eq {
-    color: white;
-    font-size: 75%;
-    &:before {
-        content: "◀";
-        display: inline-block;
-        width: 1em;
-    }
 }
 
 gauge {
