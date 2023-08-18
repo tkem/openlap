@@ -12,9 +12,11 @@
 
 - Remove "Colors" menu item.
 
+- Use colored background for position/controller display.
+
 - Simplify setting time/laps for qualifying and races.
 
-- Hide "speech" icon in portrait mode (use menu entry).
+- Hide "speech" icon in portrait mode and add menu entry.
 
 - Add more notifications.
 
