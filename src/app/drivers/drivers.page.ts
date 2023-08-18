@@ -55,13 +55,16 @@ export class DriversPage implements OnDestroy, OnInit {
   }
 
   reorderItems(event: any) {
-    let colors = this.drivers.map(driver => driver.color);
+    // TODO: optionally stick color to controller ID
+    //let colors = this.drivers.map(driver => driver.color);
     let element = this.drivers[event.detail.from];
     this.drivers.splice(event.detail.from, 1);
     this.drivers.splice(event.detail.to, 0, element);
+    /*
     colors.forEach((color, index) => {
       this.drivers[index].color = color;
     });
+    */
     event.detail.complete();
   }
 
