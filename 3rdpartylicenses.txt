@@ -16,6 +16,36 @@ MIT
 @angular/service-worker
 MIT
 
+@awesome-cordova-plugins/android-full-screen
+MIT
+
+@awesome-cordova-plugins/app-version
+MIT
+
+@awesome-cordova-plugins/ble
+MIT
+
+@awesome-cordova-plugins/core
+MIT
+
+@awesome-cordova-plugins/device
+MIT
+
+@awesome-cordova-plugins/insomnia
+MIT
+
+@awesome-cordova-plugins/social-sharing
+MIT
+
+@awesome-cordova-plugins/splash-screen
+MIT
+
+@awesome-cordova-plugins/status-bar
+MIT
+
+@awesome-cordova-plugins/toast
+MIT
+
 @babel/runtime
 MIT
 MIT License
@@ -41,42 +71,6 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-@ionic-native/android-full-screen
-MIT
-
-@ionic-native/app-version
-MIT
-
-@ionic-native/ble
-MIT
-
-@ionic-native/core
-MIT
-
-@ionic-native/device
-MIT
-
-@ionic-native/insomnia
-MIT
-
-@ionic-native/serial
-MIT
-
-@ionic-native/social-sharing
-MIT
-
-@ionic-native/splash-screen
-MIT
-
-@ionic-native/status-bar
-MIT
-
-@ionic-native/text-to-speech
-MIT
-
-@ionic-native/toast
-MIT
 
 @ionic/angular
 MIT
