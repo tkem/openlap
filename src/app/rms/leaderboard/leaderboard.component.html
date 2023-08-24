@@ -1,5 +1,33 @@
 <leaderboard-head class="row" [fields]="fields"></leaderboard-head>
 <leaderboard-item class="row" *ngFor="let item of items; odd as isOddRow;"
+                  (click)="showDetails(item)"
                   [ngClass]="isOddRow ? 'odd' : 'even'"
                   [fields]="fields" [item]="item" [ranked]="ranked" [best]="best">
 </leaderboard-item>
+<ion-modal [isOpen]="detail != null" (willDismiss)="onWillDismissDetails($event)">
+    <!-- FIXME: ng-template necessary? -->
+    <ng-template>
+        <ion-header>
+            <ion-toolbar mode="md">
+                <ion-title>
+                    <outline [color]="detail?.driver?.color">
+                        {{detail?.position + 1}}
+                    </outline>
+                    {{detail?.driver?.name || (placeholder | translate:{number: detail?.id + 1})}}
+                </ion-title>
+                <ion-buttons slot="end">
+                    <ion-button (click)="modal.dismiss()">
+                        <ion-icon name="close-sharp"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+            <leaderboard-head class="row" [fields]="detailFields"></leaderboard-head>
+            <leaderboard-lap class="row" *ngFor="let times of detail?.laptimes; odd as isOddRow; index as i; count as n"
+                             [ngClass]="isOddRow ? 'odd' : 'even'" 
+                             [lap]="n - i" [item]="detail" [times]="times" [best]="best" [intlap]="intlaps[detail?.id]" [fields]="detailFields">
+            </leaderboard-lap>
+        </ion-content>
+    </ng-template>
+  </ion-modal>

@@ -8,6 +8,8 @@
 
 - Drop Dutch language support due to decreased demand.
 
+- Open lap time history when clicking on leaderboard item.
+
 - Add custom color chooser to "Drivers" menu.
 
 - Remove "Colors" menu item.

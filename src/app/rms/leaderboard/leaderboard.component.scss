@@ -8,6 +8,11 @@
     :host {
         font-size: 2.5vw;
     }
+    ion-modal {
+        :host {
+            font-size: 1.5em !important;
+        }
+    }
 }
 
 :host {
@@ -18,6 +23,9 @@ leaderboard-head {
     margin: 0 2px;
 }
 leaderboard-item {
+    margin: 0 2px 4px 2px;
+}
+leaderboard-lap {
     margin: 0 2px 4px 2px;
 }
 .row {
@@ -50,6 +58,10 @@ leaderboard-item {
     text-align: left;
     width: 1.65em;
 }
+.lap {
+    text-align: left;
+    width: 2.5em;
+}
 .name {
     flex-basis: 4em;
     flex-grow: 1;
@@ -64,7 +76,7 @@ leaderboard-item {
     text-align: right;
     width: 6em;
 }
-.bestlap, .lastlap {
+.bestlap, .lastlap, .laptime {
     text-align: right;
     width: 5em;
 }

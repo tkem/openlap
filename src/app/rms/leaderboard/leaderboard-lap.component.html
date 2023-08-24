@@ -1,0 +1,32 @@
+<div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
+    <ng-template ngSwitchCase="lap">
+        {{lap}}
+    </ng-template>
+    <ng-template ngSwitchCase="laptime">
+        <span [ngClass]="{best: times[0] - times[1] == item.best[0], allbest: times[0] - times[1] == best[0]}">
+            {{times[0] - times[1] | time:'s.sss'}}
+        </span>
+    </ng-template>
+    <ng-template ngSwitchCase="gap">
+        {{(times[0] - times[1] - best[0] || null) | time:'+s.sss'}}
+    </ng-template>
+    <ng-template ngSwitchCase="int">
+        {{(times[0] - times[1] - intlap || null) | time:'+s.sss'}}
+    </ng-template>
+    <ng-template ngSwitchCase="sector1">
+        <span [ngClass]="{best: times[2] - times[1] == item.best[1], allbest: times[2] - times[1] == best[1]}">
+            {{times[2] - times[1] | time:'s.sss'}}
+        </span>
+    </ng-template>
+    <ng-template ngSwitchCase="sector2">
+        <span [ngClass]="{best: times[3] - times[2] == item.best[2], allbest: times[3] - times[2] == best[2]}">
+            {{times[3] - times[2] | time:'s.sss'}}
+        </span>
+    </ng-template>
+    <ng-template ngSwitchCase="sector3">
+        <span [ngClass]="{best: times[0] - times[3] == item.best[3], allbest: times[0] - times[3] == best[3]}">
+            {{times[0] - times[3] | time:'s.sss'}}
+        </span>
+    </ng-template>
+</div>
+
