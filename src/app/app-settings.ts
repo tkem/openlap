@@ -1,10 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 
 import { SettingsService } from './services/settings.service';
 
 import { map } from 'rxjs/operators';
 
-const DRIVERS = [
+const DRIVERS = isDevMode() ? [
+  {name: 'Max', code: 'MAX', color: '#3670c6'},
+  {name: 'Fernando', code: 'FER', color: '#358c75'},
+  {name: 'Lewis', code: 'LEW', color: '#6cd3bf'},
+  {name: 'Charles', code: 'CHA', color: '#f91537'},
+  {name: 'Lando', code: 'LAN', color: '#f58020'},
+  {name: 'Nico', code: 'NIC', color: '#b6babd'},
+  {name: 'Ghost', code: 'GHO', color: '#606060'},
+  {name: 'Pace Car', code: 'PAC', color: '#d4af37'}
+] : [
   {color: '#ff0000'},
   {color: '#00ff00'},
   {color: '#0000ff'},
@@ -14,19 +23,6 @@ const DRIVERS = [
   {color: '#ffffff'},
   {color: '#cccccc'}
 ];
-
-/* uncomment for testing only
-const DRIVERS = [
-  {name: 'Max', code: 'MAX', color: '#3670c6'},
-  {name: 'Fernando', code: 'FER', color: '#358c75'},
-  {name: 'Lewis', code: 'LEW', color: '#6cd3bf'},
-  {name: 'Charles', code: 'CHA', color: '#f91537'},
-  {name: 'Lando', code: 'LAN', color: '#f58020'},
-  {name: 'Nico', code: 'NIC', color: '#b6babd'},
-  {name: 'Ghost', code: 'GHO', color: '#ffffff'},
-  {name: 'Pace Car', code: 'PAC', color: '#d4af37'}
-];
-*/
 
 const NOTIFICATIONS = {
   bestlap: true,
@@ -60,12 +56,12 @@ export class Connection {
   requestTimeout = 2000;
   minReconnectDelay = 3000;
   maxReconnectDelay = 8000;
-  demoControlUnit = false;
+  demoControlUnit = isDevMode();
 }
 
 export class Options {
   cumode = true;
-  debug = false;
+  debug = isDevMode();
   fixedorder = false;
   language = '';
   speech = true;
