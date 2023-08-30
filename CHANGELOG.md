@@ -1,4 +1,4 @@
-2.0.0 UNRELEASED
+2.0.0 2023-08-30
 ----------------
 
 - Require Android 8.1 or greater.
