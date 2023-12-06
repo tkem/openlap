@@ -27,11 +27,11 @@
     <icon src="res/icon.png" />
     <platform name="android">
         <hook src="hooks/android/windowLayoutInDisplayCutoutMode.js" type="after_platform_add" />
-        <icon background="@color/cdv_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" monochrome="res/android/icon/mipmap-hdpi-mono.png" />
-        <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" monochrome="res/android/icon/mipmap-mdpi-mono.png" />
-        <icon background="@color/cdv_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" monochrome="res/android/icon/mipmap-xhdpi-mono.png" />
-        <icon background="@color/cdv_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" monochrome="res/android/icon/mipmap-xxhdpi-mono.png" />
-        <icon background="@color/cdv_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" monochrome="res/android/icon/mipmap-xxxhdpi-mono.png" />
+        <icon background="@color/cdv_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
+        <icon background="@color/cdv_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
         <preference name="android-minSdkVersion" value="27" />
         <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
