@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, OnDestroy, isDevMode } from '@angular/core';
 
 import { SwUpdate } from '@angular/service-worker';
 
@@ -57,7 +57,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (versionCode) {
           version += " (" + versionCode + ")";
         }
-        this.logger.info("Open Lap", version, "running on", window?.navigator?.userAgent);
+        this.logger.info("Open Lap", version, isDevMode() ? "[dev]" : "[prod]", "on", window?.navigator?.userAgent);
+        isDevMode
       });
     });
     this.settings.getOptions().subscribe(options => {

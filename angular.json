@@ -147,8 +147,13 @@
             "production": {
               "cordovaBuildTarget": "app:ionic-cordova-build:production",
               "devServerTarget": "app:serve:production"
+            },
+            "development": {
+              "cordovaBuildTarget": "app:ionic-cordova-build:development",
+              "browserTarget": "app:server:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "ionic-cordova-build": {
           "builder": "@ionic/cordova-builders:cordova-build",
@@ -158,8 +163,12 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "development": {
+              "browserTarget": "app:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }
