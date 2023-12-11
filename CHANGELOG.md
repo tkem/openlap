@@ -1,3 +1,14 @@
+2.1.0 UNRELEASED
+----------------
+
+- Improve drivers menu layout in portrait mode.
+
+- Re-enable "dev" mode on Android.
+
+- Drop monochrome Android icons.
+
+- Update dependencies.
+
 2.0.0 2023-08-30
 ----------------
 
