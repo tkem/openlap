@@ -6,8 +6,10 @@ import { take } from 'rxjs/operators';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { Observable } from 'rxjs';
+
 import { AppSettings, Driver } from '../app-settings';
-import { LoggingService, SpeechService } from '../services';
+import { AppService, LoggingService, SpeechService } from '../services';
 import { ColorComponent } from './color.component';
 
 @Component({
@@ -17,15 +19,19 @@ export class DriversPage implements OnDestroy, OnInit {
 
   drivers: Driver[];
 
+  orientation: Observable<string>;
+
   readonly placeholder = 'Driver {{number}}';
 
   constructor(
+    private app: AppService,
     private logger: LoggingService,
     private settings: AppSettings,
     private mc: ModalController,
     private speech: SpeechService,
     private translate: TranslateService) 
   {
+    this.orientation = app.orientation;
   }
 
   ngOnInit() {

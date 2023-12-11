@@ -63,6 +63,19 @@ ion-input.right-align {
     }
 }
 
+/* drivers menu items */
+ion-item.driver {
+    ion-button {
+        margin-inline-end: 8px;
+    }
+    ion-buttons {
+        margin-left: 0;
+        ion-note {
+            width: 3em;
+        }
+    }
+}
+
 /* checkered flag blinking in title (only) */
 @keyframes blink-checkered-flag {
     0%   { opacity: 0; }
