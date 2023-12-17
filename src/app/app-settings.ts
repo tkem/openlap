@@ -2,6 +2,8 @@ import { Injectable, isDevMode } from '@angular/core';
 
 import { SettingsService } from './services/settings.service';
 
+import { Observable } from 'rxjs';
+
 import { map } from 'rxjs/operators';
 
 const DRIVERS = isDevMode() ? [
@@ -102,6 +104,7 @@ export class RaceOptions {
   time: number;
   pause = false;
   slotmode = false;
+  stopfin = false;
   drivers?: number;
   auto = false;
   pace = false;
@@ -171,7 +174,7 @@ export class AppSettings {
     return this.settings.set('options', value);
   }
 
-  getQualifyingSettings() {
+  getQualifyingSettings(): Observable<RaceOptions> {
     return this.settings.observe('qualifying').pipe(
       map(value => Object.assign(new RaceOptions('qualifying'), value))
     );
@@ -181,7 +184,7 @@ export class AppSettings {
     return this.settings.set('qualifying', value);
   }
 
-  getRaceSettings() {
+  getRaceSettings(): Observable<RaceOptions> {
     return this.settings.observe('race').pipe(
       map(value => Object.assign(new RaceOptions('race'), value))
     );

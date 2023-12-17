@@ -69,6 +69,9 @@
       <ion-item *ngIf="mode == 'race'">
         <ion-toggle #slotmode formControlName="slotmode" translate>Finish all laps</ion-toggle>
       </ion-item>
+      <ion-item>
+        <ion-toggle #stopfin formControlName="stopfin" translate>Stop cars when finished</ion-toggle>
+      </ion-item>
     </ion-list>
   </form>
 </ion-content>

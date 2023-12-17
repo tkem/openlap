@@ -226,12 +226,17 @@ export class RmsPage implements OnDestroy, OnInit {
         skipWhile(value => !value),
         map(value => [value ? 'yellowflag' : 'greenflag', null])
       ),
+      session.allFinished.pipe(
+        filter(v => v),
+        take(1),
+        map(() => ['alldone', null])  // TODO: add notification, qualifying vs. race?
+      ),
       this.lapcount.pipe(
         filter(laps => {
           return options.laps >= 10 && laps.count === options.laps - 4 && !session.finished.value;
         }),
         take(1),
-        map(() => ['fivelaps', null])
+        map(() => ['fivelaps', null])  // TODO: threelaps, too?
       ),
       this.lapcount.pipe(
         filter(laps => {
@@ -312,13 +317,24 @@ export class RmsPage implements OnDestroy, OnInit {
       )
     );
 
+    this.subscriptions.add(
+      events.pipe(
+        filter(([event]) => event == 'alldone'),
+        withLatestFrom(this.getRaceOptions(options.mode))
+      ).subscribe(([[event], options]) => {
+        if (options.stopfin) {
+          cu.toggleStart();  // TODO: read state?
+        }
+      })
+    );
+
     if (options.mode != 'practice') {
       const start = cu.getStart();
       start.pipe(take(1)).toPromise().then(value => {
         if (value === 0) {
           cu.toggleStart();
         }
-        // wait until startlight goes off; TODO: subscribe/unsibscribe?
+        // wait until startlight goes off; TODO: subscribe/unsubscribe?
         cu.getStart().pipe(pairwise(),filter(([prev, curr]) => {
           return prev != 0 && curr == 0;
         }),take(1),).toPromise().then(() => {
@@ -326,6 +342,7 @@ export class RmsPage implements OnDestroy, OnInit {
           session.start();
         });
       });
+
     }
 
     return session;

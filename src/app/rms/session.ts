@@ -1,5 +1,5 @@
 import { EMPTY, BehaviorSubject, Observable, interval, merge } from 'rxjs';
-import { combineLatest, distinctUntilChanged, filter, groupBy, map, mergeMap, publishReplay, refCount, scan, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { combineLatestWith, distinctUntilChanged, filter, groupBy, map, mergeMap, publishReplay, refCount, scan, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
 
 import { RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -60,6 +60,7 @@ export class Session {
   currentLap: Observable<number>;
   finished = new BehaviorSubject(false);
   yellowFlag = new BehaviorSubject(false);
+  allFinished: Observable<boolean>;
   timer: Observable<number>;
   started = false;
   stopped = false;
@@ -108,7 +109,7 @@ export class Session {
 
     this.ranking = reset.pipe(
       startWith(null),
-      combineLatest(this.grid),
+      combineLatestWith(this.grid),
       map(([_reset, grid]) => {
         return grid;  // for reset side effects only...
       }),
@@ -139,6 +140,17 @@ export class Session {
         }
       }, 0),
       startWith(0),
+      publishReplay(1),
+      refCount(),
+      distinctUntilChanged()
+    );
+
+    this.allFinished = this.ranking.pipe(
+      combineLatestWith(this.finished),
+      map(([cars, fini]) => {
+        return fini && cars.every(e => e.finished);
+      }),
+      startWith(false),
       publishReplay(1),
       refCount(),
       distinctUntilChanged()
@@ -240,7 +252,7 @@ export class Session {
 
       type PitInfo = [number, boolean];
       return times.pipe(
-        combineLatest(
+        combineLatestWith(
           pits.pipe(
             map(mask => ((mask & ~this.mask) & (1 << group.key)) != 0),
             distinctUntilChanged(),

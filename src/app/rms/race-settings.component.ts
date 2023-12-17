@@ -45,6 +45,7 @@ function createQualifyingForm(fb: FormBuilder, params: NavParams) {
       value: params.get('pause') || false,
       disabled: !params.get('time')
     }),
+    stopfin: new FormControl(params.get('stopfin') || false),
     drivers: new FormControl(params.get('drivers') || ''),
     auto: new FormControl(params.get('auto') || false),
     pace: new FormControl(params.get('pace') || false)
@@ -63,6 +64,7 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
       value: !!params.get('slotmode'),
       disabled: !params.get('laps')
     }),
+    stopfin: new FormControl(params.get('stopfin') || false),
     drivers: new FormControl(params.get('drivers') || ''),
     auto: new FormControl(params.get('auto') || false),
     pace: new FormControl(params.get('pace') || false)
@@ -165,7 +167,8 @@ export class RaceSettingsComponent implements AfterViewInit {
       drivers: options.drivers ? parseInt(options.drivers) : undefined,
       auto: options.auto,
       pace: options.pace,
-      slotmode: options.slotmode
+      slotmode: options.slotmode,
+      stopfin: options.stopfin
     }));
   }
 
