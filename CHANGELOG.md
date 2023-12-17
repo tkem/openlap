@@ -1,6 +1,8 @@
 2.1.0 UNRELEASED
 ----------------
 
+- Add option to stop all cars when race/qualifying is finished.
+
 - Improve drivers menu layout in portrait mode.
 
 - Re-enable "dev" mode on Android.
