@@ -1,4 +1,4 @@
-2.1.0 UNRELEASED
+2.1.0 2023-12-22
 ----------------
 
 - Add option to stop all cars when race/qualifying is finished.
@@ -10,6 +10,7 @@
 - Drop monochrome Android icons.
 
 - Update dependencies.
+
 
 2.0.0 2023-08-30
 ----------------
