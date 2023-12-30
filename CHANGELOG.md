@@ -1,3 +1,9 @@
+2.2.0 UNRELEASED
+----------------
+
+- Add Slovak translation (courtesy of Ludevik).
+
+
 2.1.0 2023-12-22
 ----------------
 
