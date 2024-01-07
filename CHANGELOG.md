@@ -1,7 +1,13 @@
 2.2.0 UNRELEASED
 ----------------
 
+- Fix Android fullscreen mode based on screen orientation.
+
 - Add Slovak translation (courtesy of Ludevik).
+
+- Add voice selection.
+
+- Update dependencies.
 
 
 2.1.0 2023-12-22
