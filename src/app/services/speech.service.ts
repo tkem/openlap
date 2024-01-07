@@ -7,8 +7,21 @@ import { Platform } from '@ionic/angular';
 import { LoggingService } from './logging.service';
 
 class WebSpeech {
+
+  private voices = new Map<string, SpeechSynthesisVoice>();
+
   constructor(private speech: SpeechSynthesis, logger: LoggingService) {
-    logger.debug('Using Web Speech API');
+    logger.info('Using Web Speech API');
+  }
+
+  private getVoiceMap() {
+    // TODO: speech.getVoices() may not be available at initialization?
+    if (!this.voices.size) {
+      this.speech.getVoices().forEach(voice => {
+        this.voices.set(voice.voiceURI, voice);
+      });
+    }
+    return this.voices;
   }
 
   speak(textOrOptions: string | TTSOptions): Promise<void> {
@@ -20,6 +33,7 @@ class WebSpeech {
         utterance.text = textOrOptions.text;
         utterance.lang = textOrOptions.locale;
         utterance.rate = textOrOptions.rate;
+        utterance.voice = this.getVoiceMap().get(textOrOptions.identifier);
       }
       utterance.onend = () => {
         resolve();
@@ -47,7 +61,11 @@ class WebSpeech {
   }
 
   getVoices(): Promise<TTSVoice[]> {
-    return Promise.resolve([]);
+    return Promise.resolve(Array.from(this.getVoiceMap(), ([_, value]) => value).map(v => <TTSVoice>{
+      name: v.name,
+      language: v.lang,
+      identifier: v.voiceURI
+    }));
   }
 }
 
@@ -82,6 +100,8 @@ export class SpeechService {
 
   private rate = 1.0;
 
+  private voice: string;
+
   private lastMessage: string;
 
   constructor(private logger: LoggingService, private tts: TextToSpeechAdvanced, platform: Platform) {
@@ -103,6 +123,10 @@ export class SpeechService {
     this.rate = rate;
   }
 
+  setVoice(voice: string) {
+    this.voice = voice;
+  }
+
   speak(message: string) {
     // TODO: message priorities?
     if (message != this.lastMessage) {
@@ -114,7 +138,7 @@ export class SpeechService {
             text: message,
             locale: this.locale || 'en-us',
             rate: this.rate,
-            identifier: null
+            identifier: this.voice || null
           }).then(() => {
             if (this.pending === 0) {
               this.lastMessage = null;
@@ -135,5 +159,17 @@ export class SpeechService {
     } else {
       this.logger.info('Speech duplicate dismissed: ' + message);
     }
+  }
+
+  getVoices(language: string) {
+    return this.tts.getVoices().then(voices => {
+      voices = voices.filter(v => v.language.startsWith(language));
+      // Android does not provide user-friendly names for voices, see
+      // https://github.com/spasma/cordova-plugin-tts-advanced/issues/7
+      // we also filter the "*-network" voices on Android, since they 
+      // seem to be mostly duplicates, anyway
+      voices = voices.filter(v => !v.name.endsWith("-network"));
+      return voices.sort((lhs, rhs) => lhs.name.localeCompare(rhs.name));
+    });
   }
 }

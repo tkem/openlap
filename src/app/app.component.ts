@@ -64,6 +64,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.settings.getOptions().subscribe(options => {
       this.logger.setDebugEnabled(options.debug);
       this.setLanguage(options.language);
+      this.speech.setVoice(options.voice);
     });
   }
 

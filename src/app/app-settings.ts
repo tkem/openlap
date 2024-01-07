@@ -68,6 +68,7 @@ export class Options {
   language = '';
   speech = true;
   sectors = false;
+  voice = '';
 }
 
 export interface Notification {

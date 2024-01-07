@@ -25,6 +25,12 @@
         <ion-select-option value="sk">Slovak</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-select label="{{'Voice' | translate}}" [disabled]="!options.language || voices.length < 2" [(ngModel)]="options.voice" (ionChange)="updateAndGreet()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+        <ion-select-option translate value="">Default</ion-select-option>
+        <ion-select-option *ngFor="let v of voices" value="{{v.identifier}}">{{v.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
     <ion-item routerLink="/settings/connection">
       <ion-label translate>Connection</ion-label>
     </ion-item>

@@ -94,10 +94,12 @@
   "Track clear": "Strecke freigegeben",
   "Translations": "Übersetzungen",
   "Tuning": "Tuning",
+  "Voice": "Stimme",
   "Yellow flag": "Gelbe Flagge",
 
   "notifications": {
     "locale": "de-DE",
+    "greeting": "Hallo!",
     "bestlap": "Schnellste Runde!",
     "bests1": "Schnellster Sektor 1!",
     "bests2": "Schnellster Sektor 2!",

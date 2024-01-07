@@ -94,10 +94,12 @@
   "Track clear": "Bandera verde",
   "Translations": "Traduciones",
   "Tuning": "Tuning",
+  "Voice": "Voz",
   "Yellow flag": "Bandera amarilla",
 
   "notifications": {
     "locale": "es-ES",
+    "greeting": "¡Hola!",
     "bestlap": "¡Vuelta rápida!",
     "bests1": "¡Mejor sector 1!",
     "bests2": "¡Mejor sector 2!",

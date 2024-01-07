@@ -94,10 +94,12 @@
   "Track clear": "Track clear",
   "Translations": "Translations",
   "Tuning": "Tuning",
+  "Voice": "Voice",
   "Yellow flag": "Yellow flag",
 
   "notifications": {
     "locale": "en-US",
+    "greeting": "Hello!",
     "bestlap": "Fastest lap!",
     "bests1": "Fastest sector 1!",
     "bests2": "Fastest sector 2!",

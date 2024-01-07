@@ -94,10 +94,12 @@
   "Track clear": "Trať čistá",
   "Translations": "Preklady",
   "Tuning": "Tuning",
+  "Voice": "Hlas",
   "Yellow flag": "Žltá vlajka",
 
   "notifications": {
     "locale": "sk-SK",
+    "greeting": "Ahoj!",
     "bestlap": "Najrýchlejšie kolo!",
     "bests1": "Najrýchlejší sektor 1!",
     "bests2": "Najrýchlejší sektor 2!",
