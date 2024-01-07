@@ -40,12 +40,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private translate: TranslateService,
     private updates: SwUpdate)
   {
-    // enable/disable fullscreen mode based on screen orientation, *not* WebView orientation
-    window.addEventListener("orientationchange", () => {
-      app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
-    });
-    if (window.screen.orientation && window.screen.orientation.type) {
-      app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
+    if (window.screen) {
+      window.screen.orientation.addEventListener('change', () => {
+        app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
+      });
+      if (window.screen.orientation && window.screen.orientation.type) {
+        app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
+      }
     }
     app.keepAwake(true);
     translate.setDefaultLang('en');
