@@ -94,10 +94,12 @@
   "Track clear": "Circuit dégagé",
   "Translations": "Traductions",
   "Tuning": "Paramétrages",
+  "Voice": "Voix",
   "Yellow flag": "Drapeau jaune",
 
   "notifications": {
     "locale": "fr-FR",
+    "greeting": "Bonjour!",
     "bestlap": "Meilleur tour!",
     "bests1": "Meilleur intermédiaire 1!",
     "bests2": "Meilleur intermédiaire 2!",
@@ -113,7 +115,7 @@
     "fuel1": "Rentrez aux stands!",
     "fuel2": "Préparez-vous à rentrer aux stands!",
     "greenflag": "Piste dégagée!",
-    "newleader": "En tête!",
+        "newleader": "En tête!",
     "oneminute": "Une minute pour aller!",
     "pitenter": "Entrée aux stands!",
     "pitexit": "Sortie des stands!",

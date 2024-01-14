@@ -94,10 +94,12 @@
   "Track clear": "Pista libera",
   "Translations": "Traduzioni",
   "Tuning": "Tuning",
+  "Voice": "Voce",
   "Yellow flag": "Bandiera gialla",
 
   "notifications": {
     "locale": "it-IT",
+    "greeting": "Ciao!",
     "bestlap": "Giro più veloce!",
     "bests1": "Miglior settore 1!",
     "bests2": "Miglior settore 2!",
