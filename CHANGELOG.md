@@ -1,4 +1,4 @@
-2.2.0 UNRELEASED
+2.2.0 2024-01-21
 ----------------
 
 - Fix Android fullscreen mode based on screen orientation.
