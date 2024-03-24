@@ -9,8 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
 import { AppSettings, Driver } from '../app-settings';
-import { AppService, LoggingService, SpeechService } from '../services';
+import { AppService, ControlUnitService, LoggingService, SpeechService } from '../services';
+
 import { ColorComponent } from './color.component';
+
+import { ControlUnitButton } from '../carrera';
 
 @Component({
   templateUrl: 'drivers.page.html'
@@ -25,6 +28,7 @@ export class DriversPage implements OnDestroy, OnInit {
 
   constructor(
     private app: AppService,
+    private cu: ControlUnitService, 
     private logger: LoggingService,
     private settings: AppSettings,
     private mc: ModalController,
@@ -92,6 +96,10 @@ export class DriversPage implements OnDestroy, OnInit {
     this.getDriverName(id).then(name => {
       this.speech.speak(name);
     })
+  }
+
+  pressCodeButton() {
+    this.cu.value.trigger(ControlUnitButton.CODE);
   }
 
   onChangeName(event) {
