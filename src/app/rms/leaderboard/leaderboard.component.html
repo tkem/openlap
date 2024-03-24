@@ -1,4 +1,4 @@
-<leaderboard-head class="row" [fields]="fields"></leaderboard-head>
+<leaderboard-head class="row" [fields]="fields" [pos]="true"></leaderboard-head>
 <leaderboard-item class="row" *ngFor="let item of items; odd as isOddRow;"
                   (click)="showDetails(item)"
                   [ngClass]="isOddRow ? 'odd' : 'even'"
@@ -26,7 +26,13 @@
             <leaderboard-head class="row" [fields]="detailFields"></leaderboard-head>
             <leaderboard-lap class="row" *ngFor="let times of detail?.laptimes; odd as isOddRow; index as i; count as n"
                              [ngClass]="isOddRow ? 'odd' : 'even'" 
-                             [lap]="n - i" [item]="detail" [times]="times" [best]="best" [intlap]="intlaps[detail?.id]" [fields]="detailFields">
+                             [lap]="n - i"
+                             [item]="detail"
+                             [times]="times"
+                             [best]="best"
+                             [last]="detail?.laptimes[i + 1]"
+                             [intlap]="intlaps[detail?.id]"
+                             [fields]="detailFields">
             </leaderboard-lap>
         </ion-content>
     </ng-template>

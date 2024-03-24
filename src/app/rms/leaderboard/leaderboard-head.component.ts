@@ -8,4 +8,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class LeaderboardHeadComponent {
   @Input() fields: string[];
+  @Input() pos: boolean;  // FIXME: move to fields?
 }

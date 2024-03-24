@@ -35,8 +35,8 @@ const FIELDS = [{
 }];
 
 const DETAIL_FIELDS = [
-  'lap laptime gap int',
-  'lap laptime sector1 sector2 sector3'
+  'lap laptime gap int status',
+  'lap laptime sector1 sector2 sector3 status'
 ];
 
 export class LeaderboardItem {

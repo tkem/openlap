@@ -13,6 +13,7 @@ export class LeaderboardLapComponent {
   @Input() item: LeaderboardItem;
   @Input() times: number[];
   @Input() best: number[];
+  @Input() last: number[];
   @Input() intlap: number;
   @Input() fields: string[];
 }

@@ -28,5 +28,17 @@
             {{times[0] - times[3] | time:'s.sss'}}
         </span>
     </ng-template>
+    <!--
+    <ng-template ngSwitchCase="lastlap">
+        <span [ngClass]="{best: last[0] - last[1] == item.best[0], allbest: last[0] - last[1] == best[0]}">
+            {{last[0] - last[1] | time:'s.sss'}}
+        </span>
+    </ng-template>
+    -->
+    <ng-template ngSwitchCase="status">
+        <span *ngIf="last" [ngClass]="(last[0] - last[1]) > (times[0] - times[1]) ? 'pos-up' : 'pos-dn'">
+        </span>
+    </ng-template>
+
 </div>
 

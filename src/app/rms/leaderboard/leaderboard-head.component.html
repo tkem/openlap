@@ -1,4 +1,4 @@
-<div class="position cell" *ngIf="fields.length > 5">
+<div class="position cell" *ngIf="pos">
     <span class="title">POS</span>
 </div>
 <div *ngFor="let field of fields" [ngSwitch]="field" [ngClass]="[field, 'cell']">
