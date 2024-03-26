@@ -1,3 +1,13 @@
+2.3.0 UNRELEASED
+----------------
+
+- Add voice pitch and rate settings.
+
+- Add faster/slower indicator to lap details.
+
+- Add `CODE` button to drivers pages.
+
+
 2.2.0 2024-01-21
 ----------------
 
