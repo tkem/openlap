@@ -71,10 +71,12 @@
   "Open source licenses": "Licencia open source",
   "Order by number": "Ordenar por número",
   "Pace Car": "Coche de seguridad",
+  "Pitch": "Paso",
   "Privacy policy": "Política de privacidad",
   "Qualifying": "Clasificación",
   "Race finished": "Carrera terminada",
   "Race": "Carrera",
+  "Rate": "Velocidad",
   "Reconnect": "Reconectar",
   "Reconnect delay": "Retardo para reconexión",
   "Request timeout": "Solicitud de tiempo de espera",
@@ -99,7 +101,7 @@
 
   "notifications": {
     "locale": "es-ES",
-    "greeting": "¡Hola!",
+    "example": "Este es un ejemplo de síntesis de voz en español",
     "bestlap": "¡Vuelta rápida!",
     "bests1": "¡Mejor sector 1!",
     "bests2": "¡Mejor sector 2!",

@@ -12,7 +12,7 @@
 <ion-content>
   <ion-list lines="full">
     <ion-item>
-      <ion-select label="{{'Language' | translate}}" [(ngModel)]="options.language" (ionChange)="update()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+      <ion-select label="{{'Language' | translate}}" [(ngModel)]="options.language" (ionChange)="updateLanguage()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
         <!-- ion-option seems to require translate attribute value; see
              https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689
           -->
@@ -25,11 +25,8 @@
         <ion-select-option value="sk">Slovak</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
-      <ion-select label="{{'Voice' | translate}}" [disabled]="!options.language || voices.length < 2" [(ngModel)]="options.voice" (ionChange)="updateAndGreet()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
-        <ion-select-option translate value="">Default</ion-select-option>
-        <ion-select-option *ngFor="let v of voices" value="{{v.identifier}}">{{v.name}}</ion-select-option>
-      </ion-select>
+    <ion-item routerLink="/settings/voice">
+      <ion-label translate>Voice</ion-label>
     </ion-item>
     <ion-item routerLink="/settings/connection">
       <ion-label translate>Connection</ion-label>

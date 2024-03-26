@@ -33,6 +33,7 @@ class WebSpeech {
         utterance.text = textOrOptions.text;
         utterance.lang = textOrOptions.locale;
         utterance.rate = textOrOptions.rate;
+        utterance.pitch = textOrOptions.pitch;
         utterance.voice = this.getVoiceMap().get(textOrOptions.identifier);
       }
       utterance.onend = () => {
@@ -100,6 +101,8 @@ export class SpeechService {
 
   private rate = 1.0;
 
+  private pitch = 1.0;
+
   private voice: string;
 
   private lastMessage: string;
@@ -123,6 +126,10 @@ export class SpeechService {
     this.rate = rate;
   }
 
+  setPitch(pitch: number) {
+    this.pitch = pitch;
+  }
+  
   setVoice(voice: string) {
     this.voice = voice;
   }
@@ -138,6 +145,7 @@ export class SpeechService {
             text: message,
             locale: this.locale || 'en-us',
             rate: this.rate,
+            pitch: this.pitch,
             identifier: this.voice || null
           }).then(() => {
             if (this.pending === 0) {

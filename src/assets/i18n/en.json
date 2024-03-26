@@ -71,10 +71,12 @@
   "Open source licenses": "Open source licenses",
   "Order by number": "Order by number",
   "Pace Car": "Pace Car",
+  "Pitch": "Pitch",
   "Privacy policy": "Privacy policy",
   "Qualifying": "Qualifying",
   "Race finished": "Race finished",
   "Race": "Race",
+  "Rate": "Rate",
   "Reconnect": "Reconnect",
   "Reconnect delay": "Reconnect delay",
   "Request timeout": "Request timeout",
@@ -99,7 +101,7 @@
 
   "notifications": {
     "locale": "en-US",
-    "greeting": "Hello!",
+    "example": "This is an example for speech synthesis in English",
     "bestlap": "Fastest lap!",
     "bests1": "Fastest sector 1!",
     "bests2": "Fastest sector 2!",

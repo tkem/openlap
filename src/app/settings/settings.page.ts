@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { TranslateService } from '@ngx-translate/core';
-
 import { AboutPage } from './about.page';
 import { ConnectionPage } from './connection.page';
 import { LicensesPage } from './licenses.page';
@@ -15,24 +13,16 @@ import { I18nAlertService, SpeechService } from '../services';
   templateUrl: 'settings.page.html'
 })
 export class SettingsPage implements OnDestroy, OnInit {
-  aboutPage = AboutPage;
-  connectionPage = ConnectionPage;
-  licensesPage = LicensesPage;
-  loggingPage = LoggingPage;
-  notificationsPage = NotificationsPage;
 
   options = new Options();
 
-  voices = [];
-
   private subscription: any;
 
-  constructor(private alert: I18nAlertService, private settings: AppSettings, private speech: SpeechService, private translate: TranslateService) {}
+  constructor(private alert: I18nAlertService, private settings: AppSettings, private speech: SpeechService) {}
 
   ngOnInit() {
     this.subscription = this.settings.getOptions().subscribe(options => {
       this.options = options;
-      this.updateVoices();
     });
   }
 
@@ -53,27 +43,15 @@ export class SettingsPage implements OnDestroy, OnInit {
     });
   }
 
-  async update() {
-    await this.updateVoices();
-    return this.settings.setOptions(this.options);
-  }
-
-  async updateVoices() {
+  async updateLanguage() {
     if (this.options.language) {
-      this.voices = await this.speech.getVoices(this.options.language);
-      if (!this.voices.find(v => v.identifier == this.options.voice)) {
+      let voices = await this.speech.getVoices(this.options.language);
+      if (!voices.find(v => v.identifier == this.options.voice)) {
         this.options.voice = "";
       }
     } else {
-      this.voices = [];
       this.options.voice = "";
     }
-  }
-
-  async updateAndGreet() {
-    await this.update();
-    // TODO: trigger when voice is selected
-    const greeting = this.translate.instant("notifications.greeting");
-    this.speech.speak(greeting);
+    return this.settings.setOptions(this.options);
   }
 }

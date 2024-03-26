@@ -69,6 +69,8 @@ export class Options {
   speech = true;
   sectors = false;
   voice = '';
+  rate = 1000;
+  pitch = 1000;
 }
 
 export interface Notification {

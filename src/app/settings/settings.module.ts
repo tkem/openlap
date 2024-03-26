@@ -14,6 +14,7 @@ import { LoggingMenu } from './logging.menu';
 import { LoggingPage } from './logging.page';
 import { NotificationsPage } from './notifications.page';
 import { SettingsPage } from './settings.page';
+import { VoicePage } from './voice.page';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'notifications',
     component: NotificationsPage
+  },
+  {
+    path: 'voice',
+    component: VoicePage
   }
 ];
 
@@ -50,6 +55,7 @@ const routes: Routes = [
     LoggingMenu,
     LoggingPage,
     NotificationsPage,
+    VoicePage,
     SettingsPage
   ],
   exports: [

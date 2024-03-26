@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Voice</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-select label="{{'Voice' | translate}}" [disabled]="!options.language || voices.length < 2" [(ngModel)]="options.voice" (ionChange)="update()" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+        <ion-select-option translate value="">Default</ion-select-option>
+        <ion-select-option *ngFor="let v of voices" value="{{v.identifier}}">{{v.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap" translate>
+        Rate
+      </ion-label>
+      <!-- WebSpeech: 0.1..10-->
+      <ion-range legacy="true" slot="end" [(ngModel)]="options.rate" (ionChange)="update()" min="200" max="1800">
+      </ion-range>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="resetRate()">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap" translate>
+        Pitch
+      </ion-label>
+      <!-- WebSpeech: 0..2-->
+      <ion-range legacy="true" slot="end" [(ngModel)]="options.pitch" (ionChange)="update()" min="200" max="1800">
+      </ion-range>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="resetPitch()">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="test()">Test</ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
