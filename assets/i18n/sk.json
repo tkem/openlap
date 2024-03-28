@@ -71,10 +71,12 @@
   "Open source licenses": "Licencie otvoreného zdrojového kódu",
   "Order by number": "Zoradiť podľa čísla",
   "Pace Car": "Pace Car",
+  "Pitch": "Ihrisko",
   "Privacy policy": "Ochrana súkromia",
   "Qualifying": "Kvalifikácia",
   "Race finished": "Preteky ukončené",
   "Race": "Preteky",
+  "Rate": "Rýchlosť",
   "Reconnect": "Opätovne pripojiť",
   "Reconnect delay": "Oneskorenie pri opätovnom pripojení",
   "Request timeout": "Vypršanie časového limitu požiadavky",
@@ -99,7 +101,7 @@
 
   "notifications": {
     "locale": "sk-SK",
-    "greeting": "Ahoj!",
+    "example": "Toto je príklad syntézy reči v slovenčine",
     "bestlap": "Najrýchlejšie kolo!",
     "bests1": "Najrýchlejší sektor 1!",
     "bests2": "Najrýchlejší sektor 2!",

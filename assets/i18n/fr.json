@@ -71,10 +71,12 @@
   "Open source licenses": "Licence Open source",
   "Order by number": "Ordre par numéro",
   "Pace Car": "Pace Car",
+  "Pitch": "Pas",
   "Privacy policy": "Politique de confidentialité",
   "Qualifying": "Qualifications",
   "Race finished": "Course terminée",
   "Race": "Course",
+  "Rate": "Vitesse",
   "Reconnect": "Reconnexion",
   "Reconnect delay": "Délai de reconnexion",
   "Request timeout": "Demande de délai d'attente",
@@ -99,7 +101,7 @@
 
   "notifications": {
     "locale": "fr-FR",
-    "greeting": "Bonjour!",
+    "example": "Ceci est un exemple de synthèse vocale en français",
     "bestlap": "Meilleur tour!",
     "bests1": "Meilleur intermédiaire 1!",
     "bests2": "Meilleur intermédiaire 2!",
