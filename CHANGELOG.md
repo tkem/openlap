@@ -1,4 +1,4 @@
-2.3.0 UNRELEASED
+2.3.0 2024-03-28
 ----------------
 
 - Add voice pitch and rate settings.
