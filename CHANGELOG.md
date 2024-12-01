@@ -1,4 +1,12 @@
-2.3.1 UNRELEASED
+2.4.0 UNRELEASED
+----------------
+
+- Add Português translation (courtesy of Ilduario).
+
+- Update dependencies.
+
+
+2.3.1 2024-08-19
 ----------------
 
 - Upgrade to `cordova-android` 13.0.0.
