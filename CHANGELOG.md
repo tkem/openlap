@@ -1,4 +1,4 @@
-2.4.0 UNRELEASED
+2.4.0 2024-12-02
 ----------------
 
 - Add Português translation (courtesy of Ilduario).
