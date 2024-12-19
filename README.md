@@ -108,9 +108,10 @@ License
 Copyright (c) 2016-2024 Thomas Kemmer.
 
 Translations: Haarman (Nederlands), SdiF (Italiano), Maikeru
-(Español), nico12 (Français), Ludevik (Slovak).
+(Español), nico12 (Français), Ludevik (Slovak), Ilduario (Português).
 
-iOS support: softyde, elliot2extreme.
+iOS support: [softyde](https://github.com/softyde),
+[elliot2extreme](https://github.com/elliot2extreme).
 
 Licensed under the [Apache License, Version
 2.0](http://www.apache.org/licenses/LICENSE-2.0).
