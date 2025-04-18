@@ -22,7 +22,7 @@ import { Toast } from '@awesome-cordova-plugins/toast/ngx';
 
 import { Serial } from './backend/serial/ngx';
 
-import { IonicStorageModule } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';

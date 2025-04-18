@@ -18,33 +18,26 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label class="ion-text-wrap" translate>
-        Rate
-      </ion-label>
       <!-- WebSpeech: 0.1..10-->
-      <ion-range legacy="true" slot="end" [(ngModel)]="options.rate" (ionChange)="update()" min="200" max="1800">
-      </ion-range>
-      <ion-buttons slot="end">
-        <ion-button fill="clear" (click)="resetRate()">
+      <ion-range label="{{'Rate' | translate}}" [(ngModel)]="options.rate" (ionChange)="update()" min="200" max="1800">
+        <ion-button slot="end" fill="clear" (click)="resetRate()">
           <ion-icon name="refresh-outline"></ion-icon>
         </ion-button>
-      </ion-buttons>
+      </ion-range>
     </ion-item>
     <ion-item>
-      <ion-label class="ion-text-wrap" translate>
-        Pitch
-      </ion-label>
       <!-- WebSpeech: 0..2-->
-      <ion-range legacy="true" slot="end" [(ngModel)]="options.pitch" (ionChange)="update()" min="200" max="1800">
-      </ion-range>
-      <ion-buttons slot="end">
-        <ion-button fill="clear" (click)="resetPitch()">
+      <ion-range label="{{'Pitch' | translate}}" [(ngModel)]="options.pitch" (ionChange)="update()" min="200" max="1800">
+        <ion-button slot="end" fill="clear" (click)="resetPitch()">
           <ion-icon name="refresh-outline"></ion-icon>
         </ion-button>
-      </ion-buttons>
+      </ion-range>
     </ion-item>
     <ion-item>
-      <ion-button (click)="test()">Test</ion-button>
+      <ion-button (click)="test()" translate>
+        Test
+        <ion-icon slot="end" name="volume-high"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

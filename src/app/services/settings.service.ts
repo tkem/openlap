@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 
 import { Observable, ReplaySubject } from 'rxjs';
 
@@ -14,13 +14,12 @@ export class SettingsService {
   constructor(private storage: Storage) {}
 
   async clear(): Promise<void> {
-    await this.storage.ready();
     await this.storage.clear();
     this.subjects.forEach(subject => subject.next(undefined));
   }
 
   async get(key: string): Promise<any> {
-    await this.storage.ready();
+    await this.storage.create();
     const value = await this.storage.get(key);
     return value;
   }
@@ -30,7 +29,7 @@ export class SettingsService {
     if (!subject) {
       subject = new ReplaySubject<any>(1);
       this.subjects.set(key, subject);
-      this.storage.ready().then(() => {
+      this.storage.create().then(() => {
         this.storage.get(key).then(value => {
           subject.next(value);
         }).catch(error => {
@@ -42,7 +41,7 @@ export class SettingsService {
   }
 
   async remove(key: string): Promise<void> {
-    await this.storage.ready();
+    await this.storage.create();
     await this.storage.remove(key);
     const subject = this.subjects.get(key);
     if (subject) {
@@ -51,7 +50,7 @@ export class SettingsService {
   }
 
   async set(key: string, value: any): Promise<void> {
-    await this.storage.ready();
+    await this.storage.create();
     await this.storage.set(key, value);
     const subject = this.subjects.get(key);
     if (subject) {
