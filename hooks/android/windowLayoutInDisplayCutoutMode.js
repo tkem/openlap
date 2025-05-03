@@ -10,6 +10,7 @@ module.exports = function (ctx) {
             <item name="windowSplashScreenAnimationDuration">200</item>
             <item name="postSplashScreenTheme">@style/Theme.AppCompat.NoActionBar</item>
             <item name="android:windowLayoutInDisplayCutoutMode">never</item>
+            <item name="android:windowOptOutEdgeToEdgeEnforcement">false</item>
         </style>
     </resources>`
 
