@@ -105,7 +105,7 @@ request, if you like - for submitting your translations.
 License
 ------------------------------------------------------------------------
 
-Copyright (c) 2016-2024 Thomas Kemmer.
+Copyright (c) 2016-2025 Thomas Kemmer.
 
 Translations: Haarman (Nederlands), SdiF (Italiano), Maikeru
 (Español), nico12 (Français), Ludevik (Slovak), Ilduario (Português).
