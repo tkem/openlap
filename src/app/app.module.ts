@@ -1,8 +1,9 @@
 // FIXME: also import zone-patch-rxjs?
-import 'zone.js/dist/zone-patch-cordova';
+import 'zone.js';
+import 'zone.js/plugins/zone-patch-cordova';
 
 import { ErrorHandler, Injectable, NgModule } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-worker';
@@ -24,7 +25,7 @@ import { Serial } from './backend/serial/ngx';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendModule } from './backend';
@@ -64,21 +65,12 @@ export function swRegistrationOptions(platform: Platform) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent], 
   imports: [
     BrowserModule,
-    HttpClientModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(/* TODO: config */),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
     BackendModule,
     DriversModule,
     MenuModule,
@@ -107,7 +99,14 @@ export function swRegistrationOptions(platform: Platform) {
       useFactory: swRegistrationOptions,
       deps: [Platform]
     },
-  ],
-  bootstrap: [AppComponent]
+    provideHttpClient(withInterceptorsFromDi()),
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
+  ]
 })
 export class AppModule {}

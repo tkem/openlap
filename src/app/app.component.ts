@@ -78,7 +78,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   ngAfterViewInit() {
     if (this.updates.isEnabled) {
       this.logger.info("Service worker enabled");
-      this.updates.available.subscribe(() => {
+      this.updates.versionUpdates.subscribe(() => {
         this.logger.info("Update available");
         this.update();
       });
