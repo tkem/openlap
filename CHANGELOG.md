@@ -1,3 +1,19 @@
+2.5.0 UNRELEASED
+----------------
+
+- Add Polish translation (courtesy of Antoni-Czaplicki).
+
+- Update Português translation (courtesy of Ilduario).
+
+- Upgrade to Ionic 8.
+
+- Upgrade to Angular 18.
+
+- Upgrade to Cordova Android 14.
+
+- Update dependencies.
+
+
 2.4.0 2024-12-02
 ----------------
 
