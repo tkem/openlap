@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, Inject, OnInit, OnDestroy, isDevMode } from '@angular/core';
 
-import { SwUpdate } from '@angular/service-worker';
+import { NoNewVersionDetectedEvent, SwUpdate, VersionDetectedEvent, VersionReadyEvent } from '@angular/service-worker';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { Subscription, from } from 'rxjs';
-import { first, mergeMap, timeout } from 'rxjs/operators';
+import { filter, first, mergeMap, timeout } from 'rxjs/operators';
 
 import { AppSettings } from './app-settings';
 import { Backend } from './backend';
@@ -38,7 +38,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private speech: SpeechService,
     private toast: I18nToastService,
     private translate: TranslateService,
-    private updates: SwUpdate)
+    private swUpdate: SwUpdate)
   {
     if (window.screen) {
       window.screen.orientation.addEventListener('change', () => {
@@ -76,11 +76,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if (this.updates.isEnabled) {
+    if (this.swUpdate.isEnabled) {
       this.logger.info("Service worker enabled");
-      this.updates.versionUpdates.subscribe(() => {
-        this.logger.info("Update available");
-        this.update();
+      this.swUpdate.versionUpdates.subscribe(event => {
+        if (event as NoNewVersionDetectedEvent) {
+          this.logger.info("No new version detected");
+        } else if (event as VersionDetectedEvent) {
+          this.logger.info("New Version detected");
+        } else if (event as VersionReadyEvent) {
+          this.logger.info("Version update ready");
+          this.update();
+        } else {
+          this.logger.error("Version update error:", event);
+        }
       });
     } else {
       this.logger.debug("Service worker not enabled");
