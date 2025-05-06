@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1746567044111,
+  "timestamp": 1746567540909,
   "index": "/openlap/index.html",
   "assetGroups": [
     {
@@ -71,7 +71,7 @@
         "/openlap/9977.d21950e3df6bd152.js",
         "/openlap/common.cd40a40b16c07478.js",
         "/openlap/index.html",
-        "/openlap/main.1896f4343ad02944.js",
+        "/openlap/main.4e43437ed1d2053e.js",
         "/openlap/manifest.webmanifest",
         "/openlap/polyfills-core-js.f47eb60cc4ed4bde.js",
         "/openlap/polyfills-dom.bf542500b6fca113.js",
@@ -188,8 +188,8 @@
     "/openlap/assets/icons/icon-72x72.png": "eda460f85a2aad3c217a429a7a2171f120878c59",
     "/openlap/assets/icons/icon-96x96.png": "71f89f3b9f1dac01437f2b91d631f72c54673dc1",
     "/openlap/common.cd40a40b16c07478.js": "26d635c000cd8fee1b611a4b2b7139a8c9c3d1da",
-    "/openlap/index.html": "59727488025f22097b2bedce7ec5c0f9edaddc5c",
-    "/openlap/main.1896f4343ad02944.js": "e86dadce004ee6152413a1fe71be0fffcd892a4f",
+    "/openlap/index.html": "b2b1f6cfd4cc10bdb75fc29fd289ee9c97e0b1ee",
+    "/openlap/main.4e43437ed1d2053e.js": "c72a3bd722e6371e8365496c4db02634b39120b8",
     "/openlap/manifest.webmanifest": "cb0305d657912e2d792330661d18a691e9dcfe15",
     "/openlap/polyfills-core-js.f47eb60cc4ed4bde.js": "320bc5a48e53a1c00b5b0b52a9a6610781c6312f",
     "/openlap/polyfills-dom.bf542500b6fca113.js": "3fa333db66c8050f12e99d977f5098a6de8dd593",
