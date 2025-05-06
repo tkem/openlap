@@ -79,15 +79,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.swUpdate.isEnabled) {
       this.logger.info("Service worker enabled");
       this.swUpdate.versionUpdates.subscribe(event => {
-        if (event as NoNewVersionDetectedEvent) {
+        if (event as NoNewVersionDetectedEvent && event.type === "NO_NEW_VERSION_DETECTED") {
           this.logger.info("No new version detected");
-        } else if (event as VersionDetectedEvent) {
+        } else if (event as VersionDetectedEvent && event.type === "VERSION_DETECTED") {
           this.logger.info("New Version detected");
-        } else if (event as VersionReadyEvent) {
+        } else if (event as VersionReadyEvent && event.type === "VERSION_READY") {
           this.logger.info("Version update ready");
           this.update();
         } else {
-          this.logger.error("Version update error:", event);
+          this.logger.error("Version event:", event);
         }
       });
     } else {
