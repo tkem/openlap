@@ -1,4 +1,4 @@
-2.5.0 UNRELEASED
+2.5.0 2025-05-11
 ----------------
 
 - Add Polish translation (courtesy of Antoni-Czaplicki).
