@@ -74,7 +74,8 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
 }
 
 @Component({
-  templateUrl: 'race-settings.component.html'
+    templateUrl: 'race-settings.component.html',
+    standalone: false
 })
 export class RaceSettingsComponent implements AfterViewInit {
 

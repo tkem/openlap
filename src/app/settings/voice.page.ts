@@ -7,7 +7,8 @@ import { SpeechService } from '../services';
 
 
 @Component({
-  templateUrl: 'voice.page.html'
+    templateUrl: 'voice.page.html',
+    standalone: false
 })
 export class VoicePage implements OnDestroy {
 

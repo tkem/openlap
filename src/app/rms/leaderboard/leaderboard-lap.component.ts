@@ -3,10 +3,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LeaderboardItem } from './leaderboard.component';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'leaderboard-lap',
-  styleUrls: ['leaderboard.component.scss'],
-  templateUrl: 'leaderboard-lap.component.html'
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'leaderboard-lap',
+    styleUrls: ['leaderboard.component.scss'],
+    templateUrl: 'leaderboard-lap.component.html',
+    standalone: false
 })
 export class LeaderboardLapComponent {
   @Input() lap: number;

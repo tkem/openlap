@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'gauge',
-  styleUrls: ['gauge.component.scss'],
-  templateUrl: 'gauge.component.html'
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'gauge',
+    styleUrls: ['gauge.component.scss'],
+    templateUrl: 'gauge.component.html',
+    standalone: false
 })
 export class GaugeComponent {
 

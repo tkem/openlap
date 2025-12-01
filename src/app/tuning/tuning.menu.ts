@@ -6,7 +6,8 @@ import { AppSettings, Options } from '../app-settings';
 import { LoggingService } from '../services';
 
 @Component({
-  templateUrl: 'tuning.menu.html',
+    templateUrl: 'tuning.menu.html',
+    standalone: false
 })
 export class TuningMenu implements OnDestroy, OnInit {
 

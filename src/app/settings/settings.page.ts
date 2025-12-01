@@ -10,7 +10,8 @@ import { AppSettings, Options } from '../app-settings';
 import { I18nAlertService, SpeechService } from '../services';
 
 @Component({
-  templateUrl: 'settings.page.html'
+    templateUrl: 'settings.page.html',
+    standalone: false
 })
 export class SettingsPage implements OnDestroy, OnInit {
 

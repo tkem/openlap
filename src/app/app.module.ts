@@ -25,8 +25,8 @@ import { Serial } from './backend/serial/ngx';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendModule } from './backend';
 import { DriversModule } from './drivers';
@@ -50,11 +50,6 @@ export class LoggingErrorHandler implements ErrorHandler {
   handleError(error: any) {
     this.logger.error('Error:', error);
   }
-}
-
-// AoT requires an exported function for factories
-export function createTranslateLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 export function swRegistrationOptions(platform: Platform) {
@@ -101,11 +96,9 @@ export function swRegistrationOptions(platform: Platform) {
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideTranslateService({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
+      loader: provideTranslateHttpLoader({prefix: "./assets/i18n/"}),
+      fallbackLang: "en",
+      lang: "de"
     }),
   ]
 })

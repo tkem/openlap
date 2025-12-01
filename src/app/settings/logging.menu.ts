@@ -14,7 +14,8 @@ function stringify(obj) {
 }
 
 @Component({
-  templateUrl: 'logging.menu.html',
+    templateUrl: 'logging.menu.html',
+    standalone: false
 })
 export class LoggingMenu implements OnDestroy, OnInit {
 

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'startlight',
-  styleUrls: ['startlight.component.scss'],
-  templateUrl: 'startlight.component.html'
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'startlight',
+    styleUrls: ['startlight.component.scss'],
+    templateUrl: 'startlight.component.html',
+    standalone: false
 })
 export class StartlightComponent {
   @Input() active: boolean;

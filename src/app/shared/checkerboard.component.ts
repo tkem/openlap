@@ -12,10 +12,11 @@ function createCheckerboardPath(width: number, height: number) {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'checkerboard',
-  styleUrls: ['checkerboard.component.scss'],
-  templateUrl: 'checkerboard.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'checkerboard',
+    styleUrls: ['checkerboard.component.scss'],
+    templateUrl: 'checkerboard.component.html',
+    standalone: false
 })
 export class CheckerboardComponent implements OnChanges {
 

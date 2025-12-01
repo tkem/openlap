@@ -6,10 +6,11 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 import { ControlUnit, ControlUnitButton } from '../../carrera';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'race-control',
-  styleUrls: ['race-control.component.scss'],
-  templateUrl: 'race-control.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'race-control',
+    styleUrls: ['race-control.component.scss'],
+    templateUrl: 'race-control.component.html',
+    standalone: false
 })
 export class RaceControlComponent  {
 

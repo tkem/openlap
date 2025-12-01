@@ -37,7 +37,10 @@ const TIME_FORMATS = {
 
 };
 
-@Pipe({name: 'time', pure: true})
+@Pipe({
+    name: 'time', pure: true,
+    standalone: false
+})
 @Injectable()
 export class TimePipe implements PipeTransform {
   transform(value: number, pattern: string = 'h:mm:ss'): string {

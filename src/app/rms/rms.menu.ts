@@ -7,7 +7,8 @@ import { AppSettings, Options } from '../app-settings';
 import { I18nAlertService } from '../services';
 
 @Component({
-  templateUrl: 'rms.menu.html',
+    templateUrl: 'rms.menu.html',
+    standalone: false
 })
 export class RmsMenu implements OnDestroy, OnInit  {
 

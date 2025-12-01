@@ -19,7 +19,8 @@ const MODELS = [0, 1, 2, 3, 4, 5].map(id => ({
 }));
 
 @Component({
-  templateUrl: 'tuning.page.html',
+    templateUrl: 'tuning.page.html',
+    standalone: false
 })
 export class TuningPage implements OnDestroy, OnInit {
 

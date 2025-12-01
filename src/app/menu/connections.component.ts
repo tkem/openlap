@@ -11,8 +11,9 @@ import { Peripheral } from '../carrera';
 import { I18nToastService, LoggingService } from '../services';
 
 @Component({
-  selector: 'connections',
-  templateUrl: 'connections.component.html'
+    selector: 'connections',
+    templateUrl: 'connections.component.html',
+    standalone: false
 })
 export class ConnectionsComponent {
 

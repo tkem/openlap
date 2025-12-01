@@ -3,9 +3,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Session } from './session';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'race-title',
-  templateUrl: 'race-title.component.html'
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'race-title',
+    templateUrl: 'race-title.component.html',
+    standalone: false
 })
 export class RaceTitleComponent {
 

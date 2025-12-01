@@ -15,7 +15,8 @@ function isObjectSubset(a, b) {
 }
 
 @Component({
-  templateUrl: 'connection.page.html'
+    templateUrl: 'connection.page.html',
+    standalone: false
 })
 export class ConnectionPage implements OnDestroy {
 

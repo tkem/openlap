@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: 'licenses.page.html',
+    templateUrl: 'licenses.page.html',
+    standalone: false
 })
 export class LicensesPage {
   items = [{

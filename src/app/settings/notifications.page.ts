@@ -8,7 +8,8 @@ import { AppSettings, Notification } from '../app-settings';
 import { LoggingService, SpeechService } from '../services';
 
 @Component({
-  templateUrl: 'notifications.page.html'
+    templateUrl: 'notifications.page.html',
+    standalone: false
 })
 export class NotificationsPage implements OnDestroy {
 

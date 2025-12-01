@@ -15,8 +15,9 @@ import { TuningPage } from '../tuning';
 import { ConnectionsComponent } from './connections.component';
 
 @Component({
-  selector: 'menu',
-  templateUrl: 'menu.component.html'
+    selector: 'menu',
+    templateUrl: 'menu.component.html',
+    standalone: false
 })
 export class MenuComponent implements OnChanges {
 

@@ -7,7 +7,8 @@ import { LoggingService } from '../services';
 import { LoggingMenu } from './logging.menu';
 
 @Component({
-  templateUrl: 'logging.page.html',
+    templateUrl: 'logging.page.html',
+    standalone: false
 })
 export class LoggingPage {
 

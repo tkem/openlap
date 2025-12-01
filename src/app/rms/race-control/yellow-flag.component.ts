@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'yellow-flag',
-  styleUrls: ['yellow-flag.component.scss'],
-  templateUrl: 'yellow-flag.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yellow-flag',
+    styleUrls: ['yellow-flag.component.scss'],
+    templateUrl: 'yellow-flag.component.html',
+    standalone: false
 })
 export class YellowFlagComponent implements OnChanges {
 

@@ -27,7 +27,8 @@ const compare = {
 };
 
 @Component({
-  templateUrl: 'rms.page.html',
+    templateUrl: 'rms.page.html',
+    standalone: false
 })
 export class RmsPage implements OnDestroy, OnInit {
 

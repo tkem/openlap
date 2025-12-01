@@ -5,7 +5,8 @@ import { IonInput, IonToggle, NavParams, ModalController } from '@ionic/angular'
 import { Driver } from '../app-settings';
 
 @Component({
-  templateUrl: 'color.component.html'
+    templateUrl: 'color.component.html',
+    standalone: false
 })
 export class ColorComponent {
   

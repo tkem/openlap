@@ -1,7 +1,8 @@
 import { Directive, HostListener, Input } from '@angular/core';
 
 @Directive({
-  selector: 'a[target]',
+    selector: 'a[target]',
+    standalone: false
 })
 export class TargetDirective {
 

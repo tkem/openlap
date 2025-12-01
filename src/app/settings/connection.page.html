@@ -12,8 +12,8 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-label class="ion-text-wrap" translate>
-        Connection timeout
+      <ion-label class="ion-text-wrap">
+        <span translate>Connection timeout</span>
       </ion-label>
       <ion-range [(ngModel)]="ranges.connection" min="1000" max="5000" step="500" snaps="true">
         <ion-label slot="start">1 s</ion-label>
@@ -21,8 +21,8 @@
       </ion-range>
     </ion-item>
     <ion-item>
-      <ion-label class="ion-text-wrap" translate>
-        Request timeout
+      <ion-label class="ion-text-wrap">
+        <span translate>Request timeout</span>
       </ion-label>
       <ion-range [(ngModel)]="ranges.request" min="1000" max="5000" step="500" snaps="true">
         <ion-label slot="start">1 s</ion-label>
@@ -30,8 +30,8 @@
       </ion-range>
     </ion-item>
     <ion-item>
-      <ion-label class="ion-text-wrap" translate>
-        Reconnect delay
+      <ion-label class="ion-text-wrap">
+        <span translate>Reconnect delay</span>
       </ion-label>
       <ion-range [(ngModel)]="ranges.reconnect" dualKnobs="true" min="2000" max="10000" step="1000" snaps="true">
         <ion-label slot="start">2 s</ion-label>

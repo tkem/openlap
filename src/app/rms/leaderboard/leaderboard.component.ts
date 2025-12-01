@@ -63,10 +63,11 @@ class LeaderboardDetail extends LeaderboardItem {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'leaderboard',
-  styleUrls: ['leaderboard.component.scss'],
-  templateUrl: 'leaderboard.component.html'
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'leaderboard',
+    styleUrls: ['leaderboard.component.scss'],
+    templateUrl: 'leaderboard.component.html',
+    standalone: false
 })
 export class LeaderboardComponent implements OnDestroy {
 

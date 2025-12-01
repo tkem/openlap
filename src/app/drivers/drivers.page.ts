@@ -16,7 +16,8 @@ import { ColorComponent } from './color.component';
 import { ControlUnitButton } from '../carrera';
 
 @Component({
-  templateUrl: 'drivers.page.html'
+    templateUrl: 'drivers.page.html',
+    standalone: false
 })
 export class DriversPage implements OnDestroy, OnInit {
 

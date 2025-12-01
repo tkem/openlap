@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      <span translate>Tuning</span>
+      <span>{{'Tuning' | translate}}</span>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="locked = !locked">
@@ -19,13 +19,13 @@
 <ion-content>
   <ion-segment [(ngModel)]="type">
     <ion-segment-button value="speed">
-      <ion-label translate>Speed</ion-label>
+      <ion-label>{{'Speed' | translate}}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="brake">
-      <ion-label translate>Brake</ion-label>
+      <ion-label>{{'Brake' | translate}}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="fuel">
-      <ion-label translate>Fuel</ion-label>
+      <ion-label>{{'Fuel' | translate}}</ion-label>
     </ion-segment-button>
   </ion-segment>
   <ng-container *ngIf="drivers | async as d">
