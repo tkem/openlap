@@ -7,12 +7,12 @@ import { Component } from '@angular/core';
 export class LicensesPage {
   items = [{
     name: 'Angular',
-    copyright: 'Super-powered by Google ©2010-2023',
+    copyright: 'Super-powered by Google ©2010-2025',
     license: 'MIT',
     homepage: 'https://angular.io/'
   }, {
     name: 'Apache Cordova',
-    copyright: 'Copyright © 2023 The Apache Software Foundation',
+    copyright: 'Copyright © 2025 The Apache Software Foundation',
     license: 'Apache-2.0',
     homepage: 'https://cordova.apache.org/'
   }, {
@@ -108,6 +108,7 @@ export class LicensesPage {
   }, {
     name: 'ngx-translate',
     author: 'Olivier Combe',
+    copyright: 'Copyright (c) 2018 Olivier Combe, Copyright (c) 2024 Andreas Löw / CodeAndWeb GmbH',
     license: 'MIT',
     homepage: 'https://github.com/ngx-translate/core#readme'
   }];
