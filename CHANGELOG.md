@@ -1,3 +1,11 @@
+2.5.1 UNRELEASED
+----------------
+
+- Upgrade to Angular 20.
+
+- Update dependencies.
+
+
 2.5.0 2025-05-11
 ----------------
 
