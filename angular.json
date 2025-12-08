@@ -14,7 +14,8 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "www"
+              "base": "www",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
