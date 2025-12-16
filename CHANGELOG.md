@@ -1,4 +1,4 @@
-2.5.1 UNRELEASED
+2.5.1 2025-12-16
 ----------------
 
 - Upgrade to Angular 20.
