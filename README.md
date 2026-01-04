@@ -108,7 +108,8 @@ License
 Copyright (c) 2016-2025 Thomas Kemmer.
 
 Translations: Haarman (Nederlands), SdiF (Italiano), Maikeru
-(Español), nico12 (Français), Ludevik (Slovak), Ilduario (Português).
+(Español), nico12 (Français), Ludevik (Slovak), Ilduario (Português)
+bembee (Hungarian).
 
 iOS support: [softyde](https://github.com/softyde),
 [elliot2extreme](https://github.com/elliot2extreme).
