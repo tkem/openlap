@@ -7,29 +7,29 @@ import { Subscription } from 'rxjs';
 const FIELDS = [{
   // no fuel/pit lane
   practice: [
-    'bestlap gap int lastlap laps status',
+    'bestlap gap int avglap lastlap laps status',
     'bestlap sector1 sector2 sector3 lastlap status'
   ],
   qualifying: [
-    'bestlap gap int lastlap laps status',
+    'bestlap gap int avglap lastlap laps status',
     'bestlap sector1 sector2 sector3 lastlap status'
   ],
   race: [
-    'time bestlap lastlap laps status',
+    'time bestlap avglap lastlap laps status',
     'time sector1 sector2 sector3 lastlap status',
   ]
 }, {
   // with fuel/pit lane
   practice: [
-    'bestlap gap int lastlap laps fuel status',
+    'bestlap gap int avglap lastlap laps fuel status',
     'bestlap sector1 sector2 sector3 lastlap fuel status'
   ],
   qualifying: [
-    'bestlap gap int lastlap laps fuel status',
+    'bestlap gap int avglap lastlap laps fuel status',
     'bestlap sector1 sector2 sector3 lastlap fuel status'
   ],
   race: [
-    'time bestlap lastlap laps pits fuel status',
+    'time bestlap avglap lastlap laps pits fuel status',
     'time sector1 sector2 sector3 lastlap fuel status'
   ]
 }];
@@ -166,6 +166,15 @@ export class LeaderboardComponent implements OnDestroy {
     return intlaps;
   }
 
+  getAverageLap(item: any) {
+    if (!item || !item.laps || item.laps < 1 || !item.times || !item.times[0]) {
+      return null;
+    }
+
+    const pureRaceTime = item.time - item.times[0][0];
+
+    return pureRaceTime / item.laps;
+  }
   showDetails(item: LeaderboardItem) {
     this.detail = Object.assign({}, item, {
       laptimes: this.getLapTimes(item)

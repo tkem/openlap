@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { LeaderboardItem } from './leaderboard.component';
+import { LeaderboardItem, LeaderboardComponent } from './leaderboard.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,6 +14,12 @@ export class LeaderboardItemComponent {
   @Input() item: LeaderboardItem;
   @Input() ranked: LeaderboardItem[];
   @Input() best: number[];
+
+  constructor(private parent: LeaderboardComponent) {}
+
+  getAverageLap(item: LeaderboardItem) {
+    return this.parent.getAverageLap(item);
+  }
 
   abs(n: number) {
     return n < 0 ? -n : n;
