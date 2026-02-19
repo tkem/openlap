@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 
-import { take } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
 
 import { AppSettings, Connection } from '../app-settings';
 import { LoggingService } from '../services';
@@ -36,7 +36,7 @@ export class ConnectionPage implements OnDestroy {
   constructor(private logger: LoggingService, private settings: AppSettings) {}
 
   ngOnInit() {
-    this.settings.getConnection().pipe(take(1)).toPromise().then(connection => {
+    firstValueFrom(this.settings.getConnection()).then(connection => {
       this.connection = connection;
       this.ranges = {
         connection: connection.connectionTimeout,

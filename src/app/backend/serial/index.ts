@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { Serial } from './ngx';
 
-import { NextObserver, Observable, Subject, empty, from, of } from 'rxjs';
+import { EMPTY, NextObserver, Observable, Subject, from, of } from 'rxjs';
 import { share, switchMap, tap } from 'rxjs/operators';
 
 import { Backend } from '../backend';
 import { Peripheral } from '../../carrera';
+import { createSubject } from '../../carrera/peripheral';
 import { AppService, LoggingService } from '../../services';
 
 const BAUD_RATE = 19200;
@@ -42,7 +43,7 @@ class SerialPeripheral implements Peripheral {
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     const observable = this.createObservable(connected, disconnected);
     const observer = this.createObserver(disconnected);
-    return Subject.create(observer, observable);
+    return createSubject(observer, observable);
   }
 
   equals(other: Peripheral) {
@@ -160,7 +161,7 @@ export class SerialBackend extends Backend {
         if (enabled) {
           return of(new SerialPeripheral(this.serial, this.logger));
         } else {
-          return empty();
+          return EMPTY;
         }
       })
     );

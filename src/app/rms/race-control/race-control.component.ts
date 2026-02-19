@@ -29,7 +29,7 @@ export class RaceControlComponent  {
       this.lights = start.pipe(
         map(value => (value == 1 ? 5 : value > 1 && value < 7 ? value - 1 : 0))
       );
-      this.blink = combineLatest(start, state).pipe(
+      this.blink = combineLatest([start, state]).pipe(
         map(([value, state]) => (value >= 8 || state !== 'connected'))
       );
       this.keys = cu.getVersion().then(version => (version >= '5331'));

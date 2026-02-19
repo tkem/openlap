@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { AlertOptions } from '@ionic/core';
 
+import { firstValueFrom } from 'rxjs';
+
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -46,7 +48,7 @@ export class I18nAlertService {
 
   private translateString(key: string) {
     if (key) {
-      return this.translate.get(key).toPromise();
+      return firstValueFrom(this.translate.get(key));
     } else {
       return Promise.resolve(key);
     }

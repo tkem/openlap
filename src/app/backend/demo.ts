@@ -4,6 +4,7 @@ import { NextObserver, Observable, Subject, of } from 'rxjs';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
+import { createSubject } from '../carrera/peripheral';
 import { LoggingService } from '../services';
 
 const VERSION = '5336';
@@ -141,7 +142,7 @@ class DemoPeripheral implements Peripheral {
   }
 
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
-    return Subject.create(this.createObserver(), this.createObservable(connected, disconnected));
+    return createSubject(this.createObserver(), this.createObservable(connected, disconnected));
   }
 
   equals(other: Peripheral) {

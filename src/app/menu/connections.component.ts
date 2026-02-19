@@ -2,7 +2,7 @@ import { Component, Inject, Input } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { Observable, Subscription, empty, from } from 'rxjs';
+import { EMPTY, Observable, Subscription, from } from 'rxjs';
 import { catchError, filter, mergeMap, scan, take, tap } from 'rxjs/operators';
 
 import { AppSettings } from '../app-settings';
@@ -38,7 +38,7 @@ export class ConnectionsComponent {
         catchError(e => {
           this.logger.error('Scan error:', e);
           this.toast.showLongCenter(e.toString()); // TODO: key with param?
-          return empty();
+          return EMPTY;
         })
       ));
       this.peripherals = from(scans).pipe(

@@ -4,6 +4,8 @@ import { Platform, ToastController } from '@ionic/angular';
 
 import { Toast as NativeToast } from '@awesome-cordova-plugins/toast/ngx';
 
+import { firstValueFrom } from 'rxjs';
+
 import { TranslateService } from '@ngx-translate/core';
 
 interface ToastProvider {
@@ -16,7 +18,7 @@ class NativeToastProvider implements ToastProvider {
   async show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
     await this.platform.ready();
     await this.toast.hide();
-    return this.toast.show(message, duration.toString(), position).toPromise();
+    return firstValueFrom(this.toast.show(message, duration.toString(), position));
   }
 }
 
@@ -73,7 +75,7 @@ export class I18nToastService {
   }
 
   private async show(position: 'top' | 'bottom' | 'center', duration: number, key: string, params?: Object) {
-    const message = await this.translate.get(key, params).toPromise();
+    const message = await firstValueFrom(this.translate.get(key, params));
     return this.toast.show(message, duration, position);
   }
 }

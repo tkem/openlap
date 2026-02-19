@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { NextObserver, Observable, Subject, empty, from } from 'rxjs';
+import { EMPTY, NextObserver, Observable, Subject, from } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
+import { createSubject } from '../carrera/peripheral';
 import { LoggingService } from '../services';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -38,7 +39,7 @@ class WebBluetoothPeripheral implements Peripheral {
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     const observable = this.createObservable(connected, disconnected)
     const observer = this.createObserver(disconnected);
-    return Subject.create(observer, observable);
+    return createSubject(observer, observable);
   }
 
   equals(other: Peripheral) {
@@ -165,11 +166,11 @@ export class WebBluetoothBackend extends Backend {
           return from(this.requestDevice()).pipe(
             catchError(err => {
               this.logger.error('Error requesting Web Bluetooth device:', err);
-              return empty();
+              return EMPTY;
             })
           );
         } else {
-          return empty();
+          return EMPTY;
         }
       })
     );

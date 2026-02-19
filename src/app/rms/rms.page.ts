@@ -5,7 +5,7 @@ import { PopoverController, Platform } from '@ionic/angular';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { Observable, Subscription, from, of, merge } from 'rxjs';
+import { Observable, Subscription, firstValueFrom, from, of, merge } from 'rxjs';
 import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
@@ -53,8 +53,6 @@ export class RmsPage implements OnDestroy, OnInit {
   private subscriptions: Subscription;
 
   private backButtonSubscription: Subscription;
-
-  private dataSubscription: Subscription;
 
   private subscription = new Subscription();
 
@@ -305,17 +303,17 @@ export class RmsPage implements OnDestroy, OnInit {
     });
 
     this.subscriptions.add(
-      this.lapcount.subscribe(
-        laps => {
+      this.lapcount.subscribe({
+        next: laps => {
           cu.setLap(laps.count);
         },
-        error => {
+        error: error => {
           this.logger.error('Lap counter error:', error);
         },
-        () => {
+        complete: () => {
           this.logger.info('Lap counter finished');
         }
-      )
+      })
     );
 
     this.subscriptions.add(
@@ -331,14 +329,14 @@ export class RmsPage implements OnDestroy, OnInit {
 
     if (options.mode != 'practice') {
       const start = cu.getStart();
-      start.pipe(take(1)).toPromise().then(value => {
+      firstValueFrom(start).then(value => {
         if (value === 0) {
           cu.toggleStart();
         }
         // wait until startlight goes off; TODO: subscribe/unsubscribe?
-        cu.getStart().pipe(pairwise(),filter(([prev, curr]) => {
+        firstValueFrom(cu.getStart().pipe(pairwise(),filter(([prev, curr]) => {
           return prev != 0 && curr == 0;
-        }),take(1),).toPromise().then(() => {
+        }))).then(() => {
           this.logger.info('Start ' + options.mode + ' mode');
           session.start();
         });
@@ -353,9 +351,6 @@ export class RmsPage implements OnDestroy, OnInit {
     this.subscription.unsubscribe();
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
-    }
-    if (this.dataSubscription) {
-      this.dataSubscription.unsubscribe();
     }
   }
 

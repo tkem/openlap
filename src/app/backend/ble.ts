@@ -4,11 +4,12 @@ import { Platform } from '@ionic/angular';
 
 import { BLE, BLEScanOptions } from '@awesome-cordova-plugins/ble/ngx';
 
-import { NextObserver, Observable, Subject, empty, from, interval, of } from 'rxjs';
+import { EMPTY, NextObserver, Observable, Subject, from, interval, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
+import { createSubject } from '../carrera/peripheral';
 import { LoggingService } from '../services';
 
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -41,7 +42,7 @@ class BLEPeripheral implements Peripheral {
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>) {
     const observable = this.createObservable(connected, disconnected)
     const observer = this.createObserver(disconnected);
-    return Subject.create(observer, observable);
+    return createSubject(observer, observable);
   }
 
   equals(other: Peripheral) {
@@ -196,7 +197,7 @@ export class BLEBackend extends Backend {
           );
         } else {
           this.logger.info('Not scanning for BLE devices');
-          return empty();
+          return EMPTY;
         }
       })
     );

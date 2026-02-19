@@ -4,7 +4,7 @@ import { NoNewVersionDetectedEvent, SwUpdate, VersionDetectedEvent, VersionReady
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { Subscription, from } from 'rxjs';
+import { Subscription, firstValueFrom, from } from 'rxjs';
 import { filter, first, mergeMap, timeout } from 'rxjs/operators';
 
 import { AppSettings } from './app-settings';
@@ -27,7 +27,7 @@ const STATE_MESSAGES = {
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
-  private stateSubscription = new Subscription();
+  private subscription = new Subscription();
 
   constructor(
     private app: AppService,
@@ -60,16 +60,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
           version += " (" + versionCode + ")";
         }
         this.logger.info("Open Lap", version, isDevMode() ? "[dev]" : "[prod]", "on", window?.navigator?.userAgent);
-        isDevMode
       });
     });
-    this.settings.getOptions().subscribe(options => {
+    this.subscription .add(this.settings.getOptions().subscribe(options => {
       this.logger.setDebugEnabled(options.debug);
       this.setLanguage(options.language);
       this.speech.setVoice(options.voice);
       this.speech.setRate(options.rate / 1000.0);
       this.speech.setPitch(options.pitch / 1000.0);
-    });
+    }));
   }
 
   ngOnDestroy() {
@@ -114,8 +113,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private setLanguage(language: string) {
-    this.translate.use(language || this.translate.getBrowserLang() || 'en').toPromise().then(obj => {
-      this.translate.get('notifications.locale').toPromise().then(locale => {
+    firstValueFrom(this.translate.use(language || this.translate.getBrowserLang() || 'en')).then(obj => {
+      firstValueFrom(this.translate.get('notifications.locale')).then(locale => {
         this.speech.setLocale(locale);
       });
     });
@@ -130,17 +129,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private connect() {
     this.settings.getConnection().subscribe(connection => {
-      this.stateSubscription.unsubscribe();
       if (connection && connection.name) {
         this.logger.info('Connecting to ' + connection.name);
         // TODO: scan only backend responsible for this connection? provide backend.get()?
-        from(this.backends.map(backend => backend.scan())).pipe(
+        firstValueFrom(from(this.backends.map(backend => backend.scan())).pipe(
           mergeMap(device => device),
           first(device => device.equals(connection)),
           timeout(CONNECTION_TIMEOUT)
-        ).toPromise().then(device => {
+        )).then(device => {
           const cu = new ControlUnit(device, connection);
-          this.stateSubscription = cu.getState().subscribe(state => this.showConnectionToast(state, cu.peripheral.name));
+          this.subscription.add(cu.getState().subscribe(state => this.showConnectionToast(state, cu.peripheral.name)));
           this.cu.next(cu);
           cu.connect();
         }).catch(error => {

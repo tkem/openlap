@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { take } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
 
 import { AppSettings, Notification } from '../app-settings';
 import { LoggingService, SpeechService } from '../services';
@@ -87,7 +87,7 @@ export class NotificationsPage implements OnDestroy {
   }
 
   ngOnInit() {
-    this.settings.getNotifications().pipe(take(1)).toPromise().then(notifications => {
+    firstValueFrom(this.settings.getNotifications()).then(notifications => {
       this.notifications = notifications;
     }).catch(error => {
       this.logger.error('Error getting notifications', error);
@@ -110,7 +110,7 @@ export class NotificationsPage implements OnDestroy {
     if (this.notifications[id] && this.notifications[id].message) {
       return Promise.resolve(this.notifications[id].message);
     } else {
-      return this.translate.get('notifications.' + id).toPromise();
+      return firstValueFrom(this.translate.get('notifications.' + id));
     }
   }
 }

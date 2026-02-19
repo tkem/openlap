@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { ModalController } from '@ionic/angular';
 
-import { take } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -40,7 +40,7 @@ export class DriversPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.settings.getDrivers().pipe(take(1)).toPromise().then(drivers => {
+    firstValueFrom(this.settings.getDrivers()).then(drivers => {
       this.drivers = drivers;
     }).catch(error => {
       this.logger.error('Error getting drivers', error);
@@ -111,7 +111,7 @@ export class DriversPage implements OnDestroy, OnInit {
     if (this.drivers[id] && this.drivers[id].name) {
       return Promise.resolve(this.drivers[id].name);
     } else {
-      return this.translate.get(this.placeholder, {number: id + 1}).toPromise();
+      return firstValueFrom(this.translate.get(this.placeholder, {number: id + 1}));
     }
   }
 }

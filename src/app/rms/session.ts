@@ -1,5 +1,5 @@
 import { EMPTY, BehaviorSubject, Observable, interval, merge } from 'rxjs';
-import { combineLatestWith, distinctUntilChanged, filter, groupBy, map, mergeMap, publishReplay, refCount, scan, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { combineLatestWith, distinctUntilChanged, filter, groupBy, map, mergeMap, scan, share, shareReplay, startWith, tap, withLatestFrom } from 'rxjs/operators';
 
 import { RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -140,8 +140,7 @@ export class Session {
         }
       }, 0),
       startWith(0),
-      publishReplay(1),
-      refCount(),
+      shareReplay({ bufferSize: 1, refCount: true }),
       distinctUntilChanged()
     );
 
@@ -151,8 +150,7 @@ export class Session {
         return fini && cars.every(e => e.finished);
       }),
       startWith(false),
-      publishReplay(1),
-      refCount(),
+      shareReplay({ bufferSize: 1, refCount: true }),
       distinctUntilChanged()
     );
 
@@ -283,12 +281,10 @@ export class Session {
             finished: finished
           };
         }),
-        publishReplay(1),
-        refCount()
+        shareReplay({ bufferSize: 1, refCount: true })
       );
     }),
-    publishReplay(),
-    refCount()
+    shareReplay({ refCount: true })
     );
   }
 
