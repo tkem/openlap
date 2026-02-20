@@ -96,11 +96,11 @@ export class LeaderboardComponent implements OnDestroy {
         return acc;
       }, []);
     } else {
-      this.ranked = items;
+      this.ranked = [];
       this.best = [];
     }
     // FIXME: sort by id, extend item.times?
-    if (this.detail) {
+    if (this.detail && items) {
       for (let item of items) {
         if (item.id == this.detail.id) {
           this.detail = Object.assign({}, item, {

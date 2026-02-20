@@ -77,7 +77,7 @@ export class Session {
     const reset = merge(
       cu.getStart().pipe(distinctUntilChanged(),filter(start => start != 0),),
       cu.getState().pipe(filter(state => state == 'connected'),)
-    ).pipe(map(value => {
+    ).pipe(tap(() => {
       cu.setMask(this.mask);
     }));
     // create monotonic timer
@@ -219,9 +219,10 @@ export class Session {
       }
       mask >>>= 1;
     }
-    return timer.pipe(startWith(...init), groupBy(([id]) => id), map(group => {
-      type TimeInfo = [number[][], number[], number[], boolean];
+    return timer.pipe(startWith(...init), groupBy(([id]) => id), tap(group => {
       this.active |= (1 << group.key);
+    }), map(group => {
+      type TimeInfo = [number[][], number[], number[], boolean];
 
       const times = group.pipe(scan(([times, last, best, finished]: TimeInfo, [id, time, sensor]: [number, number, number]) => {
         const tail = times[times.length - 1] || [];
@@ -235,6 +236,7 @@ export class Session {
               best[tail.length] = Math.min(last[tail.length], best[tail.length] || Infinity);
             }
             if (!finished && this.isFinished(times.length - 1)) {
+              // TODO: refactor - move this.finish() side effect out of scan() into a downstream tap()
               this.finish(id);
               finished = true;
             }

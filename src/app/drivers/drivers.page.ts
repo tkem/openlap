@@ -100,7 +100,7 @@ export class DriversPage implements OnDestroy, OnInit {
   }
 
   pressCodeButton() {
-    this.cu.value.trigger(ControlUnitButton.CODE);
+    this.cu.value?.trigger(ControlUnitButton.CODE);
   }
 
   onChangeName(event) {

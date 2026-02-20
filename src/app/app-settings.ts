@@ -140,7 +140,7 @@ export class AppSettings {
       map(value => {
         const result = new Array<Driver>(8);
         for (let i = 0; i != result.length; ++i) {
-          result[i] = Object.assign(DRIVERS[i], value ? value[i] : null);
+          result[i] = Object.assign({}, DRIVERS[i], value ? value[i] : null);
         }
         return result;
       })

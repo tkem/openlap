@@ -11,12 +11,14 @@ import { AppService, ControlUnitService, LoggingService } from '../services';
 import { TuningMenu } from './tuning.menu';
 
 // TODO: store with CU or settings?
-const MODELS = [0, 1, 2, 3, 4, 5].map(id => ({
-  id: id,
-  speed: null,
-  brake: null,
-  fuel: null
-}));
+function createModels() {
+  return [0, 1, 2, 3, 4, 5].map(id => ({
+    id: id,
+    speed: null,
+    brake: null,
+    fuel: null
+  }));
+}
 
 @Component({
     templateUrl: 'tuning.page.html',
@@ -32,7 +34,7 @@ export class TuningPage implements OnDestroy, OnInit {
 
   orientation: Observable<string>;
 
-  models = MODELS;
+  models = createModels();
 
   locked = false;
 
@@ -72,13 +74,13 @@ export class TuningPage implements OnDestroy, OnInit {
       for (let model of (event.id !== undefined ? [this.models[event.id]] : this.models)) {
         switch (event.type) {
         case 'speed':
-          this.cu.value.setSpeed(model.id, model.speed);
+          this.cu.value?.setSpeed(model.id, model.speed);
           break;
         case 'brake':
-          this.cu.value.setBrake(model.id, model.brake);
+          this.cu.value?.setBrake(model.id, model.brake);
           break;
         case 'fuel':
-          this.cu.value.setFuel(model.id, model.fuel);
+          this.cu.value?.setFuel(model.id, model.fuel);
           break;
         }
       }
@@ -92,13 +94,13 @@ export class TuningPage implements OnDestroy, OnInit {
   applyAll() {
     for (let model of this.models) {
       if (model.speed !== null) {
-        this.cu.value.setSpeed(model.id, model.speed);
+        this.cu.value?.setSpeed(model.id, model.speed);
       }
       if (model.brake !== null) {
-        this.cu.value.setBrake(model.id, model.brake);
+        this.cu.value?.setBrake(model.id, model.brake);
       }
       if (model.fuel !== null) {
-        this.cu.value.setFuel(model.id, model.fuel);
+        this.cu.value?.setFuel(model.id, model.fuel);
       }
     }
   }
