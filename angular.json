@@ -84,7 +84,10 @@
               "buildTarget": "app:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "hmr": false
+          }
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
