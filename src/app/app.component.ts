@@ -4,6 +4,32 @@ import { NoNewVersionDetectedEvent, SwUpdate, VersionDetectedEvent, VersionReady
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { addIcons } from 'ionicons';
+import {
+  alertCircleSharp,
+  bugSharp,
+  buildSharp,
+  caretDownSharp,
+  caretUpSharp,
+  closeSharp,
+  ellipsisVerticalSharp,
+  exitSharp,
+  informationCircleSharp,
+  linkSharp,
+  peopleSharp,
+  refreshOutline,
+  refreshSharp,
+  settingsSharp,
+  speedometerSharp,
+  stopwatchSharp,
+  trophySharp,
+  unlinkSharp,
+  volumeHigh,
+  volumeHighSharp,
+  volumeMuteSharp,
+  warningSharp,
+} from 'ionicons/icons';
+
 import { Subscription, firstValueFrom, from } from 'rxjs';
 import { filter, first, mergeMap, timeout } from 'rxjs/operators';
 
@@ -41,6 +67,30 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private translate: TranslateService,
     private swUpdate: SwUpdate)
   {
+    addIcons({
+      alertCircleSharp,
+      bugSharp,
+      buildSharp,
+      caretDownSharp,
+      caretUpSharp,
+      closeSharp,
+      ellipsisVerticalSharp,
+      exitSharp,
+      informationCircleSharp,
+      linkSharp,
+      peopleSharp,
+      refreshOutline,
+      refreshSharp,
+      settingsSharp,
+      speedometerSharp,
+      stopwatchSharp,
+      trophySharp,
+      unlinkSharp,
+      volumeHigh,
+      volumeHighSharp,
+      volumeMuteSharp,
+      warningSharp,
+    });
     if (window.screen) {
       window.screen.orientation.addEventListener('change', () => {
         app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
