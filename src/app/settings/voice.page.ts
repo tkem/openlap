@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -10,7 +10,7 @@ import { SpeechService } from '../services';
     templateUrl: 'voice.page.html',
     standalone: false
 })
-export class VoicePage implements OnDestroy {
+export class VoicePage implements OnDestroy, OnInit {
 
   options = new Options();
 

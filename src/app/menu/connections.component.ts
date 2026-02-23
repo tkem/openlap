@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
@@ -15,7 +15,7 @@ import { I18nToastService, LoggingService } from '../services';
     templateUrl: 'connections.component.html',
     standalone: false
 })
-export class ConnectionsComponent {
+export class ConnectionsComponent implements OnDestroy, OnInit {
 
   @Input() selected: Peripheral;
 

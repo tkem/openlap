@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { firstValueFrom } from 'rxjs';
 
@@ -18,7 +18,7 @@ function isObjectSubset(a, b) {
     templateUrl: 'connection.page.html',
     standalone: false
 })
-export class ConnectionPage implements OnDestroy {
+export class ConnectionPage implements OnDestroy, OnInit {
 
   connection = new Connection();
 

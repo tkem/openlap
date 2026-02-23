@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
-import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { IonInput, IonToggle, NavParams, ModalController } from '@ionic/angular';
 
@@ -69,8 +69,8 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
     auto: new FormControl(params.get('auto') || false),
     pace: new FormControl(params.get('pace') || false)
   }, {
-    validator: lapsOrTimeRequired
-  });
+    validators: lapsOrTimeRequired
+  } as AbstractControlOptions);
 }
 
 @Component({

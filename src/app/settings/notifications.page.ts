@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,7 +11,7 @@ import { LoggingService, SpeechService } from '../services';
     templateUrl: 'notifications.page.html',
     standalone: false
 })
-export class NotificationsPage implements OnDestroy {
+export class NotificationsPage implements OnDestroy, OnInit {
 
   items = [{
     id: 'finished',
