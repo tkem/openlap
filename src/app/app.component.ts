@@ -12,6 +12,9 @@ import { Backend } from './backend';
 import { ControlUnit } from './carrera';
 import { AppService, ControlUnitService, I18nAlertService, I18nToastService, LoggingService, SpeechService } from './services';
 
+import { Router, NavigationEnd } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+
 const CONNECTION_TIMEOUT = 3000;
 
 const STATE_MESSAGES = {
@@ -28,6 +31,7 @@ const STATE_MESSAGES = {
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private stateSubscription = new Subscription();
+  private routerSub: Subscription;
 
   constructor(
     private app: AppService,
@@ -39,7 +43,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private speech: SpeechService,
     private toast: I18nToastService,
     private translate: TranslateService,
-    private swUpdate: SwUpdate)
+    private swUpdate: SwUpdate,
+    private router: Router,
+    private menuCtrl: MenuController)
   {
     if (window.screen) {
       window.screen.orientation.addEventListener('change', () => {
@@ -70,10 +76,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       this.speech.setRate(options.rate / 1000.0);
       this.speech.setPitch(options.pitch / 1000.0);
     });
+    this.setupMenuControl();
   }
 
   ngOnDestroy() {
     this.cu.next(null);
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
@@ -154,4 +164,24 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       }
     });
   }
+
+  private setupMenuControl() {
+  this.updateMenuState(this.router.url); 
+
+  this.routerSub = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe((event: NavigationEnd) => {
+    this.updateMenuState(event.url);
+  });
+}
+
+  private updateMenuState(url: string) {
+  const lowUrl = url.toLowerCase();
+  if (lowUrl.includes('/rms') || lowUrl === '/' || lowUrl === '') {
+    this.menuCtrl.enable(true);
+  } else {
+    this.menuCtrl.enable(false);
+  }
+  }
+
 }
