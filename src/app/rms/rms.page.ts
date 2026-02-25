@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PopoverController, Platform } from '@ionic/angular';
+import { PopoverController, MenuController, AlertController, ModalController } from '@ionic/angular';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,7 +11,7 @@ import { distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile
 
 import { AppSettings, Options, RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
-import { AppService, ControlUnitService, LoggingService, SpeechService } from '../services';
+import { AppService, ControlUnitService, LoggingService, SpeechService, I18nAlertService } from '../services';
 
 import { LeaderboardItem } from './leaderboard';
 import { RmsMenu } from './rms.menu';
@@ -60,7 +60,8 @@ export class RmsPage implements OnDestroy, OnInit {
 
   constructor(public cu: ControlUnitService, private app: AppService,
     private logger: LoggingService, private settings: AppSettings, private speech: SpeechService,
-    private popover: PopoverController, private translate: TranslateService, route: ActivatedRoute)
+    private popover: PopoverController, private translate: TranslateService, route: ActivatedRoute,
+    private alertCtrl: AlertController, private menuCtrl: MenuController, private modalCtrl: ModalController, private alert: I18nAlertService,)
   {
     const mode = route.snapshot.paramMap.get('mode');
     switch (mode) {
@@ -359,18 +360,30 @@ export class RmsPage implements OnDestroy, OnInit {
     }
   }
 
-  ionViewDidEnter(){
-    this.backButtonSubscription = this.app.backButton.subscribe(() => {
-      // TODO: confirm or press back button twice?
-      if (this.cu.value) {
-        this.cu.value.disconnect().catch(error => {
-          this.logger.error('Error disconnecting from CU:', error);
-        }).then(() => {
-          this.app.exit();
-        });
-      } else {
-        this.app.exit();
+  ionViewDidEnter() {
+    this.backButtonSubscription = this.app.backButton.subscribe(async () => {
+      
+      if (await this.menuCtrl.isOpen()) {
+        await this.menuCtrl.close();
+        return; 
       }
+
+      if (await this.popover.getTop()) {
+        await this.popover.dismiss();
+        return;
+      }
+
+      if (await this.modalCtrl.getTop()) {
+        await this.modalCtrl.dismiss();
+        return;
+      }
+
+      if (await this.alertCtrl.getTop()) {
+        await this.alertCtrl.dismiss();
+        return;
+      }
+
+      this.onExitApp();
     });
   }
 
@@ -431,5 +444,32 @@ export class RmsPage implements OnDestroy, OnInit {
   // see https://github.com/ngx-translate/core/issues/330
   private getTranslations(key: string, params?: Object) {
     return this.translate.stream(key, params);
+  }
+
+  onExitApp() {
+    this.alert.show({
+      message: 'Exit Open Lap?',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+      }, {
+        text: 'OK',
+        handler: () => this.exit()
+      }]
+    });
+  }
+
+ private exit() {
+    this.logger.info('Exiting application');
+    if (this.cu.value) {
+      this.cu.value.disconnect().catch(error => {
+        this.logger.error('Error disconnecting from CU:', error);
+      }).then(() => {
+        this.app.exit();
+      });
+    } else {
+      this.app.exit();
+    }
+    this.logger.info('Exited application');
   }
 }
