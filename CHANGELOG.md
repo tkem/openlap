@@ -1,3 +1,15 @@
+2.6.0 UNRELEASED
+----------------
+
+- Add Hungarian translation (courtesy of bembee).
+
+- Android: Prevent instant app exit on back button.
+
+- Various minor code improvements and cleanups.
+
+- Update dependencies.
+
+
 2.5.2 2025-12-28
 ----------------
 
