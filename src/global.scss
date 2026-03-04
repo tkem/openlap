@@ -116,3 +116,8 @@ ion-button {
         --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     }
 }
+
+/* prevent default outline on top-level backbutton alert */
+.alert-wrapper:focus  {
+    outline: none !important;
+}
