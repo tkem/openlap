@@ -117,7 +117,7 @@ export class ControlUnit {
   getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
     return this.state.asObservable().pipe(
       distinctUntilChanged(),
-      shareReplay({ refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   }
 
