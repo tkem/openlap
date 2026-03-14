@@ -42,16 +42,16 @@
           </ion-menu-toggle>
         </ion-item-group>
         <ion-item-group>
-          <ion-menu-toggle auto-hide="false">
+          <ion-menu-toggle>
             <ion-item button routerLink="/settings">
-              <ion-icon menuClose name="settings-sharp" slot="start"></ion-icon>
+              <ion-icon name="settings-sharp" slot="start"></ion-icon>
               <ion-label>{{'Settings' | translate}}</ion-label>
             </ion-item>
-            <ion-item button (click)="exitApp()" *ngIf="exitApp">
-              <ion-icon name="exit-sharp" slot="start"></ion-icon>
-              <ion-label>{{'Exit' | translate}}</ion-label>
-            </ion-item>
           </ion-menu-toggle>
+          <ion-item button (click)="exitApp()" *ngIf="exitApp">
+            <ion-icon name="exit-sharp" slot="start"></ion-icon>
+            <ion-label>{{'Exit' | translate}}</ion-label>
+          </ion-item>
         </ion-item-group>
       </div>
       <div *ngIf="!mode">
