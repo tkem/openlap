@@ -10,7 +10,7 @@ export class AboutPage {
 
   version: Promise<string>;
 
-  constructor(private app: AppService) {
+  constructor(app: AppService) {
     this.version = app.getVersion();
   }
 }

@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 
 import { BLE, BLEScanOptions } from '@awesome-cordova-plugins/ble/ngx';
 
-import { EMPTY, NextObserver, Observable, Subject, from, interval, of } from 'rxjs';
+import { EMPTY, NextObserver, Observable, from, interval, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { Backend } from './backend';

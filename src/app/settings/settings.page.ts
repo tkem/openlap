@@ -1,11 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { AboutPage } from './about.page';
-import { ConnectionPage } from './connection.page';
-import { LicensesPage } from './licenses.page';
-import { LoggingPage } from './logging.page';
-import { NotificationsPage } from './notifications.page';
-
 import { AppSettings, Options } from '../app-settings';
 import { I18nAlertService, SpeechService } from '../services';
 

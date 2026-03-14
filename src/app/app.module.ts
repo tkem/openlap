@@ -3,7 +3,7 @@ import 'zone.js';
 import 'zone.js/plugins/zone-patch-cordova';
 
 import { ErrorHandler, Injectable, NgModule } from '@angular/core';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-worker';

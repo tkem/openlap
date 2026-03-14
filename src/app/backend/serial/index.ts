@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Serial } from './ngx';
 
-import { EMPTY, NextObserver, Observable, Subject, from, of } from 'rxjs';
+import { EMPTY, NextObserver, Observable, from, of } from 'rxjs';
 import { share, switchMap, tap } from 'rxjs/operators';
 
 import { Backend } from '../backend';

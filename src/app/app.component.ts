@@ -31,7 +31,7 @@ import {
 } from 'ionicons/icons';
 
 import { Subscription, firstValueFrom, from } from 'rxjs';
-import { filter, first, mergeMap, timeout } from 'rxjs/operators';
+import { first, mergeMap, timeout } from 'rxjs/operators';
 
 import { AppSettings } from './app-settings';
 import { Backend } from './backend';
@@ -163,7 +163,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private setLanguage(language: string) {
-    firstValueFrom(this.translate.use(language || this.translate.getBrowserLang() || 'en')).then(obj => {
+    firstValueFrom(this.translate.use(language || this.translate.getBrowserLang() || 'en')).then(() => {
       firstValueFrom(this.translate.get('notifications.locale')).then(locale => {
         this.speech.setLocale(locale);
       });

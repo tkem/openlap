@@ -113,7 +113,6 @@ export class Session {
       map(([_reset, grid]) => {
         return grid;  // for reset side effects only...
       }),
-      /*mergeAll(),*/
       mergeMap(val => val),
       scan((grid, event) => {
         const newgrid = [...grid];
@@ -128,7 +127,6 @@ export class Session {
     );
 
     this.currentLap = this.grid.pipe(
-      /*mergeAll(),*/
       mergeMap(val => val),
       scan<Entry, number>((current, event) => {
         if (current > event.laps) {

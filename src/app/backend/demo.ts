@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
-import { NextObserver, Observable, Subject, of } from 'rxjs';
+import { NextObserver, Observable, of } from 'rxjs';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
@@ -178,7 +178,6 @@ class DemoPeripheral implements Peripheral {
           }
           return;
         }
-        //console.log('Demo connection next:', toString(value));
         if (toString(value) != '?') {
           console.log('Demo CU received ' + toString(value));
         }
@@ -194,7 +193,6 @@ class DemoPeripheral implements Peripheral {
         }
         setTimeout(() => {
           if (this.subscriber) {
-            // console.log('Demo connection response to ' + toString(value));
             if (toString(value) == '0') {
               this.subscriber.next(this.version);
             } else {
@@ -265,7 +263,6 @@ class DemoPeripheral implements Peripheral {
     if (this.startSequence == 0) {
       this.stopAll();
       this.startSequence = 1;
-      //this.error('Forced error');
     } else if (this.startSequence == 7) {
       this.startAll();
       this.startSequence = 0;

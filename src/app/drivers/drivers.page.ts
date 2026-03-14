@@ -28,7 +28,7 @@ export class DriversPage implements OnDestroy, OnInit {
   readonly placeholder = 'Driver {{number}}';
 
   constructor(
-    private app: AppService,
+    app: AppService,
     private cu: ControlUnitService, 
     private logger: LoggingService,
     private settings: AppSettings,
@@ -67,15 +67,9 @@ export class DriversPage implements OnDestroy, OnInit {
 
   reorderItems(event: any) {
     // TODO: optionally stick color to controller ID
-    //let colors = this.drivers.map(driver => driver.color);
     let element = this.drivers[event.detail.from];
     this.drivers.splice(event.detail.from, 1);
     this.drivers.splice(event.detail.to, 0, element);
-    /*
-    colors.forEach((color, index) => {
-      this.drivers[index].color = color;
-    });
-    */
     event.detail.complete();
   }
 

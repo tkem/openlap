@@ -49,8 +49,6 @@ export class RaceControlComponent  {
 
   @Output() onYellowFlag = new EventEmitter();
 
-  constructor() {}
- 
   togglePaceCar() {
     if (this.cu) {
       this.cu.trigger(ControlUnitButton.PACE_CAR);

@@ -321,7 +321,7 @@ export class RmsPage implements OnDestroy, OnInit {
       events.pipe(
         filter(([event]) => event == 'alldone'),
         withLatestFrom(this.getRaceOptions(options.mode))
-      ).subscribe(([[event], options]) => {
+      ).subscribe(([[,], options]) => {
         if (options.stopfin) {
           cu.toggleStart();  // TODO: read state?
         }

@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { Session } from './session';
-
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'race-title',
@@ -17,6 +15,4 @@ export class RaceTitleComponent {
   @Input() time: number;
 
   @Input() finished: boolean;
-
-  constructor() {}
 }

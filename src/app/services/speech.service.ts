@@ -75,7 +75,7 @@ class DummySpeech {
     logger.info('Speech not supported on this platform');
   }
 
-  speak(textOrOptions: string | TTSOptions): Promise<void> {
+  speak(_textOrOptions: string | TTSOptions): Promise<void> {
     return Promise.resolve();
   }
 

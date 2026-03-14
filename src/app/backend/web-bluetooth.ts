@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 
-import { EMPTY, NextObserver, Observable, Subject, from } from 'rxjs';
+import { EMPTY, NextObserver, Observable, from } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
 import { Backend } from './backend';

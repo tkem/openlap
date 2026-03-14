@@ -173,7 +173,7 @@ export class LeaderboardComponent implements OnDestroy {
     this.intlaps = this.getIntLaps(this._items);
   }
 
-  onWillDismissDetails(event) {
+  onWillDismissDetails(_event) {
     this.detail = null;
   }
 

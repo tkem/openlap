@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { IonInput, IonToggle, NavParams, ModalController } from '@ionic/angular';
+import { NavParams, ModalController } from '@ionic/angular';
 
 import { Driver } from '../app-settings';
 

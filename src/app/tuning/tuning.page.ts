@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 
 import { AppSettings, Driver, Options } from '../app-settings';
 import { AppService, ControlUnitService, LoggingService } from '../services';
