@@ -20,6 +20,8 @@ function isObjectSubset(a, b) {
 })
 export class ConnectionPage implements OnDestroy, OnInit {
 
+  private loaded = false;
+
   connection = new Connection();
 
   ranges = {
@@ -47,12 +49,16 @@ export class ConnectionPage implements OnDestroy, OnInit {
         }
       };
       this.demo = connection.demoControlUnit;
+      this.loaded = true;
     }).catch(error => {
       this.logger.error('Error getting connection parameters', error);
     });
   }
 
   ngOnDestroy() {
+    if (!this.loaded || !this.connection || !this.ranges || !this.ranges.reconnect) {
+      return;
+    }
     const connection = {
       connectionTimeout: this.ranges.connection,
       requestTimeout: this.ranges.request,

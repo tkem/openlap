@@ -23,6 +23,8 @@ export class DriversPage implements OnDestroy, OnInit {
 
   drivers: Driver[];
 
+  private loaded = false;
+
   orientation: Observable<string>;
 
   readonly placeholder = 'Driver {{number}}';
@@ -42,12 +44,16 @@ export class DriversPage implements OnDestroy, OnInit {
   ngOnInit() {
     firstValueFrom(this.settings.getDrivers()).then(drivers => {
       this.drivers = drivers;
+      this.loaded = true;
     }).catch(error => {
       this.logger.error('Error getting drivers', error);
     });
   }
 
   ngOnDestroy() {
+    if (!this.loaded || !this.drivers) {
+      return;
+    }
     this.settings.setDrivers(this.drivers).catch(error => {
       this.logger.error('Error setting drivers', error);
     });

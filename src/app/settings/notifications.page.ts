@@ -13,6 +13,8 @@ import { LoggingService, SpeechService } from '../services';
 })
 export class NotificationsPage implements OnDestroy, OnInit {
 
+  private loaded = false;
+
   items = [{
     id: 'finished',
     label: 'Race finished'
@@ -89,12 +91,16 @@ export class NotificationsPage implements OnDestroy, OnInit {
   ngOnInit() {
     firstValueFrom(this.settings.getNotifications()).then(notifications => {
       this.notifications = notifications;
+      this.loaded = true;
     }).catch(error => {
       this.logger.error('Error getting notifications', error);
     });
   }
 
   ngOnDestroy() {
+    if (!this.loaded || !this.notifications) {
+      return;
+    }
     this.settings.setNotifications(this.notifications).catch(error => {
       this.logger.error('Error setting notifications', error);
     });
