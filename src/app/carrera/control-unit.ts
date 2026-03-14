@@ -50,7 +50,7 @@ export class ControlUnit {
 
   constructor(public peripheral: Peripheral, private settings: Settings) {
     this.connection = this.peripheral.connect({
-      next: () => this.connection.next(POLL_COMMAND.buffer)
+      next: () => this.connection.next(POLL_COMMAND.buffer as ArrayBuffer)
     });
     const timedConnection = this.connection.pipe(
       timeout({
@@ -226,7 +226,7 @@ export class ControlUnit {
 
   private poll() {
     const request = this.requests.shift() || POLL_COMMAND;
-    this.connection.next(request.buffer);
+    this.connection.next(request.buffer as ArrayBuffer);
   }
 
 

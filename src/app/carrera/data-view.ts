@@ -1,8 +1,8 @@
 export class DataView {
   private array: Uint8Array;
 
-  get buffer() {
-    return this.array.buffer;
+  get buffer(): ArrayBuffer {
+    return this.array.buffer as ArrayBuffer;
   }
 
   get byteLength() {
