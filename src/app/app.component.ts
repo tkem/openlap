@@ -112,7 +112,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.logger.info("Open Lap", version, isDevMode() ? "[dev]" : "[prod]", "on", window?.navigator?.userAgent);
       });
     });
-    this.subscription .add(this.settings.getOptions().subscribe(options => {
+    this.subscription.add(this.settings.getOptions().subscribe(options => {
       this.logger.setDebugEnabled(options.debug);
       this.setLanguage(options.language);
       this.speech.setVoice(options.voice);
@@ -122,13 +122,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.cu.next(null);
   }
 
   ngAfterViewInit() {
     if (this.swUpdate.isEnabled) {
       this.logger.info("Service worker enabled");
-      this.swUpdate.versionUpdates.subscribe(event => {
+      this.subscription.add(this.swUpdate.versionUpdates.subscribe(event => {
         if (event as NoNewVersionDetectedEvent && event.type === "NO_NEW_VERSION_DETECTED") {
           this.logger.info("No new version detected");
         } else if (event as VersionDetectedEvent && event.type === "VERSION_DETECTED") {
@@ -139,7 +140,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         } else {
           this.logger.error("Version event:", event);
         }
-      });
+      }));
     } else {
       this.logger.debug("Service worker not enabled");
     }
@@ -178,7 +179,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private connect() {
-    this.settings.getConnection().subscribe(connection => {
+    this.subscription.add(this.settings.getConnection().subscribe(connection => {
       if (connection && connection.name) {
         this.logger.info('Connecting to ' + connection.name);
         // TODO: scan only backend responsible for this connection? provide backend.get()?
@@ -200,6 +201,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.app.hideSplashScreen();
         this.cu.next(null);
       }
-    });
+    }));
   }
 }
