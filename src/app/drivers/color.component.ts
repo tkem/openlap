@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import { NavParams, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 
 import { Driver } from '../app-settings';
 
@@ -8,7 +8,7 @@ import { Driver } from '../app-settings';
     templateUrl: 'color.component.html',
     standalone: false
 })
-export class ColorComponent {
+export class ColorComponent implements OnInit {
   
   readonly placeholder = 'Driver {{number}}';
 
@@ -17,14 +17,15 @@ export class ColorComponent {
     ['#c02040', '#408080', '#4080c0', '#ff8020', '#ff8080', '#20ffc0', '#404040', '#000000'],
   ];
 
-  driver: Driver;
-  id: number;
+  @Input() driver: Driver;
+  @Input() id: number;
   color: string;
 
-  constructor(params: NavParams, private mc: ModalController) {
-    this.driver = params.get("driver")
-    this.id = params.get("id");
-    this.color = this.driver.color;
+  constructor(private mc: ModalController) {
+  }
+
+  ngOnInit() {
+    this.color = this.driver?.color || '#000000';
   }
  
   update(component, event) {

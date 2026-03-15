@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { Subscription } from 'rxjs';
+
 import { AppSettings, Options } from '../app-settings';
 import { SpeechService } from '../services';
 
@@ -16,7 +18,7 @@ export class VoicePage implements OnDestroy, OnInit {
 
   voices = [];
 
-  private subscription: any;
+  private subscription: Subscription;
 
   constructor(private settings: AppSettings, private speech: SpeechService, private translate: TranslateService) {}
 

@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavParams, PopoverController } from '@ionic/angular';
 
+import { Subscription } from 'rxjs';
+
 import { AppSettings, Options } from '../app-settings';
 import { LoggingService } from '../services';
 
@@ -15,7 +17,7 @@ export class TuningMenu implements OnDestroy, OnInit {
 
   private params: any;
 
-  private subscription: any;
+  private subscription: Subscription;
 
   get mode() {
     return this.options.cumode;

@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavParams, PopoverController } from '@ionic/angular';
 
+import { Subscription } from 'rxjs';
+
 import { AppSettings, Options } from '../app-settings';
 
 import { I18nAlertService } from '../services';
@@ -16,7 +18,7 @@ export class RmsMenu implements OnDestroy, OnInit  {
 
   params: {mode: string, active: boolean, restart: any, cancel: any};
 
-  private subscription: any;
+  private subscription: Subscription;
 
   constructor(
     private alert: I18nAlertService,

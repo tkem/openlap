@@ -2,11 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { ModalController } from '@ionic/angular';
 
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 import { TranslateService } from '@ngx-translate/core';
-
-import { Observable } from 'rxjs';
 
 import { AppSettings, Driver } from '../app-settings';
 import { AppService, ControlUnitService, LoggingService, SpeechService } from '../services';

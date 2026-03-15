@@ -110,6 +110,7 @@ export class ControlUnit {
   getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
     return this.state.asObservable().pipe(
       distinctUntilChanged(),
+      // FIXME: unbounded buffer, possible side effects when reconnecting?
       shareReplay()
     );
   }

@@ -284,7 +284,7 @@ export class Session {
         shareReplay({ bufferSize: 1, refCount: true })
       );
     }),
-    shareReplay({ refCount: true })
+    shareReplay({ refCount: true })  // unbounded buffer is intentional to retrieve history on late subscription
     );
   }
 

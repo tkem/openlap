@@ -70,6 +70,7 @@ export class TuningPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    // TODO: store subscription and unsubscribe in ngOnDestroy (currently relies on subject.complete())
     this.subject.pipe(debounceTime(400)).subscribe((event) => {
       for (let model of (event.id !== undefined ? [this.models[event.id]] : this.models)) {
         switch (event.type) {

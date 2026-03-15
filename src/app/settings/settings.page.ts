@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { Subscription } from 'rxjs';
+
 import { AppSettings, Options } from '../app-settings';
 import { I18nAlertService, SpeechService } from '../services';
 
@@ -11,7 +13,7 @@ export class SettingsPage implements OnDestroy, OnInit {
 
   options = new Options();
 
-  private subscription: any;
+  private subscription: Subscription;
 
   constructor(private alert: I18nAlertService, private settings: AppSettings, private speech: SpeechService) {}
 

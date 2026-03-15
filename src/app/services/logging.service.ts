@@ -51,6 +51,7 @@ export class LoggingService {
   private log(level: LogLevel, args: any[]) {
     if (level >= this.level) {
       console.log.apply(console, args);
+      // TODO: consider using a circular buffer instead of shift() for O(1) eviction
       while (this.records.length >= this.limit) {
         this.records.shift();
       }

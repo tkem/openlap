@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { PopoverController } from '@ionic/angular';
 
+import { Subscription } from 'rxjs';
+
 import { AppSettings, Options } from '../app-settings';
 import { AppService, LoggingService } from '../services';
 
@@ -21,7 +23,7 @@ export class LoggingMenu implements OnDestroy, OnInit {
 
   private options = new Options();
 
-  private subscription: any;
+  private subscription: Subscription;
 
   share: () => void = undefined;
 

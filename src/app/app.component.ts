@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Inject, OnInit, OnDestroy, isDevMode } from '@angular/core';
 
-import { NoNewVersionDetectedEvent, SwUpdate, VersionDetectedEvent, VersionReadyEvent } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -105,9 +105,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.app.getVersion().then(version => {
-      this.app.getVersionCode().then(versionCode => {
+      return this.app.getVersionCode().then(versionCode => {
         if (versionCode) {
-          version += " (" + versionCode + ")";
+          version += ` (${versionCode})`;
         }
         this.logger.info("Open Lap", version, isDevMode() ? "[dev]" : "[prod]", "on", window?.navigator?.userAgent);
       });
@@ -130,11 +130,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.swUpdate.isEnabled) {
       this.logger.info("Service worker enabled");
       this.subscription.add(this.swUpdate.versionUpdates.subscribe(event => {
-        if (event as NoNewVersionDetectedEvent && event.type === "NO_NEW_VERSION_DETECTED") {
+        if (event.type === "NO_NEW_VERSION_DETECTED") {
           this.logger.info("No new version detected");
-        } else if (event as VersionDetectedEvent && event.type === "VERSION_DETECTED") {
+        } else if (event.type === "VERSION_DETECTED") {
           this.logger.info("New Version detected");
-        } else if (event as VersionReadyEvent && event.type === "VERSION_READY") {
+        } else if (event.type === "VERSION_READY") {
           this.logger.info("Version update ready");
           this.update();
         } else {
@@ -196,7 +196,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
           this.cu.next(cu);
           cu.connect();
         }).catch(error => {
-          this.logger.error('Error connecting to ' + connection.name + ':', error);
+          this.logger.error(`Error connecting to ${connection.name}:`, error);
         }).then(() => {
           this.app.hideSplashScreen();
         });
