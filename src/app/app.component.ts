@@ -189,7 +189,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
           timeout(CONNECTION_TIMEOUT)
         )).then(device => {
           const cu = new ControlUnit(device, connection);
-          this.subscription.add(cu.getState().subscribe(state => this.showConnectionToast(state, cu.peripheral.name)));
+          this.subscription.add(cu.getState().subscribe(state => {
+            this.logger.info('New control unit state', state, "for device", cu.peripheral.address || cu.peripheral.name);
+            this.showConnectionToast(state, cu.peripheral.name)
+          }));
           this.cu.next(cu);
           cu.connect();
         }).catch(error => {

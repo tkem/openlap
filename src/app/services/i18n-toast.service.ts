@@ -16,9 +16,10 @@ class NativeToastProvider implements ToastProvider {
   constructor(private platform: Platform, private toast: NativeToast) {}
 
   async show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
+    //console.info('Showing native toast', { message, duration, position });
     await this.platform.ready();
     await this.toast.hide();
-    return firstValueFrom(this.toast.show(message, duration.toString(), position));
+    return firstValueFrom(this.toast.show(message, "long", position));
   }
 }
 
@@ -27,6 +28,7 @@ class IonicToastProvider implements ToastProvider {
   constructor(private controller: ToastController) {}
 
   async show(message: string, duration: number, position: 'top' | 'bottom' | 'center') {
+    //console.info('Showing ionic toast', { message, duration, position });
     const toast = await this.controller.create({
       message: message,
       duration: duration,
@@ -47,7 +49,9 @@ export class I18nToastService {
   private toast: ToastProvider;
 
   constructor(platform: Platform, toast: NativeToast, controller: ToastController, private translate: TranslateService) {
-    this.toast = platform.is('cordova') ? new NativeToastProvider(platform, toast) : new IonicToastProvider(controller);
+    // FIXME: Native toasts seems to ignore duration, or shows only for a very short time.
+    // this.toast = platform.is('cordova') ? new NativeToastProvider(platform, toast) : new IonicToastProvider(controller);
+    this.toast = new IonicToastProvider(controller);
   }
 
   showShortTop(key: string, params?: Object) {
