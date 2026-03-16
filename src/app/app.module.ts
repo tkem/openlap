@@ -20,9 +20,6 @@ import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { TextToSpeechAdvanced } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
-import { Toast } from '@awesome-cordova-plugins/toast/ngx';
-
-import { Serial } from './backend/serial/ngx';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 
@@ -82,12 +79,10 @@ export function swRegistrationOptions(platform: Platform) {
     BLE,
     Device,
     Insomnia,
-    Serial,
     SocialSharing,
     SplashScreen,
     StatusBar,
     TextToSpeechAdvanced,
-    Toast,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: ErrorHandler, useClass: LoggingErrorHandler },
     {

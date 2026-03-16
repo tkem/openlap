@@ -91,20 +91,10 @@ export class LicensesPage {
     license: 'MIT',
     homepage: 'https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin#readme'
   }, {
-    name: 'cordova-plugin-x-toast',
-    author: 'Eddy Verbruggen',
-    license: 'MIT',
-    homepage: 'https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin#readme'
-  }, {
     name: 'cordova-sqlite-storage',
     author: 'various',
     license: 'MIT',
     homepage: 'https://github.com/litehelpers/Cordova-sqlite-storage'
-  }, {
-    name: 'cordovarduino',
-    copyright: 'Copyright (c) 2015 Xavier Seignard',
-    license: 'MIT',
-    homepage: 'https://github.com/xseignard/cordovarduino#readme'
   }, {
     name: 'ngx-translate',
     author: 'Olivier Combe',
