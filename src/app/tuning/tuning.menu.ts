@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { NavParams, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 
 import { Subscription } from 'rxjs';
 
@@ -13,9 +13,9 @@ import { LoggingService } from '../services';
 })
 export class TuningMenu implements OnDestroy, OnInit {
 
-  private options = new Options();
+  @Input() apply: () => void;
 
-  private params: any;
+  private options = new Options();
 
   private subscription: Subscription;
 
@@ -30,13 +30,9 @@ export class TuningMenu implements OnDestroy, OnInit {
   }
 
   constructor(
-    private logger: LoggingService, 
-    private settings: AppSettings, 
-    private controller: PopoverController,
-    params: NavParams) 
-  {
-    this.params = params.data;
-  }
+    private logger: LoggingService,
+    private settings: AppSettings,
+    private controller: PopoverController) {}
 
   ngOnInit() {
     this.subscription = this.settings.getOptions().subscribe({
@@ -57,7 +53,7 @@ export class TuningMenu implements OnDestroy, OnInit {
   }
 
   applyAll() {
-    this.params.apply();
+    this.apply();
     this.dismiss();
   }
 

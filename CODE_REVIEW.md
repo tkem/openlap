@@ -43,14 +43,9 @@ Subscribes to `getConnection()`. Each time it emits, a *new* `cu.getState()` sub
 
 ## MEDIUM — Deprecations
 
-### 4. `NavParams` is deprecated in Ionic 6+
+### 4. ~~`NavParams` is deprecated in Ionic 6+~~ — FIXED
 
-**Files:**
-- `src/app/rms/race-settings.component.ts` L5, L41, L55, L94
-- `src/app/rms/rms.menu.ts` L3, L27
-- `src/app/tuning/tuning.menu.ts` L3, L34
-
-The modern Ionic pattern is `@Input()` properties + `componentProps`. All callers already pass `componentProps`, so only the receiving components need to change.
+All three components (`race-settings.component.ts`, `rms.menu.ts`, `tuning.menu.ts`) have been migrated to `@Input()` properties + `componentProps`.
 
 ---
 

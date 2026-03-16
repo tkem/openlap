@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { AbstractControl, AbstractControlOptions, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { IonInput, IonToggle, NavParams, ModalController } from '@ionic/angular';
+import { IonInput, IonToggle, ModalController } from '@ionic/angular';
 
 import { RaceOptions } from '../app-settings';
 
@@ -38,36 +38,36 @@ function lapsOrTimeRequired(group: FormGroup): {[key: string]: any} {
   return {'required': true};
 }
 
-function createQualifyingForm(fb: FormBuilder, params: NavParams) {
+function createQualifyingForm(fb: FormBuilder, params: Record<string, any>) {
   return fb.group({
-    time: new FormControl(formatTime(params.get('time') || 300000), timeRequired),
+    time: new FormControl(formatTime(params['time'] || 300000), timeRequired),
     pause: new FormControl({
-      value: params.get('pause') || false,
-      disabled: !params.get('time')
+      value: params['pause'] || false,
+      disabled: !params['time']
     }),
-    stopfin: new FormControl(params.get('stopfin') || false),
-    drivers: new FormControl(params.get('drivers') || ''),
-    auto: new FormControl(params.get('auto') || false),
-    pace: new FormControl(params.get('pace') || false)
+    stopfin: new FormControl(params['stopfin'] || false),
+    drivers: new FormControl(params['drivers'] || ''),
+    auto: new FormControl(params['auto'] || false),
+    pace: new FormControl(params['pace'] || false)
   });
 }
 
-function createRaceForm(fb: FormBuilder, params: NavParams) {
+function createRaceForm(fb: FormBuilder, params: Record<string, any>) {
   return fb.group({
-    laps: new FormControl(params.get('laps') || '0'),
-    time: new FormControl(formatTime(params.get('time') || 0)),
+    laps: new FormControl(params['laps'] || '0'),
+    time: new FormControl(formatTime(params['time'] || 0)),
     pause: new FormControl({
-      value: !!params.get('pause'),
-      disabled: !params.get('time')
+      value: !!params['pause'],
+      disabled: !params['time']
     }),
     slotmode: new FormControl({
-      value: !!params.get('slotmode'),
-      disabled: !params.get('laps')
+      value: !!params['slotmode'],
+      disabled: !params['laps']
     }),
-    stopfin: new FormControl(params.get('stopfin') || false),
-    drivers: new FormControl(params.get('drivers') || ''),
-    auto: new FormControl(params.get('auto') || false),
-    pace: new FormControl(params.get('pace') || false)
+    stopfin: new FormControl(params['stopfin'] || false),
+    drivers: new FormControl(params['drivers'] || ''),
+    auto: new FormControl(params['auto'] || false),
+    pace: new FormControl(params['pace'] || false)
   }, {
     validators: lapsOrTimeRequired
   } as AbstractControlOptions);
@@ -77,9 +77,17 @@ function createRaceForm(fb: FormBuilder, params: NavParams) {
     templateUrl: 'race-settings.component.html',
     standalone: false
 })
-export class RaceSettingsComponent implements AfterViewInit {
+export class RaceSettingsComponent implements AfterViewInit, OnInit {
 
-  mode: 'qualifying' | 'race';
+  @Input() mode: 'qualifying' | 'race';
+  @Input() laps: number;
+  @Input() time: number;
+  @Input() pause: boolean;
+  @Input() slotmode: boolean;
+  @Input() stopfin: boolean;
+  @Input() drivers: number;
+  @Input() auto: boolean;
+  @Input() pace: boolean;
 
   form: FormGroup;
 
@@ -91,12 +99,14 @@ export class RaceSettingsComponent implements AfterViewInit {
 
   @ViewChild('slotmode') slotmodeToggle: IonToggle;
   
-  constructor(fb: FormBuilder, params: NavParams, private mod: ModalController) {
-    this.mode = params.get('mode');
+  constructor(private fb: FormBuilder, private mod: ModalController) {
+  }
+
+  ngOnInit() {
     if (this.mode == 'race') {
-      this.form = createRaceForm(fb, params);
+      this.form = createRaceForm(this.fb, this);
     } else {
-      this.form = createQualifyingForm(fb, params);
+      this.form = createQualifyingForm(this.fb, this);
     }
   }
 

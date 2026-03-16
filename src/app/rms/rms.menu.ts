@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { NavParams, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 
 import { Subscription } from 'rxjs';
 
@@ -14,20 +14,22 @@ import { I18nAlertService } from '../services';
 })
 export class RmsMenu implements OnDestroy, OnInit  {
 
-  options = new Options();
+  @Input() mode: string;
 
-  params: {mode: string, active: boolean, restart: any, cancel: any};
+  @Input() active: boolean;
+
+  @Input() restart: () => void;
+
+  @Input() cancel: () => void;
+
+  options = new Options();
 
   private subscription: Subscription;
 
   constructor(
     private alert: I18nAlertService,
     private settings: AppSettings,
-    private controller: PopoverController,
-    params: NavParams
-  ) {
-    this.params = <any>params.data;  // FIXME
-  }
+    private controller: PopoverController) {}
 
   get sectors() {
     return this.options.sectors;
@@ -71,38 +73,38 @@ export class RmsMenu implements OnDestroy, OnInit  {
 
   onRestart() {
     this.dismiss().then(() => {
-      if (this.params.active) {
+      if (this.active) {
         this.alert.show({
-          message: 'Restart ' + this.params.mode + '?',
+          message: 'Restart ' + this.mode + '?',
           buttons: [{
             text: 'Cancel',
             role: 'cancel',
           }, {
             text: 'OK',
-            handler: () => this.params.restart()
+            handler: () => this.restart()
           }]
         });
       } else {
-        this.params.restart();
+        this.restart();
       }
     });
   }
 
   onCancel() {
     this.dismiss().then(() => {
-      if (this.params.active) {
+      if (this.active) {
         this.alert.show({
-          message: 'Cancel ' + this.params.mode + '?',
+          message: 'Cancel ' + this.mode + '?',
           buttons: [{
             text: 'Cancel',
             role: 'cancel',
           }, {
             text: 'OK',
-            handler: () => this.params.cancel()
+            handler: () => this.cancel()
           }]
         });
       } else {
-        this.params.cancel();
+        this.cancel();
       }
     });
   }
