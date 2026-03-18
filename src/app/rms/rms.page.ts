@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Observable, Subscription, firstValueFrom, from, of, merge } from 'rxjs';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 
 import { AppSettings, Options, RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -81,7 +81,8 @@ export class RmsPage implements OnDestroy, OnInit {
 
     // TODO: pitlane flag is actually (cuMode & 0x04), rename to fuelMode?
     this.pitlane = cuMode.pipe(
-      map(value => (value & 0x03) != 0)
+      map(value => (value & 0x03) != 0),
+      tap(value => this.logger.info('Pitlane mode:', value))
     );
 
     this.sectors = settings.getOptions().pipe(

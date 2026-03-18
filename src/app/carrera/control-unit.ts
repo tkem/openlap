@@ -1,6 +1,6 @@
 import { BehaviorSubject , Connectable , Observable, Subject , Subscription, firstValueFrom, timer } from 'rxjs';
 
-import { concatMap, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, timeout } from 'rxjs/operators';
+import { concatMap, debounceTime, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, throttle, timeout } from 'rxjs/operators';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
@@ -64,6 +64,7 @@ export class ControlUnit {
         return value;
       })
     );
+
     this.data = timedConnection.pipe(
       retryWhen(errors => {
         return this.doReconnect(errors);
@@ -76,11 +77,12 @@ export class ControlUnit {
       }),
       publish()
     ) as Connectable<DataView>;
+
     this.status = this.data.pipe(
       filter((view) => {
         return view.byteLength >= 16 && view.toString(0, 2) === '?:';
       }),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: false })
     );
   }
 
@@ -110,8 +112,7 @@ export class ControlUnit {
   getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
     return this.state.asObservable().pipe(
       distinctUntilChanged(),
-      // FIXME: unbounded buffer, possible side effects when reconnecting?
-      shareReplay()
+      shareReplay({ bufferSize: 1, refCount: false })
     );
   }
 
@@ -124,7 +125,12 @@ export class ControlUnit {
   }
 
   getMode(): Observable<number> {
-    return this.status.pipe(map((data: DataView) => data.getUint4(11)));
+    return this.status.pipe(
+      map((data: DataView) => data.getUint4(11)),
+      // switching fuel mode on physical CU seems to toggle this for a short time,
+      // but also seems to be unreliable, so debounce it to avoid spurious updates
+      debounceTime(100)
+    );
   }
 
   getPit(): Observable<number> {
@@ -134,7 +140,6 @@ export class ControlUnit {
   getTimer(): Observable<[number, number, number]> {
     return this.data.pipe(
       filter(view => {
-        // TODO: check CRC
         return view.byteLength >= 12 && view.toString(0, 1) === '?' && view.toString(1, 1) !== ':';
       }),
       filter(view => {
@@ -142,7 +147,6 @@ export class ControlUnit {
         return id >= '1' && id <= '8';
       }),
       map(view => {
-        // tuples are never inferred
         return <[number, number, number]>[view.getUint4(1) - 1, view.getUint32(2), view.getUint4(10)];
       }),
       distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1])
