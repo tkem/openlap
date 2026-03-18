@@ -54,6 +54,8 @@ const STATE_MESSAGES = {
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private subscription = new Subscription();
+  private stateSubscription: Subscription;
+  private orientationListener: (() => void) | null = null;
 
   constructor(
     private app: AppService,
@@ -92,9 +94,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       warningSharp,
     });
     if (window.screen) {
-      window.screen.orientation.addEventListener('change', () => {
+      this.orientationListener = () => {
         app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
-      });
+      };
+      window.screen.orientation.addEventListener('change', this.orientationListener);
       if (window.screen.orientation && window.screen.orientation.type) {
         app.enableFullScreen(window.screen.orientation.type.startsWith('landscape'));
       }
@@ -122,6 +125,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.orientationListener) {
+      window.screen.orientation.removeEventListener('change', this.orientationListener);
+    }
+    if (this.stateSubscription) {
+      this.stateSubscription.unsubscribe();
+    }
     this.subscription.unsubscribe();
     this.cu.next(null);
   }
@@ -180,6 +189,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private connect() {
     this.subscription.add(this.settings.getConnection().subscribe(connection => {
+      if (this.stateSubscription) {
+        this.stateSubscription.unsubscribe();
+        this.stateSubscription = null;
+      }
       if (connection && connection.name) {
         this.logger.info('Connecting to ' + connection.name);
         // TODO: scan only backend responsible for this connection? provide backend.get()?
@@ -189,10 +202,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
           timeout(CONNECTION_TIMEOUT)
         )).then(device => {
           const cu = new ControlUnit(device, connection);
-          this.subscription.add(cu.getState().subscribe(state => {
+          this.stateSubscription = cu.getState().subscribe(state => {
             this.logger.info('New control unit state "' + state + '" for device "' + (cu.peripheral.address || cu.peripheral.name) + '"');
             this.showConnectionToast(state, cu.peripheral.name)
-          }));
+          });
           this.cu.next(cu);
           cu.connect();
         }).catch(error => {

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { PopoverController } from '@ionic/angular';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 
 import { AppSettings, Driver, Options } from '../app-settings';
@@ -56,6 +56,8 @@ export class TuningPage implements OnDestroy, OnInit {
 
   private subject = new Subject<{type: string, id: number}>();
 
+  private subscription: Subscription;
+
   constructor(private logger: LoggingService, private cu: ControlUnitService, private popover: PopoverController,
     private ref: ChangeDetectorRef, app: AppService, settings: AppSettings
   ) {
@@ -70,8 +72,7 @@ export class TuningPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    // TODO: store subscription and unsubscribe in ngOnDestroy (currently relies on subject.complete())
-    this.subject.pipe(debounceTime(400)).subscribe((event) => {
+    this.subscription = this.subject.pipe(debounceTime(400)).subscribe((event) => {
       for (let model of (event.id !== undefined ? [this.models[event.id]] : this.models)) {
         switch (event.type) {
         case 'speed':
@@ -89,6 +90,7 @@ export class TuningPage implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.subject.complete();
   }
 

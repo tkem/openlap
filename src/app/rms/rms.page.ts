@@ -50,8 +50,7 @@ export class RmsPage implements OnDestroy, OnInit {
 
   legacyAndroid: Promise<boolean>;
 
-  private subscriptions: Subscription;
-
+  private sessionSubscription: Subscription;
   private backButtonSubscription: Subscription;
 
   private subscription = new Subscription();
@@ -285,10 +284,10 @@ export class RmsPage implements OnDestroy, OnInit {
       share()
     );
 
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
+    if (this.sessionSubscription) {
+      this.sessionSubscription.unsubscribe();
     }
-    this.subscriptions = events.pipe(withLatestFrom(
+    this.sessionSubscription = events.pipe(withLatestFrom(
       this.settings.getOptions(),
       this.settings.getNotifications(),
       this.getTranslations('notifications')
@@ -304,7 +303,7 @@ export class RmsPage implements OnDestroy, OnInit {
       }
     });
 
-    this.subscriptions.add(
+    this.sessionSubscription.add(
       this.lapcount.subscribe({
         next: laps => {
           cu.setLap(laps.count);
@@ -318,7 +317,7 @@ export class RmsPage implements OnDestroy, OnInit {
       })
     );
 
-    this.subscriptions.add(
+    this.sessionSubscription.add(
       events.pipe(
         filter(([event]) => event == 'alldone'),
         withLatestFrom(this.getRaceOptions(options.mode))
@@ -350,10 +349,10 @@ export class RmsPage implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
+    if (this.sessionSubscription) {
+      this.sessionSubscription.unsubscribe();
     }
+    this.subscription.unsubscribe();
   }
 
   ionViewDidEnter() {

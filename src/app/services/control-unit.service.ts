@@ -16,14 +16,12 @@ export class ControlUnitService extends BehaviorSubject<ControlUnit> {
   }
 
   override next(value: ControlUnit) {
-    if (this.value) {
-      this.value.disconnect().catch(error => {
-        this.logger.error('Error disconnecting from', this.value, error);
-      }).then(() => {
-        super.next(value);
-      })
-    } else {
-      super.next(value);
+    const prev = this.value;
+    super.next(value);
+    if (prev) {
+      prev.disconnect().catch(error => {
+        this.logger.error('Error disconnecting from', prev, error);
+      });
     }
   }
 }

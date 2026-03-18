@@ -234,7 +234,7 @@ export class Session {
               best[tail.length] = Math.min(last[tail.length], best[tail.length] || Infinity);
             }
             if (!finished && this.isFinished(times.length - 1)) {
-              // TODO: refactor - move this.finish() side effect out of scan() into a downstream tap()
+              // TODO: side effect in scan() — move this.finish() to a downstream tap() to keep scan() pure
               this.finish(id);
               finished = true;
             }
@@ -284,7 +284,8 @@ export class Session {
         shareReplay({ bufferSize: 1, refCount: true })
       );
     }),
-    shareReplay({ refCount: true })  // unbounded buffer is intentional to retrieve history on late subscription
+    // unbounded buffer is intentional to retrieve history on late subscription
+    shareReplay({ refCount: true })
     );
   }
 

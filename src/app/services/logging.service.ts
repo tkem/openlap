@@ -17,8 +17,16 @@ export class LoggingService {
 
   private limit = 50;  // TODO: config
 
-  // TODO: Observable?
-  records = new Array<LogRecord>();
+  private buffer: LogRecord[] = [];
+  private head = 0;
+  private size = 0;
+
+  get records(): LogRecord[] {
+    if (this.size <= this.head) {
+      return this.buffer.slice(this.head - this.size, this.head);
+    }
+    return [...this.buffer.slice(this.head + this.limit - this.size), ...this.buffer.slice(0, this.head)];
+  }
 
   isDebugEnabled() {
     return this.level === LogLevel.DEBUG;
@@ -45,17 +53,19 @@ export class LoggingService {
   }
 
   clear() {
-    this.records.length = 0;
+    this.buffer = [];
+    this.head = 0;
+    this.size = 0;
   }
 
   private log(level: LogLevel, args: any[]) {
     if (level >= this.level) {
       console.log.apply(console, args);
-      // TODO: consider using a circular buffer instead of shift() for O(1) eviction
-      while (this.records.length >= this.limit) {
-        this.records.shift();
+      this.buffer[this.head] = { level: level, time: Date.now(), args: args };
+      this.head = (this.head + 1) % this.limit;
+      if (this.size < this.limit) {
+        this.size++;
       }
-      this.records.push({ level: level, time: Date.now(), args: args });
     }
   }
 }

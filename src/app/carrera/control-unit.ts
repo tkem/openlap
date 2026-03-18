@@ -66,6 +66,7 @@ export class ControlUnit {
     );
 
     this.data = timedConnection.pipe(
+      // FIXME: retryWhen is deprecated, but catchError doesn't seem to work with publish/shareReplay
       retryWhen(errors => {
         return this.doReconnect(errors);
       }),
@@ -75,6 +76,7 @@ export class ControlUnit {
       map((data: ArrayBuffer) => {
         return new DataView(data);
       }),
+      // FIXME: publish is deprecated, but shareReplay with refCount: false doesn't seem to work with retryWhen
       publish()
     ) as Connectable<DataView>;
 
@@ -82,6 +84,7 @@ export class ControlUnit {
       filter((view) => {
         return view.byteLength >= 16 && view.toString(0, 2) === '?:';
       }),
+      // setting refCount to false means the latest stat will always be replayed to new subscribers
       shareReplay({ bufferSize: 1, refCount: false })
     );
   }
@@ -112,6 +115,7 @@ export class ControlUnit {
   getState(): Observable<'disconnected' | 'connecting' | 'connected'> {
     return this.state.asObservable().pipe(
       distinctUntilChanged(),
+      // setting refCount to false means the latest state will always be replayed to new subscribers
       shareReplay({ bufferSize: 1, refCount: false })
     );
   }
@@ -127,8 +131,8 @@ export class ControlUnit {
   getMode(): Observable<number> {
     return this.status.pipe(
       map((data: DataView) => data.getUint4(11)),
-      // switching fuel mode on physical CU seems to toggle this for a short time,
-      // but also seems to be unreliable, so debounce it to avoid spurious updates
+      // switching fuel mode on physical CU seems to toggle this for a short time, but
+      // also seems to be a bit unreliable, so debounce to avoid spurious updates
       debounceTime(100)
     );
   }

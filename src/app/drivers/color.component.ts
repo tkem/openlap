@@ -29,7 +29,6 @@ export class ColorComponent implements OnInit {
   }
  
   update(component, event) {
-    console.log("update", component, event);
     const value = ('0' + event.detail.value.toString(16)).slice(-2);
     switch (component) {
     case 'r':
@@ -42,7 +41,6 @@ export class ColorComponent implements OnInit {
       this.color = this.color.substring(0, 5) + value + this.color.substring(7);
       break;
     }
-    console.log(this.color);
   }
 
   setColor(color) {
