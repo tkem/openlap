@@ -79,9 +79,10 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - **Pages** are routed to and have no `selector` property.
 - **Components** used in templates have a `selector` (typically unprefixed
   lowercase, e.g., `checkerboard`, `gauge`, `connections`).
-- **Popover menus** (`*.menu.ts`) use `NavParams` for input and
-  `PopoverController` to dismiss.
-- **Modal dialogs** use `ModalController` + `NavParams`, dismiss with data.
+- **Popover menus** (`*.menu.ts`) receive data via `@Input()` properties
+  (passed as `componentProps`) and use `PopoverController` to dismiss.
+- **Modal dialogs** use `ModalController`, receive data via `@Input()`
+  properties (passed as `componentProps`), and dismiss with data.
 
 ## Services
 
@@ -104,7 +105,7 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - Interpolation: `{{param}}` syntax.
 - Templates use both the `translate` attribute directive (`<span translate>Text</span>`)
   and the `| translate` pipe (`{{'Label' | translate}}`).
-- Supported languages: de, en, es, fr, it, pl, pt, sk.
+- Supported languages: de, en, es, fr, hu, it, pl, pt, sk.
 - `TranslateModule` is re-exported from `SharedModule`.
 
 ## Routing
