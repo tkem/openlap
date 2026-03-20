@@ -18,8 +18,8 @@
   <ion-list>
     <ion-item *ngFor="let record of logger.records">
       <ion-icon slot="start" [name]="icons[record.level]?.name" [ngStyle]="icons[record.level]?.style"></ion-icon>
+      <ion-note slot="start">{{record.time | date:'HH:mm:ss.SSS'}}</ion-note>
       <ion-label class="ion-text-wrap">
-        <span slot="start">{{record.time | date:'HH:mm:ss'}}.{{(record.time % 1000) | number:'3.0-0'}}:</span>
         <span *ngFor="let arg of record.args"> {{stringify(arg)}}</span>
       </ion-label>
     </ion-item>
