@@ -1,6 +1,6 @@
 import { BehaviorSubject , Connectable , Observable, Subject , Subscription, firstValueFrom, timer } from 'rxjs';
 
-import { concatMap, debounceTime, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, throttle, timeout } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, throttle, timeout } from 'rxjs/operators';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
@@ -129,12 +129,7 @@ export class ControlUnit {
   }
 
   getMode(): Observable<number> {
-    return this.status.pipe(
-      map((data: DataView) => data.getUint4(11)),
-      // switching fuel mode on physical CU seems to toggle this for a short time, but
-      // also seems to be a bit unreliable, so debounce to avoid spurious updates
-      debounceTime(100)
-    );
+    return this.status.pipe(map((data: DataView) => data.getUint4(11)));
   }
 
   getPit(): Observable<number> {

@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Observable, Subscription, firstValueFrom, from, of, merge } from 'rxjs';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 
 import { AppSettings, Options, RaceOptions } from '../app-settings';
 import { ControlUnit } from '../carrera';
@@ -70,18 +70,16 @@ export class RmsPage implements OnDestroy, OnInit {
     default:
       this.mode = 'practice';
     }
-        
-    const cuMode = cu.pipe(
+
+    this.pitlane = cu.pipe(
       filter(cu => !!cu),
       mergeMap(cu => cu.getMode()), 
       startWith(0),
-      distinctUntilChanged()
-    );
-
-    // TODO: pitlane flag is actually (cuMode & 0x04), rename to fuelMode?
-    this.pitlane = cuMode.pipe(
-      map(value => (value & 0x03) != 0),
-      tap(value => this.logger.info('Pitlane mode:', value))
+      distinctUntilChanged(),
+      // switching fuel mode on physical CU seems to toggle this for a short time, but
+      // also seems to be a bit unreliable, so debounce to avoid spurious updates
+      debounceTime(250),
+      map(value => (value & 0x03) != 0)
     );
 
     this.sectors = settings.getOptions().pipe(
