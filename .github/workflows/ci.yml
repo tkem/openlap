@@ -49,3 +49,17 @@ jobs:
         with:
           name: pwa
           path: www
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: www/
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: pwa
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
