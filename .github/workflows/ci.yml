@@ -54,6 +54,7 @@ jobs:
           path: www/
 
   deploy:
+    if: ${{ github.ref == 'refs/heads/master' }}
     needs: pwa
     permissions:
       pages: write
