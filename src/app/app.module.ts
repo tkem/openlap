@@ -10,7 +10,6 @@ import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-wor
 
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
 
-// TODO: @awesome-cordova-plugins is unmaintained — consider direct plugin calls or migrating to Capacitor
 import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen/ngx';
 import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
 import { BLE } from '@awesome-cordova-plugins/ble/ngx';
