@@ -4,7 +4,7 @@
 
 The codebase is well-structured for a mid-size Angular/Ionic app. Domain modeling (the `carrera/` layer) is clean and decoupled from Angular. Feature modules are logically organized, naming conventions are consistent, and barrel exports keep imports tidy. The RxJS-heavy reactive style in `Session` and `RmsPage` is idiomatic and handles complex real-time race logic effectively.
 
-The `shareReplay()` unbounded buffer issue has been fully addressed (buffer size is now explicit). The remaining weaknesses center on deprecated RxJS operators, a `scan()` side effect, and unmaintained Cordova wrappers. All known issues are documented with FIXME/TODO comments in the source.
+The `shareReplay()` unbounded buffer issue has been fully addressed (buffer size is now explicit). The remaining weaknesses center on deprecated RxJS operators and a `scan()` side effect. All known issues are documented with FIXME/TODO comments in the source.
 
 **Strengths:**
 - Clean separation between hardware abstraction (`ControlUnit`), session logic, and UI
@@ -15,7 +15,7 @@ The `shareReplay()` unbounded buffer issue has been fully addressed (buffer size
 
 **Weaknesses:**
 - Deprecated RxJS operators in the most critical file (`control-unit.ts`)
-- `scan()` side effect in session logic
+- `scan()` side effect in session logic (timing-critical, requires careful testing)
 
 ---
 
@@ -39,19 +39,11 @@ Both deprecated since RxJS 7.x (removal planned for v8). Source FIXME comments n
 
 ### 3. `scan()` side effect calls `this.finish(id)`
 
-**File:** `src/app/rms/session.ts` L238
+**File:** `src/app/rms/session.ts` L236–240
 
-The `scan()` accumulator invokes `this.finish(id)`, which mutates `this.mask` and sends commands to the CU. Side effects inside `scan()` are an anti-pattern; they should be in a downstream `tap()`. (Has existing TODO comment at L237.)
+The `scan()` accumulator invokes `this.finish(id)`, which mutates `this.mask` and sends commands to the CU. While side effects inside `scan()` are an anti-pattern (they should be in a downstream `tap()`), the timing of this call is critical to race session state management. 
 
----
-
-## LOW — Code Quality
-
-### 4. `@awesome-cordova-plugins` is unmaintained
-
-**File:** `src/app/app.module.ts` L14
-
-All `@awesome-cordova-plugins/*` packages (formerly `@ionic-native`) are unmaintained. Consider direct Cordova plugin calls or migrating to Capacitor over time. (Has existing TODO comment.)
+**Note:** Refactoring this to move the side effect downstream requires careful analysis and testing to ensure the finish logic is triggered at exactly the right point in the event stream. The existing TODO comment documents the issue for future maintainers.
 
 ---
 
@@ -60,5 +52,4 @@ All `@awesome-cordova-plugins/*` packages (formerly `@ionic-native`) are unmaint
 | Severity | Count | Key themes |
 |----------|-------|------------|
 | HIGH     | 2     | `shareReplay` refCount, deprecated `publish()`/`retryWhen()` |
-| MEDIUM   | 1     | `scan()` side effect |
-| LOW      | 1     | Unmaintained deps |
+| MEDIUM   | 1     | `scan()` side effect (timing-critical) |
