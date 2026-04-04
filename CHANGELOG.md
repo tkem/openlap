@@ -1,4 +1,4 @@
-2.6.0 UNRELEASED
+2.6.0 2026-04-04
 ----------------
 
 - Add Hungarian translation (courtesy of bembee).
