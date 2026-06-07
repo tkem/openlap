@@ -19,10 +19,11 @@
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
+    "isolatedModules": true,
     "target": "es2022",
-    "module": "es2020",
+    "module": "preserve",
     "lib": [
-      "es2018",
+      "es2022",
       "dom"
     ],
     "useDefineForClassFields": false
