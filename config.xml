@@ -32,9 +32,10 @@
         <icon background="@color/cdv_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
         <icon background="@color/cdv_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
+        <preference name="AndroidWindowSplashScreenBackground" value="@color/cdv_splashscreen_background" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
-        <preference name="AndroidWindowSplashScreenBackground" value="#222428" />
-        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
+        <preference name="AndroidPostSplashScreenTheme" value="@style/Theme.AppCompat.NoActionBar" />
+        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/cdv_colors.xml" />
     </platform>
     <platform name="ios">
         <icon height="144" src="res/ios/icon/icon-72@2x.png" width="144" />
