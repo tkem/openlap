@@ -36,6 +36,7 @@
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
         <preference name="AndroidPostSplashScreenTheme" value="@style/Theme.AppCompat.NoActionBar" />
         <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/cdv_colors.xml" />
+        <resource-file src="res/android/themes.xml" target="/app/src/main/res/values/themes.xml" />
     </platform>
     <platform name="ios">
         <icon height="144" src="res/ios/icon/icon-72@2x.png" width="144" />
