@@ -56,6 +56,12 @@ ion-range.pristine {
     --knob-size: 0;
 }
 
+ion-range::part(knob) {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
 /* right-aligned input when not editing (is this really such a smart idea?) */
 ion-input.right-align {
     :not(.has-focus) {

@@ -82,7 +82,9 @@ export class TuningPage implements OnDestroy, OnInit {
           this.cu.value?.setBrake(model.id, model.brake);
           break;
         case 'fuel':
-          this.cu.value?.setFuel(model.id, model.fuel);
+          if (model.id < 4) {
+            this.cu.value?.setFuel(model.id, model.fuel);
+          }
           break;
         }
       }
@@ -102,7 +104,7 @@ export class TuningPage implements OnDestroy, OnInit {
       if (model.brake !== null) {
         this.cu.value?.setBrake(model.id, model.brake);
       }
-      if (model.fuel !== null) {
+      if (model.fuel !== null && model.id < 4) {
         this.cu.value?.setFuel(model.id, model.fuel);
       }
     }
@@ -122,9 +124,11 @@ export class TuningPage implements OnDestroy, OnInit {
 
   update(type: string, event: any, id?: number) {
     const value = event.detail.value;
-    this.logger.debug('Set', type, 'to', value, 'for', id);
     for (let model of (id !== undefined ? [this.models[id]] : this.models)) {
-      model[type] = value;
+      if (type != 'fuel' || model.id < 4) {
+        this.logger.debug('Set', type, 'to', value, 'for', model.id);
+        model[type] = value;
+      }
     }
     this.subject.next({id: id, type: type});
     this.ref.detectChanges();
@@ -143,11 +147,6 @@ export class TuningPage implements OnDestroy, OnInit {
       value = this.fromCU.fuel[event.detail.value];
       break;
     }
-    this.logger.debug('Set', type, 'to', value, 'for', id);
-    for (let model of (id !== undefined ? [this.models[id]] : this.models)) {
-      model[type] = value;
-    }
-    this.subject.next({id: id, type: type});
-    this.ref.detectChanges();
+    this.update(type, {detail: {value: value}}, id);
   }
 }
