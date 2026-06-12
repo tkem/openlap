@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
 import { Observable, Subject, Subscription } from 'rxjs';
-import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
+import { debounceTime, filter, groupBy, map, mergeMap, switchMap } from 'rxjs/operators';
 
 import { AppSettings, Driver, Options } from '../app-settings';
 import { AppService, ControlUnitService, LoggingService } from '../services';
@@ -72,7 +72,10 @@ export class TuningPage implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.subscription = this.subject.pipe(debounceTime(400)).subscribe((event) => {
+    this.subscription = this.subject.pipe(
+      groupBy(event => event.id),
+      mergeMap(group => group.pipe(debounceTime(400)))
+    ).subscribe((event) => {
       for (let model of (event.id !== undefined ? [this.models[event.id]] : this.models)) {
         switch (event.type) {
         case 'speed':
