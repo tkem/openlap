@@ -63,7 +63,7 @@ class BLEPeripheral implements Peripheral {
             next: ([data, _]) => {
               if (this.logger.isDebugEnabled()) {
                 const s = bufferToString(data);
-                if (s !== lastReceived) {
+                if (s.startsWith('#') || s.startsWith('J') || s !== lastReceived) {
                   this.logger.debug('BLE received ' + s);
                   lastReceived = s;
                 }
@@ -114,7 +114,7 @@ class BLEPeripheral implements Peripheral {
       next: (value: ArrayBuffer) => {
         if (this.logger.isDebugEnabled()) {
           const s = bufferToString(value);
-          if (s !== this.lastWritten) {
+          if (s.startsWith('J') || s !== this.lastWritten) {
             this.logger.debug('BLE write ' + s);
             this.lastWritten = s;
           }

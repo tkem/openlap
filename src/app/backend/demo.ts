@@ -173,13 +173,13 @@ class DemoPeripheral implements Peripheral {
       next: (value: ArrayBuffer) => {
         if (Math.random() < ERROR_RATE) {
           if (this.subscriber) {
-            console.log('Random Demo error');
+            this.logger.error('Random Demo error');
             this.subscriber.error(new Error('Demo Error'));
           }
           return;
         }
         if (toString(value) != '?') {
-          console.log('Demo CU received ' + toString(value));
+          this.logger.debug('Demo CU received ' + toString(value));
         }
         if (toString(value) == 'T1') {
           this.onESC();
@@ -188,7 +188,7 @@ class DemoPeripheral implements Peripheral {
           this.onStart();
         }
         if (Math.random() < TIMEOUT_RATE) {
-          console.log('Random Demo timeout');
+          this.logger.error('Random Demo timeout');
           return;
         }
         setTimeout(() => {
@@ -203,10 +203,10 @@ class DemoPeripheral implements Peripheral {
         }, 100);
       },
       error: (err: any) => {
-        console.log('Demo connection error:', err);
+        this.logger.error('Demo connection error:', err);
       },
       complete: () => {
-        console.log('Demo connection complete');
+        this.logger.info('Demo connection complete');
         this.subscriber.complete();
       }
     };

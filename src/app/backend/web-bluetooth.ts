@@ -57,7 +57,7 @@ class WebBluetoothPeripheral implements Peripheral {
         const data = event.target.value.buffer;
         if (this.logger.isDebugEnabled()) {
           const s = bufferToString(data);
-          if (s !== lastReceived) {
+          if (s.startsWith('#') || s.startsWith('J') || s !== lastReceived) {
             this.logger.debug('Web Bluetooth received ' + s);
             lastReceived = s;
           }
@@ -98,7 +98,7 @@ class WebBluetoothPeripheral implements Peripheral {
         if (this.device.gatt.connected && this.output) {
           if (this.logger.isDebugEnabled()) {
             const s = bufferToString(value);
-            if (s !== this.lastWritten) {
+            if (s.startsWith('J') || s !== this.lastWritten) {
               this.logger.debug('Web Bluetooth write ' + s);
               this.lastWritten = s;
             }
