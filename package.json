@@ -16,13 +16,13 @@
     "watch": "ng build --watch --configuration development"
   },
   "dependencies": {
-    "@angular/common": "^20.3.15",
-    "@angular/core": "^20.3.15",
-    "@angular/forms": "^20.3.15",
-    "@angular/platform-browser": "^20.3.15",
-    "@angular/platform-browser-dynamic": "^20.3.15",
-    "@angular/router": "^20.3.15",
-    "@angular/service-worker": "^20.3.15",
+    "@angular/common": "^22.0.1",
+    "@angular/core": "^22.0.1",
+    "@angular/forms": "^22.0.1",
+    "@angular/platform-browser": "^22.0.1",
+    "@angular/platform-browser-dynamic": "^22.0.1",
+    "@angular/router": "^22.0.1",
+    "@angular/service-worker": "^22.0.1",
     "@awesome-cordova-plugins/android-full-screen": "^9.1.2",
     "@awesome-cordova-plugins/app-version": "^9.1.2",
     "@awesome-cordova-plugins/ble": "^9.1.2",
@@ -60,7 +60,7 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular/build": "^20.3.13",
+    "@angular/build": "^22.0.1",
     "@angular/cli": "^20.3.13",
     "@angular/compiler": "^20.3.15",
     "@angular/compiler-cli": "^20.3.15",
