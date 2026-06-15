@@ -9,6 +9,7 @@
   "Apply all": "Összes alkalmazása",
   "Automatic": "Automatikus",
   "Autonomous Car": "Szellem autó",
+  "Bluetooth": "Bluetooth",
   "Brake": "Fék",
   "Cancel race?": "Megszakítod a versenyt?",
   "Cancel qualifying?": "Megszakítod az időmérőt?",
@@ -21,6 +22,7 @@
   "Connecting to {{device}}": "Csatlakozás: {{device}}",
   "Connection": "Kapcsolat",
   "Connection timeout": "Kapcsolati időtúllépés",
+  "Connection type": "Kapcsolat típusa",
   "Control Unit mode": "Control Unit mód",
   "Debug messages": "Hibakeresési üzenetek",
   "Default": "Alapértelmezett",
@@ -92,6 +94,7 @@
   "Track clear": "Pálya tiszta",
   "Translations": "Fordítások",
   "Tuning": "Tuning",
+  "USB-Serial": "USB-soros",
   "Voice": "Hang",
   "Yellow flag": "Sárga zászló",
 

@@ -25,6 +25,7 @@
   "Connecting to {{device}}": "Pripájanie k zariadeniu {{device}}",
   "Connection": "Pripojenie",
   "Connection timeout": "Ćas na pripojenie",
+  "Connection type": "Typ pripojenia",
   "Control Unit mode": "Mód Control Unit",
   "Debug messages": "Diagnostické udalosti",
   "Default": "Prednastavené",
@@ -96,6 +97,7 @@
   "Track clear": "Trať čistá",
   "Translations": "Preklady",
   "Tuning": "Tuning",
+  "USB-Serial": "USB-sSSerial",
   "Voice": "Hlas",
   "Yellow flag": "Žltá vlajka",
 

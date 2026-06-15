@@ -7,6 +7,8 @@ import { DataView, Peripheral } from '../carrera';
 import { createSubject } from '../carrera/peripheral';
 import { LoggingService } from '../services';
 
+const BACKEND_TYPE = 'demo';
+
 const VERSION = '5336';
 
 const TIMEOUT_RATE = 0.0001;
@@ -131,7 +133,7 @@ class DemoPeripheral implements Peripheral {
 
   private subscriber: any;
 
-  type = 'demo';
+  type = BACKEND_TYPE;
 
   constructor(public name: string, private mode: number, private logger: LoggingService) {
     this.version = DataView.from('0', ...VERSION.split('').map(c => c.charCodeAt(0))).buffer;
@@ -294,6 +296,8 @@ class DemoPeripheral implements Peripheral {
 
 @Injectable()
 export class DemoBackend extends Backend {
+
+  type = BACKEND_TYPE;
 
   constructor(private logger: LoggingService) {
     super();

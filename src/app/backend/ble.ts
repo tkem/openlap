@@ -12,6 +12,8 @@ import { DataView, Peripheral } from '../carrera';
 import { createSubject } from '../carrera/peripheral';
 import { LoggingService } from '../services';
 
+const BACKEND_TYPE = 'ble';
+
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
 const OUTPUT_UUID = '39df8888-b1b4-b90b-57f1-7144ae4e4a6a';
 const NOTIFY_UUID = '39df9999-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -26,7 +28,7 @@ function bufferToString(buffer: ArrayBuffer) {
 
 class BLEPeripheral implements Peripheral {
 
-  type = 'ble';
+  type = BACKEND_TYPE;
 
   name: string;
 
@@ -163,6 +165,8 @@ class BLEPeripheral implements Peripheral {
 
 @Injectable()
 export class BLEBackend extends Backend {
+
+  type = BACKEND_TYPE;
 
   private scanner: Observable<any>;
 

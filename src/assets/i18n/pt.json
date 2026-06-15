@@ -13,6 +13,7 @@
   "Apply all": "Aplicar tudo",
   "Automatic": "Automático",
   "Autonomous Car": "Carro Autônomo",
+  "Bluetooth": "Bluetooth",
   "Brake": "Freio",
   "Cancel race?": "Cancelar corrida?",
   "Cancel qualifying?": "Cancelar classificação?",
@@ -25,6 +26,7 @@
   "Connecting to {{device}}": "Conectando a {{device}}",
   "Connection": "Conexão",
   "Connection timeout": "Tempo limite de conexão",
+  "Connection type": "Tipo de conexão",
   "Control Unit mode": "Modo da Unidade de Controle",
   "Debug messages": "Mensagens de diagnóstico",
   "Default": "Padrão",
@@ -96,6 +98,7 @@
   "Track clear": "Pista limpa",
   "Translations": "Traduções",
   "Tuning": "Ajuste",
+  "USB-Serial": "USB-Serial",
   "Voice": "Voz",
   "Yellow flag": "Bandeira amarela",
 

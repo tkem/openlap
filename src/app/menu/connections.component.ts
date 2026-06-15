@@ -21,7 +21,9 @@ export class ConnectionsComponent implements OnDestroy, OnInit {
 
   peripherals: Observable<Peripheral[]>;
 
-  private demoControlUnit: false;
+  private backendFilter: string;
+
+  private demoControlUnit = false;
 
   private subscription = new Subscription();
 
@@ -34,7 +36,15 @@ export class ConnectionsComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.platform.ready().then(() => {
-      const scans = this.backends.map(backend => backend.scan().pipe(
+      const scans = this.backends.filter(backend => {
+        if (backend.type == 'demo') {
+          return this.demoControlUnit;
+        } else if (this.backendFilter) {
+          return this.backendFilter.includes(backend.type);
+        } else {
+          return true;
+        }
+      }).map(backend => backend.scan().pipe(
         catchError(e => {
           this.logger.error('Scan error:', e);
           this.toast.showLongCenter(e.toString()); // TODO: key with param?
@@ -43,12 +53,10 @@ export class ConnectionsComponent implements OnDestroy, OnInit {
       ));
       this.peripherals = from(scans).pipe(
         mergeMap(value => value),
-        filter(device => {
-          return device.type != 'demo' || this.demoControlUnit;
-        }),
         tap(device => {
-          // automatically connect to first paired Web-Bluetooth device
-          if (!this.selected && device.type == 'web-bluetooth') {
+          // automatically connect to first paired Web Bluetooth/Serial device
+          this.logger.info('selected device', device);
+          if (!this.selected && (device.type == 'web-bluetooth' || device.type == 'web-serial')) {
             this.onSelect(device);
           }
         }),
@@ -59,6 +67,7 @@ export class ConnectionsComponent implements OnDestroy, OnInit {
     });
     this.subscription.add(this.settings.getConnection().subscribe(value => {
       this.demoControlUnit = value.demoControlUnit;
+      this.backendFilter = value.backendFilter;
     }));
   }
 

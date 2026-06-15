@@ -50,6 +50,16 @@ const NOTIFICATIONS = {
   yellowflag: true
 };
 
+function defaultBackendFilter() {
+  const navigator: any = window.navigator;
+  // FIXME: Assume app environment supports neither, otherwise check platform
+  if (navigator.bluetooth && navigator.serial) {
+    return 'web-bluetooth';
+  } else {
+    return undefined;
+  }
+}
+
 export class Connection {
   type?: string;
   name?: string;
@@ -58,6 +68,7 @@ export class Connection {
   requestTimeout = 2000;
   minReconnectDelay = 3000;
   maxReconnectDelay = 8000;
+  backendFilter = defaultBackendFilter();
   demoControlUnit = isDevMode();
 }
 
@@ -125,7 +136,7 @@ export class AppSettings {
     return this.settings.clear();
   }
 
-  getConnection() {
+  getConnection(): Observable<Connection> {
     return this.settings.observe('connection').pipe(
       map(value => Object.assign(new Connection(), value))
     );
@@ -135,7 +146,7 @@ export class AppSettings {
     return this.settings.set('connection', value);
   }
 
-  getDrivers() {
+  getDrivers(): Observable<Array<Driver>> {
     return this.settings.observe('drivers').pipe(
       map(value => {
         const result = new Array<Driver>(8);
@@ -151,7 +162,7 @@ export class AppSettings {
     return this.settings.set('drivers', value);
   }
 
-  getNotifications() {
+  getNotifications(): Observable<{[key: string]: Notification}> {
     return this.settings.observe('notifications').pipe(
       map(value => {
         const result = {};
@@ -165,9 +176,9 @@ export class AppSettings {
 
   setNotifications(value: {[key: string]: Notification}) {
     return this.settings.set('notifications', value);
-  }
+  } 
 
-  getOptions() {
+  getOptions(): Observable<Options> {
     return this.settings.observe('options').pipe(
       map(value => Object.assign(new Options(), value))
     );
@@ -183,7 +194,7 @@ export class AppSettings {
     );
   }
 
-  setQualifyingSettings(value: any) {
+  setQualifyingSettings(value: RaceOptions) {
     return this.settings.set('qualifying', value);
   }
 
@@ -193,7 +204,7 @@ export class AppSettings {
     );
   }
 
-  setRaceSettings(value: any) {
+  setRaceSettings(value: RaceOptions) {
     return this.settings.set('race', value);
   }
 }

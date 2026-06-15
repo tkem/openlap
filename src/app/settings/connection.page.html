@@ -38,6 +38,15 @@
         <ion-label slot="end">10 s</ion-label>
       </ion-range>
     </ion-item>
+    <ion-item *ngIf="type">
+      <ion-select label="{{'Connection type' | translate}}" [(ngModel)]="type" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+        <!-- ion-option seems to require translate attribute value; see
+             https://github.com/ionic-team/ionic/issues/8561#issuecomment-391079689
+          -->
+        <ion-select-option translate value="web-bluetooth">Bluetooth</ion-select-option>
+        <ion-select-option translate value="web-serial">USB-Serial</ion-select-option>
+      </ion-select>
+    </ion-item>
     <ion-item>
       <ion-toggle [(ngModel)]="demo" translate>Demo Control Unit</ion-toggle>
     </ion-item>

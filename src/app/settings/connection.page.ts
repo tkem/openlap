@@ -35,6 +35,8 @@ export class ConnectionPage implements OnDestroy, OnInit {
 
   demo = false;
   
+  type = undefined;
+
   constructor(private logger: LoggingService, private settings: AppSettings) {}
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class ConnectionPage implements OnDestroy, OnInit {
           upper: connection.maxReconnectDelay
         }
       };
+      this.type = connection.backendFilter;
       this.demo = connection.demoControlUnit;
       this.loaded = true;
     }).catch(error => {
@@ -64,6 +67,7 @@ export class ConnectionPage implements OnDestroy, OnInit {
       requestTimeout: this.ranges.request,
       minReconnectDelay: this.ranges.reconnect.lower,
       maxReconnectDelay: this.ranges.reconnect.upper,
+      backendFilter: this.type,
       demoControlUnit: this.demo
     };
     if (!isObjectSubset(connection, this.connection)) {

@@ -9,6 +9,7 @@
     "Apply all": "Zastosuj wszystko",
     "Automatic": "Automatycznie",
     "Autonomous Car": "Samochód autonomiczny",
+    "Bluetooth": "Bluetooth",
     "Brake": "Hamulec",
     "Cancel race?": "Anuluj wyścig?",
     "Cancel qualifying?": "Anuluj kwalifikacje?",
@@ -21,6 +22,7 @@
     "Connecting to {{device}}": "Łączenie z {{device}}",
     "Connection": "Połączenie",
     "Connection timeout": "Limit czasu połączenia",
+    "Connection type": "Typ połączenia",
     "Control Unit mode": "Tryb Control Unit",
     "Debug messages": "Wiadomości debugowania",
     "Default": "Domyślne",
@@ -92,6 +94,7 @@
     "Track clear": "Tor wolny",
     "Translations": "Tłumaczenia",
     "Tuning": "Tuning",
+    "USB-Serial": "USB-szeregowy",
     "Voice": "Głos",
     "Yellow flag": "Żółta flaga",
   

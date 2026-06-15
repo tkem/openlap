@@ -10,6 +10,8 @@ import { DataView, Peripheral } from '../carrera';
 import { createSubject } from '../carrera/peripheral';
 import { LoggingService } from '../services';
 
+const BACKEND_TYPE = 'web-bluetooth';
+
 const SERVICE_UUID = '39df7777-b1b4-b90b-57f1-7144ae4e4a6a';
 const OUTPUT_UUID = '39df8888-b1b4-b90b-57f1-7144ae4e4a6a';
 const NOTIFY_UUID = '39df9999-b1b4-b90b-57f1-7144ae4e4a6a';
@@ -24,7 +26,7 @@ function bufferToString(buffer: ArrayBuffer) {
 
 class WebBluetoothPeripheral implements Peripheral {
 
-  type = 'web-bluetooth';
+  type = BACKEND_TYPE;
 
   name: string;
 
@@ -150,6 +152,8 @@ class WebBluetoothPeripheral implements Peripheral {
 
 @Injectable()
 export class WebBluetoothBackend extends Backend {
+
+  type = BACKEND_TYPE;
 
   private navigator: any = window.navigator;
 
