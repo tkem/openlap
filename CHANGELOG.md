@@ -1,3 +1,17 @@
+2.7.0 UNRELEASED
+----------------
+
+- Add Web Serial support.
+
+- Fix missed "Tuning" updates due to debouncing.
+
+- Disable setting "Fuel" for controllers 5 and 6.
+
+- Show CU firmware version as four-digit number (again).
+
+- Update dependencies.
+
+
 2.6.0 2026-04-04
 ----------------
 
