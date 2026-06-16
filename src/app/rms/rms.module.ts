@@ -12,6 +12,7 @@ import { RmsMenu } from './rms.menu';
 import { RmsPage } from './rms.page';
 import { RaceSettingsComponent } from './race-settings.component';
 import { RaceTitleComponent } from './race-title.component';
+import { AppRoutingModule } from '../app-routing.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { RaceTitleComponent } from './race-title.component';
     RaceTitleComponent
   ],
   imports: [
+    AppRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
