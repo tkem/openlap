@@ -5,6 +5,8 @@
     "Por favor selecione um dispositivo de Unidade de Controle no menu.",
   "If no devices are listed, please make sure that Bluetooth is enabled.":
     "Se nenhum dispositivo estiver listado, por favor certifique-se de que o Bluetooth esteja habilitado.",
+  "To connect a Control Unit via USB, please change the":
+    "Para conectar uma Control Unit via USB, altere o",
   "Reset all user settings to default values?":
     "Redefinir todas as configurações do usúario para os valores padrão?",
 
@@ -32,7 +34,6 @@
   "Default": "Padrão",
   "Demo Control Unit": "Unidade de Controle de Demonstração",
   "Disconnected from {{device}}": "Desconectado de {{device}}",
-  "Done": "OK",
   "Driver {{number}}": "Piloto {{number}}",
   "Drivers": "Pilotos",
   "Event log": "Registro de eventos",

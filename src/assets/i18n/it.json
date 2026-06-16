@@ -5,6 +5,8 @@
     "Scegli tramite menù una Carrera® Control Unit.",
   "If no devices are listed, please make sure that Bluetooth is enabled.":
     "Se non appare nessuna unità, controlla che Bluetooth è attivato.",
+  "To connect a Control Unit via USB, please change the":
+    "Per connettere una Control Unit via USB, cambia il",
   "Reset all user settings to default values?":
     "Resettare tutte le impostazioni su default?",
 
@@ -32,7 +34,6 @@
   "Default": "Default",
   "Demo Control Unit": "Demo Control Unit",
   "Disconnected from {{device}}": "Disconnesso da {{device}}",
-  "Done": "OK",
   "Driver {{number}}": "Pilota {{number}}",
   "Drivers": "Piloti",
   "Event log": "Protocollo eventi",
@@ -98,7 +99,7 @@
   "Track clear": "Pista libera",
   "Translations": "Traduzioni",
   "Tuning": "Tuning",
-  "USB-Serial": "USB-Seriale",
+  "USB-Serial": "USB-Serial",
   "Voice": "Voce",
   "Yellow flag": "Bandiera gialla",
 

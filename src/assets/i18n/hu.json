@@ -2,6 +2,8 @@
   "Welcome to Open Lap!": "Üdv az Open Lapben!",
   "Please select a Control Unit device from the menu.": "Kérlek, válassz egy Carrera® Control Unit eszközt a menüből.",
   "If no devices are listed, please make sure that Bluetooth is enabled.": "Ha nem látsz eszközöket, ellenőrizd, hogy a Bluetooth be van-e kapcsolva.",
+  "To connect a Control Unit via USB, please change the":
+    "A Control Unit USB-n keresztüli csatlakoztatásához módosítsd a",
   "Reset all user settings to default values?": "Minden felhasználói beállítást visszaállítasz alapértelmezettre?",
 
   "About": "Névjegy",
@@ -28,7 +30,6 @@
   "Default": "Alapértelmezett",
   "Demo Control Unit": "Demo Control Unit",
   "Disconnected from {{device}}": "Leválasztva: {{device}}",
-  "Done": "OK",
   "Driver {{number}}": "{{number}}. pilóta",
   "Drivers": "Pilóták",
   "Event log": "Eseménynapló",
@@ -94,7 +95,7 @@
   "Track clear": "Pálya tiszta",
   "Translations": "Fordítások",
   "Tuning": "Tuning",
-  "USB-Serial": "USB-soros",
+  "USB-Serial": "USB-Serial",
   "Voice": "Hang",
   "Yellow flag": "Sárga zászló",
 

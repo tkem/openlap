@@ -48,7 +48,7 @@ class WebSerialPeripheral implements Peripheral {
   private lastWritten: string;
 
   constructor(private port: any, private logger: LoggingService) {
-    this.name = 'Control Unit';
+    this.name = 'USB Control Unit';
     const info = port.getInfo();
     if (info.usbVendorId && info.usbProductId) {
       const toUsbId = (value: Number) => value.toString(16).padStart(4, "0");
@@ -181,11 +181,6 @@ export class WebSerialBackend extends Backend {
 
   constructor(private logger: LoggingService, private platform: Platform) {
     super();
-    /*
-    this.navigator.serial.getPorts().then((ports) => {
-      this.logger.info("Web Serial ports:", ports);
-    });
-    */
   }
 
   scan(): Observable<Peripheral> {

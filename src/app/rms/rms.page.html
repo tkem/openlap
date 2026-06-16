@@ -26,8 +26,11 @@
       <p translate>
         Please select a Control Unit device from the menu.
       </p>
-      <p translate>
+      <p *ngIf="!(isSerialConnection | async)" translate>
         If no devices are listed, please make sure that Bluetooth is enabled.
+      </p>
+      <p *ngIf="isBluetoothConnection | async">
+        {{'To connect a Control Unit via USB, please change the' | translate}} <a href="/#/settings/connection">{{'Connection type' | translate}}</a>.
       </p>
     </div>
   </ng-template>

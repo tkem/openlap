@@ -50,6 +50,9 @@ export class RmsPage implements OnDestroy, OnInit {
 
   legacyAndroid: Promise<boolean>;
 
+  isBluetoothConnection: Observable<boolean>;
+  isSerialConnection: Observable<boolean>;
+
   private sessionSubscription: Subscription;
   private backButtonSubscription: Subscription;
 
@@ -85,6 +88,14 @@ export class RmsPage implements OnDestroy, OnInit {
     this.sectors = settings.getOptions().pipe(
       map(options => options.sectors)
     );
+
+    this.isBluetoothConnection = settings.getConnection().pipe(
+      map(connection => connection.backendFilter.includes("web-bluetooth"))
+    )
+
+    this.isSerialConnection = settings.getConnection().pipe(
+      map(connection => connection.backendFilter.includes("web-serial"))
+    )
 
     this.start = cu.pipe(
       filter(cu => !!cu),

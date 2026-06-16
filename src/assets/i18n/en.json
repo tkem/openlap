@@ -5,6 +5,8 @@
     "Please select a Carrera® Control Unit device from the menu.",
   "If no devices are listed, please make sure that Bluetooth is enabled.":
     "If no devices are listed, please make sure that Bluetooth is enabled.",
+  "To connect a Control Unit via USB, please change the":
+    "To connect a Control Unit via USB, please change the",
   "Reset all user settings to default values?":
     "Reset all user settings to default values?",
 
@@ -32,7 +34,6 @@
   "Default": "Default",
   "Demo Control Unit": "Demo Control Unit",
   "Disconnected from {{device}}": "Disconnected from {{device}}",
-  "Done": "OK",
   "Driver {{number}}": "Driver {{number}}",
   "Drivers": "Drivers",
   "Event log": "Event log",

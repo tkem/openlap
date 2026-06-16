@@ -1,8 +1,14 @@
 {
-    "Welcome to Open Lap!": "Witaj w Open Lap!",
-    "Please select a Control Unit device from the menu.": "Proszę wybrać urządzenie Carrera® Control Unit z menu.",
-    "If no devices are listed, please make sure that Bluetooth is enabled.": "Jeśli nie widzisz żadnych urządzeń, upewnij się, że Bluetooth jest włączony.",
-    "Reset all user settings to default values?": "Czy chcesz zresetować wszystkie ustawienia użytkownika do wartości domyślnych?",
+  "Welcome to Open Lap!":
+    "Witaj w Open Lap!",
+  "Please select a Control Unit device from the menu.":
+    "Proszę wybrać urządzenie Carrera® Control Unit z menu.",
+  "If no devices are listed, please make sure that Bluetooth is enabled.":
+    "Jeśli nie widzisz żadnych urządzeń, upewnij się, że Bluetooth jest włączony.",
+  "To connect a Control Unit via USB, please change the":
+    "Aby połączyć Control Unit przez USB, zmień",
+  "Reset all user settings to default values?":
+    "Czy chcesz zresetować wszystkie ustawienia użytkownika do wartości domyślnych?",
   
     "About": "O aplikacji",
     "About Open Lap": "O Open Lap",
@@ -28,7 +34,6 @@
     "Default": "Domyślne",
     "Demo Control Unit": "Demo Control Unit",
     "Disconnected from {{device}}": "Rozłączono z {{device}}",
-    "Done": "Gotowe",
     "Driver {{number}}": "Kierowca {{number}}",
     "Drivers": "Kierowcy",
     "Event log": "Rejestr zdarzeń",
@@ -94,7 +99,7 @@
     "Track clear": "Tor wolny",
     "Translations": "Tłumaczenia",
     "Tuning": "Tuning",
-    "USB-Serial": "USB-szeregowy",
+    "USB-Serial": "USB-Serial",
     "Voice": "Głos",
     "Yellow flag": "Żółta flaga",
   
