@@ -9,14 +9,14 @@
     "Aby połączyć Control Unit przez USB, zmień",
   "Reset all user settings to default values?":
     "Czy chcesz zresetować wszystkie ustawienia użytkownika do wartości domyślnych?",
-  "Setting the fuel tank capicity for drivers 5 and 6 can only be performed directly on the Control Unit.":
-     "Ustawień pojemności zbiornika paliwa dla kierowców 5 i 6 można dokonać wyłącznie bezpośrednio na Control Unit.",
+    "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
+      "Ustawień pojemności zbiornika paliwa dla kierowców 5 i 6 można dokonać wyłącznie bezpośrednio na Control Unit.",
   
   "About": "O aplikacji",
   "About Open Lap": "O Open Lap",
   "Apply all": "Zastosuj wszystko",
   "Automatic": "Automatycznie",
-  "Autonomous Car": "Samochód autonomiczny",
+  "Autonomous Car": "Autonomous Car",
   "Bluetooth": "Bluetooth",
   "Brake": "Hamulec",
   "Cancel race?": "Anuluj wyścig?",
@@ -75,7 +75,7 @@
   "One minute to go": "Jedna minuta do końca",
   "Open source licenses": "Licencje oprogramowania open source",
   "Order by number": "Sortuj według numeru",
-  "Pace Car": "Samochód bezpieczeństwa",
+  "Pace Car": "Pace Car",
   "Pitch": "Ton",
   "Privacy policy": "Polityka prywatności",
   "Qualifying": "Kwalifikacje",

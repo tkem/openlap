@@ -108,6 +108,16 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - Supported languages: de, en, es, fr, hu, it, pl, pt, sk.
 - `TranslateModule` is re-exported from `SharedModule`.
 
+### Translation Guidelines
+
+- **Preserve placeholders:** Keep interpolation tokens exactly as-is (for example, `{{device}}`, `{{count}}`, `{{total}}`).
+- **Do not translate product names:** Leave product-specific names untranslated. Always keep the English product names exactly as used in the UI: `Control Unit`, `Autonomous Car`, `Pace Car`, `Demo Control Unit`. Preserve brand tokens and symbols where present (for example, `Carrera® Control Unit`) and avoid creating local-language variants (e.g., do not use "unidad de control", "Unidade de Controle", or similar).
+- **Use natural, grammatical phrasing:** Translations should read naturally in the target language (avoid literal word-by-word translations). For time/remaining phrases prefer constructions like "Il reste X" in French rather than literal translations.
+- **French-specific notes:** Use `fr-FR` as the locale, prefer "Aucun" for the English "None" value, and check wording for notifications (e.g., "Il reste une minute !", "Il reste cinq tours !").
+- **Punctuation & spacing:** Follow typographic conventions where practical (e.g., space before `?`/`!` in French is acceptable), but preserving readability in the app is more important than strict non-breaking spaces.
+- **Capitalization:** Match the UI casing expectations (start-of-sentence capitalization for messages; preserve capitalized tokens).
+
+
 ## Routing
 
 - Hash-based routing (`useHash: true`) with `PreloadAllModules` strategy.

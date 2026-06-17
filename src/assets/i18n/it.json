@@ -9,8 +9,8 @@
     "Per connettere una Control Unit via USB, cambia il",
   "Reset all user settings to default values?":
     "Resettare tutte le impostazioni su default?",
-  "Setting the fuel tank capicity for drivers 5 and 6 can only be performed directly on the Control Unit.":
-     "La regolazione della capacità del serbatoio carburante per i conducenti 5 e 6 può essere effettuata solo direttamente sulla Control Unit.",
+    "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
+      "La regolazione della capacità del serbatoio carburante per i conducenti 5 e 6 può essere effettuata solo direttamente sulla Control Unit.",
 
   "About": "Informazioni",
   "About Open Lap": "Informazioni su Open Lap",
@@ -26,8 +26,8 @@
   "Car leaves pit": "Vettura lascia il box",
   "Clear": "Svuota",
   "Colors": "Colori",
-  "Connected to {{device}}": "Sintonizzato con {{device}}",
-  "Connecting to {{device}}": "Sintonizzazione con {{device}}",
+  "Connected to {{device}}": "Connesso a {{device}}",
+  "Connecting to {{device}}": "Connessione a {{device}}",
   "Connection": "Collegamento",
   "Connection timeout": "Tempo massimo per il collegamento",
   "Connection type": "Tipo di collegamento",
@@ -76,7 +76,7 @@
   "Open source licenses": "Licenze open source",
   "Order by number": "In ordine di numero",
   "Pace Car": "Pace Car",
-  "Pitch": "Pece",
+  "Pitch": "Tonalità",
   "Privacy policy": "Politica sulla riservatezza",
   "Qualifying": "Qualificazioni",
   "Race finished": "Corsa finita",

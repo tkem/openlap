@@ -4,19 +4,19 @@
   "Please select a Control Unit device from the menu.":
     "Seleccione el Carrera® Control Unit a través del menu.",
   "If no devices are listed, please make sure that Bluetooth is enabled.":
-    "Si su unidad de control no aparece, compruebe que tiene el Bluetooth activado.",
+    "Si su Control Unit no aparece, compruebe que tiene el Bluetooth activado.",
   "To connect a Control Unit via USB, please change the":
     "Para conectar una Control Unit por USB, cambie el",
   "Reset all user settings to default values?":
     "¿Quiere usar los valores establecidos por defecto?",
-  "Setting the fuel tank capicity for drivers 5 and 6 can only be performed directly on the Control Unit.":
+  "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
    "La configuración de la capacidad del depósito de combustible para los conductores 5 y 6 solo se puede realizar directamente en la Control Unit.",
   
   "About": "Información",
   "About Open Lap": "Información sobre Open Lap",
-  "Apply all": "Acceptar todo",
+  "Apply all": "Aceptar todo",
   "Automatic": "Automático",
-  "Autonomous Car": "Coche autónomo",
+  "Autonomous Car": "Autonomous Car",
   "Bluetooth": "Bluetooth",
   "Brake": "Freno",
   "Cancel race?": "¿Cancelar carrera?",
@@ -67,7 +67,7 @@
   "New race leader": "Nuevo líder de carrera",
   "No connection": "Sin conexión",
   "No fuel": "Sin gasolina",
-  "None": "Ningun",
+  "None": "Ningún",
   "Notifications": "Notificaciones",
   "Number of drivers": "Número de pilotos",
   "Number of laps": "Número de vueltas",
@@ -75,7 +75,7 @@
   "One minute to go": "Un minuto para ir",
   "Open source licenses": "Licencia open source",
   "Order by number": "Ordenar por número",
-  "Pace Car": "Coche de seguridad",
+  "Pace Car": "Pace Car",
   "Pitch": "Paso",
   "Privacy policy": "Política de privacidad",
   "Qualifying": "Clasificación",
@@ -99,7 +99,7 @@
   "Time": "Tiempo",
   "Timeout": "Se acabó el tiempo",
   "Track clear": "Bandera verde",
-  "Translations": "Traduciones",
+  "Translations": "Traducciones",
   "Tuning": "Tuning",
   "USB-Serial": "USB-Serial",
   "Voice": "Voz",
@@ -119,7 +119,7 @@
     "finished2nd": "¡Segundo lugar!",
     "finished3rd": "¡Tercer lugar!",
     "fivelaps": "¡Cinco vueltas para el final!",
-    "fuel0": "¡Éntre en boxes!",
+    "fuel0": "¡Entre en boxes!",
     "fuel1": "¡Necesita entrar en boxes!",
     "fuel2": "¡Se están preparando en boxes!",
     "greenflag": "¡Bandera verde!",
@@ -129,6 +129,5 @@
     "pitexit": "¡Acaba de abandonar el pitlane!",
     "timeout": "¡Se acabó el tiempo!",
     "yellowflag": "¡Cuidado, bandera amarilla!"
-
   }
 }
