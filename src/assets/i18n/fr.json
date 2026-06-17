@@ -9,6 +9,8 @@
     "Pour connecter une Control Unit via USB, veuillez changer le",
   "Reset all user settings to default values?":
     "Remettre les réglages par défaut?",
+  "Setting the fuel tank capicity for drivers 5 and 6 can only be performed directly on the Control Unit.":
+   "Le réglage de la capacité du réservoir de carburant pour les conducteurs 5 et 6 ne peut être effectué que directement sur le Control Unit.",
 
   "About": "A propos",
   "About Open Lap": "A propos d'Open Lap",
