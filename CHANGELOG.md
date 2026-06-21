@@ -9,6 +9,8 @@
 
 - Show CU firmware version as four-digit number (again).
 
+- Update translations.
+
 - Update dependencies.
 
 
