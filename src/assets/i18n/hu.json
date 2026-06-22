@@ -9,8 +9,8 @@
     "A Control Unit USB-n keresztüli csatlakoztatásához módosítsd a",
   "Reset all user settings to default values?":
     "Minden felhasználói beállítást visszaállítasz alapértelmezettre?",
-    "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
-      "Az 5-ös és 6-os vezető üzemanyagtartály-kapacitásának beállítása csak közvetlenül a Control Unit végezhető el.",
+  "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
+    "Az 5-ös és 6-os vezető üzemanyagtartály-kapacitásának beállítása csak közvetlenül a Control Unit végezhető el.",
 
   "About": "Névjegy",
   "About Open Lap": "Open Lap névjegye",

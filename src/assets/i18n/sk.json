@@ -9,8 +9,8 @@
     "Ak chcete pripojiť Control Unit cez USB, zmeňte",
   "Reset all user settings to default values?":
     "Resetovať všetky nastavenia na pôvodné hodnoty?",
-    "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
-      "Nastavenie objemu palivovej nádrže pre vodičov 5 a 6 je možné vykonať iba priamo na Control Unit.",
+  "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
+    "Nastavenie objemu palivovej nádrže pre vodičov 5 a 6 je možné vykonať iba priamo na Control Unit.",
 
   "About": "Informácie",
   "About Open Lap": "O aplikácii Open Lap",
