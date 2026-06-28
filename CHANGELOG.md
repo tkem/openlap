@@ -1,4 +1,4 @@
-2.7.0 UNRELEASED
+2.7.0 2026-06-28
 ----------------
 
 - Add Web Serial support.
