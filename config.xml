@@ -7,33 +7,36 @@
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <preference name="AndroidXEnabled" value="true" />
     <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="BackgroundColor" value="#222428" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="DefaultVolumeStream" value="media" />
     <preference name="DisallowOverscroll" value="true" />
+    <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="KeepRunning" value="true" />
     <preference name="LoadUrlTimeoutValue" value="60000" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashMaintainAspectRatio" value="true" />
-    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenBackgroundColor" value="#222428" />
     <preference name="SplashScreenDelay" value="3000" />
-    <preference name="SplashShowOnlyFirstTime" value="false" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
     <icon src="res/icon.png" />
     <platform name="android">
-        <hook src="hooks/android/windowLayoutInDisplayCutoutMode.js" type="after_platform_add" />
-        <icon background="@color/cdv_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" />
-        <icon background="@color/cdv_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
-        <icon background="@color/cdv_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
-        <icon background="@color/cdv_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
-        <icon background="@color/cdv_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
+        <icon background="@color/app_icon_background" density="hdpi" foreground="res/android/icon/mipmap-hdpi-icon.png" />
+        <icon background="@color/app_icon_background" density="mdpi" foreground="res/android/icon/mipmap-mdpi-icon.png" />
+        <icon background="@color/app_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
+        <icon background="@color/app_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
+        <icon background="@color/app_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
+        <preference name="AndroidEdgeToEdge" value="false" />
+        <preference name="AndroidPostSplashScreenTheme" value="@style/Theme.CustomAppTheme" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
         <preference name="android-minSdkVersion" value="27" />
-        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/colors.xml" />
+        <resource-file src="res/android/colors.xml" target="/app/src/main/res/values/app_colors.xml" />
+        <resource-file src="res/android/themes.xml" target="/app/src/main/res/values/app_themes.xml" />
     </platform>
     <platform name="ios">
         <icon height="144" src="res/ios/icon/icon-72@2x.png" width="144" />
@@ -64,6 +67,8 @@
         <icon height="152" src="res/ios/icon/icon-76@2x.png" width="152" />
         <icon height="167" src="res/ios/icon/icon-83.5@2x.png" width="167" />
         <icon height="1024" src="res/ios/icon/icon-1024.png" width="1024" />
+        <preference name="deployment-target" value="13.0" />
+        <preference name="MinimumOSVersion" value="13.0" />
         <splash height="1242" src="res/ios/splash/Default-Landscape-736h.png" width="2208" />
         <splash height="1136" src="res/ios/splash/Default-568h@2x~iphone.png" width="640" />
         <splash height="2688" src="res/ios/splash/Default-2688h~iphone.png" width="1242" />

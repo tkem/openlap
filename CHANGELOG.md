@@ -3,6 +3,8 @@
 
 - Minor layout improvements in portrait mode.
 
+- Clean up Cordova build environment.
+
 - Update dependencies.
 
 
