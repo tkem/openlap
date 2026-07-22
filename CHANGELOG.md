@@ -1,3 +1,11 @@
+2.7.1 UNRELEASED
+----------------
+
+- Minor layout improvements in portrait mode.
+
+- Update dependencies.
+
+
 2.7.0 2026-06-28
 ----------------
 
