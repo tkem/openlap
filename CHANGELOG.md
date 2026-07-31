@@ -1,3 +1,11 @@
+2.7.2 UNRELEASED
+----------------
+
+- Upgrade to Cordova Android 15.1.0 (targetting Android SDK 36).
+
+- Update dependencies.
+
+
 2.7.1 2026-07-30
 ----------------
 
