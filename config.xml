@@ -31,7 +31,7 @@
         <icon background="@color/app_icon_background" density="xhdpi" foreground="res/android/icon/mipmap-xhdpi-icon.png" />
         <icon background="@color/app_icon_background" density="xxhdpi" foreground="res/android/icon/mipmap-xxhdpi-icon.png" />
         <icon background="@color/app_icon_background" density="xxxhdpi" foreground="res/android/icon/mipmap-xxxhdpi-icon.png" />
-        <preference name="AndroidEdgeToEdge" value="false" />
+        <preference name="AndroidEdgeToEdge" value="true" />
         <preference name="AndroidPostSplashScreenTheme" value="@style/Theme.CustomAppTheme" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/icon/mipmap-xxxhdpi-icon.png" />
         <preference name="android-minSdkVersion" value="27" />
