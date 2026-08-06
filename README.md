@@ -5,24 +5,38 @@ Carrera® DIGITAL 124/132 systems.
 
 In a nutshell, Open Lap lets you
 
-- connect your mobile device or desktop browser via Bluetooth using
-  Carrera AppConnect®.
+- connect your desktop browser or mobile device via Bluetooth LE using
+  [Carrera® Bluetooth
+  Connect](https://carrera-toys.com/products/20030369-carrera-bluetooth-connect)
+  (formerly AppConnect®).
 - take it easy during free practice, go for fastest lap in qualifying,
   or compete in lap or time based race sessions.
-- get informed about important events, such as fastest laps or low
-  fuel conditions, by personalized voice messages.
+- get informed about important events, such as fastest lap or low fuel
+  conditions, by personalized voice messages.
 - adjust vehicle speed, brake force and fuel tank size for each car
   individually.
 - measure up to three intermediate or sector times (S1, S2, S3) using
-  Carrera® Check Lane or compatible equipment.
+  [Carrera® Check
+  Lane](https://carrera-toys.com/products/20030371-check-lane) or
+  compatible equipment.
 - send out the pace car in case of emergency, or temporarily disable
   lap counting during a "yellow flag" phase.
 
 Some features, such as the start light and pace car buttons, will
-require Carrera® Control Unit firmware version 3.31 or higher.
-Carrera® Check Lane support requires at least firmware version 3.36.
+require Carrera® Control Unit firmware version 5331 or higher.
+Carrera® Check Lane support requires at least firmware version 5336.
 
-The Android version is available on [Google
+Open Lap is available as a [Progressive Web
+App](https://en.wikipedia.org/wiki/Progressive_web_applications) for
+use with modern desktop browsers at
+[https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
+
+To use this with Carrera® Bluetooth Connect, you'll need a Bluetooth
+4.0 or higher adapter and a recent version of [Google
+Chrome](https://www.google.com/chrome) or [Microsoft
+Edge](https://explore.microsoft.com/edge).
+
+An Android version is available on [Google
 Play](https://play.google.com/store/apps/details?id=at.co.kemmer.openlap).
 You may also want to join the [Beta testing
 program](https://play.google.com/apps/testing/at.co.kemmer.openlap) to
@@ -32,21 +46,6 @@ An iOS version, maintained by [Philipp
 Anné](https://itunes.apple.com/us/developer/id965549566), is available
 on the [App
 Store](https://itunes.apple.com/us/app/open-lap/id1448048406).
-
-Open Lap is also available as a [Progressive Web
-App](https://en.wikipedia.org/wiki/Progressive_web_applications),
-hosted at
-[https://tkem.github.io/openlap/](https://tkem.github.io/openlap/).
-To use this with Carrera AppConnect®, you'll need a Bluetooth 4.0
-adapter and a recent version of
-[Google Chrome](https://www.google.com/chrome).  On Linux, at least,
-you'll also have to go to
-
-```
-chrome://flags/#enable-experimental-web-platform-features
-```
-
-and enable the highlighted flag.
 
 
 Building from Source
@@ -69,7 +68,7 @@ guide](https://ionicframework.com/docs/installation/cli), then run
 ionic serve
 ```
 
-To actually build the app, please make sure you have everything needed
+To build the app version, please make sure you have everything needed
 for [Android](https://ionicframework.com/docs/installation/android) or
 [iOS](https://ionicframework.com/docs/installation/ios) development.
 Then simply run
