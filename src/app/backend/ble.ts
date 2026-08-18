@@ -34,6 +34,8 @@ class BLEPeripheral implements Peripheral {
 
   address: string;
 
+  fwuBlockSize = 18;
+
   lastWritten: string;
 
   constructor(device: any, private ble: BLE, private logger: LoggingService) {

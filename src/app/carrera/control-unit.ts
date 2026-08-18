@@ -1,6 +1,6 @@
-import { BehaviorSubject , Connectable , Observable, Subject , Subscription, firstValueFrom, timer } from 'rxjs';
+import { BehaviorSubject, Connectable, Observable, Subject ,Subscription, firstValueFrom, timer } from 'rxjs';
 
-import { concatMap, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, throttle, timeout } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, timeout } from 'rxjs/operators';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
@@ -99,6 +99,7 @@ export class ControlUnit {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.version = null;
     return Promise.resolve();
   }
 

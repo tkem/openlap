@@ -9,7 +9,7 @@ import { LoggingService } from '../services';
 
 const BACKEND_TYPE = 'demo';
 
-const VERSION = '5336';
+const VERSION = '5339';
 
 const TIMEOUT_RATE = 0.0001;
 const ERROR_RATE = 0.0001;
@@ -135,6 +135,8 @@ class DemoPeripheral implements Peripheral {
 
   type = BACKEND_TYPE;
 
+  fwuBlockSize = 18;  // for BLE, set to undefined for serial
+
   constructor(public name: string, private mode: number, private logger: LoggingService) {
     this.version = DataView.from('0', ...VERSION.split('').map(c => c.charCodeAt(0))).buffer;
     for (let i = 0; i != this.config.numCars; ++i) {
@@ -195,10 +197,14 @@ class DemoPeripheral implements Peripheral {
         }
         setTimeout(() => {
           if (this.subscriber) {
-            if (toString(value) == '0') {
+            const s = toString(value);
+            if (s == '0') {
               this.subscriber.next(this.version);
+            } else if (['E', 'F', 'G'].some(p => s.startsWith(p))) {
+              // response without CRC
+              this.subscriber.next(DataView.fromString(s.charAt(0)).buffer);
             } else {
-              // TODO: command response
+              // TODO: more command responses
               this.subscriber.next(this.laps.length ? this.laps.shift() : this.createStatus());
             }
           }

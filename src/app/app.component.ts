@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, OnDestroy, isDevMode } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, OnDestroy, ViewChild, isDevMode } from '@angular/core';
 
 import { SwUpdate } from '@angular/service-worker';
 
@@ -36,6 +36,7 @@ import { first, mergeMap, timeout } from 'rxjs/operators';
 import { AppSettings } from './app-settings';
 import { Backend } from './backend';
 import { ControlUnit } from './carrera';
+import { MenuComponent } from './menu';
 import { AppService, ControlUnitService, I18nAlertService, I18nToastService, LoggingService, SpeechService } from './services';
 
 const CONNECTION_TIMEOUT = 3000;
@@ -52,6 +53,8 @@ const STATE_MESSAGES = {
     standalone: false
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+
+  @ViewChild(MenuComponent) menu: MenuComponent;
 
   private subscription = new Subscription();
   private stateSubscription: Subscription;

@@ -9,6 +9,8 @@ import { SharedModule } from '../shared';
 
 import { AboutPage } from './about.page';
 import { ConnectionPage } from './connection.page';
+import { firmwareCanDeactivateGuard } from './firmware.page';
+import { FirmwarePage } from './firmware.page';
 import { LicensesPage } from './licenses.page';
 import { LoggingMenu } from './logging.menu';
 import { LoggingPage } from './logging.page';
@@ -44,6 +46,11 @@ const routes: Routes = [
   {
     path: 'voice',
     component: VoicePage
+  },
+  {
+    path: 'firmware',
+    component: FirmwarePage,
+    canDeactivate: [firmwareCanDeactivateGuard]
   }
 ];
 
@@ -51,6 +58,7 @@ const routes: Routes = [
   declarations: [
     AboutPage,
     ConnectionPage,
+    FirmwarePage,
     LicensesPage,
     LoggingMenu,
     LoggingPage,

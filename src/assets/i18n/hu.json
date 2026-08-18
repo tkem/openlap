@@ -7,10 +7,30 @@
     "Ha nem látsz eszközöket, ellenőrizd, hogy a Bluetooth be van-e kapcsolva.",
   "To connect a Control Unit via USB, please change the":
     "A Control Unit USB-n keresztüli csatlakoztatásához módosítsd a",
+  "A new version of Open Lap is available. Do you want to update now?":
+    "Az Open Lap új verziója érhető el. Szeretnéd most frissíteni?",
   "Reset all user settings to default values?":
     "Minden felhasználói beállítást visszaállítasz alapértelmezettre?",
   "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
     "Az 5-ös és 6-os vezető üzemanyagtartály-kapacitásának beállítása csak közvetlenül a Control Unit végezhető el.",
+  "Select a firmware (.HMF) file to update the connected Control Unit.":
+    "Válassz ki egy firmware (.HMF) fájlt a csatlakoztatott Control Unit frissítéséhez.",
+  "Note that these files are the intellectual property of Carrera Toys GmbH, are protected by copyright law, and must not be distributed in any way without explicit consent.":
+    "Vegye figyelembe, hogy ezek a fájlok a Carrera Toys GmbH szellemi tulajdonát képezik, szerzői jogvédelem alatt állnak, és kifejezett hozzájárulás nélkül semmilyen módon nem terjeszthetők.",
+  "Use at your own risk: An invalid or interrupted firmware update can seriously damage your Control Unit!":
+    "Használata saját felelősségre: egy érvénytelen vagy megszakadt firmware-frissítés súlyosan károsíthatja a Control Unit készülékét!",
+  "The file seems to be invalid or corrupt.":
+    "Úgy tűnik, a fájl érvénytelen vagy sérült.",
+  "Do not disconnect or power off the Control Unit during the update!":
+    "A frissítés alatt ne válaszd le és ne kapcsold ki a Control Unit-ot!",
+  "Waiting for firmware update to start...":
+    "Várakozás a firmware frissítés indítására...",
+  "Firmware update in progress. Please do not disconnect or power off the Control Unit!":
+    "Firmware frissítés folyamatban. Kérlek, ne válaszd le és ne kapcsold ki a Control Unit-ot!",
+  "Waiting for firmware update to complete...":
+    "Várakozás a firmware frissítés befejezésére...",
+  "Firmware successfully updated to version {{version}}.":
+    "A firmware sikeresen frissítve lett a(z) {{version}} verzióra.",
 
   "About": "Névjegy",
   "About Open Lap": "Open Lap névjegye",
@@ -31,6 +51,7 @@
   "Connection": "Kapcsolat",
   "Connection timeout": "Kapcsolati időtúllépés",
   "Connection type": "Kapcsolat típusa",
+  "Control Unit firmware update": "Control Unit firmware frissítése",
   "Control Unit mode": "Control Unit mód",
   "Debug messages": "Hibakeresési üzenetek",
   "Default": "Alapértelmezett",
@@ -51,6 +72,7 @@
   "Finished first": "Első hely",
   "Finished second": "Második hely",
   "Finished third": "Harmadik hely",
+  "Firmware update": "Firmware frissítés",
   "Firmware version": "Firmware verzió",
   "Five laps to go": "Öt kör van hátra",
   "Free Practice": "Szabadedzés",
@@ -58,6 +80,8 @@
   "Fuel < 20%": "Üzemanyag < 20%",
   "Fuel": "Üzemanyag",
   "General": "Általános",
+  "Invalid firmware file": "Érvénytelen firmware fájl",
+  "iOS support": "iOS támogatás",
   "Language": "Nyelv",
   "Lap {{count}}": "{{count}}. kör",
   "Lap {{count}}/{{total}}": "{{count}}/{{total}} kör",
@@ -92,10 +116,13 @@
   "Sector times": "Szektoridők",
   "Settings": "Beállítások",
   "Share": "Megosztás",
+  "Special features": "Speciális funkciók",
   "Speed": "Sebesség",
+  "Start firmware update": "Firmware frissítés indítása",
   "Start": "Start",
   "Stop cars when finished": "Autók megállítása a befejezés után",
   "Stop time when paused": "Idő megállítása szünetben",
+  "Test": "Teszt",
   "Time": "Idő",
   "Timeout": "Lejárt az idő",
   "Track clear": "Pálya tiszta",

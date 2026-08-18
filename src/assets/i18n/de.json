@@ -7,10 +7,30 @@
     "Falls keine Geräte aufscheinen, stellen Sie bitte sicher, dass Bluetooth aktiviert ist.",
   "To connect a Control Unit via USB, please change the":
     "Um eine Control Unit über USB zu verbinden, ändern Sie bitte den",
+  "A new version of Open Lap is available. Do you want to update now?":
+    "Eine neue Version von Open Lap ist verfügbar. Möchten Sie jetzt aktualisieren?",
   "Reset all user settings to default values?":
     "Alle Einstellungen auf Standardwerte zurücksetzen?",
   "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
     "Die Einstellung des Tankinhalts für Fahrer 5 und 6 kann nur direkt an der Control Unit vorgenommen werden.",
+  "Select a firmware (.HMF) file to update the connected Control Unit.":
+    "Wählen Sie eine Firmware-Datei (.HMF) aus, um die verbundene Control Unit zu aktualisieren.",
+  "Note that these files are the intellectual property of Carrera Toys GmbH, are protected by copyright law, and must not be distributed in any way without explicit consent.":
+    "Beachten Sie, dass diese Dateien geistiges Eigentum der Carrera Toys GmbH sind, urheberrechtlich geschützt sind und ohne ausdrückliche Zustimmung in keiner Weise weitergegeben werden dürfen.",
+  "Use at your own risk: An invalid or interrupted firmware update can seriously damage your Control Unit!":
+    "Benutzung auf eigenes Risiko: Ein ungültiges oder unterbrochenes Firmware-Update kann Ihre Control Unit ernsthaft beschädigen!",
+  "The file seems to be invalid or corrupt.":
+    "Die Datei scheint ungültig oder beschädigt zu sein.",
+  "Do not disconnect or power off the Control Unit during the update!":
+    "Die Control Unit darf während des Updates nicht getrennt oder ausgeschaltet werden!",
+  "Waiting for firmware update to start...":
+    "Warten auf den Start des Firmware-Updates...",
+  "Firmware update in progress. Please do not disconnect or power off the Control Unit!":
+    "Firmware-Update wird durchgeführt. Bitte trennen Sie nicht die Verbindung und schalten Sie die Control Unit nicht aus!",
+  "Waiting for firmware update to complete...":
+    "Warten auf den Abschluss des Firmware-Updates...",
+  "Firmware successfully updated to version {{version}}.":
+    "Firmware erfolgreich auf Version {{version}} aktualisiert.",
 
   "About": "Info",
   "About Open Lap": "Über Open Lap",
@@ -31,6 +51,7 @@
   "Connection": "Verbindung",
   "Connection timeout": "Zeitlimit beim Verbinden",
   "Connection type": "Verbindungstyp",
+  "Control Unit firmware update": "Control Unit Firmware-Update",
   "Control Unit mode": "Control Unit Modus",
   "Debug messages": "Diagnosemeldungen",
   "Default": "Standard",
@@ -51,6 +72,7 @@
   "Finished first": "Erster Platz",
   "Finished second": "Zweiter Platz",
   "Finished third": "Dritter Platz",
+  "Firmware update": "Firmware-Update",
   "Firmware version": "Firmware-Version",
   "Five laps to go": "Noch fünf Runden",
   "Free Practice": "Freies Training",
@@ -58,6 +80,8 @@
   "Fuel < 20%": "Tank < 20%",
   "Fuel": "Tank",
   "General": "Allgemein",
+  "Invalid firmware file": "Ungültige Firmware-Datei",
+  "iOS support": "iOS-Unterstützung",
   "Language": "Sprache",
   "Lap {{count}}": "Runde {{count}}",
   "Lap {{count}}/{{total}}": "Runde {{count}}/{{total}}",
@@ -92,10 +116,13 @@
   "Sector times": "Sektorzeiten",
   "Settings": "Einstellungen",
   "Share": "Teilen",
+  "Special features": "Sonderfunktionen",
   "Speed": "Tempo",
+  "Start firmware update": "Firmware-Update starten",
   "Start": "Start",
   "Stop cars when finished": "Autos halten am Ende an",
   "Stop time when paused": "Zeit bei Unterbrechung stoppen",
+  "Test": "Test",
   "Time": "Zeit",
   "Timeout": "Zeit ist um",
   "Track clear": "Strecke freigegeben",

@@ -66,7 +66,6 @@ export class DataView {
     return String.fromCharCode.apply(null, [...this.subarray(byteOffset, byteLength)]);
   }
 
-  // FIXME: should use values, only
   static from(cmd: string, ...values: number[]) {
     let array = new Uint8Array(values.length + 2);
     let crc = array[0] = cmd.charCodeAt(0);
@@ -79,9 +78,31 @@ export class DataView {
     return new DataView(array.buffer);
   }
 
+  static fromHex(cmd: string, s: string) {
+    if (!/^[0-9A-Fa-f]+$/.test(s)) {
+      throw new Error('Invalid ASCII hex characters');
+    }
+    const data = s.split('').map(c => c.charCodeAt(0));
+    const array = new Uint8Array(data.length + 2);
+    array[0] = cmd.charCodeAt(0);
+    let crc = 0;
+    const offset = cmd == "F" ? 2 : 1;
+    for (let i = 0; i != data.length; ++i) {
+      const value = data[i];
+      array[i + offset] = value;
+      crc += value & 0x0f;
+    }
+    if (cmd == "F") {
+      array[1] = s.length;
+    } else {
+      array[array.length - 1] = 0x30 | (crc & 0xf);
+    }
+    return new DataView(array.buffer);
+  }
+
   static fromString(s: string) {
-    // TypedArray.from() not supported on iOS
-    const array = new Uint8Array(s.split('').map(c => c.charCodeAt(0)));
+    const values = s.split('').map(c => c.charCodeAt(0));
+    const array = new Uint8Array(values);
     return new DataView(array.buffer);
   }
 

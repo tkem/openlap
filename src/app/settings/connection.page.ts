@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { AppSettings, Connection } from '../app-settings';
-import { LoggingService } from '../services';
+import { AppService, ControlUnitService, LoggingService } from '../services';
 
 function isObjectSubset(a, b) {
   for (let key in a) {
@@ -37,7 +37,23 @@ export class ConnectionPage implements OnDestroy, OnInit {
   
   type = undefined;
 
-  constructor(private logger: LoggingService, private settings: AppSettings) {}
+  isDesktopBrowser = false;
+
+  isFirmwareUpdateSupported: Promise<boolean>;
+
+  constructor(
+    public cu: ControlUnitService,
+    private logger: LoggingService,
+    private settings: AppSettings,
+    private app: AppService
+  ) { 
+    this.isDesktopBrowser = !this.app.isCordova();
+    if (cu.value) {
+      this.isFirmwareUpdateSupported = cu.value.getVersion().then(v => v.startsWith("5"));
+    } else {
+      this.isFirmwareUpdateSupported = Promise.resolve(!!cu.value);
+    }
+  }
 
   ngOnInit() {
     firstValueFrom(this.settings.getConnection()).then(connection => {

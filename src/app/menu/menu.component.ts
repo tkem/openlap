@@ -55,7 +55,7 @@ export class MenuComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if ('cu' in changes) {
       this.mode = !!this.cu;
-      this.version = this.cu ? this.cu.getVersion() : Promise.resolve(undefined);
+      this.version = this.getVersion();
     }
   }
 
@@ -84,7 +84,7 @@ export class MenuComponent implements OnChanges {
     if (this.cu) {
       this.logger.info('Reconnecting to', this.cu.peripheral);
       this.cu.reconnect().then(() => {
-        this.version = this.cu.getVersion();
+        this.version = this.getVersion();
       });
     }
   }
@@ -96,7 +96,7 @@ export class MenuComponent implements OnChanges {
   startQualifying() {
     this.settings.getQualifyingSettings().pipe(take(1)).subscribe((options) => {
       return this.mod.create({
-        component: RaceSettingsComponent, 
+        component: RaceSettingsComponent,
         componentProps: options
       }).then(modal => {
         modal.onDidDismiss().then(detail => {
@@ -140,6 +140,18 @@ export class MenuComponent implements OnChanges {
         handler: () => this.exit()
       }]
     });
+  }
+
+  private getVersion() {
+    const cu = this.cu;
+    if (cu) {
+      return cu.getVersion().then(v => {
+        this.logger.info("Control Unit firmare version:", v);
+        return v;
+      });
+    } else {
+      return Promise.resolve(undefined);
+    }
   }
 
   private exit() {

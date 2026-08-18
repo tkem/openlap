@@ -7,10 +7,30 @@
     "Ak nie sú k dispozícii žiadne zariadenia, uistite sa že je zapnuté Bluetooth.",
   "To connect a Control Unit via USB, please change the":
     "Ak chcete pripojiť Control Unit cez USB, zmeňte",
+  "A new version of Open Lap is available. Do you want to update now?":
+    "Je k dispozícii nová verzia Open Lap. Chcete aktualizovať teraz?",
   "Reset all user settings to default values?":
     "Resetovať všetky nastavenia na pôvodné hodnoty?",
   "Setting the fuel tank capacity for drivers 5 and 6 can only be performed directly on the Control Unit.":
     "Nastavenie objemu palivovej nádrže pre vodičov 5 a 6 je možné vykonať iba priamo na Control Unit.",
+  "Select a firmware (.HMF) file to update the connected Control Unit.":
+    "Vyberte súbor s firmware (.HMF) na aktualizáciu pripojenej Control Unit.",
+  "Note that these files are the intellectual property of Carrera Toys GmbH, are protected by copyright law, and must not be distributed in any way without explicit consent.":
+    "Upozorňujeme, že tieto súbory sú duševným vlastníctvom spoločnosti Carrera Toys GmbH, sú chránené autorským právom a nesmú byť žiadnym spôsobom šírené bez výslovného súhlasu.",
+  "Use at your own risk: An invalid or interrupted firmware update can seriously damage your Control Unit!":
+    "Používajte na vlastné riziko: neplatná alebo prerušená aktualizácia firmvéru môže vážne poškodiť vašu Control Unit!",
+  "The file seems to be invalid or corrupt.":
+    "Súbor sa zdá byť neplatný alebo poškodený.",
+  "Do not disconnect or power off the Control Unit during the update!":
+    "Počas aktualizácie neodpájajte ani nevypínajte Control Unit!",
+  "Waiting for firmware update to start...":
+    "Čaká sa na spustenie aktualizácie firmware...",
+  "Firmware update in progress. Please do not disconnect or power off the Control Unit!":
+    "Prebieha aktualizácia firmware. Neodpájajte ani nevypínajte Control Unit!",
+  "Waiting for firmware update to complete...":
+    "Čaká sa na dokončenie aktualizácie firmvéru...",
+  "Firmware successfully updated to version {{version}}.":
+    "Firmvér bol úspešne aktualizovaný na verziu {{version}}.",
 
   "About": "Informácie",
   "About Open Lap": "O aplikácii Open Lap",
@@ -31,6 +51,7 @@
   "Connection": "Pripojenie",
   "Connection timeout": "Čas na pripojenie",
   "Connection type": "Typ pripojenia",
+  "Control Unit firmware update": "Aktualizácia firmware Control Unit",
   "Control Unit mode": "Mód Control Unit",
   "Debug messages": "Diagnostické udalosti",
   "Default": "Prednastavené",
@@ -51,6 +72,7 @@
   "Finished first": "Prvé miesto",
   "Finished second": "Druhé miesto",
   "Finished third": "Tretie miesto",
+  "Firmware update": "Aktualizácia firmware",
   "Firmware version": "Verzia firmware",
   "Five laps to go": "Zostáva päť kôl",
   "Free Practice": "Voľný tréning",
@@ -58,6 +80,8 @@
   "Fuel < 20%": "Palivo < 20%",
   "Fuel": "Palivo",
   "General": "Všeobecné",
+  "Invalid firmware file": "Neplatný súbor s firmware",
+  "iOS support": "Podpora iOS",
   "Language": "Jazyk",
   "Lap {{count}}": "Kolo {{count}}",
   "Lap {{count}}/{{total}}": "Kolo {{count}}/{{total}}",
@@ -92,10 +116,13 @@
   "Sector times": "Časy v sektoroch",
   "Settings": "Nastavenia",
   "Share": "Zdieľať",
+  "Special features": "Špeciálne funkcie",
   "Speed": "Rýchlosť",
+  "Start firmware update": "Spustiť aktualizáciu firmware",
   "Start": "Štart",
   "Stop cars when finished": "Zastaviť autá pri finiši",
   "Stop time when paused": "Zastaviť čas pri pauze",
+  "Test": "Test",
   "Time": "Čas",
   "Timeout": "Čas vypršal",
   "Track clear": "Trať čistá",

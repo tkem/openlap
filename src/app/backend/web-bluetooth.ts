@@ -30,6 +30,8 @@ class WebBluetoothPeripheral implements Peripheral {
 
   name: string;
 
+  fwuBlockSize = 18;
+
   output: Promise<any>;
 
   lastWritten: string;

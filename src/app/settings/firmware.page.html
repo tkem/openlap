@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/settings" [disabled]="busy"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span translate>Firmware update</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container [ngSwitch]="status">
+    <ng-container *ngSwitchCase="'init'">
+      <ion-item>
+        <ion-label>
+          <span translate>Select a firmware (.HMF) file to update the connected Control Unit.</span>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon color="warning" name="warning" slot="start"></ion-icon>
+        <ion-label>
+          <span translate>Note that these files are the intellectual property of Carrera Toys GmbH, are protected by copyright law, and must not be distributed in any way without explicit consent.</span>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon color="warning" name="warning" slot="start"></ion-icon>
+        <ion-label>
+          <span translate>Use at your own risk: An invalid or interrupted firmware update can seriously damage your Control Unit!</span>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <input type="file" accept=".HMF,.hmf" [disabled]="!cu.value" (change)="readFirmwareFile($event)">
+      </ion-item>
+      <ion-item>
+        <ion-button (click)="confirmFirmwareUpdate()" [disabled]="!lines || !cu.value" translate>
+          Start firmware update
+        </ion-button>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngSwitchCase="'starting'">
+      <ion-item>
+        <span translate>Waiting for firmware update to start...</span>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngSwitchCase="'updating'">
+      <ion-item>
+        <span translate>Firmware update in progress. Please do not disconnect or power off the Control Unit!</span>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngSwitchCase="'finishing'">
+      <ion-item>
+        <span translate>Waiting for firmware update to complete...</span>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngSwitchCase="'done'">
+      <ion-item>
+        <span [translate]="'Firmware successfully updated to version {{version}}.'" [translateParams]="{ version: version }"></span>
+      </ion-item>
+    </ng-container>
+  </ng-container>
+  <ion-item *ngIf="status !== 'init'">
+    <ion-progress-bar [value]="progress"></ion-progress-bar>
+  </ion-item>
+</ion-content>
