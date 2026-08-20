@@ -86,7 +86,7 @@ export class FirmwarePage implements OnDestroy, OnInit {
       this.logger.error(`Error parsing firmware file "${file.name}":`, error);
       await this.alert.show({
         header: 'Invalid firmware file',
-        message: 'The file seems to be invalid or corrupt',
+        message: 'The file seems to be invalid or corrupt.',
         buttons: ['OK']
       });
       input.value = '';
