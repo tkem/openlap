@@ -1,18 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CanDeactivateFn } from '@angular/router';
-import { Connectable, Subject, Subscription } from 'rxjs';
 
-import { map, publish, tap } from 'rxjs/operators';
+import { Subject, Subscription, timer } from 'rxjs';
+import { delayWhen, map } from 'rxjs/operators';
 
 import { AppComponent } from '../app.component';
 import { DataView } from '../carrera';
 import { ControlUnitService, I18nAlertService, LoggingService } from '../services';
 
 const FWU_START_COMMAND = DataView.fromString('GB2');
+const FWU_START_RESPONSE_PREFIX = 'G';
 const FWU_FINALIZE_COMMAND = DataView.fromString('E0');
 const VERSION_COMMAND = DataView.fromString('0');
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 @Component({
     templateUrl: 'firmware.page.html',
@@ -34,9 +35,15 @@ export class FirmwarePage implements OnDestroy, OnInit {
 
   private requests = [];
 
-  constructor(public cu: ControlUnitService, public logger: LoggingService, private alert: I18nAlertService, private app: AppComponent) {}
+  constructor(
+    public cu: ControlUnitService,
+    public logger: LoggingService,
+    private alert: I18nAlertService,
+    private app: AppComponent)
+  {}
 
   ngOnInit() {
+    // reserved for future use
   }
 
   ngOnDestroy() {
@@ -51,6 +58,10 @@ export class FirmwarePage implements OnDestroy, OnInit {
     return this.status === 'starting' || this.status === 'updating' || this.status === 'finishing';
   }
 
+  get fwuBlockSize(): number {
+    return this.cu.value?.peripheral?.fwuBlockSize;
+  }
+
   private async parseFirmwareFile(file: File): Promise<string[]> {
     if (!file.name.toLowerCase().endsWith('.hmf')) {
       throw new Error(`Invalid firmware file name: ${file.name}`);
@@ -59,9 +70,14 @@ export class FirmwarePage implements OnDestroy, OnInit {
     const lines = text.split(/\r?\n/)
       .map(line => line.trim())
       .filter(line => line.length > 0);
-    // So far, all known .HMF files have ~880 lines
-    if (lines.length < 800) {
-      throw new Error(`Short file with ${lines.length} line(s)`);
+    if (this.cu.value.peripheral.type != 'demo') {
+      // all known .HMF files have ~880 lines
+      if (lines.length < 800) {
+        throw new Error(`Short file with ${lines.length} line(s)`);
+      }
+      if (lines.length > 1000) {
+        throw new Error(`Long file with ${lines.length} line(s)`);
+      }
     }
     return lines.map(line => {
       const match = line.match(/^"([0-9a-fA-F]+)"$/);
@@ -75,21 +91,19 @@ export class FirmwarePage implements OnDestroy, OnInit {
   async readFirmwareFile(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    try {
-      this.lines = await this.parseFirmwareFile(file);
-      this.totalLines = this.lines.length;
-    } catch (error) {
-      this.logger.error(`Error parsing firmware file "${file.name}":`, error);
-      await this.alert.show({
-        header: 'Invalid firmware file',
-        message: 'The file seems to be invalid or corrupt.',
-        buttons: ['OK']
-      });
-      input.value = '';
+    if (file) {
+      try {
+        this.lines = await this.parseFirmwareFile(file);
+        this.totalLines = this.lines.length;
+      } catch (error) {
+        this.logger.error(`Error parsing firmware file "${file.name}":`, error);
+        await this.alert.show({
+          header: 'Invalid firmware file',
+          message: 'The file seems to be invalid or corrupt.',
+          buttons: ['OK']
+        });
+        input.value = '';
+      }
     }
   }
 
@@ -113,12 +127,8 @@ export class FirmwarePage implements OnDestroy, OnInit {
       this.logger.error('No control unit connected for firmware update');
       return;
     }
-
-    const blockSize = cu.peripheral.fwuBlockSize;
-
-    this.status = 'starting';
-
     try {
+      this.status = 'starting';
       await cu.disconnect();
       await delay(5000);
       this.connection = cu.peripheral.connect({
@@ -128,43 +138,42 @@ export class FirmwarePage implements OnDestroy, OnInit {
           this.status = 'updating';
         }
       });
-      const data = this.connection.pipe(
+      this.subscription = this.connection.pipe(
         map((data: ArrayBuffer) => {
           const s = new TextDecoder().decode(new Uint8Array(data));
-          this.logger.info("peripheral next:", s);
+          this.logger.debug("Firmware update response:", s);
           return s;
         }),
-        tap((value) => {
-          // TODO: proper subscriber, not tap!
-          this.poll(value, blockSize);
+        delayWhen(value => {
+          if (value.startsWith(FWU_START_RESPONSE_PREFIX)) {
+            return timer(2000);  // delay after FWU start
+          } else {
+            return timer(0);  // empty() should also work?
+          }
         }),
-        publish()
-      ) as Connectable<string>;
-      this.subscription = data.connect();
+      ).subscribe((value) => {
+        this.update(value);
+      });
     } catch (error) {
       this.logger.error('Error updating firmware', error);
       this.status = 'init';
     }
   }
 
-  async poll(value: string, blockSize) {
+  async update(value: string) {
     if (value.startsWith("0")) {
-      this.version = value.substr(1, 4);
+      this.version = value.substring(1, 5);
       this.status = 'done';
       if (this.app?.menu) {
-        this.app.menu.reconnect();  // updates CU version in menu
+        this.app.menu.reconnect();  // also updates CU version in menu
       } else {
         this.cu.value.reconnect();
       }
-      return;
-    }
-    if (value.startsWith("G")) {
-      await delay(2000);
-    }
-    if (this.requests && this.requests.length) {
-        const request = this.requests.shift();
-        this.connection.next(request.buffer);
+    } else if (this.requests && this.requests.length) {
+      const request = this.requests.shift();
+      this.connection.next(request.buffer);
     } else if (this.lines && this.lines.length) {
+      const blockSize = this.fwuBlockSize;
       const data = this.lines.shift();
       if (!blockSize) {
         const request = DataView.fromHex('E', data);
@@ -174,7 +183,6 @@ export class FirmwarePage implements OnDestroy, OnInit {
         for (let i = 0; i < data.length; i += blockSize) {
           const block = data.slice(i, Math.min(i + blockSize, data.length));
           const request = DataView.fromHex('F', block);
-          //this.logger.debug("Prepare request", request);
           this.requests.push(request);
         }
         this.requests.push(FWU_FINALIZE_COMMAND);
@@ -187,7 +195,6 @@ export class FirmwarePage implements OnDestroy, OnInit {
       this.connection.next(VERSION_COMMAND.buffer);
     }
   }
-
 }
 
 export const firmwareCanDeactivateGuard: CanDeactivateFn<FirmwarePage> = (page) => {
