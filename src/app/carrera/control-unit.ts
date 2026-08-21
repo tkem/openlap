@@ -1,6 +1,6 @@
-import { BehaviorSubject, Connectable, Observable, Subject ,Subscription, firstValueFrom, timer } from 'rxjs';
+import { BehaviorSubject, Connectable, Observable, Subject ,Subscription, connectable, firstValueFrom, timer } from 'rxjs';
 
-import { concatMap, distinctUntilChanged, filter, map, publish, retryWhen, scan, shareReplay, tap, timeout } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, retry, shareReplay, tap, timeout } from 'rxjs/operators';
 
 import { DataView } from './data-view';
 import { Peripheral } from './peripheral';
@@ -65,20 +65,27 @@ export class ControlUnit {
       })
     );
 
-    this.data = timedConnection.pipe(
-      // FIXME: retryWhen is deprecated, but catchError doesn't seem to work with publish/shareReplay
-      retryWhen(errors => {
-        return this.doReconnect(errors);
-      }),
-      tap(() => {
-        this.poll();
-      }),
-      map((data: ArrayBuffer) => {
-        return new DataView(data);
-      }),
-      // FIXME: publish is deprecated, but shareReplay with refCount: false doesn't seem to work with retryWhen
-      publish()
-    ) as Connectable<DataView>;
+    this.data = connectable(
+      timedConnection.pipe(
+        retry({
+          resetOnSuccess: true,
+          delay: (error, retryCount) => {
+            console.error("Reconnecting after error:", error);
+            this.state.next('disconnected');
+            return this.getReconnectDelay(retryCount).pipe(
+              tap(() => this.state.next('connecting'))
+            );
+          }
+        }),
+        tap(() => {
+          this.poll();
+        }),
+        map((data: ArrayBuffer) => {
+          return new DataView(data);
+        })
+      ),
+      { connector: () => new Subject<DataView>() }
+    );
 
     this.status = this.data.pipe(
       filter((view) => {
@@ -227,19 +234,8 @@ export class ControlUnit {
     this.connection.next(request.buffer);
   }
 
-  private doReconnect(errors: Observable<any>) {
-    const state = this.state;
-    return errors.pipe(
-      //tap(error => this.logger.error('Device error:', error)),
-      scan((count, error) => {
-        return state.value === 'connected' ? 0 : count + 1;
-      }, 0),
-      tap(() => state.next('disconnected')),
-      concatMap(count => {
-        const backoff = this.settings.minReconnectDelay * Math.pow(1.5, count);
-        return timer(Math.min(backoff, this.settings.maxReconnectDelay));
-      }),
-      tap(() => state.next('connecting'))
-    );
+  private getReconnectDelay(retryCount: number) {
+    const backoff = this.settings.minReconnectDelay * Math.pow(1.5, retryCount - 1);
+    return timer(Math.min(backoff, this.settings.maxReconnectDelay));
   }
 }
