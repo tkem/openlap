@@ -44,6 +44,11 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - Pure TypeScript classes/interfaces with no Angular decorators.
 - Heavy RxJS usage (`BehaviorSubject`, `Observable`, `Subject`, `Connectable`).
 - `ControlUnit` is a plain class (not injectable), instantiated directly.
+- `ControlUnit` uses the `connectable()` creation function (not the deprecated
+  `publish()` operator) plus the `retry({ delay, resetOnSuccess })` operator
+  (not the deprecated `retryWhen()`) to drive its own reconnect/backoff logic;
+  the `delay` callback logs the error, flips `state` to `'disconnected'`/`'connecting'`,
+  and returns a `timer()` notifier for exponential backoff.
 - Custom `DataView` class shadows the native browser `DataView` — be careful
   with imports.
 - `Session` class in `rms/` is also a non-injectable domain class.
@@ -169,9 +174,10 @@ normal race operation.
      a **new low-level connection** directly via `cu.peripheral.connect()`.
    - On connect, sends the start command `GB2` (`FWU_START_COMMAND`) and sets
      `status` to `'updating'`.
-   - Every response is decoded as text and passed to `poll()` via a `tap()` in the
-     response pipeline, which drives the rest of the update as a simple state machine.
-4. `poll(value, blockSize)`:
+   - Every response is decoded as text and passed to `update()` via a direct
+     `.subscribe()` on the response pipeline, which drives the rest of the update
+     as a simple state machine.
+4. `update(value, blockSize)`:
    - If the response starts with `0` (version response), logs the new version and
      calls `cu.value.reconnect()` to resume normal `ControlUnit` polling, then returns.
    - If the response starts with `G`, the CU is still busy (e.g. erasing) — wait 2s.
@@ -195,8 +201,7 @@ normal race operation.
 
 ### Known gaps / TODOs
 
-- `firmware.page.ts` has a `TODO` about replacing the `tap()` in the response
-  pipeline with a proper subscriber, and a `TODO` about retrieving the new firmware
-  version via `peripheral` or `cu` instead of a raw `0` (`VERSION_COMMAND`) request.
+- `firmware.page.ts` has a `TODO` about retrieving the new firmware version via
+  `peripheral` or `cu` instead of a raw `0` (`VERSION_COMMAND`) request.
 - File parsing uses a `TODO: use better file check indicator` heuristic based on the
   `.hmf` extension.
