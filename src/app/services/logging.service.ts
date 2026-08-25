@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
-export enum LogLevel { DEBUG, INFO, WARNING, ERROR };
+export enum LogLevel { DEBUG, INFO, WARNING, ERROR }
 
 export class LogRecord {
   level: LogLevel;  // TODO: as string?
   time: number;
   args: any[];
-};
+}
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +60,7 @@ export class LoggingService {
 
   private log(level: LogLevel, args: any[]) {
     if (level >= this.level) {
-      console.log.apply(console, args);
+      console.log(...args);
       this.buffer[this.head] = { level: level, time: Date.now(), args: args };
       this.head = (this.head + 1) % this.limit;
       if (this.size < this.limit) {

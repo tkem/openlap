@@ -61,7 +61,7 @@ export class DriversPage implements OnDestroy, OnInit {
     let chars = name.replace(/\W/g, '').toUpperCase();  // TODO: proper Unicode support
     let codes = this.drivers.filter((_, index) => index !== id).map(obj => obj.code);
     for (let n = 2; n < chars.length; ++n) {
-      let s = chars.substr(0, 2) + chars.substr(n, 1);
+      let s = chars.slice(0, 2) + chars[n];
       if (codes.indexOf(s) === -1) {
         return s;
       }

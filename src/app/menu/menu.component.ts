@@ -62,8 +62,7 @@ export class MenuComponent implements OnChanges {
   onMenuOpen() {
     if (!this.initialized && this.connections) {
       // workaround for Web Bluetooth/Serial: need user gesture for scanning
-      const navigator: any = window.Navigator;
-      if (navigator.bluetooth || navigator.serial) {
+      if ((navigator as any).bluetooth || (navigator as any).serial) {
         this.connections.ngOnInit();
       }
       this.initialized = true;

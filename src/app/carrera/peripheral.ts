@@ -17,8 +17,8 @@ export function createSubject<T>(destination: Partial<Observer<T>>, source: Obse
 export interface Peripheral {
   type: string; // 'ble' | 'serial' | 'demo';
   name: string;
-  address?: any;
+  address?: string;
   fwuBlockSize?: number;  // max. size of firmware update data chunks
   connect(connected?: NextObserver<void>, disconnected?: NextObserver<void>): Subject<ArrayBuffer>;
-  equals(other: any);
+  equals(other: any): boolean;
 }

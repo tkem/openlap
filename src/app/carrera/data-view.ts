@@ -63,7 +63,7 @@ export class DataView {
   }
 
   toString(byteOffset?: number, byteLength?: number) {
-    return String.fromCharCode.apply(null, [...this.subarray(byteOffset, byteLength)]);
+    return String.fromCharCode(...this.subarray(byteOffset, byteLength));
   }
 
   static from(cmd: string, ...values: number[]) {

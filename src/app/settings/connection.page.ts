@@ -51,7 +51,7 @@ export class ConnectionPage implements OnDestroy, OnInit {
     if (cu.value) {
       this.isFirmwareUpdateSupported = cu.value.getVersion().then(v => v.startsWith("5"));
     } else {
-      this.isFirmwareUpdateSupported = Promise.resolve(!!cu.value);
+      this.isFirmwareUpdateSupported = Promise.resolve(false);
     }
   }
 

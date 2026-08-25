@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
-import { NextObserver, Observable, of } from 'rxjs';
+import { NextObserver, Observable, Subscriber, of } from 'rxjs';
 
 import { Backend } from './backend';
 import { DataView, Peripheral } from '../carrera';
@@ -19,9 +19,7 @@ function random(min: number, max: number) {
 }
 
 function toString(buffer: ArrayBuffer) {
-  let array = new Uint8Array(buffer)
-  let string = String.fromCharCode.apply(null, [...array]);
-  return string;
+  return String.fromCharCode(...new Uint8Array(buffer));
 }
 
 class Car {
@@ -38,14 +36,14 @@ class Car {
   private minSectorTime: number;
   private maxSectorTime: number;
   private sectors: number;
-  private timeout: any;
+  private timeout: ReturnType<typeof setTimeout>;
 
   constructor(id: string) {
     this.id = id;
-    this.fuel = this.id == '7' || this .id == '8' ? 0 : 0xff;
+    this.fuel = this.id == '7' || this.id == '8' ? 0 : 0xff;
   }
 
-  start(minSectorTime, maxSectorTime, sectors=1, delay=0) {
+  start(minSectorTime: number, maxSectorTime: number, sectors = 1, delay = 0) {
     this.maxSectorTime = maxSectorTime;
     if (this.id == '8') {
       this.minSectorTime = minSectorTime + (maxSectorTime - minSectorTime) * 0.8;
@@ -75,7 +73,7 @@ class Car {
     if (++this.sector > this.sectors) {
       this.sector = 1;
     }
-    if (this.id == '7' || this .id == '8') {
+    if (this.id == '7' || this.id == '8') {
       this.events.emit(this);
       this.timeout = setTimeout(() => this.onNext(), random(this.minSectorTime, this.maxSectorTime));
     } else {
@@ -131,7 +129,7 @@ class DemoPeripheral implements Peripheral {
 
   private version: ArrayBuffer;
 
-  private subscriber: any;
+  private subscriber: Subscriber<ArrayBuffer>;
 
   type = BACKEND_TYPE;
 
@@ -167,7 +165,7 @@ class DemoPeripheral implements Peripheral {
         if (disconnected) {
           disconnected.next(undefined);
         }
-        delete this.subscriber;
+        this.subscriber = undefined;
       }
     });
   }
@@ -215,7 +213,7 @@ class DemoPeripheral implements Peripheral {
       },
       complete: () => {
         this.logger.info('Demo connection complete');
-        this.subscriber.complete();
+        this.subscriber?.complete();
       }
     };
   }
@@ -258,7 +256,7 @@ class DemoPeripheral implements Peripheral {
     ).buffer;
   }
 
-  private getPitMask(begin, end) {
+  private getPitMask(begin: number, end: number) {
     let mask = 0;
     for (let i = begin; i != end; ++i) {
       mask >>= 1
@@ -312,4 +310,4 @@ export class DemoBackend extends Backend {
   scan(): Observable<Peripheral> {
     return of(new DemoPeripheral('Demo Control Unit', 0x6, this.logger));
   }
-};
+}

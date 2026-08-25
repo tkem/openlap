@@ -75,8 +75,8 @@ export class Session {
     const compare = COMPARE[options.mode];
 
     const reset = merge(
-      cu.getStart().pipe(distinctUntilChanged(),filter(start => start != 0),),
-      cu.getState().pipe(filter(state => state == 'connected'),)
+      cu.getStart().pipe(distinctUntilChanged(), filter(start => start != 0)),
+      cu.getState().pipe(filter(state => state == 'connected'))
     ).pipe(tap(() => {
       cu.setMask(this.mask);
     }));

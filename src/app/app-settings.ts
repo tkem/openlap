@@ -50,13 +50,14 @@ const NOTIFICATIONS = {
   yellowflag: true
 };
 
-function defaultBackendFilter() {
+function defaultBackendFilter(): string {
   const navigator: any = window.navigator;
   // FIXME: Assume app environment supports neither, otherwise check platform
+  // TODO: change to array?
   if (navigator.bluetooth && navigator.serial) {
     return 'web-bluetooth';
   } else {
-    return undefined;
+    return '';
   }
 }
 

@@ -1,4 +1,4 @@
-import { BehaviorSubject, Connectable, Observable, Subject ,Subscription, connectable, firstValueFrom, timer } from 'rxjs';
+import { BehaviorSubject, Connectable, Observable, Subject, Subscription, connectable, firstValueFrom, timer } from 'rxjs';
 
 import { distinctUntilChanged, filter, map, retry, shareReplay, tap, timeout } from 'rxjs/operators';
 
@@ -30,7 +30,7 @@ export class Settings {
   requestTimeout = REQUEST_TIMEOUT;
   minReconnectDelay = MIN_RECONNECT_DELAY;
   maxReconnectDelay = MAX_RECONNECT_DELAY;
-};
+}
 
 export class ControlUnit {
 
@@ -46,7 +46,7 @@ export class ControlUnit {
 
   private state = new BehaviorSubject<'disconnected' | 'connecting' | 'connected'>('disconnected');
 
-  private version: Promise<string> = null;
+  private version: Promise<string>;
 
   constructor(public peripheral: Peripheral, private settings: Settings) {
     this.connection = this.peripheral.connect({
@@ -69,8 +69,8 @@ export class ControlUnit {
       timedConnection.pipe(
         retry({
           resetOnSuccess: true,
-          delay: (error, retryCount) => {
-            console.error("Reconnecting after error:", error);
+          delay: (_error, retryCount) => {
+            //console.error("Connection error:", _error, retryCount);
             this.state.next('disconnected');
             return this.getReconnectDelay(retryCount).pipe(
               tap(() => this.state.next('connecting'))
@@ -84,11 +84,11 @@ export class ControlUnit {
           return new DataView(data);
         })
       ),
-      // resetOnDisconnect: false keeps the same multicast subject across
-      // disconnect/reconnect cycles, so long-lived subscribers (e.g. `status`,
-      // built with shareReplay({ refCount: false })) keep receiving values
-      // after a reconnect instead of being left subscribed to a stale subject.
-      { connector: () => new Subject<DataView>(), resetOnDisconnect: false }
+      { 
+        connector: () => new Subject<DataView>(), 
+        // if true (the default), existing subscribers will not receive anything after reconnecting
+        resetOnDisconnect: false 
+      }
     );
 
     this.status = this.data.pipe(

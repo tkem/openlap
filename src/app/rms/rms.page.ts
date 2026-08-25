@@ -5,8 +5,7 @@ import { PopoverController, MenuController, AlertController, ModalController } f
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { Observable, Subscription, firstValueFrom, from, of, merge } from 'rxjs';
-import { combineLatest } from 'rxjs';
+import { Observable, Subscription, combineLatest, firstValueFrom, from, of, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, mergeMap, pairwise, share, skipWhile, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 
 import { AppSettings, Options, RaceOptions } from '../app-settings';
@@ -90,11 +89,11 @@ export class RmsPage implements OnDestroy, OnInit {
     );
 
     this.isBluetoothConnection = settings.getConnection().pipe(
-      map(connection => connection.backendFilter.includes("web-bluetooth"))
+      map(connection => !!connection.backendFilter?.includes("web-bluetooth"))
     )
 
     this.isSerialConnection = settings.getConnection().pipe(
-      map(connection => connection.backendFilter.includes("web-serial"))
+      map(connection => !!connection.backendFilter?.includes("web-serial"))
     )
 
     this.start = cu.pipe(

@@ -53,6 +53,31 @@ Open Lap aims to provide a free, open-source solution for race management, focus
   with imports.
 - `Session` class in `rms/` is also a non-injectable domain class.
 
+### RxJS Conventions & Gotchas
+
+- `connectable()` (used by `ControlUnit.data`) must always pass
+  `resetOnDisconnect: false`. The default (`true`) creates a brand-new
+  internal multicast subject on every `disconnect()`/`reconnect()`, which
+  permanently breaks long-lived `shareReplay({ refCount: false })` consumers
+  (e.g. `status`, `getFuel`/`getStart`/`getMode`/`getPit`) since they stay
+  subscribed to the old, dead subject.
+- `Peripheral.connect()` (`ble.ts`, `web-bluetooth.ts`) returns a Subject built
+  via `createSubject()` (`carrera/peripheral.ts`) whose `_subscribe` is
+  overridden to resubscribe a **cold** observable that performs the actual
+  BLE/serial connect. This means every `retry()` resubscription of
+  `ControlUnit.connection` genuinely re-establishes the physical connection —
+  intentional, not a bug, if you see it while touching reconnect logic.
+- `Connection.backendFilter` (`app-settings.ts`) is optional/`undefined` by
+  design (the "auto" backend-detection case). Always guard with `?.` (or an
+  `if (backendFilter)` check) before calling string methods like `.includes()`
+  on it — calling it unguarded throws inside `map()` and permanently errors
+  the observable. See `connections.component.ts` (`if (this.backendFilter)`)
+  and `rms.page.ts` (`!!connection.backendFilter?.includes(...)`) for the
+  two verified guard patterns used in this codebase.
+- Prefer combining all `rxjs` (and separately all `rxjs/operators`) named
+  imports into a single import statement per module rather than splitting them
+  across multiple `import … from 'rxjs'` lines.
+
 ## Code Style
 
 - **Single quotes** for all strings and imports.
@@ -61,6 +86,9 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - No linter or formatter configured — style is convention-based.
 - TypeScript strict mode with `strictNullChecks: false` and `noImplicitAny: false`.
 - `useDefineForClassFields: false` in tsconfig.
+- Loose equality (`==`/`!=`) is used consistently project-wide instead of
+  strict equality (`===`/`!==`) — this is an established codebase convention,
+  not a defect; don't "fix" it file-by-file.
 - Templates in separate HTML files (`templateUrl`), styles in separate SCSS files
   (`styleUrls`). Some pages omit `styleUrls` when no styling is needed.
 - Use legacy Angular template syntax (`*ngIf`, `*ngFor`, `[ngSwitch]`) — not
@@ -121,6 +149,7 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - **French-specific notes:** Use `fr-FR` as the locale, prefer "Aucun" for the English "None" value, and check wording for notifications (e.g., "Il reste une minute !", "Il reste cinq tours !").
 - **Punctuation & spacing:** Follow typographic conventions where practical (e.g., space before `?`/`!` in French is acceptable), but preserving readability in the app is more important than strict non-breaking spaces.
 - **Capitalization:** Match the UI casing expectations (start-of-sentence capitalization for messages; preserve capitalized tokens).
+- **Key parity:** All locale files under `src/assets/i18n/` (`de`, `en`, `es`, `fr`, `hu`, `it`, `pl`, `pt`, `sk`) must keep the exact same key set as `en.json` — verify this when adding/removing a translation key.
 
 
 ## Routing
@@ -145,6 +174,12 @@ Open Lap aims to provide a free, open-source solution for race management, focus
 - Custom `LoggingErrorHandler` routes errors through `LoggingService`.
 - Service Worker is conditionally enabled (production + non-Cordova only).
 - Avoid creating test files — the project has no existing test suite.
+- `ControlUnit` (`carrera/control-unit.ts`) is a plain non-injectable class, so
+  it cannot use `LoggingService`. Its `retry({ delay })` reconnect handler
+  intentionally ignores the error (parameter named `_error`) rather than
+  logging it — reconnect/backoff state (`disconnected`/`connecting`) is still
+  surfaced via `this.state`, so callers observe the failure without needing
+  the error detail logged.
 
 ## Firmware Update
 
