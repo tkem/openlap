@@ -17,7 +17,7 @@ jobs:
       - run: npm install -g cordova @ionic/cli
       - run: npm ci
       - run: ionic cordova build android --prod
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android
           path: platforms/android/**/*.apk
@@ -31,7 +31,7 @@ jobs:
       - run: npm install -g cordova @ionic/cli
       - run: npm ci
       - run: ionic cordova build ios --prod
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios
           path: platforms/ios/build/**/*.app
@@ -45,7 +45,7 @@ jobs:
       - run: npm install -g @ionic/cli
       - run: npm ci
       - run: ionic build --prod -- --base-href=/openlap/ --service-worker
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: pwa
           path: www
