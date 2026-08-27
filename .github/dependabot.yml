@@ -3,9 +3,9 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
-      weekly-batch:
+      monthly-batch:
         patterns:
           - "*"
     target-branch: "develop"
